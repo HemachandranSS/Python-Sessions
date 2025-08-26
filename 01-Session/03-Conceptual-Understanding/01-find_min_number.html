@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find the Minimum — Mini Game</title>
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --panel:#111827;       /* gray-900 */
+      --muted:#94a3b8;       /* slate-400 */
+      --text:#e5e7eb;        /* gray-200 */
+      --accent:#22c55e;      /* green-500 */
+      --accent-2:#3b82f6;    /* blue-500 */
+      --danger:#ef4444;      /* red-500 */
+      --card:#1f2937;        /* gray-800 */
+      --card-hover:#273244;  
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing: border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, #0b1225 0%, #0b1326 35%, var(--bg) 100%);
+      color: var(--text);
+      min-height:100dvh; display:grid; place-items:center; padding:24px;
+    }
+    .app{
+      width:min(1100px, 100%);
+      display:grid; gap:18px;
+    }
+    header{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+    }
+    h1{font-size:clamp(20px, 4vw, 32px); margin:0; letter-spacing:.3px}
+    .subtitle{color:var(--muted); font-size:14px}
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .controls{display:flex; flex-wrap:wrap; gap:12px; align-items:end}
+    .group{display:grid; gap:6px}
+    label{font-size:12px; color:var(--muted)}
+    select, input[type="number"], button.toggle{
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--text);
+      padding:10px 12px; border-radius:12px; outline:none;
+    }
+    .btn{cursor:pointer; user-select:none; border:none; padding:10px 14px; border-radius:14px; font-weight:600}
+    .btn.primary{background:linear-gradient(180deg, #2563eb, #1d4ed8); color:white}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,.12); color:var(--text)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+
+    .hud{display:flex; gap:10px; flex-wrap:wrap}
+    .stat{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:10px 12px; font-size:13px}
+    .stat strong{font-size:14px}
+
+    .board{display:grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap:12px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding:18px; text-align:center; font-weight:800; font-size:28px;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      cursor:pointer; user-select:none;
+    }
+    .card:hover{ transform: translateY(-2px); background: var(--card-hover)}
+    .card.correct{ outline: 2px solid var(--accent); box-shadow: 0 0 0 4px rgba(34,197,94,.2) inset}
+    .card.wrong{ outline: 2px solid var(--danger); box-shadow: 0 0 0 4px rgba(239,68,68,.2) inset; opacity:.85}
+    .card:disabled{opacity:.6; cursor:not-allowed}
+
+    .bar{height:10px; background:#0b1a34; border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.1)}
+    .bar > div{height:100%; background: linear-gradient(90deg, #22c55e, #eab308, #ef4444); width:100%; transition: width .2s linear}
+
+    .callout{font-size:14px; color:var(--muted)}
+    .callout strong{color:var(--text)}
+
+    .footer{display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap}
+    .sr{position:absolute; left:-9999px}
+    button[class="card"]{
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Find the Minimum game">
+    <header>
+      <div>
+        <h1>Find the Minimum</h1>
+        <div class="subtitle">Click the smallest number before the timer runs out.</div>
+      </div>
+      <button id="resetAll" class="btn ghost" title="Reset stats">Reset Stats</button>
+    </header>
+
+    <section class="panel controls" aria-label="Game controls">
+      <div class="group">
+        <label for="len">List length</label>
+        <select id="len">
+          <option value="5">5</option>
+          <option value="7" selected>7</option>
+          <option value="9">9</option>
+          <option value="11">11</option>
+          <option value="13">13</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="range">Number range (0…N)</label>
+        <input id="range" type="number" min="9" max="9999" step="1" value="99" />
+      </div>
+      <div class="group">
+        <label for="timer">Round time (seconds)</label>
+        <select id="timer">
+          <option value="6">6</option>
+          <option value="8" selected>8</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="0">No timer</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="negatives">Allow negatives</label>
+        <button id="negatives" class="toggle" aria-pressed="false">Off</button>
+      </div>
+      <div style="flex:1"></div>
+      <button id="start" class="btn primary">Start Round (Space)</button>
+    </section>
+
+    <section class="panel" aria-label="Round status">
+      <div class="hud">
+        <div class="stat"><strong>Score:</strong> <span id="score">0</span></div>
+        <div class="stat"><strong>Streak:</strong> <span id="streak">0</span> (best <span id="bestStreak">0</span>)</div>
+        <div class="stat"><strong>Accuracy:</strong> <span id="accuracy">0%</span></div>
+        <div class="stat"><strong>Rounds:</strong> <span id="rounds">0</span></div>
+        <div class="stat"><strong>Min this round:</strong> <span id="minNow">—</span></div>
+      </div>
+      <div class="bar" aria-hidden="true" style="margin-top:12px"><div id="timeBar"></div></div>
+    </section>
+
+    <section class="panel" aria-label="Game board">
+      <div id="board" class="board" role="group" aria-live="polite"></div>
+      <p id="msg" class="callout" aria-live="polite" style="margin:10px 2px 0"></p>
+    </section>
+
+    <div class="footer">
+      <div class="callout">Tip: Use <strong>number keys</strong> 1–9 to pick quickly. Press <strong>Space</strong> to start the next round.</div>
+      <div class="callout">Goal: Pick the <strong>smallest</strong> number in the list.</div>
+    </div>
+  </div>
+
+  <script>
+    const el = (id)=>document.getElementById(id);
+    const board = el('board');
+    const scoreEl = el('score');
+    const streakEl = el('streak');
+    const bestStreakEl = el('bestStreak');
+    const accEl = el('accuracy');
+    const roundsEl = el('rounds');
+    const minNowEl = el('minNow');
+    const msgEl = el('msg');
+    const timeBar = el('timeBar');
+
+    let state = {
+      playing:false,
+      numbers:[],
+      min:null,
+      picked:false,
+      score:0,
+      streak:0,
+      bestStreak:0,
+      correct:0,
+      total:0,
+      roundStart:0,
+      timer:null,
+      timeLeft:0,
+      timeTotal:0
+    };
+
+    function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+    function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+    function updateHUD(){
+      scoreEl.textContent = state.score;
+      streakEl.textContent = state.streak;
+      bestStreakEl.textContent = state.bestStreak;
+      roundsEl.textContent = state.total;
+      const acc = state.total ? Math.round((state.correct/state.total)*100) : 0;
+      accEl.textContent = acc + '%';
+      minNowEl.textContent = state.playing ? '???' : '—';
+    }
+
+    function setMessage(text){ msgEl.textContent = text }
+
+    function genRound(){
+      const len = parseInt(el('len').value,10);
+      const max = Math.max(9, parseInt(el('range').value,10) || 99);
+      const allowNeg = el('negatives').getAttribute('aria-pressed') === 'true';
+      const nums = new Set();
+      while(nums.size < len){
+        const n = allowNeg ? randInt(-max, max) : randInt(0, max);
+        nums.add(n);
+      }
+      const arr = shuffle([...nums]);
+      const min = Math.min(...arr);
+      return {arr, min};
+    }
+
+    function renderBoard(numbers){
+      board.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      numbers.forEach((n, idx)=>{
+        const btn = document.createElement('button');
+        btn.className = 'card';
+        btn.type = 'button';
+        btn.textContent = n;
+        btn.dataset.value = n;
+        btn.dataset.index = idx+1; // for keyboard hint
+        btn.addEventListener('click', ()=>pick(btn));
+        btn.title = `Pick ${n} (key ${idx+1})`;
+        frag.appendChild(btn);
+      });
+      board.appendChild(frag);
+    }
+
+    function startTimer(seconds){
+      clearInterval(state.timer);
+      if(seconds <= 0){ timeBar.style.width = '100%'; return }
+      state.timeLeft = seconds*1000;
+      state.timeTotal = state.timeLeft;
+      const start = performance.now();
+      state.timer = setInterval(()=>{
+        const elapsed = performance.now() - start;
+        const remain = Math.max(0, state.timeTotal - elapsed);
+        state.timeLeft = remain;
+        const pct = (remain / state.timeTotal) * 100;
+        timeBar.style.width = pct + '%';
+        if(remain <= 0){
+          clearInterval(state.timer);
+          outOfTime();
+        }
+      }, 100);
+    }
+
+    function startRound(){
+      if(state.playing) return;
+      state.playing = true; state.picked = false; setMessage('');
+      const {arr, min} = genRound();
+      state.numbers = arr; state.min = min; minNowEl.textContent = '???';
+      renderBoard(arr);
+      updateHUD();
+      state.roundStart = performance.now();
+      const seconds = parseInt(el('timer').value,10);
+      startTimer(seconds);
+      el('start').disabled = true;
+    }
+
+    function endRound(correct){
+      state.total++; if(correct){ state.correct++; state.streak++; state.bestStreak = Math.max(state.bestStreak, state.streak); } else { state.streak = 0 }
+      updateHUD();
+      el('start').disabled = false;
+      state.playing = false;
+    }
+
+    function pick(btn){
+      if(!state.playing || state.picked) return;
+      state.picked = true;
+      clearInterval(state.timer);
+      const val = parseInt(btn.dataset.value,10);
+      const timeMs = Math.max(1, performance.now() - state.roundStart);
+      const isCorrect = val === state.min;
+
+      // reveal the true min
+      [...board.children].forEach(b=>{
+        const v = parseInt(b.dataset.value,10);
+        if(v === state.min) b.classList.add('correct');
+      });
+
+      if(isCorrect){
+        btn.classList.add('correct');
+        const seconds = parseInt(el('timer').value,10);
+        // Score: base 100 + time bonus (if timer)
+        let add = 100;
+        if(seconds>0){
+          const remain = state.timeLeft; // ms
+          const bonus = Math.round((remain / (seconds*1000)) * 100);
+          add += bonus;
+        }
+        state.score += add;
+        setMessage(`✅ Correct! +${add} points. Min was ${state.min}.`);
+      } else {
+        btn.classList.add('wrong');
+        state.score = Math.max(0, state.score - 25);
+        setMessage(`❌ Oops! You picked ${val}. Min was ${state.min}. −25 points.`);
+      }
+      minNowEl.textContent = state.min;
+      endRound(isCorrect);
+    }
+
+    function outOfTime(){
+      if(!state.playing || state.picked) return;
+      state.picked = true;
+      // reveal min
+      [...board.children].forEach(b=>{
+        const v = parseInt(b.dataset.value,10);
+        if(v === state.min) b.classList.add('correct');
+      });
+      state.score = Math.max(0, state.score - 25);
+      setMessage(`⌛ Time's up! Min was ${state.min}. −25 points.`);
+      minNowEl.textContent = state.min;
+      endRound(false);
+    }
+
+    // Controls
+    el('start').addEventListener('click', startRound);
+    el('negatives').addEventListener('click', (e)=>{
+      const on = e.currentTarget.getAttribute('aria-pressed') === 'true';
+      e.currentTarget.setAttribute('aria-pressed', String(!on));
+      e.currentTarget.textContent = !on ? 'On' : 'Off';
+    });
+    el('resetAll').addEventListener('click', ()=>{
+      clearInterval(state.timer);
+      state = {playing:false,numbers:[],min:null,picked:false,score:0,streak:0,bestStreak:0,correct:0,total:0,roundStart:0,timer:null,timeLeft:0,timeTotal:0};
+      board.innerHTML=''; timeBar.style.width='100%'; setMessage('Stats reset. Press Start to play.'); updateHUD(); minNowEl.textContent='—';
+    });
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if(e.code === 'Space'){ e.preventDefault(); if(!state.playing) startRound(); return }
+      if(!state.playing) return;
+      const idx = parseInt(e.key,10);
+      if(Number.isInteger(idx) && idx>=1 && idx<=board.children.length){
+        const btn = board.children[idx-1]; btn && pick(btn);
+      }
+    });
+
+    // Initial
+    updateHUD();
+    setMessage('Press Start to generate a number list. Pick the smallest number.');
+  </script>
+</body>
+</html>

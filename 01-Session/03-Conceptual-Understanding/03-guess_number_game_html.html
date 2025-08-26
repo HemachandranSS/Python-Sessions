@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guess the Number Game</title>
+<style>
+  body{margin:0;font-family:sans-serif;display:grid;place-items:center;min-height:100vh;background:#0b1225;color:#e5e7eb;padding:20px}
+  .panel{background:#111827;padding:16px;border-radius:16px;display:grid;gap:12px;min-width:300px;text-align:center}
+  input, button{padding:10px 14px;border-radius:12px;border:none;font-size:16px}
+  input{width:80px;text-align:center}
+  button{cursor:pointer;background:#2563eb;color:white;font-weight:600;transition:0.2s}
+  button:hover{background:#1d4ed8}
+  .feedback{margin-top:12px;font-size:18px}
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Guess the Number</h2>
+  <div>
+    Range: <input id="min" type="number" value="1" style="width:60px"> to <input id="max" type="number" value="100" style="width:60px">
+    <button id="start">Start Game</button>
+  </div>
+  <div style="margin-top:12px">
+    Your guess: <input id="guess" type="number"> <button id="check">Check</button>
+  </div>
+  <div class="feedback" id="feedback">Press Start to begin.</div>
+  <div>Attempts: <span id="attempts">0</span> | Score: <span id="score">0</span></div>
+</div>
+<script>
+const el=(id)=>document.getElementById(id);
+let state={playing:false,target:0,attempts:0,score:0,min:1,max:100};
+function startGame(){
+  state.min=parseInt(el('min').value,10);
+  state.max=parseInt(el('max').value,10);
+  if(state.min>=state.max){el('feedback').textContent='Invalid range!'; return;}
+  state.target=Math.floor(Math.random()*(state.max-state.min+1))+state.min;
+  state.attempts=0; state.playing=true;
+  el('feedback').textContent=`Game started! Guess a number between ${state.min} and ${state.max}.`;
+  el('attempts').textContent=state.attempts;
+}
+function checkGuess(){
+  if(!state.playing){el('feedback').textContent='Press Start first.'; return;}
+  const val=parseInt(el('guess').value,10);
+  if(isNaN(val)){el('feedback').textContent='Enter a valid number!'; return;}
+  state.attempts++; el('attempts').textContent=state.attempts;
+  if(val===state.target){
+    el('feedback').textContent=`🎉 Correct! The number was ${state.target}.`;
+    state.score+=100-Math.min(50,state.attempts*10); el('score').textContent=state.score; state.playing=false;
+  } else if(val<state.target){
+    el('feedback').textContent='⬆ Too low!';
+  } else {
+    el('feedback').textContent='⬇ Too high!';
+  }
+}
+el('start').addEventListener('click',startGame);
+el('check').addEventListener('click',checkGuess);
+window.addEventListener('keydown',(e)=>{if(e.code==='Enter')checkGuess();});
+</script>
+</body>
+</html>

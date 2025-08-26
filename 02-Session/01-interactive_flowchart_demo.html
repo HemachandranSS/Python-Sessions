@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart to Code Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .flowchart-panel, .code-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .flowchart-panel {
+            max-width: 600px;
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Flowchart Styles */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .flowchart-step {
+            padding: 12px 20px;
+            border: 2px solid #667eea;
+            color: #333;
+            font-weight: 500;
+            text-align: center;
+            min-width: 200px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .flowchart-step.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .terminal {
+            border-radius: 50px;
+            background: #e8f2ff;
+        }
+
+        .process {
+            border-radius: 8px;
+            background: #f0f8ff;
+        }
+
+        .decision {
+            transform: rotate(45deg);
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff5e6;
+        }
+
+        .decision-text {
+            transform: rotate(-45deg);
+            font-size: 0.9em;
+            line-height: 1.2;
+        }
+
+        .input-output {
+            background: #f0fff0;
+            transform: skew(-10deg);
+            margin: 0 20px;
+        }
+
+        .input-output-text {
+            transform: skew(10deg);
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: #667eea;
+            margin: 5px 0;
+        }
+
+        /* Form Styles */
+        .registration-form {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.error {
+            border-color: #e74c3c;
+            background: #ffebee;
+        }
+
+        input.success {
+            border-color: #27ae60;
+            background: #e8f5e8;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #e57373;
+        }
+
+        .message.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #81c784;
+        }
+
+        .step-indicator {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .code-explanation {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .flowchart-panel, .code-panel {
+                padding: 15px;
+            }
+            
+            .flowchart-step {
+                min-width: 150px;
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
+            
+            .decision {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Flowchart Panel -->
+        <div class="flowchart-panel">
+            <h1>User Registration Flowchart</h1>
+            
+            <div class="flowchart">
+                <div class="flowchart-step terminal" data-step="1">
+                    <div class="step-indicator">1</div>
+                    START: User opens form
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flowchart-step input-output" data-step="2">
+                    <div class="step-indicator">2</div>
+                    <div class="input-output-text">INPUT: User fills form</div>
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flowchart-step process" data-step="3">
+                    <div class="step-indicator">3</div>
+                    PROCESS: Capture form data
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flowchart-step decision" data-step="4">
+                    <div class="step-indicator">4</div>
+                    <div class="decision-text">DECISION:<br>Valid data?</div>
+                </div>
+                
+                <div style="display: flex; gap: 40px; align-items: center; margin: 20px 0;">
+                    <div style="text-align: center;">
+                        <div style="color: #e74c3c; font-weight: bold;">NO</div>
+                        <div class="arrow" style="color: #e74c3c;">↓</div>
+                        <div class="flowchart-step process" data-step="5a" style="border-color: #e74c3c;">
+                            <div class="step-indicator" style="background: #e74c3c;">5a</div>
+                            PROCESS: Show errors
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="color: #27ae60; font-weight: bold;">YES</div>
+                        <div class="arrow" style="color: #27ae60;">↓</div>
+                        <div class="flowchart-step process" data-step="5b" style="border-color: #27ae60;">
+                            <div class="step-indicator" style="background: #27ae60;">5b</div>
+                            PROCESS: Submit data
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flowchart-step terminal" data-step="6">
+                    <div class="step-indicator">6</div>
+                    END: Show result
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="registration-form">
+                <h2>Live Demo Form</h2>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Register</button>
+                </form>
+                
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Code Panel -->
+        <div class="code-panel">
+            <h2>Code Implementation</h2>
+            
+            <div class="code-explanation">
+<strong>Step 1 - Terminal (START):</strong>
+HTML form structure created
+&lt;form id="registrationForm"&gt;
+
+<strong>Step 2 - Input/Output:</strong>
+Event listener captures user input
+form.addEventListener('submit', handleSubmit)
+
+<strong>Step 3 - Process:</strong>
+const formData = {
+    username: form.username.value,
+    email: form.email.value,
+    password: form.password.value
+}
+
+<strong>Step 4 - Decision:</strong>
+if (validateForm(formData)) {
+    // YES path
+} else {
+    // NO path
+}
+
+<strong>Step 5a - Process (Error):</strong>
+showMessage('Please fix errors', 'error')
+highlightInvalidFields()
+
+<strong>Step 5b - Process (Success):</strong>
+showMessage('Registration successful!', 'success')
+
+<strong>Step 6 - Terminal (END):</strong>
+Form processing complete
+            </div>
+            
+            <div id="currentStep" style="background: #e8f2ff; padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid #667eea;">
+                <strong>Current Step:</strong> <span id="stepDescription">Ready to start - Fill out the form above!</span>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <h3 style="margin-bottom: 10px; color: #333;">Validation Rules:</h3>
+                <ul style="line-height: 1.6; color: #666;">
+                    <li>Username: minimum 3 characters</li>
+                    <li>Email: valid email format</li>
+                    <li>Password: minimum 6 characters</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Step tracking and visual feedback
+        let currentStep = 1;
+        const stepDescriptions = {
+            1: "Form loaded and ready for input",
+            2: "User is entering data",
+            3: "Processing form data on submit",
+            4: "Validating user input",
+            "5a": "Showing validation errors",
+            "5b": "Processing successful registration",
+            6: "Registration process complete"
+        };
+
+        function highlightStep(step) {
+            // Remove active class from all steps
+            document.querySelectorAll('.flowchart-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to current step
+            const stepElement = document.querySelector(`[data-step="${step}"]`);
+            if (stepElement) {
+                stepElement.classList.add('active');
+                document.getElementById('stepDescription').textContent = stepDescriptions[step];
+            }
+        }
+
+        function validateForm(data) {
+            let isValid = true;
+            const errors = [];
+
+            // Reset all inputs
+            document.querySelectorAll('input').forEach(input => {
+                input.classList.remove('error', 'success');
+            });
+
+            // Username validation
+            if (!data.username || data.username.trim().length < 3) {
+                document.getElementById('username').classList.add('error');
+                errors.push('Username must be at least 3 characters');
+                isValid = false;
+            } else {
+                document.getElementById('username').classList.add('success');
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!data.email || !emailRegex.test(data.email)) {
+                document.getElementById('email').classList.add('error');
+                errors.push('Please enter a valid email address');
+                isValid = false;
+            } else {
+                document.getElementById('email').classList.add('success');
+            }
+
+            // Password validation
+            if (!data.password || data.password.length < 6) {
+                document.getElementById('password').classList.add('error');
+                errors.push('Password must be at least 6 characters');
+                isValid = false;
+            } else {
+                document.getElementById('password').classList.add('success');
+            }
+
+            return { isValid, errors };
+        }
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type} show`;
+            
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 5000);
+        }
+
+        // Initialize
+        highlightStep(1);
+
+        // Form input tracking
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                highlightStep(2);
+            });
+        });
+
+        // Form submission handling
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Step 3: Process form data
+            highlightStep(3);
+            
+            setTimeout(() => {
+                const formData = {
+                    username: this.username.value,
+                    email: this.email.value,
+                    password: this.password.value
+                };
+
+                // Step 4: Decision - validate
+                highlightStep(4);
+                
+                setTimeout(() => {
+                    const validation = validateForm(formData);
+                    
+                    if (validation.isValid) {
+                        // Step 5b: Success path
+                        highlightStep('5b');
+                        
+                        setTimeout(() => {
+                            showMessage('Registration successful! 🎉', 'success');
+                            // Step 6: End
+                            highlightStep(6);
+                        }, 1000);
+                        
+                    } else {
+                        // Step 5a: Error path
+                        highlightStep('5a');
+                        
+                        setTimeout(() => {
+                            showMessage(`Errors found: ${validation.errors.join(', ')}`, 'error');
+                            // Back to step 2 for corrections
+                            setTimeout(() => highlightStep(2), 2000);
+                        }, 1000);
+                    }
+                }, 1000);
+            }, 500);
+        });
+
+        // Interactive flowchart steps
+        document.querySelectorAll('.flowchart-step').forEach(step => {
+            step.addEventListener('click', () => {
+                const stepNumber = step.getAttribute('data-step');
+                highlightStep(stepNumber);
+            });
+        });
+    </script>
+</body>
+</html>

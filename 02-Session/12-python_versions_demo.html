@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Versions Evolution & Interactive Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.2); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.4); }
+        }
+
+        .version-timeline {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .version-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .version-card:nth-child(1) { animation-delay: 0.2s; }
+        .version-card:nth-child(2) { animation-delay: 0.4s; }
+        .version-card:nth-child(3) { animation-delay: 0.6s; }
+        .version-card:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .version-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .version-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .version-number {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-right: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .version-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .version-features {
+            margin: 15px 0;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-tag:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .current-badge {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.7; }
+        }
+
+        .demo-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px 10px 0 0;
+            margin: -20px -20px 15px -20px;
+            font-size: 0.9rem;
+        }
+
+        .code {
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .keyword { color: #66d9ef; }
+        .string { color: #a6e22e; }
+        .comment { color: #75715e; }
+        .number { color: #ae81ff; }
+        .function { color: #fd971f; }
+
+        .output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 0 0 10px 10px;
+            margin: 15px -20px -20px -20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .run-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .run-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76,175,80,0.4);
+        }
+
+        .run-button:active {
+            transform: translateY(0);
+        }
+
+        .compatibility-warning {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            animation: warning-pulse 3s infinite;
+        }
+
+        @keyframes warning-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,152,0,0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(255,152,0,0); }
+        }
+
+        .snake-animation {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .snake {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            animation: snake-move 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        @keyframes snake-move {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+        }
+
+        .interactive-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .interactive-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .python-logo {
+            color: #3776ab;
+            font-size: 1.5rem;
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            border-right: 3px solid #4CAF50;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #4CAF50; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Version Evolution</h1>
+            <p>From 1994 to 2025: A Journey Through Python's Growth</p>
+            <div class="snake-animation">
+                <div class="snake">🐍</div>
+            </div>
+        </div>
+
+        <div class="version-timeline">
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Python 1.0</div>
+                    <div class="version-date">January 1994</div>
+                </div>
+                <p><strong>The Foundation:</strong> The first official Python release that established the core philosophy of readable, simple code.</p>
+                <div class="version-features">
+                    <span class="feature-tag">Basic Object Model</span>
+                    <span class="feature-tag">Exception Handling</span>
+                    <span class="feature-tag">Modules & Packages</span>
+                    <span class="feature-tag">REPL Interactive Shell</span>
+                </div>
+            </div>
+
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Python 2.0</div>
+                    <div class="version-date">October 2000</div>
+                </div>
+                <p><strong>Major Enhancement:</strong> Introduced list comprehensions and garbage collection, making Python more powerful and memory-efficient.</p>
+                <div class="version-features">
+                    <span class="feature-tag">List Comprehensions</span>
+                    <span class="feature-tag">Garbage Collection</span>
+                    <span class="feature-tag">Unicode Support</span>
+                    <span class="feature-tag">Augmented Assignment</span>
+                </div>
+            </div>
+
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Python 3.0</div>
+                    <div class="version-date">December 2008</div>
+                </div>
+                <p><strong>Revolutionary Change:</strong> Complete redesign with no backward compatibility to Python 2, focusing on consistency and modern practices.</p>
+                <div class="version-features">
+                    <span class="feature-tag">Print Function</span>
+                    <span class="feature-tag">Unicode by Default</span>
+                    <span class="feature-tag">Integer Division</span>
+                    <span class="feature-tag">Iterators Everywhere</span>
+                </div>
+                <div class="compatibility-warning">
+                    ⚠️ <strong>Breaking Change:</strong> Python 3 programs will NOT run on Python 2 interpreters!
+                </div>
+            </div>
+
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Python 3.13.7</div>
+                    <div class="version-date">August 14, 2025</div>
+                    <span class="current-badge">CURRENT STABLE</span>
+                </div>
+                <p><strong>Latest & Greatest:</strong> The most recent stable release with enhanced performance, better debugging, and experimental JIT compilation.</p>
+                <div class="version-features">
+                    <span class="feature-tag">Enhanced Interactive Interpreter</span>
+                    <span class="feature-tag">Experimental JIT</span>
+                    <span class="feature-tag">Colorized Tracebacks</span>
+                    <span class="feature-tag">Multi-line Editing</span>
+                    <span class="feature-tag">Performance Optimizations</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🚀 Interactive Python Code Demonstration</h2>
+            <div class="interactive-demo">
+                <div>
+                    <div class="code-container">
+                        <div class="code-header">Python 2.x vs 3.x Compatibility Demo</div>
+                        <div class="code" id="python-code">
+<span class="comment"># Python 2 vs Python 3 Differences</span>
+<span class="comment"># This code shows why Python 2 programs won't run in Python 3</span>
+
+<span class="comment"># Python 2 syntax (won't work in Python 3)</span>
+<span class="keyword">print</span> <span class="string">"Hello, World!"</span>  <span class="comment"># Python 2</span>
+
+<span class="comment"># Python 3 syntax</span>
+<span class="function">print</span>(<span class="string">"Hello, Python 3!"</span>)  <span class="comment"># Python 3</span>
+
+<span class="comment"># Division differences</span>
+result_py2 = <span class="number">5</span> / <span class="number">2</span>  <span class="comment"># Python 2: 2, Python 3: 2.5</span>
+result_py3 = <span class="number">5</span> // <span class="number">2</span> <span class="comment"># Floor division: 2</span>
+
+<span class="comment"># String handling</span>
+text = <span class="string">"Python Evolution 🐍"</span>
+<span class="function">print</span>(<span class="string">f"Current text: {text}"</span>)
+<span class="function">print</span>(<span class="string">f"Length: {len(text)}"</span>)
+
+<span class="comment"># Modern Python 3.13 features</span>
+data = [<span class="number">1, 2, 3, 4, 5</span>]
+squared = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> data]
+<span class="function">print</span>(<span class="string">f"Original: {data}"</span>)
+<span class="function">print</span>(<span class="string">f"Squared: {squared}"</span>)
+
+<span class="comment"># Type hints (Python 3.5+)</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name: <span class="keyword">str</span>) -> <span class="keyword">str</span>:
+    <span class="keyword">return</span> <span class="string">f"Hello, {name}! Welcome to Python 3.13!"</span>
+
+<span class="function">print</span>(<span class="function">greet</span>(<span class="string">"Developer"</span>))
+                        </div>
+                        <button class="run-button" onclick="runPythonDemo()">▶ Execute Python Code</button>
+                        <div class="output" id="output">Click "Execute Python Code" to see the results...</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="code-container">
+                        <div class="code-header">Python 3.13 New Features Demo</div>
+                        <div class="code">
+<span class="comment"># Python 3.13 Enhanced Features</span>
+
+<span class="comment"># Improved error messages and debugging</span>
+<span class="keyword">try</span>:
+    data = {<span class="string">'python'</span>: <span class="number">3.13</span>, <span class="string">'year'</span>: <span class="number">2025</span>}
+    <span class="function">print</span>(<span class="string">f"Python version: {data['python']}"</span>)
+    <span class="function">print</span>(<span class="string">f"Current year: {data['year']}"</span>)
+<span class="keyword">except</span> <span class="keyword">KeyError</span> <span class="keyword">as</span> e:
+    <span class="function">print</span>(<span class="string">f"Key error: {e}"</span>)
+
+<span class="comment"># Advanced list comprehensions</span>
+numbers = <span class="function">range</span>(<span class="number">1, 11</span>)
+even_squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> numbers <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]
+<span class="function">print</span>(<span class="string">f"Even squares: {even_squares}"</span>)
+
+<span class="comment"># F-string formatting (enhanced in 3.13)</span>
+version = <span class="string">"3.13.7"</span>
+release_date = <span class="string">"August 2025"</span>
+<span class="function">print</span>(<span class="string">f"Python {version} released in {release_date}"</span>)
+
+<span class="comment"># Walrus operator (:=) - Python 3.8+</span>
+<span class="keyword">if</span> (n := <span class="function">len</span>(<span class="string">"Python 3.13"</span>)) > <span class="number">10</span>:
+    <span class="function">print</span>(<span class="string">f"Long string with {n} characters"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">f"Short string with {n} characters"</span>)
+                        </div>
+                        <button class="run-button" onclick="runAdvancedDemo()">▶ Run Advanced Demo</button>
+                        <div class="output" id="output2">Click "Run Advanced Demo" to see Python 3.13 features...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="typing-effect">🎯 Why Python 3 Breaks Backward Compatibility</h2>
+            <div class="compatibility-warning">
+                <h3>🔥 Critical Compatibility Issues:</h3>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>Print Statement vs Function:</strong> Python 2 uses `print "text"`, Python 3 requires `print("text")`</li>
+                    <li><strong>Division Behavior:</strong> Python 2: 5/2 = 2, Python 3: 5/2 = 2.5</li>
+                    <li><strong>String Handling:</strong> Python 3 has native Unicode support, different string types</li>
+                    <li><strong>Iterator Changes:</strong> Many functions return iterators instead of lists</li>
+                    <li><strong>Exception Syntax:</strong> `except Exception, e:` vs `except Exception as e:`</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function runPythonDemo() {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
+            const results = [
+                'Python 3 Execution Results:',
+                '>>> print("Hello, Python 3!")  # This works in Python 3',
+                'Hello, Python 3!',
+                '',
+                '>>> result_py3 = 5 / 2  # Python 3 division',
+                '>>> print(f"5 / 2 = {result_py3}")',
+                '5 / 2 = 2.5',
+                '',
+                '>>> result_floor = 5 // 2  # Floor division',
+                '>>> print(f"5 // 2 = {result_floor}")',
+                '5 // 2 = 2',
+                '',
+                '>>> text = "Python Evolution 🐍"',
+                '>>> print(f"Current text: {text}")',
+                'Current text: Python Evolution 🐍',
+                '>>> print(f"Length: {len(text)}")',
+                'Length: 18',
+                '',
+                '>>> data = [1, 2, 3, 4, 5]',
+                '>>> squared = [x**2 for x in data]',
+                '>>> print(f"Original: {data}")',
+                'Original: [1, 2, 3, 4, 5]',
+                '>>> print(f"Squared: {squared}")',
+                'Squared: [1, 4, 9, 16, 25]',
+                '',
+                '>>> def greet(name: str) -> str:',
+                '...     return f"Hello, {name}! Welcome to Python 3.13!"',
+                '>>> print(greet("Developer"))',
+                'Hello, Developer! Welcome to Python 3.13!',
+                '',
+                '✅ Code executed successfully in Python 3.13.7!'
+            ];
+            
+            let i = 0;
+            function typeResult() {
+                if (i < results.length) {
+                    output.innerHTML += results[i] + '\n';
+                    output.scrollTop = output.scrollHeight;
+                    i++;
+                    setTimeout(typeResult, 100);
+                }
+            }
+            typeResult();
+        }
+
+        function runAdvancedDemo() {
+            const output2 = document.getElementById('output2');
+            output2.innerHTML = '';
+            
+            const results = [
+                'Python 3.13 Advanced Features Demo:',
+                '',
+                '>>> data = {\'python\': 3.13, \'year\': 2025}',
+                '>>> print(f"Python version: {data[\'python\']}")',
+                'Python version: 3.13',
+                '>>> print(f"Current year: {data[\'year\']}")',
+                'Current year: 2025',
+                '',
+                '>>> numbers = range(1, 11)',
+                '>>> even_squares = [x**2 for x in numbers if x % 2 == 0]',
+                '>>> print(f"Even squares: {even_squares}")',
+                'Even squares: [4, 16, 36, 64, 100]',
+                '',
+                '>>> version = "3.13.7"',
+                '>>> release_date = "August 2025"',
+                '>>> print(f"Python {version} released in {release_date}")',
+                'Python 3.13.7 released in August 2025',
+                '',
+                '>>> # Walrus operator demonstration',
+                '>>> if (n := len("Python 3.13")) > 10:',
+                '...     print(f"Long string with {n} characters")',
+                '... else:',
+                '...     print(f"Short string with {n} characters")',
+                'Short string with 11 characters',
+                '',
+                '🚀 Python 3.13 features executed successfully!',
+                '💡 Enhanced debugging, JIT compilation, and better performance!'
+            ];
+            
+            let i = 0;
+            function typeResult() {
+                if (i < results.length) {
+                    output2.innerHTML += results[i] + '\n';
+                    output2.scrollTop = output2.scrollHeight;
+                    i++;
+                    setTimeout(typeResult, 120);
+                }
+            }
+            typeResult();
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate version cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.version-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

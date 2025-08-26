@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Files Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #667eea;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .file-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .file-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .file-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .file-type {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .files-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <H1> Session 2</H1>
+        <div class="category-section">
+            <h2 class="category-title">Features of Python Programming 🐍</h2>
+            <div class="files-grid">
+                <div class="file-card" data-file="01-python_simplicity_demo.html">
+                    <div class="file-title">Simple and easy to learn</div>
+                    <div class="file-description">Python is a simple programming language. When we read Python program,we can feel like reading english statements</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-python_opensource_demo.html">
+                    <div class="file-title">Freeware and Open Source</div>
+                    <div class="file-description">We can use Python software without any licence and it is freeware.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="03-python_highlevel_demo.html">
+                    <div class="file-title">High Level Programming language</div>
+                    <div class="file-description">Python is high level programming language and hence it is programmer friendly language.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="04-python_platform_independence.html">
+                    <div class="file-title">Platform Independent</div>
+                    <div class="file-description">Once we write a Python program,it can run on any platform without rewriting once again.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="05-python_portability_demo.html">
+                    <div class="file-title">Portability</div>
+                    <div class="file-description">Python programs are portable. ie we can migrate from one platform to another platform very easily</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="06-portability_vs_independence.html">
+                    <div class="file-title">Platform Independent VS Portability</div>
+                    <div class="file-description">Python can run on any platform without rewriting once again.Python programs are portable. ie we can migrate from one platform to another platform very easily</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="07-dynamic-typing-demo.html">
+                    <div class="file-title">Dynamically Typed</div>
+                    <div class="file-description">In Python we are not required to declare type for variables. Whenever we are assigning the value, based on value, type will be allocated automatically</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="08-python_paradigms_demo.html">
+                    <div class="file-title">Both Procedure Oriented and Object Oriented</div>
+                    <div class="file-description">Python language supports both Procedure oriented (like C, pascal etc) and object oriented (like C++, Java) features</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="09-python_compilation_demo.html">
+                    <div class="file-title">Interpreted</div>
+                    <div class="file-description">We are not required to compile Python programs explcitly. Internally Python interpreter will take care that compilation.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="10-python_extensibility_demo.html">
+                    <div class="file-title">Extensible</div>
+                    <div class="file-description">We can use other language programs in Python.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="11-python_embedding_demo.html">
+                    <div class="file-title">Embedded</div>
+                    <div class="file-description">We can use Python programs in any other language programs.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="12-python_libraries_interactive.html">
+                    <div class="file-title">Extensive Library</div>
+                    <div class="file-description">Python has a rich inbuilt library.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File card click handlers
+        const fileCards = document.querySelectorAll('.file-card');
+        
+        fileCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const fileName = this.getAttribute('data-file');
+                window.open(fileName, '_blank');
+            });
+        });
+
+        // Add hover effects
+        fileCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

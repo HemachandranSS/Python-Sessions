@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming Language - History & Origins</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(45deg, #3776ab, #ffd43b);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .python-logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            position: relative;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+            align-items: center;
+        }
+
+        .info-section {
+            animation: slideInLeft 1s ease-out 0.3s both;
+        }
+
+        .creator-section {
+            text-align: center;
+            animation: slideInRight 1s ease-out 0.6s both;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #3776ab;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(55, 118, 171, 0.15);
+            background: #e3f2fd;
+        }
+
+        .info-card h3 {
+            color: #3776ab;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .creator-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 5px solid #ffd43b;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        .creator-image:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(255, 212, 59, 0.4);
+        }
+
+        .creator-info {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+        }
+
+        .creator-info h3 {
+            color: #3776ab;
+            font-size: 1.6em;
+            margin-bottom: 10px;
+        }
+
+        .creator-info p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(90deg, #3776ab, #ffd43b);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .timeline-year {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .timeline-event {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .recommendation {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 20px rgba(40, 167, 69, 0.5); }
+            to { box-shadow: 0 0 30px rgba(40, 167, 69, 0.8); }
+        }
+
+        .recommendation h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .python-logo {
+                font-size: 50px;
+            }
+            
+            .creator-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .interactive-btn {
+            background: linear-gradient(45deg, #3776ab, #ffd43b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(55, 118, 171, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="python-logo">🐍</div>
+            <h1>Python Programming Language</h1>
+            <p>The Journey from Conception to Global Adoption</p>
+        </div>
+
+        <div class="content">
+            <div class="info-section">
+                <div class="info-card" onclick="showDetails('development')">
+                    <h3><span class="icon">🚀</span> Development Begins</h3>
+                    <p>Python was developed by Guido van Rossum in 1989 while working at the National Research Institute in the Netherlands. The language was conceived as a successor to the ABC programming language.</p>
+                </div>
+
+                <div class="info-card" onclick="showDetails('release')">
+                    <h3><span class="icon">🎉</span> Public Release</h3>
+                    <p>Python was officially made available to the public in 1991, marking the beginning of its journey to become one of the world's most popular programming languages.</p>
+                </div>
+
+                <div class="info-card" onclick="showDetails('birthday')">
+                    <h3><span class="icon">🎂</span> Official Birth Date</h3>
+                    <p>The official Date of Birth for Python is <strong>February 20th, 1991</strong>. This date marks when Python 0.9.0 was first released to the public.</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item" onclick="showTimeline('1989')">
+                        <span class="timeline-year">1989</span>
+                        <span class="timeline-event">Development Started</span>
+                    </div>
+                    <div class="timeline-item" onclick="showTimeline('1991')">
+                        <span class="timeline-year">1991</span>
+                        <span class="timeline-event">Public Release</span>
+                    </div>
+                    <div class="timeline-item" onclick="showTimeline('today')">
+                        <span class="timeline-year">Today</span>
+                        <span class="timeline-event">Global Language</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creator-section">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Guido_van_Rossum_OSCON_2006.jpg" 
+                     alt="Guido van Rossum" 
+                     class="creator-image"
+                     onclick="showCreatorDetails()">
+                
+                <div class="creator-info">
+                    <h3>Guido van Rossum</h3>
+                    <p>Creator of Python Programming Language</p>
+                    <p>Often referred to as Python's "Benevolent Dictator For Life" (BDFL)</p>
+                    <button class="interactive-btn" onclick="showCreatorDetails()">Learn More About Guido</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <h3>🌟 Perfect for Beginners!</h3>
+            <p>Python is widely recommended as the first programming language for beginners due to its simple syntax, readability, and extensive community support.</p>
+            <button class="interactive-btn" onclick="showWhyPython()">Why Choose Python?</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function showDetails(topic) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+            
+            let modalData = {
+                development: {
+                    title: "🚀 Python Development (1989)",
+                    content: `
+                        <h2>The Birth of Python</h2>
+                        <p>In December 1989, Guido van Rossum was looking for a hobby programming project to keep him occupied during Christmas week. He decided to write an interpreter for a new scripting language he had been thinking about - a descendant of ABC that would appeal to Unix/C hackers.</p>
+                        <p>He was working at the Centrum Wiskunde & Informatica (CWI) in the Netherlands, and the name "Python" came from the BBC comedy series "Monty Python's Flying Circus".</p>
+                    `
+                },
+                release: {
+                    title: "🎉 Public Release (1991)",
+                    content: `
+                        <h2>Python Goes Public</h2>
+                        <p>On February 20, 1991, Guido van Rossum released Python 0.9.0 to the alt.sources newsgroup. This first release already included many of the features we know today:</p>
+                        <ul style="text-align: left; margin: 20px 0;">
+                            <li>Classes with inheritance</li>
+                            <li>Exception handling</li>
+                            <li>Functions</li>
+                            <li>Modules</li>
+                        </ul>
+                    `
+                },
+                birthday: {
+                    title: "🎂 Python's Birthday",
+                    content: `
+                        <h2>February 20th, 1991</h2>
+                        <p>This date is celebrated as Python's official birthday when version 0.9.0 was released. It marked the beginning of Python's journey from a hobby project to one of the world's most important programming languages.</p>
+                        <p>Today, Python powers everything from web applications to artificial intelligence, data science, and space exploration!</p>
+                    `
+                }
+            };
+            
+            content.innerHTML = modalData[topic].content;
+            modal.style.display = 'block';
+            
+            // Add animation
+            setTimeout(() => {
+                modal.querySelector('.modal-content').style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function showCreatorDetails() {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <h2>👨‍💻 Guido van Rossum</h2>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Guido_van_Rossum_OSCON_2006.jpg" 
+                     style="width: 200px; height: 200px; border-radius: 50%; margin: 20px 0; object-fit: cover;">
+                <p><strong>Born:</strong> January 31, 1956 in Haarlem, Netherlands</p>
+                <p><strong>Education:</strong> Mathematics and Computer Science at University of Amsterdam</p>
+                <p><strong>Known for:</strong> Creating the Python programming language</p>
+                <p><strong>Title:</strong> "Benevolent Dictator For Life" (BDFL) of Python (until 2018)</p>
+                <p>Guido has worked at prestigious companies including Google, Dropbox, and currently Microsoft, continuing to influence Python's development and the broader programming community.</p>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function showWhyPython() {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <h2>🌟 Why Python for Beginners?</h2>
+                <div style="text-align: left; margin: 20px 0;">
+                    <h3>✅ Simple Syntax</h3>
+                    <p>Python's syntax is clean and readable, making it easy to learn and understand.</p>
+                    
+                    <h3>🚀 Versatile</h3>
+                    <p>Web development, data science, AI, automation, game development - Python does it all!</p>
+                    
+                    <h3>🤝 Great Community</h3>
+                    <p>Massive community support with extensive documentation and libraries.</p>
+                    
+                    <h3>💼 Career Opportunities</h3>
+                    <p>High demand in job market across multiple industries.</p>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function showTimeline(year) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+            
+            let timelineData = {
+                '1989': {
+                    title: "1989 - The Beginning",
+                    content: "Guido van Rossum starts developing Python as a hobby project during Christmas week at CWI in the Netherlands."
+                },
+                '1991': {
+                    title: "1991 - Birth of Python",
+                    content: "February 20th - Python 0.9.0 is released to the public via alt.sources newsgroup."
+                },
+                'today': {
+                    title: "Python Today",
+                    content: "Python is now one of the most popular programming languages worldwide, powering everything from web applications to AI and space exploration."
+                }
+            };
+            
+            content.innerHTML = `
+                <h2>${timelineData[year].title}</h2>
+                <p>${timelineData[year].content}</p>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Add some interactive animations on page load
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // Add floating animation to Python logo
+        const logo = document.querySelector('.python-logo');
+        setInterval(() => {
+            logo.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                logo.style.transform = 'translateY(0)';
+            }, 1000);
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Limitations Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .limitation-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .limitation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-right: 20px;
+        }
+
+        .performance-icon { background: linear-gradient(45deg, #ff6b6b, #ee5a52); }
+        .mobile-icon { background: linear-gradient(45deg, #4ecdc4, #44a08d); }
+
+        .card-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+        }
+
+        .demo-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .performance-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .algorithm-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .algorithm-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .run-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .run-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            width: 0%;
+            transition: width 2s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .results {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .mobile-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .platform-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .platform-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+        }
+
+        .native-platform { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .python-platform { background: linear-gradient(45deg, #3498db, #2980b9); }
+
+        .performance-meter {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1s ease-in-out;
+        }
+
+        .high-performance { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .low-performance { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+
+        .code-snippet {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 15px 0;
+            overflow-x: auto;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .keyword { color: #3498db; }
+        .string { color: #2ecc71; }
+        .comment { color: #95a5a6; }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .spinning {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            height: 200px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            transition: height 2s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .performance-demo, .mobile-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 { font-size: 2em; }
+            .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐍 Python Limitations Analysis</h1>
+
+        <!-- Performance Limitation Card -->
+        <div class="limitation-card">
+            <div class="card-header">
+                <div class="card-icon performance-icon">⚡</div>
+                <h2 class="card-title">Performance Limitations</h2>
+            </div>
+            
+            <p>Python's interpreted nature creates significant performance bottlenecks compared to compiled languages. The interpreter overhead, Global Interpreter Lock (GIL), and dynamic typing all contribute to slower execution.</p>
+
+            <div class="demo-section">
+                <h3>🔬 Performance Demo: Algorithm Comparison</h3>
+                <div class="performance-demo">
+                    <div class="algorithm-box">
+                        <h4>Inefficient Algorithm (O(2^n))</h4>
+                        <div class="code-snippet">
+<span class="keyword">def</span> fib_recursive(n):
+    <span class="keyword">if</span> n <= <span class="string">1</span>:
+        <span class="keyword">return</span> n
+    <span class="keyword">return</span> fib_recursive(n-<span class="string">1</span>) + fib_recursive(n-<span class="string">2</span>)
+                        </div>
+                        <button class="run-button" onclick="runSlowAlgorithm()">Run Slow Algorithm</button>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="slow-progress"></div>
+                        </div>
+                        <div class="results" id="slow-results">Click to run simulation...</div>
+                    </div>
+
+                    <div class="algorithm-box">
+                        <h4>Optimized Algorithm (O(n))</h4>
+                        <div class="code-snippet">
+<span class="keyword">def</span> fib_dynamic(n):
+    <span class="keyword">if</span> n <= <span class="string">1</span>: <span class="keyword">return</span> n
+    dp = [<span class="string">0</span>] * (n + <span class="string">1</span>)
+    dp[<span class="string">1</span>] = <span class="string">1</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="string">2</span>, n + <span class="string">1</span>):
+        dp[i] = dp[i-<span class="string">1</span>] + dp[i-<span class="string">2</span>]
+    <span class="keyword">return</span> dp[n]
+                        </div>
+                        <button class="run-button" onclick="runFastAlgorithm()">Run Fast Algorithm</button>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="fast-progress"></div>
+                        </div>
+                        <div class="results" id="fast-results">Click to run simulation...</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h4>Performance Comparison Chart</h4>
+                    <div class="bar-chart">
+                        <div class="bar" id="python-bar" style="height: 20px;">Python<br>Interpreted</div>
+                        <div class="bar" id="c-bar" style="height: 20px;">C/C++<br>Compiled</div>
+                        <div class="bar" id="java-bar" style="height: 20px;">Java<br>JIT</div>
+                        <div class="bar" id="js-bar" style="height: 20px;">JavaScript<br>V8</div>
+                    </div>
+                    <button class="run-button" onclick="showPerformanceChart()">Show Performance Comparison</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Development Limitation Card -->
+        <div class="limitation-card">
+            <div class="card-header">
+                <div class="card-icon mobile-icon">📱</div>
+                <h2 class="card-title">Mobile Development Limitations</h2>
+            </div>
+            
+            <p>Python faces significant challenges in mobile development due to platform architecture, performance requirements, and ecosystem limitations. Mobile platforms favor native languages for optimal performance and user experience.</p>
+
+            <div class="demo-section">
+                <h3>📊 Platform Comparison</h3>
+                <div class="mobile-comparison">
+                    <div class="platform-box">
+                        <div class="platform-icon native-platform">🚀</div>
+                        <h4>Native Development</h4>
+                        <p><strong>iOS:</strong> Swift/Objective-C<br><strong>Android:</strong> Kotlin/Java</p>
+                        <div class="performance-meter">
+                            <div class="meter-fill high-performance" id="native-meter" style="width: 0%;"></div>
+                        </div>
+                        <p><small>Optimal performance, full API access, app store compliant</small></p>
+                    </div>
+
+                    <div class="platform-box">
+                        <div class="platform-icon python-platform">🐍</div>
+                        <h4>Python Mobile</h4>
+                        <p><strong>Frameworks:</strong> Kivy, BeeWare<br><strong>Status:</strong> Limited</p>
+                        <div class="performance-meter">
+                            <div class="meter-fill low-performance" id="python-meter" style="width: 0%;"></div>
+                        </div>
+                        <p><small>Interpretation overhead, limited APIs, larger app size</small></p>
+                    </div>
+                </div>
+
+                <button class="run-button" onclick="showMobileComparison()">Analyze Mobile Performance</button>
+
+                <div class="demo-section" style="margin-top: 30px;">
+                    <h4>🔍 Key Mobile Development Challenges for Python:</h4>
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li style="padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; border-left: 4px solid #e74c3c;">
+                            <strong>Performance:</strong> Interpreted execution is too slow for responsive mobile UIs
+                        </li>
+                        <li style="padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; border-left: 4px solid #f39c12;">
+                            <strong>Battery Life:</strong> Higher CPU usage drains battery faster
+                        </li>
+                        <li style="padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; border-left: 4px solid #9b59b6;">
+                            <strong>App Size:</strong> Python runtime increases app download size
+                        </li>
+                        <li style="padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; border-left: 4px solid #3498db;">
+                            <strong>Platform APIs:</strong> Limited access to native mobile features
+                        </li>
+                        <li style="padding: 10px; margin: 5px 0; background: #fff; border-radius: 5px; border-left: 4px solid #1abc9c;">
+                            <strong>App Store:</strong> Restrictions on dynamic code execution
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solutions and Alternatives -->
+        <div class="limitation-card">
+            <div class="card-header">
+                <div class="card-icon" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">💡</div>
+                <h2 class="card-title">Solutions & Alternatives</h2>
+            </div>
+            
+            <div class="demo-section">
+                <h3>🛠️ Performance Optimization Strategies</h3>
+                <div class="code-snippet">
+<span class="comment"># 1. Use NumPy for numerical computations</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+arr = np.array([<span class="string">1</span>, <span class="string">2</span>, <span class="string">3</span>, <span class="string">4</span>, <span class="string">5</span>])
+result = np.sum(arr * arr)  <span class="comment"># Much faster than pure Python</span>
+
+<span class="comment"># 2. Use Cython for critical sections</span>
+<span class="comment"># cython: language_level=3</span>
+<span class="keyword">def</span> fast_fibonacci(<span class="keyword">int</span> n):
+    <span class="keyword">cdef int</span> a = <span class="string">0</span>, b = <span class="string">1</span>, i
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):
+        a, b = b, a + b
+    <span class="keyword">return</span> a
+
+<span class="comment"># 3. Use multiprocessing for CPU-bound tasks</span>
+<span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Pool
+<span class="keyword">with</span> Pool() <span class="keyword">as</span> pool:
+    results = pool.map(cpu_bound_function, data_list)
+                </div>
+
+                <h3>📱 Mobile Development Alternatives</h3>
+                <div class="code-snippet">
+<span class="comment"># 1. Web-based mobile apps with Flask/Django</span>
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template
+app = Flask(__name__)
+
+<span class="keyword">@app.route</span>(<span class="string">'/'</span>)
+<span class="keyword">def</span> mobile_web_app():
+    <span class="keyword">return</span> render_template(<span class="string">'mobile_optimized.html'</span>)
+
+<span class="comment"># 2. API backend for mobile apps</span>
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI
+api = FastAPI()
+
+<span class="keyword">@api.get</span>(<span class="string">'/api/data'</span>)
+<span class="keyword">async def</span> get_mobile_data():
+    <span class="keyword">return</span> {<span class="string">"data"</span>: <span class="string">"optimized_for_mobile"</span>}
+
+<span class="comment"># 3. Cross-platform with Kivy (limited but possible)</span>
+<span class="keyword">from</span> kivy.app <span class="keyword">import</span> App
+<span class="keyword">from</span> kivy.uix.label <span class="keyword">import</span> Label
+
+<span class="keyword">class</span> MyApp(App):
+    <span class="keyword">def</span> build(self):
+        <span class="keyword">return</span> Label(text=<span class="string">'Python Mobile App'</span>)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function runSlowAlgorithm() {
+            const button = event.target;
+            const progress = document.getElementById('slow-progress');
+            const results = document.getElementById('slow-results');
+            
+            button.innerHTML = '⏳ Running...';
+            button.disabled = true;
+            button.classList.add('spinning');
+            
+            progress.style.width = '0%';
+            results.innerHTML = 'Simulating exponential time complexity...<br>This would take very long for large inputs!';
+            
+            // Simulate slow progress
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 5;
+                progress.style.width = Math.min(width, 100) + '%';
+                
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        results.innerHTML = `
+                            <strong>Fibonacci(35) Recursive:</strong><br>
+                            Result: 9,227,465<br>
+                            Time: ~2.847 seconds<br>
+                            Function calls: 29,860,703<br>
+                            <span style="color: #e74c3c;">⚠️ Exponential time complexity O(2^n)</span>
+                        `;
+                        button.innerHTML = 'Run Slow Algorithm';
+                        button.disabled = false;
+                        button.classList.remove('spinning');
+                    }, 500);
+                }
+            }, 100);
+        }
+        
+        function runFastAlgorithm() {
+            const button = event.target;
+            const progress = document.getElementById('fast-progress');
+            const results = document.getElementById('fast-results');
+            
+            button.innerHTML = '⚡ Running...';
+            button.disabled = true;
+            
+            progress.style.width = '0%';
+            results.innerHTML = 'Executing optimized dynamic programming solution...';
+            
+            // Simulate fast execution
+            setTimeout(() => {
+                progress.style.width = '100%';
+                results.innerHTML = `
+                    <strong>Fibonacci(35) Dynamic:</strong><br>
+                    Result: 9,227,465<br>
+                    Time: ~0.0001 seconds<br>
+                    Operations: 35<br>
+                    <span style="color: #27ae60;">✅ Linear time complexity O(n)</span><br>
+                    <strong>Speed improvement: ~28,470x faster!</strong>
+                `;
+                button.innerHTML = 'Run Fast Algorithm';
+                button.disabled = false;
+            }, 300);
+        }
+        
+        function showPerformanceChart() {
+            const pythonBar = document.getElementById('python-bar');
+            const cBar = document.getElementById('c-bar');
+            const javaBar = document.getElementById('java-bar');
+            const jsBar = document.getElementById('js-bar');
+            
+            // Simulate relative performance (Python = baseline)
+            setTimeout(() => pythonBar.style.height = '40px', 200);  // Python (slowest)
+            setTimeout(() => jsBar.style.height = '80px', 400);      // JavaScript
+            setTimeout(() => javaBar.style.height = '120px', 600);   // Java
+            setTimeout(() => cBar.style.height = '160px', 800);      // C/C++ (fastest)
+        }
+        
+        function showMobileComparison() {
+            const nativeMeter = document.getElementById('native-meter');
+            const pythonMeter = document.getElementById('python-meter');
+            
+            // Animate performance meters
+            setTimeout(() => {
+                nativeMeter.style.width = '95%'; // Native is highly optimized
+                pythonMeter.style.width = '35%'; // Python has limitations
+            }, 300);
+        }
+        
+        // Auto-show performance chart on page load
+        window.addEventListener('load', () => {
+            setTimeout(showPerformanceChart, 2000);
+            setTimeout(showMobileComparison, 3000);
+        });
+        
+        // Add some interactive hover effects
+        document.querySelectorAll('.algorithm-box').forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

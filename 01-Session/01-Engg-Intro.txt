@@ -1,0 +1,255 @@
+Computer Science Engineering (CSE) is not tough — hard work builds your basics, and smart work helps you apply them efficiently. With the right balance of both, the subject feels less difficult and more interesting.
+
+2021 regulation - Computer Science and Engineering Syllabus: https://cac.annauniv.edu/aidetails/afug_2021_fu/Revised/IandC/B.E.CSE.pdf
+
+Cutting Edge Technologies:
+
+  1. Artificial Intelligence (AI) & Machine Learning (ML)
+
+    Generative AI, Large Language Models (like GPT-5), Reinforcement Learning.
+
+    AI in healthcare, finance, robotics, and autonomous systems.
+
+  2. Quantum Computing
+
+    Using quantum mechanics for solving problems beyond classical computers.
+
+    Applications: cryptography, drug discovery, optimization.
+
+  3. Cloud Computing & Edge Computing
+
+    Hybrid & multi-cloud systems.
+
+    Edge AI for real-time data processing in IoT and smart devices.
+
+  4. Cybersecurity & Zero-Trust Architectures
+
+    AI-driven threat detection.
+
+    Post-quantum cryptography.
+
+  5. Blockchain & Web3
+
+    Decentralized finance (DeFi), smart contracts, NFTs beyond art (supply chain, healthcare).
+
+  6. Extended Reality (XR: AR/VR/MR)
+
+    Metaverse applications, immersive training, 3D collaboration tools.
+
+  7. Bioinformatics & Computational Biology
+
+    AI in genomics, drug design, personalized medicine.
+
+  8. 5G & 6G Networking
+
+    Ultra-low latency communication.
+
+    Enabler for IoT, autonomous vehicles, and Industry 4.0.
+
+  9. Robotics & Human-AI Collaboration
+
+    Cobots (collaborative robots).
+
+    AI-driven automation in manufacturing, logistics, and healthcare.
+
+  10. Green Computing & Sustainable Tech
+
+    Energy-efficient data centers.
+
+    AI for climate modeling and carbon footprint reduction.
+
+
+Placements:
+
+ROUND 1:
+
+  1. Quantitative Aptitude
+    a) Profit and Loss
+    b) Simple and compound interest
+    c) Time and Distance
+    d) Average
+    e) Permutation
+    f) Percentage
+    g) Ration and Proportions
+    h) Time and Work
+    i) Mixture
+
+  2. Logical Reasoning
+    a) Puzzles
+    b) Syllogisms
+    c) Data Sufficiency
+    d) Seating Arrangements
+    e) In equalities 
+    f) coding
+
+  3. English Grammar
+    a) Correction of sentence
+    b) Spot the Error
+    c) Reading Comprehension
+
+Round 2:
+
+  1. Group discussion
+    a) General Topics: [Women Empowerment, Explain movies]
+    b) Currently trending Political or Economical events
+    c) Topic on Leaders and thier thoughs
+
+Round 3 and 4:
+  1. Data Structures and Algorithms (All roles) and Database Management (SQL)
+  2. Required Programming Languages (Python, Java and others) and Font End Skills based on Role
+    
+    Roles:
+
+    a. Core Software Roles
+
+      Software Engineer / Developer -- General programming, application building.
+
+      Full Stack Developer -- End-to-end (frontend + backend + DB + APIs).
+
+      Frontend Developer -- UI/UX side (React, Angular, Flutter, etc.).
+
+      Backend Developer -- Servers, databases, APIs (Java, Python, Node.js, Ruby).
+
+      Mobile App Developer -- Android/iOS apps.
+
+      System Software Engineer -- OS, compilers, low-level software (C, C++).
+
+    b. Data & AI Roles
+
+      Data Analyst -- Basic data processing, SQL, visualization.
+
+      Data Engineer -- Build data pipelines, big data systems (Hadoop, Spark).
+
+      Data Scientist -- Predictive models, ML/AI solutions.
+
+      Machine Learning Engineer -- Advanced AI, deep learning.
+
+      AI/ML Research Engineer -- R&D in AI, robotics, NLP, vision.
+
+    c. Cloud, Systems & Infra
+
+      System Administrator -- Manage servers, OS, networks.
+
+      Cloud Engineer / Cloud Architect -- AWS, Azure, GCP design & deployments.
+
+      DevOps Engineer -- CI/CD, automation, Docker, Kubernetes.
+
+      Site Reliability Engineer (SRE) -- Performance + scalability of systems.
+
+      Network Engineer -- Routing, switching, network security.
+
+    d. Cybersecurity & Privacy
+
+      Cybersecurity Analyst -- Monitor attacks, incident response.
+
+      Penetration Tester / Ethical Hacker -- Test systems for vulnerabilities.
+
+      Security Engineer -- Design & implement secure systems.
+
+      Forensic Expert -- Investigate cybercrimes.
+
+      Cryptographer -- Algorithms, encryption, blockchain security.
+
+    e. Specialized Emerging Tech
+
+      Game Developer -- Unity, Unreal Engine.
+
+      IoT / Embedded Systems Engineer -- Robotics, microcontrollers.
+
+      AR/VR Developer -- Metaverse, 3D simulations.
+
+      Blockchain Developer -- Smart contracts, decentralized apps.
+
+      Quantum Computing Researcher -- Future-focused roles.
+
+    f. Research & Academia
+
+      Teaching (Professor/Lecturer) -- CS education in universities.
+
+      Research Scientist (CS) -- Labs, AI, algorithms, computing theory.
+
+    g. Product & Business
+
+      Product Manager (Tech) -- Manage product lifecycle + strategy.
+
+      Project Manager (IT) -- Handle project delivery.
+
+      Business Analyst (IT) -- Connect business requirements with technical solutions.
+
+      Tech Consultant -- Provide IT & software solutions for companies.
+
+    h. So, Computer Science Engineering gives you 3 broad paths:
+
+      Tech-heavy roles → Software, AI, Cloud, Cybersecurity.
+
+      Research/Academia → Higher studies, R&D, teaching.
+
+      Tech + Business blend → Product management, consulting, entrepreneurship.
+      
+
+        ├── 01-Frontend-Beginner - Specialize in web & app interfaces (React, Angular, Vue, etc.).
+        ├── 02-Backend-Beginner - Focus on servers, databases, APIs (Java, Python, Ruby, Node.js).
+        ├── 03-Devops-Beginner
+        ├── 04-Frontend - Specialize in web & app interfaces (React, Angular, Vue, etc.).
+        ├── 05-Backend
+        ├── 06-Full-Stack -- Work on both frontend (UI) and backend (server/database).
+        ├── 07-API-Design
+        ├── 08-QA Engineer
+        ├── 09-DevOps - Automate deployment, CI/CD, containers (Docker, Kubernetes).
+        ├── 10-Android Developer
+        ├── 11-iOS Developer
+        ├── 12-PostgreSQL DBA
+        ├── 13-Software Architect - Build applications (web, mobile, desktop)
+        ├── 14-Technical Writer
+        ├── 15-Developer Relations
+        ├── 16-AI and Data Scientist - Use ML/AI to build predictive & decision models, Design and deploy ML models.
+        ├── 17-AI Engineer -  Work on chatbots, vision, speech recognition.
+        ├── 18-AI Agents
+        ├── 19-Data Analyst - Process and analyze data for insights.
+        ├── 20-MLOps
+        ├── 21-Product Manager
+        ├── 22-Engineering Manager
+        ├── 23-Client Side Game Developer
+        ├── 24-Server Side Game Developer
+        ├── 25-UX Design
+        ├── 26.Blockchain Developer
+        └── 27-Cyber Security Expert
+
+
+        ├── 01-GraphQL.pdf
+        ├── 02-Git and GitHub.pdf
+        ├── 03-React Developer.pdf
+        ├── 04-Vue Developer.pdf
+        ├── 05-Angular Developer.pdf
+        ├── 06-Spring Boot Developer.pdf
+        ├── 07-ASP.NET Core Developer.pdf
+        ├── 08-JavaScript.pdf
+        ├── 09-TypeScript.pdf
+        ├── 10-Node.js Developer.pdf
+        ├── 11-PHP.pdf
+        ├── 12-C++ Developer.pdf
+        ├── 13-Go Developer.pdf
+        ├── 14-Rust Developer.pdf
+        ├── 15-Python Developer.pdf
+        ├── 16-Java Developer.pdf
+        ├── 17-SQL.pdf
+        ├── 18-Docker.pdf
+        ├── 19-Kubernetes.pdf
+        ├── 20-AWS.pdf
+        ├── 21-Cloudflare.pdf
+        ├── 22-Linux.pdf
+        ├── 23-Terraform.pdf
+        ├── 24-React Native Developer.pdf
+        ├── 25-Flutter Developer.pdf
+        ├── 26-MongoDB.pdf
+        ├── 27-Redis.pdf
+        ├── 28-Computer Science.pdf
+        ├── 29-Data Structures & Algorithms.pdf
+        ├── 30-System Design.pdf
+        ├── 31-Software Design and Architecture.pdf
+        ├── 32-Code Review Pyramid.pdf
+        ├── 33-AI Red Teaming.pdf
+        ├── 34-Prompt Engineering.pdf
+        └── 35-Design System.pdf
+
+

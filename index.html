@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Files Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #667eea;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .file-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .file-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .file-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .file-type {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .files-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📁 Computer Science Engineering and Programming</h1>
+        <p class="subtitle">Explore your collection of programming tutorials and demonstrations</p>
+
+
+        <H1> Session 1</H1>
+        <div class="category-section">
+            <h2 class="category-title">📚 Engineering (Computer Science) and Problem Solving</h2>
+            <div class="files-grid">
+                <div class="file-card" data-file="01-Session/01-cse_roadmap.html">
+                    <div class="file-icon">📊</div>
+                    <div class="file-title">CSE Roadmap</div>
+                    <div class="file-description">Engineering is nothing but solving problems and automation.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/Electronics-Engg-Components-And-Materials.pdf">
+                    <div class="file-icon">📚</div>
+                    <div class="file-title">Engineering Hardware components</div>
+                    <div class="file-description">Engineering Hardwares and components</div>
+                    <div class="file-type">PDF</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/02-Syllabus/B.E.CSE.pdf">
+                    <div class="file-icon">📚</div>
+                    <div class="file-title">Anna University CSE Syllabus (Regulation - 2021)</div>
+                    <div class="file-description">Computer Science engg syllabus for 2021 regulation</div>
+                    <div class="file-type">PDF</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/02-computing_fundamentals_game.html">
+                    <div class="file-title">Problem Solving Fundamentals</div>
+                    <div class="file-description">Problem Solving steps, methods and techniques.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/03-Conceptual-Understanding/01-find_min_number.html">
+                    <div class="file-title">Finding Minimum of n numbers</div>
+                    <div class="file-description">solving the problem</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/03-Conceptual-Understanding/02-inserting-a-card-in-sorted-deck-of-cards.html">
+                    <div class="file-title">Inserting a number in the Sorted List/ Card</div>
+                    <div class="file-description">solving the problem</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/03-Conceptual-Understanding/03-guess_number_game_html.html">
+                    <div class="file-title">Guessing the Number</div>
+                    <div class="file-description">solving the problem</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="01-Session/03-Conceptual-Understanding/04-towers_of_hanoi.html">
+                    <div class="file-title">Towers of Hanoi</div>
+                    <div class="file-description">solving the problem</div>
+                    <div class="file-type">HTML</div>
+                </div>
+            </div>
+        </div>
+        
+
+        <H1> Session 2</H1>
+        <div class="category-section">
+            <h2 class="category-title">📚 Interactive Learning</h2>
+            <div class="files-grid">
+                <div class="file-card" data-file="02-Session/00-flowchart_interactive.html">
+                    <div class="file-icon">📊</div>
+                    <div class="file-title">Interactive Flowchart</div>
+                    <div class="file-description">Visual flowchart demonstration with interactive elements for learning programming concepts.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/01-interactive_flowchart_demo.html">
+                    <div class="file-icon">🔄</div>
+                    <div class="file-title">Interactive Flowchart Demo</div>
+                    <div class="file-description">Advanced interactive flowchart with dynamic content and user interactions.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="category-title">💻 Programming Concepts</h2>
+            <div class="files-grid">
+                <div class="file-card" data-file="02-Session/02-programming_languages_demo-test.html">
+                    <div class="file-icon">🔧</div>
+                    <div class="file-title">What is Programming Languages</div>
+                    <div class="file-description">Comprehensive overview of programming languages</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/04-compiler_interpreter_guide.html">
+                    <div class="file-icon">⚙️</div>
+                    <div class="file-title">Compiler vs Interpreter Guide</div>
+                    <div class="file-description">Educational guide explaining the differences between compilers and interpreters with examples.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/05-typing_explanation.html">
+                    <div class="file-icon">📝</div>
+                    <div class="file-title">Typing Explanation</div>
+                    <div class="file-description">Detailed explanation of static vs dynamic typing in programming languages.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/06-programming_paradigms_demo.html">
+                    <div class="file-icon">🎯</div>
+                    <div class="file-title">Programming Paradigms</div>
+                    <div class="file-description">In-depth exploration of various programming paradigms including OOP, functional, and procedural programming.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-section">
+            <h2 class="category-title">🐍 Python Programming</h2>
+            <div class="files-grid">
+                <div class="file-card" data-file="02-Session/03-python_history_interactive.html">
+                    <div class="file-icon">🐍</div>
+                    <div class="file-title">Python History Interactive</div>
+                    <div class="file-description">Explore the history and evolution of Python programming language through interactive timeline.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/07-python_domains_popularity.html">
+                    <div class="file-icon">📈</div>
+                    <div class="file-title">Python Domains & Popularity</div>
+                    <div class="file-description">Visual representation of Python's usage across different domains and its growing popularity.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/08-python_applications_showcase.html">
+                    <div class="file-icon">🚀</div>
+                    <div class="file-title">Python Applications Showcase</div>
+                    <div class="file-description">Comprehensive showcase of real-world Python applications and use cases.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/09-Python-Features/feature-index.html">
+                    <div class="file-icon">⭐</div>
+                    <div class="file-title">Python Features</div>
+                    <div class="file-description">Detailed overview of Python's key features and what makes it unique among programming languages.</div>
+                    <div class="file-type">Directory</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/10-python_limitations_demo.html">
+                    <div class="file-icon">⚠️</div>
+                    <div class="file-title">Python Limitations Demo</div>
+                    <div class="file-description">Educational content about Python's limitations and when to consider other languages.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/11-python_flavors_guide.html">
+                    <div class="file-icon">🍃</div>
+                    <div class="file-title">Python Flavors Guide</div>
+                    <div class="file-description">Comprehensive guide to different Python implementations and flavors (CPython, PyPy, Jython, etc.).</div>
+                    <div class="file-type">HTML</div>
+                </div>
+
+                <div class="file-card" data-file="02-Session/12-python_versions_demo.html">
+                    <div class="file-icon">🔢</div>
+                    <div class="file-title">Python Versions Demo</div>
+                    <div class="file-description">Interactive demonstration of Python version differences and evolution over time.</div>
+                    <div class="file-type">HTML</div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script>
+        // File card click handlers
+        const fileCards = document.querySelectorAll('.file-card');
+        
+        fileCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const fileName = this.getAttribute('data-file');
+                window.open(fileName, '_blank');
+            });
+        });
+
+        // Add hover effects
+        fileCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

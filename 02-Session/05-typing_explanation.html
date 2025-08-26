@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static vs Dynamic Typing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .type-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .type-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .type-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .static-typing h2 {
+            color: #ff6b6b;
+        }
+        
+        .dynamic-typing h2 {
+            color: #4ecdc4;
+        }
+        
+        .code-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        .variable-demo {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .variable-box {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .string-type {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #333;
+        }
+        
+        .number-type {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            color: #333;
+        }
+        
+        .boolean-type {
+            background: linear-gradient(45deg, #96fbc4, #f9f586);
+            color: #333;
+        }
+        
+        .type-error {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .explanation {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: rgba(255, 255, 0, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .animated {
+            animation: pulse 0.6s ease-in-out;
+        }
+        
+        .demo-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Static vs Dynamic Typing</h1>
+        
+        <div class="comparison">
+            <div class="type-section static-typing">
+                <h2>Static Typing</h2>
+                <div class="code-container">
+                    <div class="code" id="static-code">
+# Python with type hints (static-like)
+def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+# Variable types are declared
+name: str = "Alice"
+age: int = 25
+is_student: bool = True
+                    </div>
+                </div>
+                
+                <div class="variable-demo">
+                    <h4>Variables with Fixed Types:</h4>
+                    <div class="variable-box string-type" data-type="string">name: str</div>
+                    <div class="variable-box number-type" data-type="number">age: int</div>
+                    <div class="variable-box boolean-type" data-type="boolean">is_student: bool</div>
+                </div>
+            </div>
+            
+            <div class="type-section dynamic-typing">
+                <h2>Dynamic Typing</h2>
+                <div class="code-container">
+                    <div class="code" id="dynamic-code">
+# Python (dynamically typed)
+def add_anything(a, b):
+    return a + b
+
+# Variables can change types
+variable = "Hello"      # string
+variable = 42           # now it's a number
+variable = [1, 2, 3]    # now it's a list
+                    </div>
+                </div>
+                
+                <div class="variable-demo">
+                    <h4>Variable that Changes:</h4>
+                    <div class="variable-box string-type" id="dynamic-var">variable: "Hello"</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="demonstrateStatic()">Show Static Typing</button>
+            <button class="btn" onclick="demonstrateDynamic()">Show Dynamic Typing</button>
+            <button class="btn" onclick="showTypeError()">Show Type Error</button>
+        </div>
+        
+        <div class="demo-section">
+            <h3 class="demo-title">Interactive Demo</h3>
+            <div id="demo-output" class="explanation">
+                Click the buttons above to see the differences in action!
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>Key Differences:</h3>
+            <p><strong>Static Typing:</strong></p>
+            <ul>
+                <li>Types are <span class="highlight">checked at compile time</span></li>
+                <li>Variables have <span class="highlight">fixed types</span> once declared</li>
+                <li>Catches type errors <span class="highlight">before runtime</span></li>
+                <li>Examples: Java, C++, TypeScript, Python with type hints</li>
+            </ul>
+            
+            <p style="margin-top: 20px;"><strong>Dynamic Typing:</strong></p>
+            <ul>
+                <li>Types are <span class="highlight">checked at runtime</span></li>
+                <li>Variables can <span class="highlight">change types</span> during execution</li>
+                <li>More <span class="highlight">flexible</span> but can have runtime errors</li>
+                <li>Examples: Python, JavaScript, Ruby, PHP</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let dynamicVarStates = [
+            { value: '"Hello"', type: 'string-type', class: 'string-type' },
+            { value: '42', type: 'number', class: 'number-type' },
+            { value: '[1,2,3]', type: 'list', class: 'boolean-type' },
+            { value: 'True', type: 'boolean', class: 'boolean-type' }
+        ];
+        
+        let currentState = 0;
+        
+        function demonstrateStatic() {
+            const output = document.getElementById('demo-output');
+            const staticVars = document.querySelectorAll('.static-typing .variable-box');
+            
+            output.innerHTML = `
+                <h4>Static Typing in Action:</h4>
+                <p>In statically typed languages, once a variable is declared with a type, it cannot change:</p>
+                <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">
+name: str = "Alice"     # ✓ Valid
+age: int = 25           # ✓ Valid  
+age = "twenty-five"     # ✗ Type Error!
+                </pre>
+                <p>The compiler prevents type mismatches <strong>before</strong> the program runs.</p>
+            `;
+            
+            staticVars.forEach((variable, index) => {
+                setTimeout(() => {
+                    variable.classList.add('animated');
+                    setTimeout(() => variable.classList.remove('animated'), 600);
+                }, index * 200);
+            });
+        }
+        
+        function demonstrateDynamic() {
+            const output = document.getElementById('demo-output');
+            const dynamicVar = document.getElementById('dynamic-var');
+            
+            output.innerHTML = `
+                <h4>Dynamic Typing in Action:</h4>
+                <p>In dynamically typed languages, variables can change types during execution:</p>
+                <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">
+variable = "Hello"      # string
+variable = 42           # now it's a number
+variable = [1, 2, 3]    # now it's a list
+                </pre>
+                <p>Watch the variable change types below:</p>
+            `;
+            
+            let stateIndex = 0;
+            const interval = setInterval(() => {
+                const state = dynamicVarStates[stateIndex];
+                dynamicVar.className = `variable-box ${state.class}`;
+                dynamicVar.textContent = `variable: ${state.value}`;
+                dynamicVar.classList.add('animated');
+                
+                setTimeout(() => dynamicVar.classList.remove('animated'), 600);
+                
+                stateIndex++;
+                if (stateIndex >= dynamicVarStates.length) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+        
+        function showTypeError() {
+            const output = document.getElementById('demo-output');
+            const staticVars = document.querySelectorAll('.static-typing .variable-box');
+            
+            output.innerHTML = `
+                <h4>Type Error Demonstration:</h4>
+                <p><strong>Static Typing:</strong> Errors caught at compile time</p>
+                <pre style="background: rgba(255,0,0,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+result = add_numbers("5", "10")  # ✗ Compile Error!
+# Error: Expected int, got str
+                </pre>
+                
+                <p><strong>Dynamic Typing:</strong> Errors discovered at runtime</p>
+                <pre style="background: rgba(255,165,0,0.2); padding: 15px; border-radius: 8px; margin: 10px 0;">
+def add_numbers(a, b):
+    return a + b
+
+result = add_numbers("5", "10")  # ✓ Runs fine, returns "510"
+result = add_numbers("5", 10)    # ✗ Runtime Error!
+# TypeError: can only concatenate str (not "int") to str
+                </pre>
+            `;
+            
+            staticVars[1].classList.add('type-error');
+            setTimeout(() => staticVars[1].classList.remove('type-error'), 2000);
+        }
+        
+        // Initialize with some animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const title = document.querySelector('h1');
+                title.classList.add('animated');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

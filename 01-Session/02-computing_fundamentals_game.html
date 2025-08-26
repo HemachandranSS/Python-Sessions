@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computing Fundamentals Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #007bff;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #4299e1;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .interactive-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .interactive-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .quiz-container {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .flowchart-box {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            min-width: 200px;
+        }
+
+        .flowchart-diamond {
+            background: #FF9800;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50%;
+            text-align: center;
+            position: relative;
+            min-width: 150px;
+            transform: rotate(45deg);
+        }
+
+        .flowchart-diamond span {
+            transform: rotate(-45deg);
+            display: block;
+        }
+
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #666;
+        }
+
+        .algorithm-visualizer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .array-element {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .array-element.highlight {
+            background: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                justify-content: stretch;
+            }
+            
+            .tab-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Computing Fundamentals Interactive Learning</h1>
+            <p>Master algorithms, problem-solving, and computational thinking through games!</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('problems')">🎯 Problems</button>
+            <button class="tab-btn" onclick="showTab('algorithms')">⚙️ Algorithms</button>
+            <button class="tab-btn" onclick="showTab('building-blocks')">🧱 Building Blocks</button>
+            <button class="tab-btn" onclick="showTab('notation')">📝 Notation</button>
+            <button class="tab-btn" onclick="showTab('problem-solving')">🔍 Problem Solving</button>
+            <button class="tab-btn" onclick="showTab('strategies')">🎲 Strategies</button>
+        </div>
+
+        <!-- Computational Problems Section -->
+        <div id="problems" class="content-section active">
+            <h2>🎯 Identification of Computational Problems</h2>
+            <p>A computational problem is a task that can be solved using a computer through a series of logical steps.</p>
+            
+            <div class="game-area">
+                <h3>🎮 Game: Problem Classifier</h3>
+                <p>Identify whether these are computational problems or not:</p>
+                <div id="problemGame">
+                    <div class="quiz-container">
+                        <p id="problemStatement">Loading problem...</p>
+                        <button class="interactive-button" onclick="answerProblem(true)">✅ Computational</button>
+                        <button class="interactive-button" onclick="answerProblem(false)">❌ Not Computational</button>
+                        <p id="problemFeedback"></p>
+                        <p>Score: <span id="problemScore">0</span>/10</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Examples of Computational Problems:</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>✅ Computational Problems</h4>
+                    <ul>
+                        <li>Finding the shortest path between two cities</li>
+                        <li>Sorting a list of numbers</li>
+                        <li>Calculating compound interest</li>
+                        <li>Image recognition</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>❌ Non-Computational Problems</h4>
+                    <ul>
+                        <li>Deciding what to have for lunch</li>
+                        <li>Choosing a favorite color</li>
+                        <li>Feeling happy or sad</li>
+                        <li>Creating art (subjective)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithms Section -->
+        <div id="algorithms" class="content-section">
+            <h2>⚙️ Algorithms</h2>
+            <p>An algorithm is a step-by-step procedure for solving a problem or completing a task.</p>
+            
+            <div class="game-area">
+                <h3>🎮 Game: Algorithm Race</h3>
+                <p>Watch different algorithms sort an array. Click to start the race!</p>
+                <div class="algorithm-visualizer" id="sortingArray"></div>
+                <button class="interactive-button" onclick="startSortingRace()">🏁 Start Race</button>
+                <p id="sortingProgress">Ready to sort!</p>
+            </div>
+
+            <h3>Real-World Algorithm Example: Making Coffee ☕</h3>
+            <div class="code-block" data-language="Algorithm">
+1. Fill kettle with water
+2. Turn on kettle
+3. While kettle is boiling:
+   - Get coffee mug
+   - Add coffee powder to mug
+4. When water boils:
+   - Pour hot water into mug
+   - Stir for 30 seconds
+5. Add milk and sugar if desired
+6. Enjoy coffee!
+            </div>
+        </div>
+
+        <!-- Building Blocks Section -->
+        <div id="building-blocks" class="content-section">
+            <h2>🧱 Building Blocks of Algorithms</h2>
+            
+            <div class="game-area">
+                <h3>🎮 Game: Build Your Algorithm</h3>
+                <p>Drag and drop building blocks to create an algorithm that finds the maximum number in an array:</p>
+                <div id="buildingBlocksGame">
+                    <div class="grid-2">
+                        <div>
+                            <h4>Available Blocks:</h4>
+                            <div id="availableBlocks"></div>
+                        </div>
+                        <div>
+                            <h4>Your Algorithm:</h4>
+                            <div id="algorithmBuilder"></div>
+                            <button class="interactive-button" onclick="testAlgorithm()">🧪 Test Algorithm</button>
+                            <p id="algorithmResult"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The Four Building Blocks:</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>1. 📝 Statements</h4>
+                    <p>Basic instructions that perform actions</p>
+                    <div class="code-block" data-language="JavaScript">
+let x = 5;           // Assignment
+console.log("Hello"); // Output
+x = x + 1;           // Computation
+                    </div>
+                </div>
+                <div>
+                    <h4>2. 💾 State</h4>
+                    <p>Information stored in variables</p>
+                    <div class="code-block" data-language="JavaScript">
+let playerScore = 100;
+let playerName = "Alice";
+let isGameOver = false;
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div>
+                    <h4>3. 🔀 Control Flow</h4>
+                    <p>Decisions and loops that control execution</p>
+                    <div class="code-block" data-language="JavaScript">
+if (score > 100) {
+    console.log("High score!");
+}
+
+for (let i = 0; i < 10; i++) {
+    console.log(i);
+}
+                    </div>
+                </div>
+                <div>
+                    <h4>4. 🔧 Functions</h4>
+                    <p>Reusable blocks of code</p>
+                    <div class="code-block" data-language="JavaScript">
+function calculateArea(length, width) {
+    return length * width;
+}
+
+let area = calculateArea(5, 3);
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notation Section -->
+        <div id="notation" class="content-section">
+            <h2>📝 Notation</h2>
+            <p>Different ways to represent algorithms before coding them.</p>
+
+            <div class="game-area">
+                <h3>🎮 Game: Notation Translator</h3>
+                <p>Convert between different notation types:</p>
+                <select id="notationSelect" onchange="showNotation()">
+                    <option value="pseudocode">Pseudocode</option>
+                    <option value="flowchart">Flowchart</option>
+                    <option value="javascript">JavaScript Code</option>
+                </select>
+                <div id="notationDisplay"></div>
+            </div>
+
+            <h3>Three Types of Notation:</h3>
+            
+            <div class="grid-2">
+                <div>
+                    <h4>1. 📄 Pseudocode</h4>
+                    <p>Human-readable description of algorithm logic</p>
+                    <div class="code-block" data-language="Pseudocode">
+BEGIN FindMax
+    SET max = first_number
+    FOR each number in list
+        IF number > max THEN
+            SET max = number
+        END IF
+    END FOR
+    RETURN max
+END
+                    </div>
+                </div>
+                <div>
+                    <h4>2. 📊 Flowchart</h4>
+                    <p>Visual representation using shapes and arrows</p>
+                    <div class="flowchart">
+                        <div class="flowchart-box">Start</div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-box">Initialize max = first number</div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-diamond"><span>More numbers?</span></div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-box">End</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem Solving Section -->
+        <div id="problem-solving" class="content-section">
+            <h2>🔍 Algorithmic Problem Solving</h2>
+            <p>A systematic approach to breaking down and solving computational problems.</p>
+
+            <div class="game-area">
+                <h3>🎮 Game: Problem Solving Steps</h3>
+                <p>Put the problem-solving steps in the correct order:</p>
+                <div id="problemSolvingGame">
+                    <div class="grid-2">
+                        <div>
+                            <h4>Mixed Up Steps:</h4>
+                            <div id="mixedSteps"></div>
+                        </div>
+                        <div>
+                            <h4>Correct Order:</h4>
+                            <div id="correctOrder"></div>
+                            <button class="interactive-button" onclick="checkProblemSolving()">✅ Check Order</button>
+                            <p id="problemSolvingResult"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The Problem Solving Process:</h3>
+            <div class="flowchart">
+                <div class="flowchart-box">1. Understand the Problem</div>
+                <div class="arrow"></div>
+                <div class="flowchart-box">2. Break into Subproblems</div>
+                <div class="arrow"></div>
+                <div class="flowchart-box">3. Design Algorithm</div>
+                <div class="arrow"></div>
+                <div class="flowchart-box">4. Implement Solution</div>
+                <div class="arrow"></div>
+                <div class="flowchart-box">5. Test and Debug</div>
+            </div>
+
+            <h3>Example: Finding a Book in Library</h3>
+            <div class="code-block" data-language="Problem Analysis">
+Problem: Find a specific book in a large library
+
+1. Understand: Need to locate one book among thousands
+2. Break down: 
+   - Know book title and author
+   - Understand library organization system
+   - Navigate to correct section
+3. Algorithm: Use catalog system or ask librarian
+4. Implementation: Follow the steps
+5. Test: Verify you found the correct book
+            </div>
+        </div>
+
+        <!-- Strategies Section -->
+        <div id="strategies" class="content-section">
+            <h2>🎲 Simple Strategies for Developing Algorithms</h2>
+            
+            <div class="game-area">
+                <h3>🎮 Game: Strategy Showdown</h3>
+                <p>Compare iteration vs recursion in calculating factorial:</p>
+                <div class="grid-2">
+                    <div>
+                        <h4>Iteration Approach</h4>
+                        <input type="number" id="iterativeInput" value="5" min="1" max="10">
+                        <button class="interactive-button" onclick="calculateIterative()">🔄 Calculate</button>
+                        <div id="iterativeSteps"></div>
+                    </div>
+                    <div>
+                        <h4>Recursion Approach</h4>
+                        <input type="number" id="recursiveInput" value="5" min="1" max="10">
+                        <button class="interactive-button" onclick="calculateRecursive()">🔁 Calculate</button>
+                        <div id="recursiveSteps"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Two Main Strategies:</h3>
+            
+            <div class="grid-2">
+                <div>
+                    <h4>🔄 Iteration</h4>
+                    <p>Repeating a process using loops</p>
+                    <div class="code-block" data-language="JavaScript">
+function factorialIterative(n) {
+    let result = 1;
+    for (let i = 1; i <= n; i++) {
+        result = result * i;
+    }
+    return result;
+}
+
+// factorial(5) = 1*2*3*4*5 = 120
+                    </div>
+                    <p><strong>When to use:</strong> When you need to process items one by one, or repeat until a condition is met.</p>
+                </div>
+                <div>
+                    <h4>🔁 Recursion</h4>
+                    <p>A function calling itself with simpler inputs</p>
+                    <div class="code-block" data-language="JavaScript">
+function factorialRecursive(n) {
+    if (n <= 1) {
+        return 1;  // Base case
+    }
+    return n * factorialRecursive(n - 1);
+}
+
+// factorial(5) = 5 * factorial(4)
+//              = 5 * 4 * factorial(3)...
+                    </div>
+                    <p><strong>When to use:</strong> When the problem can be broken into smaller, similar subproblems.</p>
+                </div>
+            </div>
+
+            <h3>More Examples:</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>Iteration Examples:</h4>
+                    <ul>
+                        <li>Counting from 1 to 100</li>
+                        <li>Processing each item in a shopping list</li>
+                        <li>Reading each line in a file</li>
+                        <li>Bubble sort algorithm</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Recursion Examples:</h4>
+                    <ul>
+                        <li>Calculating Fibonacci numbers</li>
+                        <li>Navigating folder structures</li>
+                        <li>Tower of Hanoi puzzle</li>
+                        <li>Tree traversal algorithms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        // Global variables for games
+        let problemQuestions = [
+            {text: "Sort a list of student grades", isComputational: true},
+            {text: "Choose your favorite pizza topping", isComputational: false},
+            {text: "Calculate the area of a circle", isComputational: true},
+            {text: "Decide if you like a movie", isComputational: false},
+            {text: "Find the shortest route to work", isComputational: true},
+            {text: "Compress a video file", isComputational: true},
+            {text: "Pick a random number", isComputational: true},
+            {text: "Feel happy about something", isComputational: false},
+            {text: "Search for a word in a document", isComputational: true},
+            {text: "Choose what clothes to wear", isComputational: false}
+        ];
+        
+        let currentProblem = 0;
+        let problemScore = 0;
+        let sortingArray = [];
+        
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Initialize games for specific tabs
+            if (tabName === 'problems') {
+                loadProblemQuestion();
+            } else if (tabName === 'algorithms') {
+                initializeSortingArray();
+            } else if (tabName === 'building-blocks') {
+                initializeBuildingBlocks();
+            } else if (tabName === 'notation') {
+                showNotation();
+            } else if (tabName === 'problem-solving') {
+                initializeProblemSolving();
+            }
+        }
+        
+        // Problem identification game
+        function loadProblemQuestion() {
+            if (currentProblem < problemQuestions.length) {
+                document.getElementById('problemStatement').textContent = problemQuestions[currentProblem].text;
+                document.getElementById('problemFeedback').textContent = '';
+            } else {
+                document.getElementById('problemStatement').textContent = 'Game Complete! You scored ' + problemScore + '/10';
+                document.querySelector('#problemGame .interactive-button').style.display = 'none';
+            }
+        }
+        
+        function answerProblem(answer) {
+            const correct = problemQuestions[currentProblem].isComputational === answer;
+            const feedback = document.getElementById('problemFeedback');
+            
+            if (correct) {
+                problemScore++;
+                feedback.textContent = '✅ Correct!';
+                feedback.style.color = 'green';
+                showNotification('Correct! +1 point');
+            } else {
+                feedback.textContent = '❌ Incorrect. ' + (problemQuestions[currentProblem].isComputational ? 
+                    'This can be solved with clear steps.' : 'This involves personal preference/feelings.');
+                feedback.style.color = 'red';
+            }
+            
+            document.getElementById('problemScore').textContent = problemScore;
+            currentProblem++;
+            
+            setTimeout(() => {
+                loadProblemQuestion();
+            }, 2000);
+        }
+        
+        // Sorting visualization
+        function initializeSortingArray() {
+            sortingArray = [64, 34, 25, 12, 22, 11, 90];
+            displayArray();
+        }
+        
+        function displayArray() {
+            const container = document.getElementById('sortingArray');
+            container.innerHTML = '';
+            sortingArray.forEach((num, index) => {
+                const element = document.createElement('div');
+                element.className = 'array-element';
+                element.textContent = num;
+                element.id = 'element-' + index;
+                container.appendChild(element);
+            });
+        }
+        
+        async function startSortingRace() {
+            document.getElementById('sortingProgress').textContent = 'Sorting in progress...';
+            await bubbleSort();
+            document.getElementById('sortingProgress').textContent = 'Sorting complete! Array is now sorted.';
+            showNotification('Sorting algorithm finished!');
+        }
+        
+        async function bubbleSort() {
+            const n = sortingArray.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    // Highlight comparing elements
+                    document.getElementById('element-' + j).classList.add('highlight');
+                    document.getElementById('element-' + (j + 1)).classList.add('highlight');
+                    
+                    await sleep(800);
+                    
+                    if (sortingArray[j] > sortingArray[j + 1]) {
+                        // Swap elements
+                        [sortingArray[j], sortingArray[j + 1]] = [sortingArray[j + 1], sortingArray[j]];
+                        displayArray();
+                    }
+                    
+                    // Remove highlighting
+                    document.getElementById('element-' + j).classList.remove('highlight');
+                    document.getElementById('element-' + (j + 1)).classList.remove('highlight');
+                }
+            }
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // Building blocks game
+        function initializeBuildingBlocks() {
+            const blocks = [
+                'Initialize max = first element',
+                'For each element in array',
+                'If element > max',
+                'Set max = element',
+                'Return max'
+            ];
+            
+            const availableContainer = document.getElementById('availableBlocks');
+            availableContainer.innerHTML = '';
+            
+            blocks.forEach((block, index) => {
+                const blockElement = document.createElement('div');
+                blockElement.className = 'interactive-button';
+                blockElement.textContent = block;
+                blockElement.onclick = () => addToAlgorithm(block, index);
+                availableContainer.appendChild(blockElement);
+            });
+        }
+        
+        let algorithmSteps = [];
+        
+        function addToAlgorithm(block, index) {
+            algorithmSteps.push(block);
+            updateAlgorithmDisplay();
+        }
+        
+        function updateAlgorithmDisplay() {
+            const container = document.getElementById('algorithmBuilder');
+            container.innerHTML = '';
+            algorithmSteps.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.textContent = (index + 1) + '. ' + step;
+                stepElement.style.margin = '5px 0';
+                stepElement.style.padding = '10px';
+                stepElement.style.background = '#e3f2fd';
+                stepElement.style.borderRadius = '5px';
+                container.appendChild(stepElement);
+            });
+        }
+        
+        function testAlgorithm() {
+            const correct = [
+                'Initialize max = first element',
+                'For each element in array',
+                'If element > max',
+                'Set max = element',
+                'Return max'
+            ];
+            
+            const isCorrect = algorithmSteps.length === correct.length && 
+                algorithmSteps.every((step, index) => step === correct[index]);
+            
+            const result = document.getElementById('algorithmResult');
+            if (isCorrect) {
+                result.textContent = '🎉 Perfect! Your algorithm will find the maximum correctly!';
+                result.style.color = 'green';
+                showNotification('Algorithm completed successfully!');
+            } else {
+                result.textContent = '❌ Not quite right. Try arranging the steps in logical order.';
+                result.style.color = 'red';
+            }
+        }
+        
+        // Notation display
+        function showNotation() {
+            const type = document.getElementById('notationSelect').value;
+            const container = document.getElementById('notationDisplay');
+            
+            const examples = {
+                pseudocode: `
+                    <div class="code-block" data-language="Pseudocode">
+BEGIN CheckEvenOdd
+    INPUT number
+    IF number MOD 2 = 0 THEN
+        OUTPUT "Even"
+    ELSE
+        OUTPUT "Odd"
+    END IF
+END
+                    </div>`,
+                flowchart: `
+                    <div class="flowchart">
+                        <div class="flowchart-box">Start</div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-box">Input number</div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-diamond"><span>number % 2 = 0?</span></div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-box">Output "Even/Odd"</div>
+                        <div class="arrow"></div>
+                        <div class="flowchart-box">End</div>
+                    </div>`,
+                javascript: `
+                    <div class="code-block" data-language="JavaScript">
+function checkEvenOdd(number) {
+    if (number % 2 === 0) {
+        console.log("Even");
+        return "Even";
+    } else {
+        console.log("Odd");
+        return "Odd";
+    }
+}
+
+// Usage example
+let result = checkEvenOdd(8); // Output: "Even"
+                    </div>`
+            };
+            
+            container.innerHTML = examples[type];
+        }
+        
+        // Problem solving game
+        let problemSolvingSteps = [
+            'Understand the Problem',
+            'Break into Subproblems', 
+            'Design Algorithm',
+            'Implement Solution',
+            'Test and Debug'
+        ];
+        let userOrder = [];
+        
+        function initializeProblemSolving() {
+            const shuffled = [...problemSolvingSteps].sort(() => Math.random() - 0.5);
+            const mixedContainer = document.getElementById('mixedSteps');
+            mixedContainer.innerHTML = '';
+            
+            shuffled.forEach(step => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'interactive-button';
+                stepElement.textContent = step;
+                stepElement.onclick = () => addToOrder(step);
+                mixedContainer.appendChild(stepElement);
+            });
+            
+            userOrder = [];
+            updateOrderDisplay();
+        }
+        
+        function addToOrder(step) {
+            if (!userOrder.includes(step)) {
+                userOrder.push(step);
+                updateOrderDisplay();
+            }
+        }
+        
+        function updateOrderDisplay() {
+            const container = document.getElementById('correctOrder');
+            container.innerHTML = '';
+            userOrder.forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.textContent = (index + 1) + '. ' + step;
+                stepElement.style.margin = '5px 0';
+                stepElement.style.padding = '10px';
+                stepElement.style.background = '#f0f8ff';
+                stepElement.style.borderRadius = '5px';
+                stepElement.style.border = '1px solid #007bff';
+                container.appendChild(stepElement);
+            });
+        }
+        
+        function checkProblemSolving() {
+            const isCorrect = userOrder.length === problemSolvingSteps.length && 
+                userOrder.every((step, index) => step === problemSolvingSteps[index]);
+            
+            const result = document.getElementById('problemSolvingResult');
+            if (isCorrect) {
+                result.textContent = '🎉 Excellent! You understand the problem-solving process!';
+                result.style.color = 'green';
+                showNotification('Problem solving mastered!');
+            } else {
+                result.textContent = '❌ Not quite. Think about the logical flow of solving a problem.';
+                result.style.color = 'red';
+            }
+        }
+        
+        // Strategy comparison functions
+        function calculateIterative() {
+            const n = parseInt(document.getElementById('iterativeInput').value);
+            const container = document.getElementById('iterativeSteps');
+            container.innerHTML = '<h5>Iteration Steps:</h5>';
+            
+            let result = 1;
+            let steps = [`Step 1: Initialize result = 1`];
+            
+            for (let i = 1; i <= n; i++) {
+                result *= i;
+                steps.push(`Step ${i + 1}: result = ${result / i} × ${i} = ${result}`);
+            }
+            
+            steps.forEach(step => {
+                const stepDiv = document.createElement('div');
+                stepDiv.textContent = step;
+                stepDiv.style.padding = '5px';
+                stepDiv.style.margin = '2px 0';
+                stepDiv.style.background = '#e8f5e8';
+                stepDiv.style.borderRadius = '3px';
+                container.appendChild(stepDiv);
+            });
+            
+            const finalDiv = document.createElement('div');
+            finalDiv.textContent = `Final Result: ${n}! = ${result}`;
+            finalDiv.style.fontWeight = 'bold';
+            finalDiv.style.color = '#2e7d32';
+            finalDiv.style.marginTop = '10px';
+            container.appendChild(finalDiv);
+        }
+        
+        function calculateRecursive() {
+            const n = parseInt(document.getElementById('recursiveInput').value);
+            const container = document.getElementById('recursiveSteps');
+            container.innerHTML = '<h5>Recursion Steps:</h5>';
+            
+            let steps = [];
+            
+            function factorialWithSteps(num, depth = 0) {
+                const indent = '  '.repeat(depth);
+                if (num <= 1) {
+                    steps.push(`${indent}factorial(${num}) = 1 (base case)`);
+                    return 1;
+                } else {
+                    steps.push(`${indent}factorial(${num}) = ${num} × factorial(${num - 1})`);
+                    const result = num * factorialWithSteps(num - 1, depth + 1);
+                    steps.push(`${indent}factorial(${num}) = ${num} × ${result / num} = ${result}`);
+                    return result;
+                }
+            }
+            
+            const result = factorialWithSteps(n);
+            
+            steps.forEach(step => {
+                const stepDiv = document.createElement('div');
+                stepDiv.textContent = step;
+                stepDiv.style.padding = '3px';
+                stepDiv.style.margin = '2px 0';
+                stepDiv.style.background = '#fff3e0';
+                stepDiv.style.borderRadius = '3px';
+                stepDiv.style.fontFamily = 'monospace';
+                container.appendChild(stepDiv);
+            });
+            
+            const finalDiv = document.createElement('div');
+            finalDiv.textContent = `Final Result: ${n}! = ${result}`;
+            finalDiv.style.fontWeight = 'bold';
+            finalDiv.style.color = '#f57c00';
+            finalDiv.style.marginTop = '10px';
+            container.appendChild(finalDiv);
+        }
+        
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            text.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize the first tab
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProblemQuestion();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Chart Designer & Examples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #4CAF50;
+            color: #4CAF50;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .symbol-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .symbol-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .symbol {
+            width: 80px;
+            height: 50px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .oval { background: #FF6B6B; border-radius: 50px; }
+        .rectangle { background: #4ECDC4; }
+        .diamond { 
+            background: #45B7D1; 
+            transform: rotate(45deg);
+            border-radius: 5px;
+        }
+        .diamond span { transform: rotate(-45deg); }
+        .parallelogram { 
+            background: #96CEB4; 
+            transform: skew(-20deg);
+        }
+        .parallelogram span { transform: skew(20deg); }
+        .circle { background: #FECA57; border-radius: 50%; }
+
+        .calculator-app, .game-app {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .calculator-display, .game-display {
+            background: #2c3e50;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            font-size: 18px;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-number { background: #3498db; color: white; }
+        .btn-operator { background: #e74c3c; color: white; }
+        .btn-equals { background: #27ae60; color: white; }
+        .btn-clear { background: #f39c12; color: white; }
+
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .flowchart-visual {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .flow-step.start-end { background: #FF6B6B; border-radius: 50px; }
+        .flow-step.process { background: #4ECDC4; }
+        .flow-step.decision { 
+            background: #45B7D1; 
+            transform: rotate(45deg);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flow-step.decision span { transform: rotate(-45deg); }
+        .flow-step.input-output { 
+            background: #96CEB4; 
+            transform: skew(-20deg);
+        }
+        .flow-step.input-output span { transform: skew(20deg); }
+
+        .arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .stats {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔀 Flow Chart Designer & Interactive Examples</h1>
+            <p>Learn flow chart symbols and see them in action with live JavaScript programs</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('symbols')">Flow Chart Symbols</button>
+            <button class="tab" onclick="showTab('calculator')">Calculator Example</button>
+            <button class="tab" onclick="showTab('game')">Guessing Game</button>
+            <button class="tab" onclick="showTab('visual')">Visual Flow Charts</button>
+        </div>
+
+        <!-- Symbols Tab -->
+        <div id="symbols" class="tab-content active">
+            <h2>Flow Chart Symbols and Meanings</h2>
+            <div class="symbols-grid">
+                <div class="symbol-card">
+                    <div class="symbol oval"><span>START</span></div>
+                    <h3>Terminal/Oval</h3>
+                    <p><strong>Purpose:</strong> Start and End points</p>
+                    <p><strong>Usage:</strong> Marks where the program begins and terminates</p>
+                    <p><strong>Code Example:</strong> Function start/end, program entry/exit</p>
+                </div>
+                
+                <div class="symbol-card">
+                    <div class="symbol rectangle"><span>PROCESS</span></div>
+                    <h3>Process/Rectangle</h3>
+                    <p><strong>Purpose:</strong> Processing steps</p>
+                    <p><strong>Usage:</strong> Calculations, assignments, function calls</p>
+                    <p><strong>Code Example:</strong> <code>result = a + b</code></p>
+                </div>
+                
+                <div class="symbol-card">
+                    <div class="symbol diamond"><span>?</span></div>
+                    <h3>Decision/Diamond</h3>
+                    <p><strong>Purpose:</strong> Decision points</p>
+                    <p><strong>Usage:</strong> Conditions that branch the flow</p>
+                    <p><strong>Code Example:</strong> <code>if (x > 0)</code></p>
+                </div>
+                
+                <div class="symbol-card">
+                    <div class="symbol parallelogram"><span>I/O</span></div>
+                    <h3>Input-Output/Parallelogram</h3>
+                    <p><strong>Purpose:</strong> Data input or output</p>
+                    <p><strong>Usage:</strong> User input, display results</p>
+                    <p><strong>Code Example:</strong> <code>prompt()</code>, <code>alert()</code></p>
+                </div>
+                
+                <div class="symbol-card">
+                    <div class="symbol circle"><span>A</span></div>
+                    <h3>Connector/Circle</h3>
+                    <p><strong>Purpose:</strong> Connect flow parts</p>
+                    <p><strong>Usage:</strong> Link sections, avoid crossing lines</p>
+                    <p><strong>Code Example:</strong> Function calls, goto labels</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🎯 Key Flow Chart Principles:</h3>
+                <ul>
+                    <li><strong>Single Entry/Exit:</strong> Each flowchart should have one start and one end point</li>
+                    <li><strong>Clear Direction:</strong> Arrows show the flow direction clearly</li>
+                    <li><strong>Simple Logic:</strong> Each decision symbol should have only yes/no or true/false outcomes</li>
+                    <li><strong>Readable Labels:</strong> Use clear, concise text in each symbol</li>
+                    <li><strong>Structured Flow:</strong> Avoid unnecessary complexity and crossing lines</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Calculator Tab -->
+        <div id="calculator" class="tab-content">
+            <h2>Interactive Calculator with Flow Chart Logic</h2>
+            
+            <div class="calculator-app">
+                <div class="calculator-display" id="calc-display">Calculator Ready - Click numbers and operators</div>
+                
+                <div class="calculator-buttons">
+                    <button class="btn btn-clear" onclick="clearCalculator()">C</button>
+                    <button class="btn btn-clear" onclick="deleteLast()">⌫</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('/')">/</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('*')">×</button>
+                    
+                    <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+                    
+                    <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+                    <button class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+                    
+                    <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+                    <button class="btn btn-equals" onclick="calculate()" rowspan="2">=</button>
+                    
+                    <button class="btn btn-number" onclick="appendToDisplay('0')" colspan="2">0</button>
+                    <button class="btn btn-number" onclick="appendToDisplay('.')">.</button>
+                </div>
+                
+                <div class="stats" id="calc-stats">
+                    Operations performed: 0 | Last operation: None
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🔄 Calculator Flow Chart Logic:</h3>
+                <p><strong>1. START:</strong> Initialize display and variables</p>
+                <p><strong>2. INPUT:</strong> Wait for user button click</p>
+                <p><strong>3. DECISION:</strong> Is it a number, operator, or equals?</p>
+                <p><strong>4. PROCESS:</strong> Handle the input type appropriately</p>
+                <p><strong>5. DECISION:</strong> Is calculation complete?</p>
+                <p><strong>6. OUTPUT:</strong> Display result or continue input</p>
+                <p><strong>7. DECISION:</strong> Continue or exit? Loop back to step 2</p>
+            </div>
+        </div>
+
+        <!-- Game Tab -->
+        <div id="game" class="tab-content">
+            <h2>Number Guessing Game with Flow Chart Structure</h2>
+            
+            <div class="game-app">
+                <div class="game-display" id="game-display">
+                    🎯 Welcome to the Number Guessing Game!<br>
+                    I'm thinking of a number between 1 and 100.<br>
+                    Click 'Start Game' to begin!
+                </div>
+                
+                <div class="game-controls">
+                    <button class="btn btn-equals" onclick="startGame()">Start New Game</button>
+                    <button class="btn btn-clear" onclick="resetGame()">Reset Stats</button>
+                </div>
+                
+                <div class="input-group">
+                    <label>Your Guess:</label>
+                    <input type="number" id="guess-input" min="1" max="100" placeholder="Enter 1-100">
+                    <button class="btn btn-number" onclick="makeGuess()">Submit Guess</button>
+                </div>
+                
+                <div class="stats" id="game-stats">
+                    Games Played: 0 | Games Won: 0 | Win Rate: 0% | Current Streak: 0
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🎮 Guessing Game Flow Chart Logic:</h3>
+                <p><strong>1. START:</strong> Generate random number (1-100)</p>
+                <p><strong>2. INPUT:</strong> Get player's guess</p>
+                <p><strong>3. PROCESS:</strong> Increment attempt counter</p>
+                <p><strong>4. DECISION:</strong> Is guess correct?</p>
+                <p><strong>5a. YES:</strong> OUTPUT win message, update stats</p>
+                <p><strong>5b. NO:</strong> DECISION - Too high or low?</p>
+                <p><strong>6. OUTPUT:</strong> Provide hint (higher/lower)</p>
+                <p><strong>7. DECISION:</strong> Max attempts reached?</p>
+                <p><strong>8. DECISION:</strong> Play again? Loop to step 1 or END</p>
+            </div>
+        </div>
+
+        <!-- Visual Tab -->
+        <div id="visual" class="tab-content">
+            <h2>Visual Flow Chart Representations</h2>
+            
+            <h3>Calculator Flow Chart:</h3>
+            <div class="flowchart-visual">
+                <div class="flow-step start-end">START</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step input-output"><span>INPUT: Button Click</span></div>
+                <div class="arrow">↓</div>
+                <div class="flow-step decision"><span>Number?</span></div>
+                <div class="arrow">↓ YES</div>
+                <div class="flow-step process">Add to Display</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step decision"><span>Operator?</span></div>
+                <div class="arrow">↓ YES</div>
+                <div class="flow-step process">Store Operation</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step decision"><span>Equals?</span></div>
+                <div class="arrow">↓ YES</div>
+                <div class="flow-step process">Calculate Result</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step input-output"><span>OUTPUT: Display Result</span></div>
+                <div class="arrow">↓</div>
+                <div class="flow-step start-end">END</div>
+            </div>
+            
+            <h3>Guessing Game Flow Chart:</h3>
+            <div class="flowchart-visual">
+                <div class="flow-step start-end">START</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step process">Generate Random Number</div>
+                <div class="arrow">↓</div>
+                <div class="flow-step input-output"><span>INPUT: Player Guess</span></div>
+                <div class="arrow">↓</div>
+                <div class="flow-step decision"><span>Correct?</span></div>
+                <div class="arrow">↓ NO</div>
+                <div class="flow-step decision"><span>Too High?</span></div>
+                <div class="arrow">↓ YES</div>
+                <div class="flow-step input-output"><span>OUTPUT: "Too High"</span></div>
+                <div class="arrow">↺ Loop Back</div>
+                <div class="flow-step decision"><span>Max Attempts?</span></div>
+                <div class="arrow">↓ NO</div>
+                <div class="flow-step start-end">Game Over</div>
+            </div>
+
+            <div class="highlight">
+                <h3>🎨 Flow Chart Best Practices:</h3>
+                <ul>
+                    <li><strong>Use Standard Symbols:</strong> Stick to conventional shapes for clarity</li>
+                    <li><strong>Maintain Consistent Size:</strong> Keep symbols proportional and readable</li>
+                    <li><strong>Label Clearly:</strong> Use descriptive text inside each symbol</li>
+                    <li><strong>Show All Paths:</strong> Every decision should show both YES and NO paths</li>
+                    <li><strong>Avoid Crossing Lines:</strong> Use connectors to keep the chart clean</li>
+                    <li><strong>Test the Logic:</strong> Walk through the chart to verify it works correctly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Calculator functionality following flow chart logic
+        let currentDisplay = '';
+        let previousOperand = '';
+        let operator = '';
+        let waitingForOperand = false;
+        let operationCount = 0;
+        let lastOperation = 'None';
+
+        function appendToDisplay(value) {
+            // DECISION: Is waiting for new operand?
+            if (waitingForOperand) {
+                currentDisplay = value;
+                waitingForOperand = false;
+            } else {
+                // PROCESS: Add to current display
+                currentDisplay = currentDisplay === '0' ? value : currentDisplay + value;
+            }
+            updateCalculatorDisplay();
+        }
+
+        function clearCalculator() {
+            // PROCESS: Reset all variables (START state)
+            currentDisplay = '';
+            previousOperand = '';
+            operator = '';
+            waitingForOperand = false;
+            updateCalculatorDisplay('Calculator Cleared');
+        }
+
+        function deleteLast() {
+            // PROCESS: Remove last character
+            currentDisplay = currentDisplay.slice(0, -1);
+            if (currentDisplay === '') currentDisplay = '0';
+            updateCalculatorDisplay();
+        }
+
+        function calculate() {
+            // DECISION: Is there an operator and operands?
+            if (operator && !waitingForOperand) {
+                const prev = parseFloat(previousOperand);
+                const current = parseFloat(currentDisplay);
+                let result;
+                
+                // DECISION: Which operation to perform?
+                switch (operator) {
+                    case '+': result = prev + current; break;
+                    case '-': result = prev - current; break;
+                    case '*': result = prev * current; break;
+                    case '/': 
+                        // DECISION: Check for division by zero
+                        if (current === 0) {
+                            updateCalculatorDisplay('Error: Division by zero!');
+                            return;
+                        }
+                        result = prev / current; 
+                        break;
+                    default: return;
+                }
+                
+                // PROCESS: Update operation statistics
+                operationCount++;
+                lastOperation = `${prev} ${operator} ${current} = ${result}`;
+                
+                // OUTPUT: Display result
+                currentDisplay = result.toString();
+                previousOperand = '';
+                operator = '';
+                waitingForOperand = true;
+                
+                updateCalculatorDisplay();
+                updateCalculatorStats();
+            }
+        }
+
+        function updateCalculatorDisplay(message = null) {
+            // OUTPUT: Update display (Parallelogram symbol)
+            const display = document.getElementById('calc-display');
+            display.textContent = message || currentDisplay || '0';
+        }
+
+        function updateCalculatorStats() {
+            // OUTPUT: Update statistics display
+            const stats = document.getElementById('calc-stats');
+            stats.textContent = `Operations performed: ${operationCount} | Last operation: ${lastOperation}`;
+        }
+
+        // Handle operators
+        document.querySelectorAll('.btn-operator').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const selectedOperator = this.textContent === '×' ? '*' : this.textContent;
+                
+                // DECISION: Is there already an operation in progress?
+                if (operator && !waitingForOperand) {
+                    calculate();
+                }
+                
+                // PROCESS: Store operator and operand
+                previousOperand = currentDisplay;
+                operator = selectedOperator;
+                waitingForOperand = true;
+            });
+        });
+
+        // Guessing Game functionality following flow chart logic
+        let secretNumber = 0;
+        let gameAttempts = 0;
+        let maxAttempts = 7;
+        let gamesPlayed = 0;
+        let gamesWon = 0;
+        let currentStreak = 0;
+        let gameActive = false;
+
+        function startGame() {
+            // START: Initialize new game (Terminal symbol)
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            gameAttempts = 0;
+            gameActive = true;
+            
+            // OUTPUT: Display start message
+            updateGameDisplay(`🎯 New game started! I'm thinking of a number between 1 and 100.
+                              You have ${maxAttempts} attempts. Good luck!`);
+        }
+
+        function makeGuess() {
+            // DECISION: Is game active?
+            if (!gameActive) {
+                updateGameDisplay('Please start a new game first!');
+                return;
+            }
+
+            // INPUT: Get user guess (Parallelogram symbol)
+            const guessInput = document.getElementById('guess-input');
+            const guess = parseInt(guessInput.value);
+            
+            // DECISION: Is input valid?
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                updateGameDisplay('Please enter a valid number between 1 and 100!');
+                return;
+            }
+
+            // PROCESS: Increment attempts (Rectangle symbol)
+            gameAttempts++;
+            
+            // DECISION: Is guess correct? (Diamond symbol)
+            if (guess === secretNumber) {
+                // WIN PATH
+                gamesPlayed++;
+                gamesWon++;
+                currentStreak++;
+                gameActive = false;
+                
+                // OUTPUT: Win message
+                updateGameDisplay(`🎉 Congratulations! You guessed it!
+                                  The number was ${secretNumber}.
+                                  You won in ${gameAttempts} attempts!`);
+                updateGameStats();
+                
+            } else if (gameAttempts >= maxAttempts) {
+                // GAME OVER PATH
+                gamesPlayed++;
+                currentStreak = 0;
+                gameActive = false;
+                
+                // OUTPUT: Game over message
+                updateGameDisplay(`💀 Game Over! You've used all ${maxAttempts} attempts.
+                                  The number was ${secretNumber}. Better luck next time!`);
+                updateGameStats();
+                
+            } else {
+                // CONTINUE GAME PATH
+                // DECISION: Too high or too low?
+                const hint = guess > secretNumber ? '📉 Too high!' : '📈 Too low!';
+                const remaining = maxAttempts - gameAttempts;
+                
+                // OUTPUT: Provide hint
+                updateGameDisplay(`${hint} Try again!
+                                  Attempts remaining: ${remaining}`);
+            }
+            
+            // Clear input for next guess
+            guessInput.value = '';
+        }
+
+        function resetGame() {
+            // PROCESS: Reset all game statistics
+            gamesPlayed = 0;
+            gamesWon = 0;
+            currentStreak = 0;
+            gameActive = false;
+            
+            updateGameDisplay('Game statistics reset. Click "Start New Game" to play!');
+            updateGameStats();
+        }
+
+        function updateGameDisplay(message) {
+            // OUTPUT: Update game display (Parallelogram symbol)
+            document.getElementById('game-display').innerHTML = message;
+        }
+
+        function updateGameStats() {
+            // PROCESS: Calculate and display statistics
+            const winRate = gamesPlayed > 0 ? ((gamesWon / gamesPlayed) * 100).toFixed(1) : 0;
+            const stats = document.getElementById('game-stats');
+            stats.textContent = `Games Played: ${gamesPlayed} | Games Won: ${gamesWon} | Win Rate: ${winRate}% | Current Streak: ${currentStreak}`;
+        }
+
+        // Allow Enter key to submit guess
+        document.getElementById('guess-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                makeGuess();
+            }
+        });
+
+        // Initialize displays
+        updateCalculatorDisplay('Calculator Ready - Click numbers and operators');
+        updateGameStats();
+    </script>
+</body>
+</html>

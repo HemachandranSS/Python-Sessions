@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insert a Card — Sorting Game</title>
+  <style>
+    :root{
+      --bg:#0b1225; --panel:#0f172a; --muted:#94a3b8; --text:#e5e7eb;
+      --card:#1f2937; --card2:#273244; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --accent:#3b82f6;
+      --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, #0b1225 0%, #0b1326 35%, #0b1225 100%);
+      color:var(--text); min-height:100dvh; display:grid; place-items:center; padding:24px}
+    .app{width:min(1100px,100%); display:grid; gap:18px}
+    header{display:flex; align-items:center; justify-content:space-between}
+    h1{margin:0; font-size:clamp(20px,4vw,32px)}
+    .subtitle{color:var(--muted); font-size:14px}
+
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
+
+    .controls{display:flex; flex-wrap:wrap; gap:12px; align-items:end}
+    .group{display:grid; gap:6px}
+    label{font-size:12px; color:var(--muted)}
+    select, input[type="number"], button.toggle{background:var(--card); border:1px solid rgba(255,255,255,.08); color:var(--text);
+      padding:10px 12px; border-radius:12px; outline:none}
+    .btn{cursor:pointer; user-select:none; border:none; padding:10px 14px; border-radius:14px; font-weight:600}
+    .btn.primary{background:linear-gradient(180deg, #2563eb, #1d4ed8); color:white}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,.12); color:var(--text)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+
+    .hud{display:flex; gap:10px; flex-wrap:wrap}
+    .stat{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:10px 12px; font-size:13px}
+    .stat strong{font-size:14px}
+
+    .bar{height:10px; background:#0b1a34; border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.1)}
+    .bar > div{height:100%; background: linear-gradient(90deg, #22c55e, #eab308, #ef4444); width:100%; transition: width .2s linear}
+
+    /* Board */
+    .board-wrap{display:grid; gap:14px}
+    .row{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap}
+
+    .slot{width:26px; height:50px; border-radius:8px; border:1px dashed rgba(255,255,255,.18); background:rgba(255,255,255,.03);
+      display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--muted); cursor:pointer; transition:transform .08s ease, background .2s ease}
+    .slot:hover{transform:translateY(-2px); background:rgba(59,130,246,.15)}
+    .slot.correct{outline:2px solid var(--ok); box-shadow:0 0 0 4px rgba(34,197,94,.2) inset}
+    .slot.wrong{outline:2px solid var(--bad); box-shadow:0 0 0 4px rgba(239,68,68,.2) inset}
+
+    .card{
+      min-width:80px; text-align:center; padding:14px 16px; border-radius:16px; font-weight:800; font-size:28px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid rgba(255,255,255,.08); transition: transform .08s ease, background .2s ease; user-select:none
+    }
+    .card.primary{background:linear-gradient(180deg, rgba(59,130,246,.25), rgba(59,130,246,.08)); border-color:rgba(59,130,246,.4)}
+    .card:hover{transform:translateY(-2px); background:var(--card2)}
+    .card.correct{outline:2px solid var(--ok); box-shadow:0 0 0 4px rgba(34,197,94,.2) inset}
+    .card.wrong{outline:2px solid var(--bad); box-shadow:0 0 0 4px rgba(239,68,68,.2) inset}
+
+    .callout{font-size:14px; color:var(--muted)}
+    .footer{display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap}
+
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Insert a Card sorting game">
+    <header>
+      <div>
+        <h1>Insert a Card</h1>
+        <div class="subtitle">Pick the slot where the new card should go to keep the list sorted.</div>
+      </div>
+      <button id="resetAll" class="btn ghost" title="Reset stats">Reset Stats</button>
+    </header>
+
+    <section class="panel controls" aria-label="Game controls">
+      <div class="group">
+        <label for="len">Cards in row</label>
+        <select id="len">
+          <option value="4">4</option>
+          <option value="5" selected>5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="range">Number range (0…N)</label>
+        <input id="range" type="number" min="9" max="9999" step="1" value="99" />
+      </div>
+      <div class="group">
+        <label for="order">Order</label>
+        <select id="order">
+          <option value="asc" selected>Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="timer">Round time (seconds)</label>
+        <select id="timer">
+          <option value="6">6</option>
+          <option value="8" selected>8</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="0">No timer</option>
+        </select>
+      </div>
+      <div style="flex:1"></div>
+      <button id="start" class="btn primary">Start Round (Space)</button>
+    </section>
+
+    <section class="panel" aria-label="Round status">
+      <div class="hud">
+        <div class="stat"><strong>Score:</strong> <span id="score">0</span></div>
+        <div class="stat"><strong>Streak:</strong> <span id="streak">0</span> (best <span id="bestStreak">0</span>)</div>
+        <div class="stat"><strong>Accuracy:</strong> <span id="accuracy">0%</span></div>
+        <div class="stat"><strong>Rounds:</strong> <span id="rounds">0</span></div>
+        <div class="stat"><strong>New card:</strong> <span id="newCard">—</span></div>
+      </div>
+      <div class="bar" aria-hidden="true" style="margin-top:12px"><div id="timeBar"></div></div>
+    </section>
+
+    <section class="panel board-wrap" aria-label="Game board">
+      <div id="board" class="row" role="group" aria-live="polite"></div>
+      <p id="msg" class="callout" aria-live="polite" style="margin:6px 2px 0"></p>
+      <div class="callout">Tip: Choose a <strong>slot</strong> (thin dashed boxes) where the new card should be inserted. Use number keys <strong>1…(n+1)</strong> to pick a slot quickly. Space = next round.</div>
+    </section>
+
+    <div class="footer">
+      <div class="callout">Goal: Keep the list <strong>sorted</strong> after inserting the new card.</div>
+    </div>
+  </div>
+
+  <script>
+    const el = (id)=>document.getElementById(id);
+    const board = el('board');
+    const scoreEl = el('score');
+    const streakEl = el('streak');
+    const bestStreakEl = el('bestStreak');
+    const accEl = el('accuracy');
+    const roundsEl = el('rounds');
+    const newCardEl = el('newCard');
+    const msgEl = el('msg');
+    const timeBar = el('timeBar');
+
+    let state = {
+      playing:false,
+      base:[],           // sorted base cards
+      card:null,         // new card to insert
+      answerIdx:null,    // correct slot index (0..len)
+      picked:false,
+      score:0,
+      streak:0,
+      bestStreak:0,
+      correct:0,
+      total:0,
+      roundStart:0,
+      timer:null,
+      timeLeft:0,
+      timeTotal:0
+    };
+
+    const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+
+    function updateHUD(){
+      scoreEl.textContent = state.score;
+      streakEl.textContent = state.streak;
+      bestStreakEl.textContent = state.bestStreak;
+      roundsEl.textContent = state.total;
+      const acc = state.total ? Math.round((state.correct/state.total)*100) : 0;
+      accEl.textContent = acc + '%';
+      newCardEl.textContent = state.playing ? state.card : '—';
+    }
+
+    function setMessage(t){ msgEl.textContent = t }
+
+    function genUnique(count, minV, maxV){
+      const s = new Set();
+      while(s.size < count){ s.add(randInt(minV,maxV)); }
+      return [...s];
+    }
+
+    function sortByOrder(arr){
+      const ord = el('order').value;
+      return arr.sort((a,b)=> ord==='asc' ? a-b : b-a);
+    }
+
+    function correctSlotIndex(base, card){
+      const ord = el('order').value;
+      if(ord==='asc'){
+        // first index i where card <= base[i]
+        for(let i=0;i<base.length;i++) if(card <= base[i]) return i;
+        return base.length;
+      } else {
+        // descending: first i where card >= base[i]
+        for(let i=0;i<base.length;i++) if(card >= base[i]) return i;
+        return base.length;
+      }
+    }
+
+    function renderBoard(){
+      board.innerHTML='';
+      const frag = document.createDocumentFragment();
+      // slots are indices 0..base.length
+      for(let i=0;i<=state.base.length;i++){
+        const slot = document.createElement('button');
+        slot.type='button'; slot.className='slot';
+        slot.dataset.slot=i; slot.title = `Insert at slot ${i+1} (key ${i+1})`;
+        slot.textContent = i+1; // small hint
+        slot.addEventListener('click', ()=>pickSlot(i, slot));
+        frag.appendChild(slot);
+        if(i<state.base.length){
+          const c = document.createElement('div');
+          c.className = 'card'; c.textContent = state.base[i];
+          frag.appendChild(c);
+        }
+      }
+      board.appendChild(frag);
+    }
+
+    function startTimer(seconds){
+      clearInterval(state.timer);
+      if(seconds <= 0){ timeBar.style.width = '100%'; return }
+      state.timeLeft = seconds*1000; state.timeTotal = state.timeLeft;
+      const start = performance.now();
+      state.timer = setInterval(()=>{
+        const elapsed = performance.now() - start;
+        const remain = Math.max(0, state.timeTotal - elapsed);
+        state.timeLeft = remain; const pct = (remain/state.timeTotal)*100;
+        timeBar.style.width = pct + '%';
+        if(remain<=0){ clearInterval(state.timer); outOfTime(); }
+      },100);
+    }
+
+    function startRound(){
+      if(state.playing) return;
+      setMessage(''); state.picked=false; state.playing=true;
+      const len = parseInt(el('len').value,10);
+      const max = Math.max(9, parseInt(el('range').value,10)||99);
+      const base = genUnique(len, 0, max);
+      sortByOrder(base);
+      let card;
+      do { card = randInt(0,max); } while(base.includes(card));
+      state.base = base; state.card = card; state.answerIdx = correctSlotIndex(base, card);
+      newCardEl.textContent = card;
+      renderBoard();
+      // Show the new card visually
+      const nc = document.createElement('div');
+      nc.className = 'card primary'; nc.textContent = card; nc.setAttribute('aria-label','New card to insert');
+      board.insertAdjacentElement('afterbegin', nc);
+
+      updateHUD();
+      state.roundStart = performance.now();
+      const seconds = parseInt(el('timer').value,10);
+      startTimer(seconds);
+      el('start').disabled = true;
+    }
+
+    function endRound(correct){
+      state.total++; if(correct){ state.correct++; state.streak++; state.bestStreak = Math.max(state.bestStreak, state.streak); } else { state.streak = 0 }
+      updateHUD(); el('start').disabled = false; state.playing=false;
+    }
+
+    function reveal(){
+      // highlight correct slot
+      [...board.querySelectorAll('.slot')].forEach((s,i)=>{
+        if(i===state.answerIdx) s.classList.add('correct');
+      });
+    }
+
+    function pickSlot(i, elSlot){
+      if(!state.playing || state.picked) return;
+      state.picked = true; clearInterval(state.timer);
+      const correct = i === state.answerIdx;
+      reveal();
+      if(correct){
+        elSlot.classList.add('correct');
+        const seconds = parseInt(el('timer').value,10);
+        let add = 100; if(seconds>0){ const bonus = Math.round((state.timeLeft/(seconds*1000))*100); add+=bonus; }
+        state.score += add; setMessage(`✅ Correct! +${add} points. Slot ${i+1} keeps it sorted.`);
+      } else {
+        elSlot.classList.add('wrong');
+        state.score = Math.max(0, state.score - 25);
+        setMessage(`❌ Not quite. Correct slot was ${state.answerIdx+1}. −25 points.`);
+      }
+      endRound(correct);
+    }
+
+    function outOfTime(){
+      if(!state.playing || state.picked) return;
+      state.picked = true; reveal();
+      state.score = Math.max(0, state.score - 25);
+      setMessage(`⌛ Time's up! Correct slot was ${state.answerIdx+1}. −25 points.`);
+      endRound(false);
+    }
+
+    // Controls
+    document.getElementById('start').addEventListener('click', startRound);
+    document.getElementById('resetAll').addEventListener('click', ()=>{
+      clearInterval(state.timer);
+      state = {playing:false,base:[],card:null,answerIdx:null,picked:false,score:0,streak:0,bestStreak:0,correct:0,total:0,roundStart:0,timer:null,timeLeft:0,timeTotal:0};
+      board.innerHTML=''; timeBar.style.width='100%'; setMessage('Stats reset. Press Start to play.'); updateHUD(); newCardEl.textContent='—';
+    });
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e)=>{
+      if(e.code==='Space'){ e.preventDefault(); if(!state.playing) startRound(); return; }
+      if(!state.playing) return;
+      const idx = parseInt(e.key,10);
+      if(Number.isInteger(idx)){
+        const slotCount = state.base.length + 1;
+        if(idx>=1 && idx<=slotCount){ const btn = board.querySelectorAll('.slot')[idx-1]; btn && pickSlot(idx-1, btn); }
+      }
+    });
+
+    // Init
+    updateHUD();
+    setMessage('Press Start. Insert the new card (blue) at the correct slot to keep the row sorted.');
+  </script>
+</body>
+</html>
