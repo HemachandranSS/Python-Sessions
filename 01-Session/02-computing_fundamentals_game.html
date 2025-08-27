@@ -327,6 +327,7 @@
             </div>
 
             <h3>Real-World Algorithm Example: Making Coffee ☕</h3>
+            <pre>
             <div class="code-block" data-language="Algorithm">
 1. Fill kettle with water
 2. Turn on kettle
@@ -339,6 +340,7 @@
 5. Add milk and sugar if desired
 6. Enjoy coffee!
             </div>
+            <pre>
         </div>
 
         <!-- Building Blocks Section -->
@@ -369,20 +371,24 @@
                 <div>
                     <h4>1. 📝 Statements</h4>
                     <p>Basic instructions that perform actions</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
-let x = 5;           // Assignment
-console.log("Hello"); // Output
-x = x + 1;           // Computation
+let x = 5;             //Assignment
+console.log("Hello");  // Output
+x = x + 1;             // Computation
                     </div>
+                    </pre>
                 </div>
                 <div>
                     <h4>2. 💾 State</h4>
                     <p>Information stored in variables</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
 let playerScore = 100;
 let playerName = "Alice";
 let isGameOver = false;
                     </div>
+                    </pre>
                 </div>
             </div>
             
@@ -390,6 +396,7 @@ let isGameOver = false;
                 <div>
                     <h4>3. 🔀 Control Flow</h4>
                     <p>Decisions and loops that control execution</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
 if (score > 100) {
     console.log("High score!");
@@ -399,10 +406,12 @@ for (let i = 0; i < 10; i++) {
     console.log(i);
 }
                     </div>
+                    </pre>
                 </div>
                 <div>
                     <h4>4. 🔧 Functions</h4>
                     <p>Reusable blocks of code</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
 function calculateArea(length, width) {
     return length * width;
@@ -410,6 +419,7 @@ function calculateArea(length, width) {
 
 let area = calculateArea(5, 3);
                     </div>
+                    </pre>
                 </div>
             </div>
         </div>
@@ -436,6 +446,7 @@ let area = calculateArea(5, 3);
                 <div>
                     <h4>1. 📄 Pseudocode</h4>
                     <p>Human-readable description of algorithm logic</p>
+                    <pre>
                     <div class="code-block" data-language="Pseudocode">
 BEGIN FindMax
     SET max = first_number
@@ -447,6 +458,7 @@ BEGIN FindMax
     RETURN max
 END
                     </div>
+                    </pre>
                 </div>
                 <div>
                     <h4>2. 📊 Flowchart</h4>
@@ -502,6 +514,7 @@ END
             </div>
 
             <h3>Example: Finding a Book in Library</h3>
+            <pre>
             <div class="code-block" data-language="Problem Analysis">
 Problem: Find a specific book in a large library
 
@@ -514,6 +527,7 @@ Problem: Find a specific book in a large library
 4. Implementation: Follow the steps
 5. Test: Verify you found the correct book
             </div>
+            </pre>
         </div>
 
         <!-- Strategies Section -->
@@ -545,6 +559,7 @@ Problem: Find a specific book in a large library
                 <div>
                     <h4>🔄 Iteration</h4>
                     <p>Repeating a process using loops</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
 function factorialIterative(n) {
     let result = 1;
@@ -556,11 +571,13 @@ function factorialIterative(n) {
 
 // factorial(5) = 1*2*3*4*5 = 120
                     </div>
+                </pre>
                     <p><strong>When to use:</strong> When you need to process items one by one, or repeat until a condition is met.</p>
                 </div>
                 <div>
                     <h4>🔁 Recursion</h4>
                     <p>A function calling itself with simpler inputs</p>
+                    <pre>
                     <div class="code-block" data-language="JavaScript">
 function factorialRecursive(n) {
     if (n <= 1) {
@@ -572,6 +589,7 @@ function factorialRecursive(n) {
 // factorial(5) = 5 * factorial(4)
 //              = 5 * 4 * factorial(3)...
                     </div>
+                </pre>
                     <p><strong>When to use:</strong> When the problem can be broken into smaller, similar subproblems.</p>
                 </div>
             </div>
@@ -812,6 +830,7 @@ function factorialRecursive(n) {
             
             const examples = {
                 pseudocode: `
+                <pre>
                     <div class="code-block" data-language="Pseudocode">
 BEGIN CheckEvenOdd
     INPUT number
@@ -821,7 +840,8 @@ BEGIN CheckEvenOdd
         OUTPUT "Odd"
     END IF
 END
-                    </div>`,
+                    </div>
+                    </pre>`,
                 flowchart: `
                     <div class="flowchart">
                         <div class="flowchart-box">Start</div>
@@ -835,6 +855,7 @@ END
                         <div class="flowchart-box">End</div>
                     </div>`,
                 javascript: `
+                <pre>
                     <div class="code-block" data-language="JavaScript">
 function checkEvenOdd(number) {
     if (number % 2 === 0) {
@@ -848,7 +869,7 @@ function checkEvenOdd(number) {
 
 // Usage example
 let result = checkEvenOdd(8); // Output: "Even"
-                    </div>`
+                    </div></pre>`
             };
             
             container.innerHTML = examples[type];
