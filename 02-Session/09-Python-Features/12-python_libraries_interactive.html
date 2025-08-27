@@ -259,11 +259,13 @@
                 <div class="library-description">
                     Handle dates, times, and time zones with ease. Complex date arithmetic, formatting, and parsing made simple.
                 </div>
+                <pre>
                 <div class="code-example">
 from datetime import datetime
 now = datetime.now()
 formatted = now.strftime("%Y-%m-%d")
                 </div>
+            </pre>
             </div>
 
             <div class="library-card" onclick="demonstrateLibrary('json')">
@@ -274,11 +276,13 @@ formatted = now.strftime("%Y-%m-%d")
                 <div class="library-description">
                     Serialize and deserialize JSON data effortlessly. Convert between Python objects and JSON strings.
                 </div>
+                <pre>
                 <div class="code-example">
 import json
 data = {"name": "John", "age": 30}
 json_str = json.dumps(data)
                 </div>
+            </pre>
             </div>
 
             <div class="library-card" onclick="demonstrateLibrary('requests')">
@@ -289,11 +293,13 @@ json_str = json.dumps(data)
                 <div class="library-description">
                     Make HTTP requests with just a few lines of code. Handle APIs, web scraping, and data fetching.
                 </div>
+            <pre>
                 <div class="code-example">
 import requests
 response = requests.get("https://api.example.com")
 data = response.json()
                 </div>
+            </pre>
             </div>
 
             <div class="library-card" onclick="demonstrateLibrary('pandas')">
@@ -304,11 +310,13 @@ data = response.json()
                 <div class="library-description">
                     Powerful data manipulation and analysis. Handle CSV files, databases, and complex data operations.
                 </div>
+            <pre>
                 <div class="code-example">
 import pandas as pd
 df = pd.read_csv("data.csv")
 result = df.groupby("category").sum()
                 </div>
+            </pre>
             </div>
 
             <div class="library-card" onclick="demonstrateLibrary('matplotlib')">
@@ -319,11 +327,13 @@ result = df.groupby("category").sum()
                 <div class="library-description">
                     Create stunning visualizations and plots. Generate charts, graphs, and statistical visualizations.
                 </div>
+            <pre>
                 <div class="code-example">
 import matplotlib.pyplot as plt
 plt.plot([1, 2, 3, 4], [1, 4, 2, 3])
 plt.show()
                 </div>
+            </pre>
             </div>
 
             <div class="library-card" onclick="demonstrateLibrary('regex')">
@@ -334,11 +344,13 @@ plt.show()
                 <div class="library-description">
                     Pattern matching and text processing with regular expressions. Find, extract, and validate text patterns.
                 </div>
+            <pre>
                 <div class="code-example">
 import re
 emails = re.findall(r'\S+@\S+', text)
 phone = re.sub(r'\D', '', phone_number)
                 </div>
+            </pre>
             </div>
         </div>
 

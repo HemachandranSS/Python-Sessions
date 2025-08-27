@@ -306,6 +306,7 @@
             <div class="demo-card">
                 <h3>C/C++ Integration</h3>
                 <p>Python can be embedded in C/C++ applications using the Python C API:</p>
+                <pre>
                 <div class="code-block">
 // C++ Code<br>
 #include &lt;Python.h&gt;<br><br>
@@ -316,6 +317,8 @@ int main() {<br>
 &nbsp;&nbsp;return 0;<br>
 }
                 </div>
+            </pre>
+        <pre>
                 <div class="code-block python-code">
 # Python Extension Module<br>
 import ctypes<br>
@@ -323,10 +326,11 @@ lib = ctypes.CDLL('./mylib.so')<br>
 result = lib.calculate(10, 20)
                 </div>
             </div>
-
+        </pre>
             <div class="demo-card">
                 <h3>Web Framework Integration</h3>
                 <p>Python backends seamlessly integrate with frontend technologies:</p>
+            <pre>
                 <div class="code-block python-code">
 # Flask Backend<br>
 from flask import Flask, jsonify<br>
@@ -335,17 +339,21 @@ app = Flask(__name__)<br><br>
 def get_data():<br>
 &nbsp;&nbsp;return jsonify({'message': 'Hello from Python!'})
                 </div>
+            </pre>
+        <pre>
                 <div class="code-block javascript-code">
 // JavaScript Frontend<br>
 fetch('/api/data')<br>
 &nbsp;&nbsp;.then(response => response.json())<br>
 &nbsp;&nbsp;.then(data => console.log(data.message));
                 </div>
+            </pre>
             </div>
 
             <div class="demo-card">
                 <h3>Real-time Processing</h3>
                 <p>Python handles complex data processing while JavaScript manages the UI:</p>
+            <pre>
                 <div class="code-block python-code">
 # Python Data Processor<br>
 import numpy as np<br>
@@ -354,11 +362,13 @@ def process_data(raw_data):<br>
 &nbsp;&nbsp;df = pd.DataFrame(raw_data)<br>
 &nbsp;&nbsp;return df.describe().to_dict()
                 </div>
+            </pre>
             </div>
 
             <div class="demo-card">
                 <h3>Cross-Platform Apps</h3>
                 <p>Python with frameworks like Kivy or BeeWare for mobile/desktop apps:</p>
+            <pre>
                 <div class="code-block python-code">
 # Kivy Mobile App<br>
 from kivy.app import App<br>
@@ -368,6 +378,7 @@ class MyApp(App):<br>
 &nbsp;&nbsp;&nbsp;&nbsp;return Button(text='Hello World!')<br><br>
 MyApp().run()
                 </div>
+            </pre>
             </div>
         </div>
 

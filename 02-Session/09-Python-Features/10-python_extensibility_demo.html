@@ -355,6 +355,7 @@
                     <div class="language-icon c-lang">C</div>
                     <h3 class="card-title">C Extension with ctypes</h3>
                 </div>
+                <pre>
                 <div class="code-block">
 <span class="keyword">import</span> <span class="string">ctypes</span>
 
@@ -367,6 +368,7 @@ libc.pow.restype = ctypes.c_double
 result = libc.pow(<span class="string">2.0</span>, <span class="string">10.0</span>)
 <span class="function">print</span>(f<span class="string">"C pow(2.0, 10.0) = {result}"</span>)
                 </div>
+                </pre>
                 <button class="run-btn" onclick="runCExtension()">
                     <span class="btn-text">Run C Extension</span>
                 </button>
@@ -378,6 +380,7 @@ result = libc.pow(<span class="string">2.0</span>, <span class="string">10.0</sp
                     <div class="language-icon nodejs">JS</div>
                     <h3 class="card-title">Subprocess Integration</h3>
                 </div>
+                <pre>
                 <div class="code-block">
 <span class="keyword">import</span> <span class="string">subprocess</span>
 <span class="keyword">import</span> <span class="string">json</span>
@@ -391,6 +394,7 @@ result = subprocess.run([
     data = json.loads(result.stdout)
     <span class="function">print</span>(f<span class="string">"Processed: {data}"</span>)
                 </div>
+                </pre>
                 <button class="run-btn" onclick="runSubprocess()">
                     <span class="btn-text">Run Subprocess</span>
                 </button>
@@ -402,6 +406,7 @@ result = subprocess.run([
                     <div class="language-icon python">⚡</div>
                     <h3 class="card-title">Performance Comparison</h3>
                 </div>
+                <pre>
                 <div class="code-block">
 <span class="comment"># Pure Python vs C Extension</span>
 <span class="keyword">def</span> <span class="function">fibonacci_python</span>(n):
@@ -414,6 +419,7 @@ start = time.time()
 result = fibonacci_python(<span class="string">35</span>)
 duration = time.time() - start
                 </div>
+            </pre>
                 <button class="run-btn" onclick="runPerformanceTest()">
                     <span class="btn-text">Run Performance Test</span>
                 </button>
@@ -429,6 +435,7 @@ duration = time.time() - start
                     <div class="language-icon rust">🦀</div>
                     <h3 class="card-title">Multi-Language Integration</h3>
                 </div>
+                <pre>
                 <div class="code-block">
 <span class="comment"># Using PyO3 for Rust integration</span>
 <span class="keyword">import</span> <span class="string">rust_extension</span>
@@ -440,6 +447,7 @@ result = rust_extension.parallel_sum(numbers)
 <span class="function">print</span>(f<span class="string">"Parallel sum: {result}"</span>)
 <span class="function">print</span>(f<span class="string">"Performance boost: ~{rust_extension.benchmark()}x"</span>)
                 </div>
+            </pre>
                 <button class="run-btn" onclick="runMultiLang()">
                     <span class="btn-text">Run Multi-Language</span>
                 </button>
