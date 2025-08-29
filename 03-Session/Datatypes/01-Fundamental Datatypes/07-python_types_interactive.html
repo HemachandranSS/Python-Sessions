@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Type Casting & Immutability Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: linear-gradient(135deg, #5a0619 0%, #ebef7c 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .section h2 {
+            color: #ffd700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            border-radius: 2px;
+        }
+
+        .bool-converter {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .conversion-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .conversion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .conversion-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .conversion-card:hover::before {
+            left: 100%;
+        }
+
+        .conversion-card h3 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid #4ecdc4;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            min-height: 60px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .type-rules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .rule-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .rule-card h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .memory-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .memory-visual {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .memory-object {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .memory-object.highlight {
+            animation: pulse 1s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+        }
+
+        .reference-line {
+            position: absolute;
+            height: 2px;
+            background: #ffd700;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .reference-line::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -3px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #ffd700;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+
+        .id-display {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4ecdc4;
+            margin-top: 5px;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-example {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            border-left: 4px solid #4ecdc4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-example::before {
+            content: '>>> ';
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .tab.active {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .interactive-bool {
+            margin-top: 20px;
+        }
+
+        .bool-test {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .bool-test:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bool-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .bool-arrow {
+            color: #ffd700;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        .bool-result {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .bool-result.true {
+            background: rgba(76, 175, 80, 0.3);
+            border: 2px solid #4CAF50;
+        }
+
+        .bool-result.false {
+            background: rgba(244, 67, 54, 0.3);
+            border: 2px solid #f44336;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .success {
+            color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .memory-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .memory-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .variable-ref {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ffd700);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+            color: #000;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .variable-ref:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .object-id {
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .highlight {
+            animation: highlight 2s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0%, 100% { background: rgba(255, 255, 255, 0.05); }
+            50% { background: rgba(255, 215, 0, 0.3); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Type System Explorer</h1>
+            <p>Interactive guide to type casting, bool() function, and object immutability</p>
+        </div>
+
+        <!-- Bool Function Rules Section -->
+        <div class="section">
+            <h2>📊 Understanding bool() Function</h2>
+            <p>The bool() function converts values to True or False based on specific rules for each data type:</p>
+            
+            <div class="type-rules">
+                <div class="rule-card">
+                    <h4>🔢 Integer (int)</h4>
+                    <p><strong>0</strong> → False</p>
+                    <p><strong>Any non-zero</strong> → True</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>🔸 Float</h4>
+                    <p><strong>0.0</strong> → False</p>
+                    <p><strong>Any non-zero</strong> → True</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>🌊 Complex</h4>
+                    <p><strong>0+0j</strong> → False</p>
+                    <p><strong>Any other value</strong> → True</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>📝 String (str)</h4>
+                    <p><strong>Empty string ""</strong> → False</p>
+                    <p><strong>Any non-empty string</strong> → True</p>
+                </div>
+            </div>
+
+            <div class="interactive-bool">
+                <h3>🎮 Interactive Bool Converter</h3>
+                <div class="bool-test">
+                    <input type="text" class="bool-input" placeholder="Enter any value..." data-index="0">
+                    <span class="bool-arrow">→</span>
+                    <div class="bool-result" data-index="0">Test a value!</div>
+                </div>
+                <div class="bool-test">
+                    <input type="text" class="bool-input" placeholder="Try another value..." data-index="1">
+                    <span class="bool-arrow">→</span>
+                    <div class="bool-result" data-index="1">Try it out!</div>
+                </div>
+                <div class="bool-test">
+                    <input type="text" class="bool-input" placeholder="Test more values..." data-index="2">
+                    <span class="bool-arrow">→</span>
+                    <div class="bool-result" data-index="2">Keep testing!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Type Conversion Section -->
+        <div class="section">
+            <h2>🔄 Type Casting Functions</h2>
+            
+            <div class="tabs">
+                <button class="tab active" data-tab="int-tab">int()</button>
+                <button class="tab" data-tab="float-tab">float()</button>
+                <button class="tab" data-tab="complex-tab">complex()</button>
+                <button class="tab" data-tab="str-tab">str()</button>
+            </div>
+
+            <div id="int-tab" class="tab-content active">
+                <h3>🔢 Integer Conversion</h3>
+                <div class="bool-converter">
+                    <div class="conversion-card">
+                        <h3>Convert to int</h3>
+                        <div class="input-group">
+                            <label>Enter value:</label>
+                            <input type="text" id="int-input" placeholder="e.g., 123.456, True, '42'">
+                        </div>
+                        <button class="convert-btn" onclick="convertToInt()">Convert to int()</button>
+                        <div class="result" id="int-result"></div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <div>int(123.987) → 123</div>
+                    <div>int(True) → 1</div>
+                    <div>int(False) → 0</div>
+                    <div>int("10") → 10</div>
+                    <div style="color: #ff6b6b;">int("10.5") → ValueError</div>
+                    <div style="color: #ff6b6b;">int(10+5j) → TypeError</div>
+                </div>
+            </div>
+
+            <div id="float-tab" class="tab-content">
+                <h3>🔸 Float Conversion</h3>
+                <div class="bool-converter">
+                    <div class="conversion-card">
+                        <h3>Convert to float</h3>
+                        <div class="input-group">
+                            <label>Enter value:</label>
+                            <input type="text" id="float-input" placeholder="e.g., 10, True, '10.5'">
+                        </div>
+                        <button class="convert-btn" onclick="convertToFloat()">Convert to float()</button>
+                        <div class="result" id="float-result"></div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <div>float(10) → 10.0</div>
+                    <div>float(True) → 1.0</div>
+                    <div>float("10.5") → 10.5</div>
+                    <div style="color: #ff6b6b;">float("ten") → ValueError</div>
+                    <div style="color: #ff6b6b;">float(10+5j) → TypeError</div>
+                </div>
+            </div>
+
+            <div id="complex-tab" class="tab-content">
+                <h3>🌊 Complex Conversion</h3>
+                <div class="bool-converter">
+                    <div class="conversion-card">
+                        <h3>Convert to complex</h3>
+                        <div class="input-group">
+                            <label>Real part:</label>
+                            <input type="text" id="complex-real" placeholder="e.g., 10, True, '5'">
+                        </div>
+                        <div class="input-group">
+                            <label>Imaginary part (optional):</label>
+                            <input type="text" id="complex-imag" placeholder="e.g., 2, False, '3'">
+                        </div>
+                        <button class="convert-btn" onclick="convertToComplex()">Convert to complex()</button>
+                        <div class="result" id="complex-result"></div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <div>complex(10) → (10+0j)</div>
+                    <div>complex(10, -2) → (10-2j)</div>
+                    <div>complex(True, False) → (1+0j)</div>
+                    <div>complex("10") → (10+0j)</div>
+                </div>
+            </div>
+
+            <div id="str-tab" class="tab-content">
+                <h3>📝 String Conversion</h3>
+                <div class="bool-converter">
+                    <div class="conversion-card">
+                        <h3>Convert to str</h3>
+                        <div class="input-group">
+                            <label>Enter value:</label>
+                            <input type="text" id="str-input" placeholder="e.g., 10, True, 10+5j">
+                        </div>
+                        <button class="convert-btn" onclick="convertToStr()">Convert to str()</button>
+                        <div class="result" id="str-result"></div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <div>str(10) → '10'</div>
+                    <div>str(10.5) → '10.5'</div>
+                    <div>str(10+5j) → '(10+5j)'</div>
+                    <div>str(True) → 'True'</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Immutability and Identity Section -->
+        <div class="section">
+            <h2>🔐 Object Immutability & Identity</h2>
+            <p>Fundamental data types in Python are immutable. When you create objects with the same value, Python often reuses the same memory location for efficiency.</p>
+            
+            <div class="demo-controls">
+                <button class="demo-btn" onclick="demonstrateIntegerIdentity()">Integer Identity Demo</button>
+                <button class="demo-btn" onclick="demonstrateStringIdentity()">String Identity Demo</button>
+                <button class="demo-btn" onclick="demonstrateBoolIdentity()">Boolean Identity Demo</button>
+                <button class="demo-btn" onclick="demonstrateComplexIdentity()">Complex Identity Demo</button>
+            </div>
+
+            <div class="memory-comparison">
+                <div class="memory-box">
+                    <h3>📍 Variables</h3>
+                    <div id="variables-display">
+                        <div class="variable-ref" data-var="a">a</div>
+                        <div class="variable-ref" data-var="b">b</div>
+                    </div>
+                </div>
+                
+                <div class="memory-box">
+                    <h3>💾 Memory Objects</h3>
+                    <div id="memory-objects">
+                        <div class="memory-object" id="obj1">
+                            Value: <span id="obj1-value">10</span>
+                            <div class="id-display">ID: <span id="obj1-id">1572353952</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-example" id="identity-code">
+                <div id="code-output">
+                    >>> a = 10<br>
+                    >>> b = 10<br>
+                    >>> a is b<br>
+                    True<br>
+                    >>> id(a)<br>
+                    1572353952<br>
+                    >>> id(b)<br>
+                    1572353952
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Concepts Section -->
+        <div class="section">
+            <h2>💡 Key Concepts</h2>
+            
+            <div class="type-rules">
+                <div class="rule-card">
+                    <h4>🔒 Immutability</h4>
+                    <p>Once created, fundamental data type objects cannot be changed. Any modification creates a new object.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>♻️ Object Reuse</h4>
+                    <p>Python reuses objects with identical values to save memory and improve performance.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>🆔 Identity vs Equality</h4>
+                    <p><code>is</code> checks if two variables point to the same object. <code>==</code> checks if values are equal.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>🎯 Type Safety</h4>
+                    <p>Each conversion function has specific rules. Complex numbers cannot be converted to int or float.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = (Math.random() * 10 + 5) + 'px';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 6) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Bool converter for interactive inputs
+        document.querySelectorAll('.bool-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const index = e.target.dataset.index;
+                const resultDiv = document.querySelector(`[data-index="${index}"].bool-result`);
+                const value = e.target.value;
+                
+                if (value === '') {
+                    resultDiv.textContent = 'Enter value';
+                    resultDiv.className = 'bool-result';
+                    return;
+                }
+
+                try {
+                    const boolResult = evaluateBool(value);
+                    resultDiv.textContent = boolResult.toString();
+                    resultDiv.className = `bool-result ${boolResult ? 'true' : 'false'}`;
+                } catch (error) {
+                    resultDiv.textContent = 'Invalid';
+                    resultDiv.className = 'bool-result false';
+                }
+            });
+        });
+
+        function evaluateBool(value) {
+            // Handle different input types
+            if (value === 'True' || value === 'true') return true;
+            if (value === 'False' || value === 'false') return false;
+            
+            // Try to parse as number
+            const num = parseFloat(value);
+            if (!isNaN(num)) {
+                return num !== 0;
+            }
+            
+            // Handle complex numbers (simplified)
+            if (value.includes('j') || value.includes('J')) {
+                if (value === '0+0j' || value === '0j') return false;
+                return true;
+            }
+            
+            // Handle empty string
+            if (value === '""' || value === "''" || value === '') return false;
+            
+            // Any other string
+            return true;
+        }
+
+        // Type conversion functions
+        function convertToInt() {
+            const input = document.getElementById('int-input').value;
+            const result = document.getElementById('int-result');
+            
+            try {
+                let convertedValue;
+                if (input === 'True' || input === 'true') {
+                    convertedValue = 1;
+                } else if (input === 'False' || input === 'false') {
+                    convertedValue = 0;
+                } else if (input.includes('j') || input.includes('J')) {
+                    throw new Error("TypeError: can't convert complex to int");
+                } else if (input.includes('.') && isNaN(parseInt(input))) {
+                    throw new Error("ValueError: invalid literal for int()");
+                } else if (input.includes('.')) {
+                    convertedValue = Math.floor(parseFloat(input));
+                } else {
+                    const num = parseInt(input);
+                    if (isNaN(num)) throw new Error("ValueError: invalid literal for int()");
+                    convertedValue = num;
+                }
+                
+                result.innerHTML = `<div class="success">int(${input}) → ${convertedValue}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+            
+            result.classList.add('show');
+        }
+
+        function convertToFloat() {
+            const input = document.getElementById('float-input').value;
+            const result = document.getElementById('float-result');
+            
+            try {
+                let convertedValue;
+                if (input === 'True' || input === 'true') {
+                    convertedValue = 1.0;
+                } else if (input === 'False' || input === 'false') {
+                    convertedValue = 0.0;
+                } else if (input.includes('j') || input.includes('J')) {
+                    throw new Error("TypeError: can't convert complex to float");
+                } else {
+                    const num = parseFloat(input);
+                    if (isNaN(num)) throw new Error("ValueError: could not convert string to float");
+                    convertedValue = num;
+                }
+                
+                result.innerHTML = `<div class="success">float(${input}) → ${convertedValue}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">${error.message}</div>`;
+            }
+            
+            result.classList.add('show');
+        }
+
+        function convertToComplex() {
+            const real = document.getElementById('complex-real').value;
+            const imag = document.getElementById('complex-imag').value || '0';
+            const result = document.getElementById('complex-result');
+            
+            try {
+                let realVal = parseFloat(real) || 0;
+                let imagVal = parseFloat(imag) || 0;
+                
+                if (real === 'True' || real === 'true') realVal = 1;
+                if (real === 'False' || real === 'false') realVal = 0;
+                if (imag === 'True' || imag === 'true') imagVal = 1;
+                if (imag === 'False' || imag === 'false') imagVal = 0;
+                
+                const complexStr = imagVal >= 0 ? 
+                    `(${realVal}+${imagVal}j)` : 
+                    `(${realVal}${imagVal}j)`;
+                
+                result.innerHTML = `<div class="success">complex(${real}, ${imag}) → ${complexStr}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">ValueError: complex() arg is a malformed string</div>`;
+            }
+            
+            result.classList.add('show');
+        }
+
+        function convertToStr() {
+            const input = document.getElementById('str-input').value;
+            const result = document.getElementById('str-result');
+            
+            try {
+                let convertedValue = `'${input}'`;
+                
+                // Handle special cases
+                if (input === 'True' || input === 'true') {
+                    convertedValue = "'True'";
+                } else if (input === 'False' || input === 'false') {
+                    convertedValue = "'False'";
+                } else if (!isNaN(parseFloat(input))) {
+                    convertedValue = `'${input}'`;
+                }
+                
+                result.innerHTML = `<div class="success">str(${input}) → ${convertedValue}</div>`;
+            } catch (error) {
+                result.innerHTML = `<div class="error">Conversion error</div>`;
+            }
+            
+            result.classList.add('show');
+        }
+
+        // Memory demonstration functions
+        let currentDemo = 'integer';
+        let objectCounter = 1572353952;
+
+        function demonstrateIntegerIdentity() {
+            currentDemo = 'integer';
+            updateMemoryDemo('10', '10', true, 'Integer');
+        }
+
+        function demonstrateStringIdentity() {
+            currentDemo = 'string';
+            updateMemoryDemo('"hello"', '"hello"', true, 'String');
+        }
+
+        function demonstrateBoolIdentity() {
+            currentDemo = 'boolean';
+            updateMemoryDemo('True', 'True', true, 'Boolean');
+        }
+
+        function demonstrateComplexIdentity() {
+            currentDemo = 'complex';
+            updateMemoryDemo('10+5j', '10+5j', false, 'Complex');
+        }
+
+        function updateMemoryDemo(valueA, valueB, sameId, type) {
+            const memoryObjects = document.getElementById('memory-objects');
+            const codeOutput = document.getElementById('code-output');
+            const obj1Value = document.getElementById('obj1-value');
+            const obj1Id = document.getElementById('obj1-id');
+            
+            // Generate random IDs
+            const id1 = Math.floor(Math.random() * 1000000000) + 1572353952;
+            const id2 = sameId ? id1 : id1 + Math.floor(Math.random() * 1000);
+            
+            // Update object display
+            obj1Value.textContent = valueA;
+            obj1Id.textContent = id1;
+            
+            // Create second object if needed
+            let objectsHtml = `
+                <div class="memory-object highlight" id="obj1">
+                    Value: <span>${valueA}</span>
+                    <div class="id-display">ID: <span>${id1}</span></div>
+                </div>
+            `;
+            
+            if (!sameId) {
+                objectsHtml += `
+                    <div class="memory-object highlight" id="obj2">
+                        Value: <span>${valueB}</span>
+                        <div class="id-display">ID: <span>${id2}</span></div>
+                    </div>
+                `;
+            }
+            
+            memoryObjects.innerHTML = objectsHtml;
+            
+            // Update code example
+            const isResult = sameId ? 'True' : 'False';
+            codeOutput.innerHTML = `
+                >>> a = ${valueA}<br>
+                >>> b = ${valueB}<br>
+                >>> a is b<br>
+                <span style="color: ${sameId ? '#4ecdc4' : '#ff6b6b'}">${isResult}</span><br>
+                >>> id(a)<br>
+                ${id1}<br>
+                >>> id(b)<br>
+                ${id2}
+            `;
+            
+            // Add explanation
+            setTimeout(() => {
+                const explanation = sameId ? 
+                    `✅ Same object in memory! Python reused the existing object for efficiency.` :
+                    `❌ Different objects! Each complex number gets its own memory location.`;
+                
+                codeOutput.innerHTML += `<br><br><span style="color: #ffd700; font-style: italic;">${explanation}</span>`;
+            }, 1000);
+            
+            // Remove highlight after animation
+            setTimeout(() => {
+                document.querySelectorAll('.memory-object').forEach(obj => {
+                    obj.classList.remove('highlight');
+                });
+            }, 2000);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            demonstrateIntegerIdentity();
+        });
+
+        // Add some interactive hover effects for variable references
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('variable-ref')) {
+                const varName = e.target.dataset.var;
+                const memoryObjects = document.querySelectorAll('.memory-object');
+                
+                memoryObjects.forEach(obj => {
+                    obj.classList.add('highlight');
+                });
+                
+                setTimeout(() => {
+                    memoryObjects.forEach(obj => {
+                        obj.classList.remove('highlight');
+                    });
+                }, 1000);
+            }
+        });
+
+
+
+function demonstrateIntegerIdentity() {
+    currentDemo = 'integer';
+    updateMemoryDemo('10', '10', true, 'Integer');
+}
+
+function demonstrateStringIdentity() {
+    currentDemo = 'string';
+    updateMemoryDemo('"hello"', '"hello"', true, 'String');
+}
+
+function demonstrateBoolIdentity() {
+    currentDemo = 'boolean';
+    updateMemoryDemo('True', 'True', true, 'Boolean');
+}
+
+function demonstrateComplexIdentity() {
+    currentDemo = 'complex';
+    updateMemoryDemo('10+5j', '10+5j', false, 'Complex');
+}
+
+function updateMemoryDemo(valueA, valueB, sameId, type) {
+    const memoryObjects = document.getElementById('memory-objects');
+    const codeOutput = document.getElementById('code-output');
+    const variablesDisplay = document.getElementById('variables-display');
+    
+    // Generate realistic memory IDs
+    const id1 = Math.floor(Math.random() * 1000000000) + 1572353952;
+    const id2 = sameId ? id1 : id1 + Math.floor(Math.random() * 100000) + 1000;
+    
+    // Update variables display
+    variablesDisplay.innerHTML = `
+        <div class="variable-ref highlight" data-var="a" style="background: linear-gradient(45deg, #ff6b6b, #ffd700);">
+            a → ${valueA}
+        </div>
+        <div class="variable-ref highlight" data-var="b" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">
+            b → ${valueB}
+        </div>
+    `;
+    
+    // Update memory objects display
+    let objectsHtml = `
+        <div class="memory-object highlight" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4);">
+            <div style="font-size: 1.1rem;">📦 Object 1</div>
+            Value: <span style="color: #ffd700; font-weight: bold;">${valueA}</span>
+            <div class="id-display">ID: <span>${id1}</span></div>
+        </div>
+    `;
+    
+    if (!sameId) {
+        objectsHtml += `
+            <div class="memory-object highlight" style="background: linear-gradient(45deg, #44a08d, #667eea); margin-top: 15px;">
+                <div style="font-size: 1.1rem;">📦 Object 2</div>
+                Value: <span style="color: #ffd700; font-weight: bold;">${valueB}</span>
+                <div class="id-display">ID: <span>${id2}</span></div>
+            </div>
+        `;
+    }
+    
+    memoryObjects.innerHTML = objectsHtml;
+    
+    // Update code example with proper formatting
+    const isResult = sameId ? 'True' : 'False';
+    const resultColor = sameId ? '#4ecdc4' : '#ff6b6b';
+    
+    codeOutput.innerHTML = `
+        <div style="color: #ffd700;">>>> a = ${valueA}</div>
+        <div style="color: #ffd700;">>>> b = ${valueB}</div>
+        <div style="color: #ffd700;">>>> a is b</div>
+        <div style="color: ${resultColor}; font-weight: bold; margin: 5px 0;">${isResult}</div>
+        <div style="color: #ffd700;">>>> id(a)</div>
+        <div style="color: #4ecdc4;">${id1}</div>
+        <div style="color: #ffd700;">>>> id(b)</div>
+        <div style="color: #4ecdc4;">${id2}</div>
+    `;
+    
+    // Add explanation with delay
+    setTimeout(() => {
+        const typeExplanation = getTypeExplanation(type, sameId);
+        const explanation = sameId ? 
+            `✅ Same object in memory! ${typeExplanation}` :
+            `❌ Different objects! ${typeExplanation}`;
+        
+        codeOutput.innerHTML += `<br><div style="color: #ffd700; font-style: italic; background: rgba(255, 215, 0, 0.1); padding: 10px; border-radius: 5px; margin-top: 10px;">${explanation}</div>`;
+    }, 1000);
+    
+    // Remove highlight after animation
+    setTimeout(() => {
+        document.querySelectorAll('.memory-object, .variable-ref').forEach(obj => {
+            obj.classList.remove('highlight');
+        });
+    }, 2000);
+}
+
+function getTypeExplanation(type, sameId) {
+    const explanations = {
+        'Integer': sameId ? 'Python caches small integers (-5 to 256) for performance.' : 'Large integers may get separate memory locations.',
+        'String': sameId ? 'Python interns small strings and identifiers for efficiency.' : 'Large or dynamic strings may get separate objects.',
+        'Boolean': sameId ? 'Python has only two boolean objects: True and False in memory.' : 'Booleans always reference the same objects.',
+        'Complex': sameId ? 'Small complex numbers may be cached.' : 'Complex numbers typically get separate memory locations.'
+    };
+    return explanations[type] || 'Object identity depends on Python\'s internal optimizations.';
+}
+    </script>
+</body>
+</html>
