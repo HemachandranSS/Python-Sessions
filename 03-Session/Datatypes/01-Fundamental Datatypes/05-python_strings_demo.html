@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python String Data Type - Interactive Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1a0b 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header h1 {
+            color: #000;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); }
+        }
+
+        .section {
+            margin: 30px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4ecdc4;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 2px;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid #4a5568;
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #4ecdc4;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .string-demo {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #4ecdc4;
+        }
+
+        .string-visual {
+            display: flex;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+
+        .char-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4ecdc4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+            background: white;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .char-box:hover {
+            background: #4ecdc4;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .index-positive {
+            font-size: 0.8rem;
+            color: #27ae60;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .index-negative {
+            font-size: 0.8rem;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .interactive-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            min-height: 50px;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            background: #ffd93d;
+            color: #2c3e50;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .quote-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quote-box {
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .single-quote {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+
+        .double-quote {
+            background: #e8f4f8;
+            border-color: #3498db;
+        }
+
+        .triple-quote {
+            background: #fdf2e9;
+            border-color: #f39c12;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slicing-demo {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .slice-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .slice-notation {
+            font-family: monospace;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .operation-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #4ecdc4;
+            transition: transform 0.3s ease;
+        }
+
+        .operation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .char-box {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🐍 Python String Data Type</h2>
+            <p>Interactive Learning with Hema Examples</p>
+        </div>
+
+        <div class="section">
+            <h2>📚 What is a String?</h2>
+            <p>A <strong>String</strong> is a sequence of characters enclosed within quotes. In Python, strings are immutable, meaning once created, they cannot be changed.</p>
+            
+            <div class="quote-demo">
+                <div class="quote-box single-quote">
+                    <h4>Single Quotes</h4>
+                    <pre>
+                    <div class="code-block">s1 = 'Hema'</div>
+                    </pre>
+                </div>
+                <div class="quote-box double-quote">
+                    <h4>Double Quotes</h4>
+                    <pre>
+                        <div class="code-block">s1 = "Hema"</div>
+                    </pre>
+                </div>
+                <div class="quote-box triple-quote">
+                    <h4>Triple Quotes (Multi-line)</h4>
+                    <pre>
+                    <div class="code-block">s1 = '''Hema<br>Software<br>Engineer'''</div>
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 String Indexing</h2>
+            <p>Python strings follow <strong>zero-based indexing</strong>. Each character has both positive (left to right) and negative (right to left) indices.</p>
+            
+            <div id="stringVisualization">
+                <div class="string-visual" id="stringChars"></div>
+            </div>
+        </div>
+
+        <div class="section interactive-section">
+            <h2>✂️ String Slicing Interactive Demo</h2>
+            <p>Use the slice operator [ ] to extract parts of a string. Syntax: string[start:end:step]</p>
+            
+            <div class="input-group">
+                <input type="text" id="sliceString" class="input-field" placeholder="Enter string (default: Hema)" value="Hema">
+                <input type="number" id="sliceStart" class="input-field" placeholder="Start index">
+                <input type="number" id="sliceEnd" class="input-field" placeholder="End index">
+                <input type="number" id="sliceStep" class="input-field" placeholder="Step (optional)" value="1">
+                <button class="btn" onclick="performSlicing()">Slice String</button>
+            </div>
+            
+            <div class="result" id="sliceResult">
+                Result will appear here...
+            </div>
+            
+            <div class="slicing-demo">
+                <h4>Common Slicing Examples:</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 15px;">
+                    <button class="btn" onclick="quickSlice('Hema', 0, 2)" style="font-size: 0.9rem;">s[0:2] = "He"</button>
+                    <button class="btn" onclick="quickSlice('Hema', 1, null)" style="font-size: 0.9rem;">s[1:] = "ema"</button>
+                    <button class="btn" onclick="quickSlice('Hema', null, 3)" style="font-size: 0.9rem;">s[:3] = "Hem"</button>
+                    <button class="btn" onclick="quickSlice('Hema', -2, null)" style="font-size: 0.9rem;">s[-2:] = "ma"</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 String Operations</h2>
+            <div class="operations-grid">
+                <div class="operation-card">
+                    <h4>String Repetition (*)</h4>
+                    <div class="code-block">>> s = "Hema"<br>>>> s * 3<br>'HemaHemaHema'</div>
+                    <div class="input-group">
+                        <input type="text" id="repeatString" class="input-field" placeholder="String" value="Hema">
+                        <input type="number" id="repeatCount" class="input-field" placeholder="Count" value="3">
+                        <button class="btn" onclick="repeatString()">Repeat</button>
+                    </div>
+                    <div class="result" id="repeatResult"></div>
+                </div>
+                
+                <div class="operation-card">
+                    <h4>String Length (len)</h4>
+                    <div class="code-block">>> s = "Hema"<br>>>> len(s)<br>4</div>
+                    <div class="input-group">
+                        <input type="text" id="lengthString" class="input-field" placeholder="String" value="Hema">
+                        <button class="btn" onclick="getLength()">Get Length</button>
+                    </div>
+                    <div class="result" id="lengthResult"></div>
+                </div>
+                
+                <div class="operation-card">
+                    <h4>Character Access</h4>
+                    <div class="code-block">>> s = "Hema"<br>>>> s[0]<br>'H'<br>>>> s[-1]<br>'a'</div>
+                    <div class="input-group">
+                        <input type="text" id="accessString" class="input-field" placeholder="String" value="Hema">
+                        <input type="number" id="accessIndex" class="input-field" placeholder="Index">
+                        <button class="btn" onclick="accessCharacter()">Get Character</button>
+                    </div>
+                    <div class="result" id="accessResult"></div>
+                </div>
+                
+                <div class="operation-card">
+                    <h4>String Concatenation (+)</h4>
+                    <div class="code-block">>> s1 = "Hema"<br>>>> s2 = " rocks!"<br>>>> s1 + s2<br>'Hema rocks!'</div>
+                    <div class="input-group">
+                        <input type="text" id="concat1" class="input-field" placeholder="First string" value="Hema">
+                        <input type="text" id="concat2" class="input-field" placeholder="Second string" value=" rocks!">
+                        <button class="btn" onclick="concatenateStrings()">Concatenate</button>
+                    </div>
+                    <div class="result" id="concatResult"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 Key Points to Remember</h2>
+            <ul style="list-style-type: none; padding: 0;">
+                <li style="margin: 10px 0; padding: 10px; background: #e8f5e8; border-left: 4px solid #27ae60; border-radius: 5px;">
+                    ✅ Strings are <strong>immutable</strong> - operations create new strings
+                </li>
+                <li style="margin: 10px 0; padding: 10px; background: #e8f4f8; border-left: 4px solid #3498db; border-radius: 5px;">
+                    ✅ Use triple quotes for <strong>multi-line strings</strong>
+                </li>
+                <li style="margin: 10px 0; padding: 10px; background: #fdf2e9; border-left: 4px solid #f39c12; border-radius: 5px;">
+                    ✅ <strong>Negative indices</strong> count from the end (-1 is last character)
+                </li>
+                <li style="margin: 10px 0; padding: 10px; background: #fdeeee; border-left: 4px solid #e74c3c; border-radius: 5px;">
+                    ✅ Slicing syntax: <strong>[start:end:step]</strong> (end is exclusive)
+                </li>
+                <li style="margin: 10px 0; padding: 10px; background: #f4e8fd; border-left: 4px solid #9b59b6; border-radius: 5px;">
+                    ✅ <strong>IndexError</strong> occurs when accessing invalid indices
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Initialize string visualization
+        function initializeStringVisualization() {
+            const string = "Hema";
+            const container = document.getElementById('stringChars');
+            container.innerHTML = '';
+            
+            // Create negative indices row
+            const negativeIndices = document.createElement('div');
+            negativeIndices.className = 'string-visual';
+            for (let i = 0; i < string.length; i++) {
+                const indexDiv = document.createElement('div');
+                indexDiv.className = 'index-negative';
+                indexDiv.textContent = -(string.length - i);
+                negativeIndices.appendChild(indexDiv);
+            }
+            container.appendChild(negativeIndices);
+            
+            // Create character boxes
+            const charsDiv = document.createElement('div');
+            charsDiv.className = 'string-visual';
+            for (let i = 0; i < string.length; i++) {
+                const charBox = document.createElement('div');
+                charBox.className = 'char-box';
+                charBox.textContent = string[i];
+                charBox.title = `Character: '${string[i]}', Positive Index: ${i}, Negative Index: ${-(string.length - i)}`;
+                charBox.onclick = () => {
+                    alert(`Character: '${string[i]}'\nPositive Index: ${i}\nNegative Index: ${-(string.length - i)}`);
+                };
+                charsDiv.appendChild(charBox);
+            }
+            container.appendChild(charsDiv);
+            
+            // Create positive indices row
+            const positiveIndices = document.createElement('div');
+            positiveIndices.className = 'string-visual';
+            for (let i = 0; i < string.length; i++) {
+                const indexDiv = document.createElement('div');
+                indexDiv.className = 'index-positive';
+                indexDiv.textContent = i;
+                positiveIndices.appendChild(indexDiv);
+            }
+            container.appendChild(positiveIndices);
+        }
+
+        function performSlicing() {
+            const string = document.getElementById('sliceString').value || 'Hema';
+            const start = document.getElementById('sliceStart').value;
+            const end = document.getElementById('sliceEnd').value;
+            const step = document.getElementById('sliceStep').value || 1;
+            
+            try {
+                const startIndex = start === '' ? undefined : parseInt(start);
+                const endIndex = end === '' ? undefined : parseInt(end);
+                const stepValue = parseInt(step);
+                
+                let result;
+                if (startIndex === undefined && endIndex === undefined) {
+                    result = string;
+                } else if (startIndex === undefined) {
+                    result = string.slice(0, endIndex);
+                } else if (endIndex === undefined) {
+                    result = string.slice(startIndex);
+                } else {
+                    result = string.slice(startIndex, endIndex);
+                }
+                
+                if (stepValue !== 1) {
+                    let steppedResult = '';
+                    for (let i = 0; i < result.length; i += stepValue) {
+                        steppedResult += result[i];
+                    }
+                    result = steppedResult;
+                }
+                
+                const notation = `"${string}"[${start || ''}:${end || ''}${step != 1 ? ':' + step : ''}]`;
+                document.getElementById('sliceResult').innerHTML = `
+                    <strong>Expression:</strong> ${notation}<br>
+                    <strong>Result:</strong> "${result}"<br>
+                    <strong>Length:</strong> ${result.length}
+                `;
+            } catch (error) {
+                document.getElementById('sliceResult').innerHTML = `<span style="color: #e74c3c;">Error: ${error.message}</span>`;
+            }
+        }
+
+        function quickSlice(string, start, end) {
+            document.getElementById('sliceString').value = string;
+            document.getElementById('sliceStart').value = start || '';
+            document.getElementById('sliceEnd').value = end || '';
+            performSlicing();
+        }
+
+        function repeatString() {
+            const string = document.getElementById('repeatString').value;
+            const count = parseInt(document.getElementById('repeatCount').value) || 0;
+            
+            if (count > 50) {
+                document.getElementById('repeatResult').innerHTML = '<span style="color: #e74c3c;">Please enter a count less than 50</span>';
+                return;
+            }
+            
+            const result = string.repeat(count);
+            document.getElementById('repeatResult').innerHTML = `
+                <strong>Result:</strong> "${result}"<br>
+                <strong>Length:</strong> ${result.length}
+            `;
+        }
+
+        function getLength() {
+            const string = document.getElementById('lengthString').value;
+            document.getElementById('lengthResult').innerHTML = `
+                <strong>String:</strong> "${string}"<br>
+                <strong>Length:</strong> ${string.length}
+            `;
+        }
+
+        function accessCharacter() {
+            const string = document.getElementById('accessString').value;
+            const index = parseInt(document.getElementById('accessIndex').value);
+            
+            try {
+                if (index >= string.length || index < -string.length) {
+                    throw new Error('Index out of range');
+                }
+                
+                const char = string[index >= 0 ? index : string.length + index];
+                document.getElementById('accessResult').innerHTML = `
+                    <strong>String:</strong> "${string}"<br>
+                    <strong>Index:</strong> ${index}<br>
+                    <strong>Character:</strong> "${char}"
+                `;
+            } catch (error) {
+                document.getElementById('accessResult').innerHTML = `<span style="color: #e74c3c;">IndexError: ${error.message}</span>`;
+            }
+        }
+
+        function concatenateStrings() {
+            const str1 = document.getElementById('concat1').value;
+            const str2 = document.getElementById('concat2').value;
+            const result = str1 + str2;
+            
+            document.getElementById('concatResult').innerHTML = `
+                <strong>First String:</strong> "${str1}"<br>
+                <strong>Second String:</strong> "${str2}"<br>
+                <strong>Result:</strong> "${result}"<br>
+                <strong>Total Length:</strong> ${result.length}
+            `;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeStringVisualization();
+        });
+
+        // Add some interactive animations
+        document.querySelectorAll('.char-box').forEach(box => {
+            box.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.1) rotateY(180deg)';
+            });
+            
+            box.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1) rotateY(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

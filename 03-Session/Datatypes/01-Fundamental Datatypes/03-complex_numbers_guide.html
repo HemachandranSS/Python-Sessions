@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Complex Numbers - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #232633 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            animation: slideInFromBottom 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.4s; }
+        .section:nth-child(4) { animation-delay: 0.6s; }
+        .section:nth-child(5) { animation-delay: 0.8s; }
+
+        .section h2 {
+            color: #4a5568;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .complex-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .complex-visualization {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .part-box {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .real-part {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .imaginary-part {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .part-box:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .part-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .part-box p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .error {
+            color: #f56565;
+            background: rgba(245, 101, 101, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .demo-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .control-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+        }
+
+        .result-display {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .operation-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .app-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+        }
+
+        .app-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .app-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-number {
+            position: absolute;
+            color: rgba(255,255,255,0.1);
+            font-size: 2rem;
+            font-weight: bold;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .complex-visualization {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .operation-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-number" style="left: 10%; animation-delay: 0s;">3+5j</div>
+        <div class="floating-number" style="left: 80%; animation-delay: 5s;">2-4j</div>
+        <div class="floating-number" style="left: 50%; animation-delay: 10s;">1+1j</div>
+        <div class="floating-number" style="left: 30%; animation-delay: 15s;">7+2j</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Python Complex Numbers</h1>
+            <p>Explore the fascinating world of complex numbers in Python - from basic syntax to real-world applications</p>
+        </div>
+
+        <div class="section">
+            <h2>📐 Complex Number Structure</h2>
+            <div class="complex-form">
+                <span>a + bj</span>
+            </div>
+            <div class="complex-visualization">
+                <div class="part-box real-part">
+                    <h3>Real Part (a)</h3>
+                    <p>Integer or Float</p>
+                    <p>Can be: decimal, binary, octal, hex</p>
+                </div>
+                <div class="part-box imaginary-part">
+                    <h3>Imaginary Part (b)</h3>
+                    <p>Coefficient of j</p>
+                    <p>Must be in decimal form</p>
+                </div>
+            </div>
+            <p><strong>Key Point:</strong> j² = -1, where j = √(-1)</p>
+        </div>
+
+        <div class="section">
+            <h2>💻 Valid Examples</h2>
+            <pre>
+            <div class="code-block">
+<span class="highlight"># Valid complex numbers</span>
+a = 3 + 5j
+b = 10 + 5.5j
+c = 0.5 + 0.1j
+d = 0B11 + 5j  <span class="highlight"># Binary real part (3 + 5j)</span>
+
+print(a)  <span class="highlight"># Output: (3+5j)</span>
+print(type(a))  <span class="highlight"># Output: &lt;class 'complex'&gt;</span>
+            </div>
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>❌ Invalid Syntax</h2>
+            <pre>
+            <div class="code-block">
+<span class="error"># This will cause SyntaxError</span>
+a = 3 + 0B11j  <span class="error"># Invalid: imaginary part must be decimal</span>
+<span class="error"># SyntaxError: invalid syntax</span>
+
+<span class="highlight"># Correct way:</span>
+a = 3 + 11j  <span class="highlight"># Use decimal form for imaginary part</span>
+            </div>
+        </pre>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Interactive Complex Calculator</h2>
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>First Complex Number:</label>
+                        <input type="text" id="complex1" placeholder="e.g., 10+1.5j" value="10+1.5j">
+                    </div>
+                    <div class="control-group">
+                        <label>Second Complex Number:</label>
+                        <input type="text" id="complex2" placeholder="e.g., 20+2.5j" value="20+2.5j">
+                    </div>
+                </div>
+                
+                <div class="operation-buttons">
+                    <button class="btn" onclick="performOperation('add')">Add (+)</button>
+                    <button class="btn" onclick="performOperation('subtract')">Subtract (-)</button>
+                    <button class="btn" onclick="performOperation('multiply')">Multiply (×)</button>
+                    <button class="btn" onclick="performOperation('divide')">Divide (÷)</button>
+                    <button class="btn" onclick="showParts()">Show Parts</button>
+                </div>
+                
+                <div class="result-display" id="result">
+                    Result will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Built-in Attributes</h2>
+            <pre>
+            <div class="code-block">
+c = 10.5 + 3.6j
+
+<span class="highlight"># Access real and imaginary parts</span>
+print(c.real)  <span class="highlight"># Output: 10.5</span>
+print(c.imag)  <span class="highlight"># Output: 3.6</span>
+print(abs(c))  <span class="highlight"># Magnitude: √(10.5² + 3.6²) ≈ 11.11</span>
+            </div>
+        </pre>
+            
+            <div class="demo-controls" style="margin-top: 20px;">
+                <div class="control-group">
+                    <label>Test Complex Number:</label>
+                    <input type="text" id="testComplex" placeholder="e.g., 10.5+3.6j" value="10.5+3.6j">
+                    <button class="btn" onclick="showAttributes()" style="margin-top: 10px; width: 100%;">Show Attributes</button>
+                </div>
+            </div>
+            <div class="result-display" id="attributes" style="margin-top: 20px;">
+                Enter a complex number and click "Show Attributes"
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌟 Real-World Applications</h2>
+            <div class="applications">
+                <div class="app-card">
+                    <h3>⚡ Electrical Engineering</h3>
+                    <p>AC circuit analysis, impedance calculations, phasor diagrams for alternating current systems</p>
+                </div>
+                <div class="app-card">
+                    <h3>📡 Signal Processing</h3>
+                    <p>Fourier transforms, digital filters, frequency domain analysis of signals and systems</p>
+                </div>
+                <div class="app-card">
+                    <h3>🔬 Quantum Physics</h3>
+                    <p>Wave functions, quantum states, probability amplitudes in quantum mechanics</p>
+                </div>
+                <div class="app-card">
+                    <h3>🎮 Computer Graphics</h3>
+                    <p>2D rotations, fractal generation, Mandelbrot sets, and complex transformations</p>
+                </div>
+                <div class="app-card">
+                    <h3>📊 Data Analysis</h3>
+                    <p>Frequency analysis, spectral methods, and advanced mathematical modeling</p>
+                </div>
+                <div class="app-card">
+                    <h3>🎵 Audio Processing</h3>
+                    <p>Digital audio effects, equalizers, and sound synthesis algorithms</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Parse complex number from string
+        function parseComplex(str) {
+            str = str.replace(/\s/g, ''); // Remove spaces
+            
+            // Handle cases like "5j" or "-3j"
+            if (str.match(/^[+-]?\d*\.?\d*j$/)) {
+                let coeff = str.replace('j', '');
+                if (coeff === '' || coeff === '+') coeff = '1';
+                if (coeff === '-') coeff = '-1';
+                return { real: 0, imag: parseFloat(coeff) };
+            }
+            
+            // Handle full complex numbers
+            const match = str.match(/^([+-]?\d*\.?\d*)?([+-]\d*\.?\d*)j$/);
+            if (match) {
+                let real = match[1] || '0';
+                let imag = match[2];
+                if (imag === '+') imag = '+1';
+                if (imag === '-') imag = '-1';
+                return { 
+                    real: parseFloat(real) || 0, 
+                    imag: parseFloat(imag) || 0 
+                };
+            }
+            
+            // Handle real numbers
+            if (!isNaN(parseFloat(str))) {
+                return { real: parseFloat(str), imag: 0 };
+            }
+            
+            throw new Error('Invalid complex number format');
+        }
+
+        // Format complex number for display
+        function formatComplex(real, imag) {
+            if (imag === 0) return real.toString();
+            if (real === 0) return `${imag}j`;
+            
+            const imagStr = imag > 0 ? `+${imag}j` : `${imag}j`;
+            return `(${real}${imagStr})`;
+        }
+
+        // Perform mathematical operations
+        function performOperation(op) {
+            try {
+                const c1 = parseComplex(document.getElementById('complex1').value);
+                const c2 = parseComplex(document.getElementById('complex2').value);
+                let result;
+                
+                switch(op) {
+                    case 'add':
+                        result = {
+                            real: c1.real + c2.real,
+                            imag: c1.imag + c2.imag
+                        };
+                        break;
+                    case 'subtract':
+                        result = {
+                            real: c1.real - c2.real,
+                            imag: c1.imag - c2.imag
+                        };
+                        break;
+                    case 'multiply':
+                        result = {
+                            real: c1.real * c2.real - c1.imag * c2.imag,
+                            imag: c1.real * c2.imag + c1.imag * c2.real
+                        };
+                        break;
+                    case 'divide':
+                        const denominator = c2.real * c2.real + c2.imag * c2.imag;
+                        if (denominator === 0) throw new Error('Division by zero');
+                        result = {
+                            real: (c1.real * c2.real + c1.imag * c2.imag) / denominator,
+                            imag: (c1.imag * c2.real - c1.real * c2.imag) / denominator
+                        };
+                        break;
+                }
+                
+                document.getElementById('result').innerHTML = 
+                    `Result: ${formatComplex(result.real.toFixed(2), result.imag.toFixed(2))}`;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Show parts of complex numbers
+        function showParts() {
+            try {
+                const c1 = parseComplex(document.getElementById('complex1').value);
+                const c2 = parseComplex(document.getElementById('complex2').value);
+                
+                document.getElementById('result').innerHTML = `
+                    <div style="text-align: left;">
+                        <strong>First Number:</strong><br>
+                        Real: ${c1.real}, Imaginary: ${c1.imag}<br><br>
+                        <strong>Second Number:</strong><br>
+                        Real: ${c2.real}, Imaginary: ${c2.imag}
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Show attributes of a complex number
+        function showAttributes() {
+            try {
+                const c = parseComplex(document.getElementById('testComplex').value);
+                const magnitude = Math.sqrt(c.real * c.real + c.imag * c.imag);
+                const angle = Math.atan2(c.imag, c.real) * (180 / Math.PI);
+                
+                document.getElementById('attributes').innerHTML = `
+                    <div style="text-align: left;">
+                        <strong>Real Part:</strong> ${c.real}<br>
+                        <strong>Imaginary Part:</strong> ${c.imag}<br>
+                        <strong>Magnitude (abs):</strong> ${magnitude.toFixed(4)}<br>
+                        <strong>Phase Angle:</strong> ${angle.toFixed(2)}°
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('attributes').innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Add some interactive animations to the part boxes
+        document.querySelectorAll('.part-box').forEach(box => {
+            box.addEventListener('click', function() {
+                this.style.animation = 'pulse 0.6s ease-in-out';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 600);
+            });
+        });
+
+        // Add hover effects to application cards
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) rotateX(10deg)';
+                this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotateX(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Reserved Words - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #ffeaa7 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #FFD700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .categories-section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            animation: fadeInStagger 0.8s ease-out forwards;
+        }
+
+        .category:hover {
+            transform: scale(1.02);
+        }
+
+        .category h3 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .keyword {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 200%;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: gradientFlow 3s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .keyword:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .keyword::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .keyword:hover::before {
+            left: 100%;
+        }
+
+        .special-words {
+            margin-top: 40px;
+        }
+
+        .special-word {
+            background: linear-gradient(135deg, #FFD700, #FF6B6B, #4ECDC4);
+            background-size: 200% 200%;
+            color: #333;
+            font-weight: bold;
+            animation: specialGradient 4s ease infinite;
+        }
+
+        @keyframes specialGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .interactive-demo {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .result.valid {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .result.invalid {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInStagger {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .category:nth-child(1) { animation-delay: 0.1s; }
+        .category:nth-child(2) { animation-delay: 0.2s; }
+        .category:nth-child(3) { animation-delay: 0.3s; }
+        .category:nth-child(4) { animation-delay: 0.4s; }
+        .category:nth-child(5) { animation-delay: 0.5s; }
+        .category:nth-child(6) { animation-delay: 0.6s; }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+    
+    <div class="container">
+        <div class="hero">
+            <h1>Python Reserved Words</h1>
+            <p>Interactive guide to Python's 33 built-in reserved keywords</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="stat-number">33</span>
+                <span class="stat-label">Total Reserved Words</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Capitalized Words</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">30</span>
+                <span class="stat-label">Lowercase Words</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Alphabetic Characters</span>
+            </div>
+        </div>
+
+        <div class="categories-section">
+            <h2 class="section-title">Categories of Reserved Words</h2>
+            
+            <div class="categories">
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #e74c3c;">B</div>
+                        Boolean & None Values
+                    </h3>
+                    <p>Fundamental constants representing truth values and absence of value</p>
+                    <div class="keywords">
+                        <div class="keyword special-word tooltip">
+                            True
+                            <span class="tooltiptext">Boolean true value</span>
+                        </div>
+                        <div class="keyword special-word tooltip">
+                            False
+                            <span class="tooltiptext">Boolean false value</span>
+                        </div>
+                        <div class="keyword special-word tooltip">
+                            None
+                            <span class="tooltiptext">Null value/absence of value</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #3498db;">L</div>
+                        Logical Operators
+                    </h3>
+                    <p>Keywords for logical operations and comparisons</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            and
+                            <span class="tooltiptext">Logical AND operator</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            or
+                            <span class="tooltiptext">Logical OR operator</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            not
+                            <span class="tooltiptext">Logical NOT operator</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            is
+                            <span class="tooltiptext">Identity comparison</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            in
+                            <span class="tooltiptext">Membership test operator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #f39c12;">C</div>
+                        Control Flow
+                    </h3>
+                    <p>Keywords that control program execution flow</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            if
+                            <span class="tooltiptext">Conditional statement</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            elif
+                            <span class="tooltiptext">Else if condition</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            else
+                            <span class="tooltiptext">Alternative condition</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            while
+                            <span class="tooltiptext">While loop</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            for
+                            <span class="tooltiptext">For loop</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            break
+                            <span class="tooltiptext">Exit loop</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            continue
+                            <span class="tooltiptext">Skip to next iteration</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            return
+                            <span class="tooltiptext">Return from function</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            yield
+                            <span class="tooltiptext">Generator yield</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            pass
+                            <span class="tooltiptext">Null operation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #e67e22;">E</div>
+                        Exception Handling
+                    </h3>
+                    <p>Keywords for handling errors and exceptions</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            try
+                            <span class="tooltiptext">Start exception handling block</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            except
+                            <span class="tooltiptext">Catch exceptions</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            finally
+                            <span class="tooltiptext">Always execute block</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            raise
+                            <span class="tooltiptext">Raise an exception</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            assert
+                            <span class="tooltiptext">Debug assertion</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #9b59b6;">I</div>
+                        Import & Modules
+                    </h3>
+                    <p>Keywords for importing and working with modules</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            import
+                            <span class="tooltiptext">Import module</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            from
+                            <span class="tooltiptext">Import from module</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            as
+                            <span class="tooltiptext">Alias for import</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #27ae60;">D</div>
+                        Definitions & Scope
+                    </h3>
+                    <p>Keywords for defining functions, classes, and managing scope</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            class
+                            <span class="tooltiptext">Define a class</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            def
+                            <span class="tooltiptext">Define a function</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            lambda
+                            <span class="tooltiptext">Anonymous function</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            global
+                            <span class="tooltiptext">Global scope</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            nonlocal
+                            <span class="tooltiptext">Nonlocal scope</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            del
+                            <span class="tooltiptext">Delete reference</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            with
+                            <span class="tooltiptext">Context manager</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h3 class="demo-title">💻 Python Keyword Module Demo</h3>
+            <div style="background: #2d3748; border-radius: 10px; padding: 20px; margin-bottom: 20px; color: #e2e8f0; font-family: 'Courier New', monospace;">
+                <div style="color: #68d391; margin-bottom: 10px;">>>> import keyword</div>
+                <div style="color: #68d391; margin-bottom: 10px;">>>> keyword.kwlist</div>
+                <div style="color: #fbb6ce; line-height: 1.6;">
+                    ['False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
+                </div>
+            </div>
+            <h3 class="demo-title">🔍 Reserved Word Validator</h3>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                Type a word below to check if it's a Python reserved word!
+            </p>
+            <input type="text" class="code-input" id="wordInput" placeholder="Enter a word (e.g., 'True', 'for', 'hello')">
+            <div class="result" id="result"></div>
+        </div>
+
+        <div class="special-words" style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 30px; margin: 40px 0;">
+            <h3 style="color: #333; font-size: 1.8rem; margin-bottom: 20px; text-align: center;">
+                📚 Key Facts About Python Reserved Words
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
+                    <h4 style="color: #333; margin-bottom: 10px;">✅ Case Sensitivity</h4>
+                    <p style="color: #666;">Only <strong>True</strong>, <strong>False</strong>, and <strong>None</strong> are capitalized. All others are lowercase.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #28a745;">
+                    <h4 style="color: #333; margin-bottom: 10px;">🔤 Character Composition</h4>
+                    <p style="color: #666;">All reserved words contain <strong>only alphabetic characters</strong> - no numbers or symbols.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #dc3545;">
+                    <h4 style="color: #333; margin-bottom: 10px;">🚫 Cannot Be Used As</h4>
+                    <p style="color: #666;">Variable names, function names, class names, or any other identifiers.</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107;">
+                    <h4 style="color: #333; margin-bottom: 10px;">📊 Current Count</h4>
+                    <p style="color: #666;">Python currently has <strong>33 reserved words</strong>. This number may change in future versions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.floating-particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Reserved words list
+        const reservedWords = [
+            'False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 
+            'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 
+            'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 
+            'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 
+            'while', 'with', 'yield'
+        ];
+
+        // Word validator
+        function validateWord() {
+            const input = document.getElementById('wordInput');
+            const result = document.getElementById('result');
+            const word = input.value.trim();
+
+            if (!word) {
+                result.innerHTML = '';
+                result.className = 'result';
+                return;
+            }
+
+            const isReserved = reservedWords.includes(word);
+            
+            if (isReserved) {
+                result.innerHTML = `✅ <strong>"${word}"</strong> is a Python reserved word!`;
+                result.className = 'result valid';
+            } else {
+                result.innerHTML = `❌ <strong>"${word}"</strong> is not a Python reserved word.`;
+                result.className = 'result invalid';
+            }
+        }
+
+        // Add event listeners
+        document.getElementById('wordInput').addEventListener('input', validateWord);
+
+        // Add click animation to keywords
+        document.querySelectorAll('.keyword').forEach(keyword => {
+            keyword.addEventListener('click', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.animation = 'pulse 0.6s ease-in-out';
+                
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.animation = '';
+                }, 600);
+            });
+        });
+
+        // Initialize particles
+        createParticles();
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent);
+                const duration = 2000;
+                const steps = 60;
+                const increment = target / steps;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.textContent.includes('%') ? '%' : '');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current) + (counter.textContent.includes('%') ? '%' : '');
+                    }
+                }, duration / steps);
+            });
+        }
+
+        // Trigger counter animation when page loads
+        window.addEventListener('load', () => {
+            setTimeout(animateCounters, 1000);
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.category').forEach(category => {
+            observer.observe(category);
+        });
+    </script>
+</body>
+</html>

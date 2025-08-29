@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Fundamental Data Types</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #176b0e 0%, #e8e241 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            animation: slideInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+
+        .python-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #306998, #ffd43b);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            animation: bounce 2s infinite;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .datatype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .datatype-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .datatype-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .datatype-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .datatype-card:hover::before {
+            left: 100%;
+        }
+
+        .datatype-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .datatype-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .int-icon { background: linear-gradient(45deg, #ff6b6b, #ff8e53); }
+        .float-icon { background: linear-gradient(45deg, #4ecdc4, #44a08d); }
+        .complex-icon { background: linear-gradient(45deg, #a8edea, #fed6e3); }
+        .bool-icon { background: linear-gradient(45deg, #ffecd2, #fcb69f); }
+        .str-icon { background: linear-gradient(45deg, #d299c2, #fef9d7); }
+
+        .datatype-title {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .datatype-description {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .code-example {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            color: #4ecdc4;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            white-space: pre;
+        }
+
+        .code-example::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ffd93d);
+            animation: codeShimmer 3s linear infinite;
+        }
+
+        .interactive-demo {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .demo-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .demo-output {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #4ecdc4;
+            min-height: 50px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .special-notes {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .note-title {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-icon {
+            margin-right: 15px;
+            font-size: 2.5rem;
+        }
+
+        .note-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .note-item {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #ffd93d;
+            transition: all 0.3s ease;
+        }
+
+        .note-item:hover {
+            transform: translateX(10px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .note-item h3 {
+            color: #ffd93d;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .note-item p {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+
+        .comparison-table {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        th {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .version-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .version-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .version-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        }
+
+        .version-title {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes codeShimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .datatype-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .version-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="width: 20px; height: 20px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="width: 15px; height: 15px; top: 20%; right: 15%; animation-delay: 1s;"></div>
+        <div class="floating-element" style="width: 25px; height: 25px; bottom: 20%; left: 20%; animation-delay: 2s;"></div>
+        <div class="floating-element" style="width: 18px; height: 18px; bottom: 15%; right: 10%; animation-delay: 3s;"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="python-logo">🐍</div>
+            <h1>Python Fundamental Data Types</h1>
+            <p class="subtitle">An Interactive Guide to Python's Core Data Types</p>
+        </header>
+
+        <div class="datatype-grid">
+            <div class="datatype-card">
+                <div class="datatype-header">
+                    <div class="datatype-icon int-icon">123</div>
+                    <h2 class="datatype-title">int</h2>
+                </div>
+                <p class="datatype-description">
+                    Represents whole numbers (positive, negative, or zero). In Python 3, integers have unlimited precision!
+                </p>
+                <div class="code-example">
+                </code></pre>
+>>> age = 25
+>>> population = 7800000000
+>>> negative = -42
+>>> type(age)
+&lt;class 'int'&gt;
+</code></pre>
+                </div>
+                <div class="interactive-demo">
+                    <input type="text" class="demo-input" placeholder="Enter an integer (e.g., 42)" data-type="int">
+                    <div class="demo-output" id="int-output">Try entering a number above!</div>
+                </div>
+            </div>
+
+            <div class="datatype-card">
+                <div class="datatype-header">
+                    <div class="datatype-icon float-icon">3.14</div>
+                    <h2 class="datatype-title">float</h2>
+                </div>
+                <p class="datatype-description">
+                    Represents decimal numbers with floating-point precision. Perfect for scientific calculations and measurements.
+                </p>
+                <div class="code-example">
+>>> pi = 3.14159<br>
+>>> temperature = -273.15<br>
+>>> scientific = 1.23e-4<br>
+>>> type(pi)<br>
+&lt;class 'float'&gt;
+                </div>
+                <div class="interactive-demo">
+                    <input type="text" class="demo-input" placeholder="Enter a decimal (e.g., 3.14)" data-type="float">
+                    <div class="demo-output" id="float-output">Try entering a decimal number above!</div>
+                </div>
+            </div>
+
+            <div class="datatype-card">
+                <div class="datatype-header">
+                    <div class="datatype-icon complex-icon">i</div>
+                    <h2 class="datatype-title">complex</h2>
+                </div>
+                <p class="datatype-description">
+                    Represents complex numbers with real and imaginary parts. Essential for advanced mathematics and engineering.
+                </p>
+                <div class="code-example">
+>>> z = 3 + 4j<br>
+>>> imaginary = 5j<br>
+>>> result = complex(2, 3)<br>
+>>> type(z)<br>
+&lt;class 'complex'&gt;
+                </div>
+                <div class="interactive-demo">
+                    <input type="text" class="demo-input" placeholder="Enter complex number (e.g., 3+4j)" data-type="complex">
+                    <div class="demo-output" id="complex-output">Try entering a complex number above!</div>
+                </div>
+            </div>
+
+            <div class="datatype-card">
+                <div class="datatype-header">
+                    <div class="datatype-icon bool-icon">T/F</div>
+                    <h2 class="datatype-title">bool</h2>
+                </div>
+                <p class="datatype-description">
+                    Represents logical values: True or False. Essential for conditions, loops, and decision-making in programs.
+                </p>
+                <div class="code-example">
+>>> is_python_awesome = True<br>
+>>> is_zero = False<br>
+>>> result = bool(1)<br>
+>>> type(is_python_awesome)<br>
+&lt;class 'bool'&gt;
+                </div>
+                <div class="interactive-demo">
+                    <input type="text" class="demo-input" placeholder="Enter True or False" data-type="bool">
+                    <div class="demo-output" id="bool-output">Try entering True or False above!</div>
+                </div>
+            </div>
+
+            <div class="datatype-card">
+                <div class="datatype-header">
+                    <div class="datatype-icon str-icon">"A"</div>
+                    <h2 class="datatype-title">str</h2>
+                </div>
+                <p class="datatype-description">
+                    Represents text data and individual characters. Python doesn't have a separate char type - everything is a string!
+                </p>
+                <div class="code-example">
+>>> name = "Python"<br>
+>>> char = 'a'<br>
+>>> multiline = """Hello<br>
+World"""<br>
+>>> type(char)<br>
+&lt;class 'str'&gt;
+                </div>
+                <div class="interactive-demo">
+                    <input type="text" class="demo-input" placeholder="Enter any text or character" data-type="str">
+                    <div class="demo-output" id="str-output">Try entering some text above!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="special-notes">
+            <h2 class="note-title">
+                <span class="note-icon">📝</span>
+                Important Notes & Key Insights
+            </h2>
+            <div class="note-content">
+                <div class="note-item">
+                    <h3>Character Representation</h3>
+                    <p>Python uses str type for both strings and individual characters. There's no separate char type like in C++ or Java. Even a single character like 'a' is actually a string of length 1.</p>
+                </div>
+                <div class="note-item">
+                    <h3>Python 2 vs Python 3</h3>
+                    <p>Python 2 had a separate 'long' data type for large integers. Python 3 unified this - the int type can handle arbitrarily large numbers without overflow!</p>
+                </div>
+                <div class="note-item">
+                    <h3>Dynamic Typing</h3>
+                    <p>Python determines data types automatically at runtime. You don't need to declare types explicitly - Python figures it out based on the value you assign.</p>
+                </div>
+                <div class="note-item">
+                    <h3>Type Conversion</h3>
+                    <p>Python allows easy conversion between compatible types using built-in functions like int(), float(), str(), bool(), and complex().</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <h2 style="color: white; margin-bottom: 20px; text-align: center;">Data Type Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data Type</th>
+                        <th>Purpose</th>
+                        <th>Example Values</th>
+                        <th>Memory Usage</th>
+                        <th>Range/Precision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>int</strong></td>
+                        <td>Integer numbers</td>
+                        <td>42, -17, 0, 999999</td>
+                        <td>Variable</td>
+                        <td>Unlimited precision</td>
+                    </tr>
+                    <tr>
+                        <td><strong>float</strong></td>
+                        <td>Decimal numbers</td>
+                        <td>3.14, -0.5, 1e6</td>
+                        <td>8 bytes</td>
+                        <td>~15-17 decimal digits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>complex</strong></td>
+                        <td>Complex numbers</td>
+                        <td>3+4j, 5j, complex(1,2)</td>
+                        <td>16 bytes</td>
+                        <td>Two float components</td>
+                    </tr>
+                    <tr>
+                        <td><strong>bool</strong></td>
+                        <td>Logical values</td>
+                        <td>True, False</td>
+                        <td>1 byte</td>
+                        <td>True or False only</td>
+                    </tr>
+                    <tr>
+                        <td><strong>str</strong></td>
+                        <td>Text & characters</td>
+                        <td>"Hello", 'a', "123"</td>
+                        <td>Variable</td>
+                        <td>Unicode characters</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="version-comparison">
+            <div class="version-card">
+                <h3 class="version-title">Python 2</h3>
+                <div class="code-example">
+# Separate data types<br>
+>>> type(42)<br>
+&lt;class 'int'&gt;<br>
+>>> type(42L)<br>
+&lt;class 'long'&gt;<br>
+>>> type(99999999999999999999)<br>
+&lt;class 'long'&gt;
+                </div>
+                <p style="color: rgba(255,255,255,0.8);">Had separate int and long types</p>
+            </div>
+            <div class="version-card">
+                <h3 class="version-title">Python 3</h3>
+                <div class="code-example">
+# Unified integer type<br>
+>>> type(42)<br>
+&lt;class 'int'&gt;<br>
+>>> type(99999999999999999999)<br>
+&lt;class 'int'&gt;<br>
+# No more 'long' suffix needed!
+                </div>
+                <p style="color: rgba(255,255,255,0.8);">Unified int type with unlimited precision</p>
+            </div>
+        </div>
+
+        <div class="interactive-demo" style="background: rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; margin: 30px 0;">
+            <h3 style="color: white; margin-bottom: 20px; text-align: center;">🧪 Type Testing Laboratory</h3>
+            <input type="text" class="demo-input" id="typeTest" placeholder="Enter any value to see its Python type..." style="font-size: 18px; padding: 15px;">
+            <button class="btn-primary" id="analyzeBtn">Analyze Type</button>
+            <div class="demo-output" id="typeResult" style="margin-top: 20px; font-size: 16px;">
+                Enter a value above to see detailed type analysis!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global functions defined at top level
+        function testDataType(input, expectedType) {
+            const value = input.value;
+            const outputId = expectedType + '-output';
+            const output = document.getElementById(outputId);
+            
+            if (!value) {
+                output.textContent = 'Enter a value to test!';
+                return;
+            }
+
+            let result = '';
+            let isValid = false;
+
+            try {
+                if (expectedType === 'int') {
+                    if (/^-?\d+$/.test(value)) {
+                        result = `Value: ${value}\nType: int\nValid integer ✓`;
+                        isValid = true;
+                    } else {
+                        result = `"${value}" is not a valid integer`;
+                    }
+                } else if (expectedType === 'float') {
+                    if (/^-?\d*\.?\d+([eE][-+]?\d+)?$/.test(value)) {
+                        result = `Value: ${value}\nType: float\nValid decimal number ✓`;
+                        isValid = true;
+                    } else {
+                        result = `"${value}" is not a valid float`;
+                    }
+                } else if (expectedType === 'complex') {
+                    if (/^(-?\d*\.?\d*)?[+-]?\d*\.?\d*[jJ]$/.test(value) || /^\d+\+\d+[jJ]$/.test(value)) {
+                        result = `Value: ${value}\nType: complex\nValid complex number ✓`;
+                        isValid = true;
+                    } else {
+                        result = `"${value}" is not a valid complex number\nTry: 3+4j, 5j, or 2-3j`;
+                    }
+                } else if (expectedType === 'bool') {
+                    if (value.toLowerCase() === 'true' || value.toLowerCase() === 'false') {
+                        result = `Value: ${value}\nType: bool\nValid boolean ✓`;
+                        isValid = true;
+                    } else {
+                        result = `"${value}" is not a boolean\nTry: True or False`;
+                    }
+                } else if (expectedType === 'str') {
+                    result = `Value: "${value}"\nType: str\nLength: ${value.length}\n${value.length === 1 ? 'Single character (still a string!)' : 'String with multiple characters'} ✓`;
+                    isValid = true;
+                }
+
+                // Add animation effect
+                output.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    output.textContent = result;
+                    output.style.color = isValid ? '#4ecdc4' : '#ff6b6b';
+                    output.style.transform = 'scale(1)';
+                }, 100);
+                
+            } catch (error) {
+                output.textContent = `Error: ${error.message}`;
+                output.style.color = '#ff6b6b';
+            }
+        }
+
+        function analyzeType() {
+            const input = document.getElementById('typeTest');
+            const output = document.getElementById('typeResult');
+            const value = input.value.trim();
+            
+            if (!value) {
+                output.innerHTML = '<span style="color: #ff6b6b;">Please enter a value to analyze!</span>';
+                return;
+            }
+
+            let analysis = '';
+            let pythonCode = '';
+            let additionalInfo = '';
+
+            // Enhanced type detection with more details
+            if (/^-?\d+$/.test(value)) {
+                const num = parseInt(value);
+                pythonCode = `>>> value = ${value}\n>>> type(value)\n<class 'int'>\n>>> isinstance(value, int)\nTrue`;
+                additionalInfo = `
+                    <br>• Value: ${num.toLocaleString()}
+                    <br>• Sign: ${num >= 0 ? 'Positive' : 'Negative'}
+                    <br>• Digits: ${Math.abs(num).toString().length}
+                    <br>• Binary: ${num.toString(2)}
+                    <br>• Hexadecimal: ${num.toString(16).toUpperCase()}
+                `;
+                analysis = `<strong>🔢 INTEGER DETECTED</strong><br>
+                Your value "${value}" is an integer.${additionalInfo}`;
+                
+            } else if (/^-?\d*\.?\d+([eE][-+]?\d+)?$/.test(value)) {
+                const num = parseFloat(value);
+                pythonCode = `>>> value = ${value}\n>>> type(value)\n<class 'float'>\n>>> isinstance(value, float)\nTrue`;
+                additionalInfo = `
+                    <br>• Value: ${num}
+                    <br>• Scientific notation: ${num.toExponential()}
+                    <br>• Is finite: ${isFinite(num)}
+                    <br>• Decimal places: ${(value.split('.')[1] || '').length}
+                `;
+                analysis = `<strong>🌊 FLOAT DETECTED</strong><br>
+                Your value "${value}" is a floating-point number.${additionalInfo}`;
+                
+            } else if (/^(-?\d*\.?\d*)?[+-]?\d*\.?\d*[jJ]$/.test(value) || /^\d+[+-]\d+[jJ]$/.test(value)) {
+                pythonCode = `>>> value = ${value}\n>>> type(value)\n<class 'complex'>\n>>> value.real\n${value.includes('+') || value.includes('-') ? value.split(/[+-]/)[0] || '0' : '0'}\n>>> value.imag\n${value.replace(/[jJ]/, '').match(/[+-]?\d*\.?\d*$/)[0]}`;
+                analysis = `<strong>🌀 COMPLEX NUMBER DETECTED</strong><br>
+                Your value "${value}" is a complex number.<br>
+                • Has real and imaginary components<br>
+                • Use .real and .imag to access parts<br>
+                • Perfect for mathematical calculations`;
+                
+            } else if (value.toLowerCase() === 'true' || value.toLowerCase() === 'false') {
+                pythonCode = `>>> value = ${value}\n>>> type(value)\n<class 'bool'>\n>>> int(value)\n${value.toLowerCase() === 'true' ? '1' : '0'}`;
+                additionalInfo = `
+                    <br>• Logical value: ${value}
+                    <br>• Integer equivalent: ${value.toLowerCase() === 'true' ? '1' : '0'}
+                    <br>• Used in: conditions, loops, logic
+                `;
+                analysis = `<strong>✅ BOOLEAN DETECTED</strong><br>
+                Your value "${value}" is a boolean.${additionalInfo}`;
+                
+            } else {
+                pythonCode = `>>> value = "${value}"\n>>> type(value)\n<class 'str'>\n>>> len(value)\n${value.length}`;
+                
+                // Character analysis
+                const charTypes = [];
+                if (/[a-zA-Z]/.test(value)) charTypes.push('letters');
+                if (/\d/.test(value)) charTypes.push('digits');
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) charTypes.push('special chars');
+                if (/\s/.test(value)) charTypes.push('whitespace');
+                
+                additionalInfo = `
+                    <br>• Length: ${value.length} character${value.length !== 1 ? 's' : ''}
+                    <br>• Contains: ${charTypes.join(', ') || 'no special patterns'}
+                    <br>• Is single char: ${value.length === 1 ? 'Yes (but still a string!)' : 'No'}
+                    <br>• Unicode compatible: ✓
+                `;
+                analysis = `<strong>📝 STRING DETECTED</strong><br>
+                Your value "${value}" is a string.${additionalInfo}`;
+            }
+
+            // Enhanced output with animation
+            output.style.transform = 'scale(0.95)';
+            output.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                output.innerHTML = `
+                    ${analysis}<br><br>
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; font-family: monospace; border-left: 4px solid #4ecdc4;">
+                        <strong>Python Code:</strong><br>
+                        ${pythonCode.replace(/\n/g, '<br>')}
+                    </div>
+                `;
+                output.style.transform = 'scale(1)';
+                output.style.opacity = '1';
+                output.style.color = '#4ecdc4';
+            }, 200);
+        }
+
+        function createFloatingSymbol() {
+            const symbols = ['🐍', '💻', '⚡', '🔧', '📊'];
+            const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            const element = document.createElement('div');
+            element.textContent = symbol;
+            element.style.position = 'fixed';
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.top = '100vh';
+            element.style.fontSize = '2rem';
+            element.style.pointerEvents = 'none';
+            element.style.zIndex = '-1';
+            element.style.opacity = '0.3';
+            element.style.transition = 'all 4s ease-out';
+            
+            document.body.appendChild(element);
+            
+            setTimeout(() => {
+                element.style.top = '-10vh';
+                element.style.opacity = '0';
+            }, 100);
+            
+            setTimeout(() => {
+                if (element && element.parentNode) {
+                    document.body.removeChild(element);
+                }
+            }, 4000);
+        }
+
+        // DOM Content Loaded Event Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener for analyze button
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', analyzeType);
+            }
+
+            // Add event listeners for demo inputs
+            const demoInputs = document.querySelectorAll('.demo-input');
+            demoInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const expectedType = this.getAttribute('data-type');
+                    if (expectedType) {
+                        testDataType(this, expectedType);
+                    }
+                });
+            });
+            
+            // Animate cards on scroll
+            const cards = document.querySelectorAll('.datatype-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+
+            // Add typing effect to code examples
+            const codeExamples = document.querySelectorAll('.code-example');
+            codeExamples.forEach(code => {
+                const pre = code.querySelector("pre code");
+                const text = pre.textContent;   // ✅ get plain text
+                pre.textContent = "";  
+                let i = 0;
+                const typeWriter = () => {
+                    if (i < text.length) {
+                        code.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 20);
+                    }
+                };
+                
+                // Start typing when card comes into view
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(typeWriter, 500);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                observer.observe(code.closest('.datatype-card'));
+            });
+
+            // Add interactive hover effects
+            const icons = document.querySelectorAll('.datatype-icon');
+            icons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'rotate(360deg) scale(1.1)';
+                    this.style.transition = 'transform 0.6s ease';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'rotate(0deg) scale(1)';
+                });
+            });
+
+            // Auto-focus on type test input when scrolled into view
+            const typeTestInput = document.getElementById('typeTest');
+            if (typeTestInput) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                typeTestInput.focus();
+                            }, 500);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                observer.observe(typeTestInput);
+
+                // Add Enter key support for type testing
+                typeTestInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        analyzeType();
+                    }
+                });
+            }
+
+            // Create floating python symbols
+            setInterval(createFloatingSymbol, 3000);
+
+            // Add pulse animation to the Python logo
+            const logo = document.querySelector('.python-logo');
+            if (logo) {
+                setInterval(() => {
+                    logo.style.animation = 'none';
+                    setTimeout(() => {
+                        logo.style.animation = 'bounce 2s infinite';
+                    }, 10);
+                }, 8000);
+            }
+
+            // Add interactive code examples
+            const codeExampleElements = document.querySelectorAll('.code-example');
+            codeExampleElements.forEach(code => {
+                code.addEventListener('click', function() {
+                    // Copy to clipboard effect
+                    this.style.background = 'rgba(78, 205, 196, 0.2)';
+                    setTimeout(() => {
+                        this.style.background = 'rgba(0,0,0,0.3)';
+                    }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Integer Data Types - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3e435a 0%, #9f88b6 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #4a5568;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .number-systems {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .system-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .system-card:hover::before {
+            animation: shine 0.5s ease-in-out;
+        }
+
+        .system-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .system-card .base {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .converter-section {
+            margin-top: 40px;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .converter-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .converter-card h3 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .convert-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-example::before {
+            content: 'Python';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .comment {
+            color: #68d391;
+        }
+
+        .animated-number {
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            border-color: #e53e3e;
+        }
+
+        .success {
+            color: #38a169;
+            background: #c6f6d5;
+            border-color: #38a169;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .number-systems {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape" style="width: 100px; height: 100px; background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 50%;"></div>
+        <div class="shape" style="width: 80px; height: 80px; background: linear-gradient(45deg, #f093fb, #f5576c); transform: rotate(45deg);"></div>
+        <div class="shape" style="width: 120px; height: 120px; background: linear-gradient(45deg, #a8edea, #fed6e3); border-radius: 20px;"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Integer Data Types</h1>
+            <p>Master number systems and base conversions with interactive examples</p>
+        </div>
+
+        <div class="card">
+            <h2>📊 Integer Data Type Overview</h2>
+            <p>In Python, the <strong>int</strong> data type represents whole numbers (integral values). Unlike Python 2, Python 3 uses only the <code>int</code> type for all integers, including very large values.</p>
+            <pre>
+            <div class="code-example">
+a = 10
+print(type(a))  <span class="comment"># &lt;class 'int'&gt;</span>
+
+<span class="comment"># Python 3 can handle arbitrarily large integers</span>
+big_number = 12345678901234567890
+print(big_number)  <span class="comment"># No overflow!</span>
+            </div>
+            </pre>
+
+            <p><strong>Key Points:</strong></p>
+            <ul style="margin: 15px 0 0 20px; line-height: 1.8;">
+                <li>Python 3 unified integer representation (no separate long type)</li>
+                <li>Supports arbitrarily large integers (limited only by memory)</li>
+                <li>Four different literal representations: decimal, binary, octal, hexadecimal</li>
+                <li>All values are displayed in decimal form by default</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔢 Number Systems</h2>
+            <p>Python supports four different number systems for representing integers:</p>
+            
+            <div class="number-systems">
+                <div class="system-card" onclick="showExample('decimal')">
+                    <h3>Decimal</h3>
+                    <div class="base">Base <span class="animated-number">10</span></div>
+                    <p>Default system</p>
+                    <p>Digits: 0-9</p>
+                    <code>a = 42</code>
+                </div>
+                
+                <div class="system-card" onclick="showExample('binary')">
+                    <h3>Binary</h3>
+                    <div class="base">Base <span class="animated-number">2</span></div>
+                    <p>Prefix: 0b or 0B</p>
+                    <p>Digits: 0, 1</p>
+                    <code>a = 0b101010</code>
+                </div>
+                
+                <div class="system-card" onclick="showExample('octal')">
+                    <h3>Octal</h3>
+                    <div class="base">Base <span class="animated-number">8</span></div>
+                    <p>Prefix: 0o or 0O</p>
+                    <p>Digits: 0-7</p>
+                    <code>a = 0o52</code>
+                </div>
+                
+                <div class="system-card" onclick="showExample('hex')">
+                    <h3>Hexadecimal</h3>
+                    <div class="base">Base <span class="animated-number">16</span></div>
+                    <p>Prefix: 0x or 0X</p>
+                    <p>Digits: 0-9, A-F</p>
+                    <code>a = 0x2A</code>
+                </div>
+            </div>
+
+            <div id="example-display" class="code-example" style="margin-top: 30px; display: none;">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔄 Interactive Base Converters</h2>
+            <p>Use Python's built-in functions to convert between different number systems:</p>
+            
+            <div class="converter-grid">
+                <div class="converter-card">
+                    <h3>🔢 To Binary - bin()</h3>
+                    <div class="input-group">
+                        <label>Enter a number (any base):</label>
+                        <input type="text" id="binInput" placeholder="e.g., 15, 0o17, 0x0F">
+                    </div>
+                    <button class="convert-btn" onclick="convertToBinary()">Convert to Binary</button>
+                    <div id="binResult" class="result">Result will appear here...</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3>🔢 To Octal - oct()</h3>
+                    <div class="input-group">
+                        <label>Enter a number (any base):</label>
+                        <input type="text" id="octInput" placeholder="e.g., 10, 0b1111, 0x123">
+                    </div>
+                    <button class="convert-btn" onclick="convertToOctal()">Convert to Octal</button>
+                    <div id="octResult" class="result">Result will appear here...</div>
+                </div>
+                
+                <div class="converter-card">
+                    <h3>🔢 To Hexadecimal - hex()</h3>
+                    <div class="input-group">
+                        <label>Enter a number (any base):</label>
+                        <input type="text" id="hexInput" placeholder="e.g., 100, 0b111111, 0o12345">
+                    </div>
+                    <button class="convert-btn" onclick="convertToHex()">Convert to Hexadecimal</button>
+                    <div id="hexResult" class="result">Result will appear here...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 All Given Examples from Your Content</h2>
+            <p>Here are ALL the specific examples from your provided material:</p>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">📝 Basic Integer Declaration</h3>
+            <pre>
+            <div class="code-example">
+a = 10
+print(type(a))  <span class="comment"># &lt;class 'int'&gt;</span>
+            </div>
+        </pre>
+            <h3 style="margin-top: 30px; color: #667eea;">🔢 Same Values in Different Representations</h3>
+            <pre>
+            <div class="code-example">
+a = 10      <span class="comment"># Decimal form</span>
+b = 0o10    <span class="comment"># Octal form (same as decimal 8)</span>
+c = 0X10    <span class="comment"># Hexadecimal form (same as decimal 16)</span>
+d = 0B10    <span class="comment"># Binary form (same as decimal 2)</span>
+
+print(a)    <span class="comment"># Output: 10</span>
+print(b)    <span class="comment"># Output: 8</span>
+print(c)    <span class="comment"># Output: 16</span>
+print(d)    <span class="comment"># Output: 2</span>
+            </div>
+        </pre>
+            <h3 style="margin-top: 30px; color: #667eea;">💥 Examples with Errors (These will cause SyntaxError!)</h3>
+            <pre>
+            <div class="code-example" style="border: 2px solid #e53e3e; background: #fed7d7;">
+<span class="comment"># ❌ THESE EXAMPLES HAVE INTENTIONAL ERRORS FROM YOUR CONTENT:</span>
+a = 0B123   <span class="comment"># ❌ SyntaxError: invalid digit '2' in binary literal</span>
+a = b111    <span class="comment"># ❌ NameError: name 'b111' is not defined</span>
+a = 0o786   <span class="comment"># ❌ SyntaxError: invalid digit '8' in octal literal</span>
+a = 0XBeer  <span class="comment"># ❌ SyntaxError: invalid digit 'r' in hex literal</span>
+
+<span class="comment"># ✅ CORRECT VERSIONS:</span>
+a = 0B101   <span class="comment"># ✅ Valid binary</span>
+a = 0b111   <span class="comment"># ✅ Valid binary (note lowercase 'b')</span>
+a = 0o76    <span class="comment"># ✅ Valid octal (no digit 8)</span>
+a = 0XBee   <span class="comment"># ✅ Valid hex (removed 'r')</span>
+            </div>
+        </pre>
+            <h3 style="margin-top: 30px; color: #667eea;">✅ Valid Examples from Your Content</h3>
+            <pre>
+            <div class="code-example">
+<span class="comment"># Binary examples</span>
+a = 0B1111    <span class="comment"># Valid - equals 15 in decimal</span>
+print(a)      <span class="comment"># Output: 15</span>
+
+<span class="comment"># Octal examples</span>
+a = 0o123     <span class="comment"># Valid - equals 83 in decimal</span>
+print(a)      <span class="comment"># Output: 83</span>
+
+<span class="comment"># Hexadecimal examples</span>
+a = 0XFACE    <span class="comment"># Valid - equals 64206 in decimal</span>
+print(a)      <span class="comment"># Output: 64206</span>
+
+a = 0XBeef    <span class="comment"># Valid - equals 48879 in decimal</span>
+print(a)      <span class="comment"># Output: 48879</span>
+            </div>
+        </pre>
+        </div>
+
+        <div class="card">
+            <h2>🔄 Base Conversion Examples (Exact from Your Content)</h2>
+            
+            <h3 style="color: #667eea;">1️⃣ bin() Function Examples</h3>
+            <pre>
+            <div class="code-example">
+<span class="comment"># All examples from your content:</span>
+print(bin(15))      <span class="comment"># Output: '0b1111'</span>
+print(bin(0o11))    <span class="comment"># Output: '0b1001'</span>
+print(bin(0X10))    <span class="comment"># Output: '0b10000'</span>
+            </div>
+            </pre>
+            <h3 style="color: #667eea; margin-top: 25px;">2️⃣ oct() Function Examples</h3>
+            <pre>
+            <div class="code-example">
+<span class="comment"># All examples from your content:</span>
+print(oct(10))      <span class="comment"># Output: '0o12'</span>
+print(oct(0B1111))  <span class="comment"># Output: '0o17'</span>
+print(oct(0X123))   <span class="comment"># Output: '0o443'</span>
+            </div>
+        </pre>
+            <h3 style="color: #667eea; margin-top: 25px;">3️⃣ hex() Function Examples</h3>
+            <pre>
+            <div class="code-example">
+<span class="comment"># All examples from your content:</span>
+print(hex(100))     <span class="comment"># Output: '0x64'</span>
+print(hex(0B111111)) <span class="comment"># Output: '0x3f'</span>
+print(hex(0o12345)) <span class="comment"># Output: '0x14e5'</span>
+            </div>
+        </pre>
+            <h3 style="color: #667eea; margin-top: 25px;">🧪 Interactive Tester for Your Examples</h3>
+            <div style="background: #e6fffa; border: 2px solid #38b2ac; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <p><strong>Try the exact examples from your content:</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                    <button onclick="testExample('bin(15)')" style="padding: 8px 15px; background: #38b2ac; color: white; border: none; border-radius: 5px; cursor: pointer;">bin(15)</button>
+                    <button onclick="testExample('bin(0o11)')" style="padding: 8px 15px; background: #38b2ac; color: white; border: none; border-radius: 5px; cursor: pointer;">bin(0o11)</button>
+                    <button onclick="testExample('bin(0X10)')" style="padding: 8px 15px; background: #38b2ac; color: white; border: none; border-radius: 5px; cursor: pointer;">bin(0X10)</button>
+                    <button onclick="testExample('oct(10)')" style="padding: 8px 15px; background: #805ad5; color: white; border: none; border-radius: 5px; cursor: pointer;">oct(10)</button>
+                    <button onclick="testExample('oct(0B1111)')" style="padding: 8px 15px; background: #805ad5; color: white; border: none; border-radius: 5px; cursor: pointer;">oct(0B1111)</button>
+                    <button onclick="testExample('oct(0X123)')" style="padding: 8px 15px; background: #805ad5; color: white; border: none; border-radius: 5px; cursor: pointer;">oct(0X123)</button>
+                    <button onclick="testExample('hex(100)')" style="padding: 8px 15px; background: #e53e3e; color: white; border: none; border-radius: 5px; cursor: pointer;">hex(100)</button>
+                    <button onclick="testExample('hex(0B111111)')" style="padding: 8px 15px; background: #e53e3e; color: white; border: none; border-radius: 5px; cursor: pointer;">hex(0B111111)</button>
+                    <button onclick="testExample('hex(0o12345)')" style="padding: 8px 15px; background: #e53e3e; color: white; border: none; border-radius: 5px; cursor: pointer;">hex(0o12345)</button>
+                </div>
+                <div id="testResult" style="margin-top: 15px; padding: 10px; background: white; border-radius: 5px; font-family: 'Courier New', monospace; min-height: 30px; border: 1px solid #cbd5e0;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ Common Mistakes & Important Notes from Your Content</h2>
+            
+            <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4 style="color: #856404; margin-bottom: 10px;">🚫 Invalid Examples from Your Content (These cause errors):</h4>
+                <ul style="line-height: 1.8; color: #856404;">
+                    <li><strong>a = 0B123</strong> ❌ SyntaxError: invalid digit '2' in binary literal</li>
+                    <li><strong>a = b111</strong> ❌ NameError: name 'b111' is not defined (missing 0b prefix)</li>
+                    <li><strong>a = 0o786</strong> ❌ SyntaxError: invalid digit '8' in octal literal</li>
+                    <li><strong>a = 0XBeer</strong> ❌ SyntaxError: invalid digit 'r' in hexadecimal literal</li>
+                </ul>
+            </div>
+
+            <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4 style="color: #0c5460; margin-bottom: 10px;">✅ Correct Versions and Key Points:</h4>
+                <ul style="line-height: 1.8; color: #0c5460;">
+                    <li><strong>Binary:</strong> Only digits 0 and 1 allowed. Use 0b or 0B prefix.</li>
+                    <li><strong>Octal:</strong> Only digits 0-7 allowed. Use 0o or 0O prefix.</li>
+                    <li><strong>Hexadecimal:</strong> Digits 0-9 and A-F allowed (case insensitive). Use 0x or 0X prefix.</li>
+                    <li><strong>Important:</strong> PVM (Python Virtual Machine) always displays values in decimal form, regardless of how you enter them.</li>
+                </ul>
+            </div>
+
+            <div style="background: #d4edda; border-left: 4px solid #28a745; padding: 20px; border-radius: 8px;">
+                <h4 style="color: #155724; margin-bottom: 10px;">📚 Key Insights from Your Content:</h4>
+                <ul style="line-height: 1.8; color: #155724;">
+                    <li>Python 2 had separate <code>long</code> type, but Python 3 uses only <code>int</code> for all integers</li>
+                    <li>You can specify literals in decimal, binary, octal, and hexadecimal forms</li>
+                    <li>PVM always provides output in decimal form only</li>
+                    <li>Base conversion functions (bin, oct, hex) work with any input base</li>
+                    <li>The example <code>a=10, b=0o10, c=0X10, d=0B10</code> shows same syntax but different values!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const examples = {
+            decimal: {
+                title: "Decimal (Base 10) Examples - From Your Content",
+                code: `# Basic decimal example from your content
+a = 10
+print(type(a))  # <class 'int'>
+
+# More decimal examples
+a = 10      # Simple decimal
+b = 1337    # Larger decimal
+c = 999999  # Even larger decimal
+
+print(a)  # Output: 10
+print(b)  # Output: 1337
+print(c)  # Output: 999999`
+            },
+            binary: {
+                title: "Binary (Base 2) Examples - From Your Content", 
+                code: `# Valid binary examples from your content
+a = 0B1111    # Valid: equals 15 in decimal
+print(a)      # Output: 15
+
+# More binary examples
+b = 0b101010  # equals 42 in decimal  
+c = 0B10      # equals 2 in decimal (from a=10, b=0o10, c=0X10, d=0B10)
+print(b)      # Output: 42
+print(c)      # Output: 2
+
+# ❌ INVALID examples from your content (these cause SyntaxError):
+# a = 0B123   # ERROR: '2' and '3' are not valid binary digits
+# a = b111    # ERROR: missing 0b prefix
+
+# Note: Only digits 0 and 1 are allowed in binary`
+            },
+            octal: {
+                title: "Octal (Base 8) Examples - From Your Content",
+                code: `# Valid octal examples from your content
+a = 0o123     # Valid: equals 83 in decimal
+print(a)      # Output: 83
+
+b = 0o10      # equals 8 in decimal (from a=10, b=0o10, c=0X10, d=0B10)
+print(b)      # Output: 8
+
+c = 0o12345   # Valid large octal (used in hex(0o12345) example)
+print(c)      # Output: 5349
+
+# ❌ INVALID example from your content (causes SyntaxError):
+# a = 0o786   # ERROR: '8' is not a valid octal digit
+
+# Note: Only digits 0-7 are allowed in octal`
+            },
+            hex: {
+                title: "Hexadecimal (Base 16) Examples - From Your Content", 
+                code: `# Valid hexadecimal examples from your content
+a = 0XFACE    # Valid: equals 64206 in decimal
+print(a)      # Output: 64206
+
+b = 0XBeef    # Valid: equals 48879 in decimal  
+print(b)      # Output: 48879
+
+c = 0X10      # equals 16 in decimal (from a=10, b=0o10, c=0X10, d=0B10)
+print(c)      # Output: 16
+
+d = 0X123     # equals 291 in decimal (used in oct(0X123) example)
+print(d)      # Output: 291
+
+# ❌ INVALID example from your content (causes SyntaxError):
+# a = 0XBeer  # ERROR: 'r' is not a valid hex digit
+
+# Note: Digits 0-9 and A-F (case insensitive) are allowed`
+            }
+        };
+
+        function showExample(type) {
+            const display = document.getElementById('example-display');
+            const example = examples[type];
+            
+            display.innerHTML = `
+                <div style="margin-bottom: 15px; color: #4a5568; font-size: 1.1rem; font-weight: bold;">
+                    ${example.title}
+                </div>
+                ${example.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+            `;
+            display.style.display = 'block';
+            
+            // Add animation
+            display.style.opacity = '0';
+            display.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                display.style.transition = 'all 0.3s ease';
+                display.style.opacity = '1';
+                display.style.transform = 'translateY(0)';
+            }, 50);
+        }
+
+        function parseInput(input) {
+            input = input.trim();
+            if (!input) return null;
+            
+            try {
+                // Handle different prefixes
+                if (input.startsWith('0b') || input.startsWith('0B')) {
+                    return parseInt(input, 2);
+                } else if (input.startsWith('0o') || input.startsWith('0O')) {
+                    return parseInt(input, 8);
+                } else if (input.startsWith('0x') || input.startsWith('0X')) {
+                    return parseInt(input, 16);
+                } else {
+                    return parseInt(input, 10);
+                }
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function convertToBinary() {
+            const input = document.getElementById('binInput').value;
+            const result = document.getElementById('binResult');
+            
+            const number = parseInput(input);
+            if (number === null || isNaN(number)) {
+                result.textContent = 'Invalid input! Please enter a valid number.';
+                result.className = 'result error';
+                return;
+            }
+            
+            const binary = (number >>> 0).toString(2);
+            result.innerHTML = `
+                <strong>Input:</strong> ${input} <br>
+                <strong>Decimal:</strong> ${number} <br>
+                <strong>Binary:</strong> 0b${binary}
+            `;
+            result.className = 'result success';
+            
+            // Add animation
+            result.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                result.style.transition = 'transform 0.2s ease';
+                result.style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        function convertToOctal() {
+            const input = document.getElementById('octInput').value;
+            const result = document.getElementById('octResult');
+            
+            const number = parseInput(input);
+            if (number === null || isNaN(number)) {
+                result.textContent = 'Invalid input! Please enter a valid number.';
+                result.className = 'result error';
+                return;
+            }
+            
+            const octal = number.toString(8);
+            result.innerHTML = `
+                <strong>Input:</strong> ${input} <br>
+                <strong>Decimal:</strong> ${number} <br>
+                <strong>Octal:</strong> 0o${octal}
+            `;
+            result.className = 'result success';
+            
+            // Add animation
+            result.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                result.style.transition = 'transform 0.2s ease';
+                result.style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        function convertToHex() {
+            const input = document.getElementById('hexInput').value;
+            const result = document.getElementById('hexResult');
+            
+            const number = parseInput(input);
+            if (number === null || isNaN(number)) {
+                result.textContent = 'Invalid input! Please enter a valid number.';
+                result.className = 'result error';
+                return;
+            }
+            
+            const hex = number.toString(16);
+            result.innerHTML = `
+                <strong>Input:</strong> ${input} <br>
+                <strong>Decimal:</strong> ${number} <br>
+                <strong>Hexadecimal:</strong> 0x${hex}
+            `;
+            result.className = 'result success';
+            
+            // Add animation
+            result.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                result.style.transition = 'transform 0.2s ease';
+                result.style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        // Add enter key support for inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('binInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') convertToBinary();
+            });
+            
+            document.getElementById('octInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') convertToOctal();
+            });
+            
+            document.getElementById('hexInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') convertToHex();
+            });
+        });
+
+        // Test specific examples from the content
+        function testExample(example) {
+            const result = document.getElementById('testResult');
+            let output = '';
+            
+            try {
+                switch(example) {
+                    case 'bin(15)':
+                        output = `${example} = '0b${(15).toString(2)}'`;
+                        break;
+                    case 'bin(0o11)':
+                        const octal11 = parseInt('11', 8); // 9 in decimal
+                        output = `${example} = bin(${octal11}) = '0b${octal11.toString(2)}'`;
+                        break;
+                    case 'bin(0X10)':
+                        const hex10 = parseInt('10', 16); // 16 in decimal
+                        output = `${example} = bin(${hex10}) = '0b${hex10.toString(2)}'`;
+                        break;
+                    case 'oct(10)':
+                        output = `${example} = '0o${(10).toString(8)}'`;
+                        break;
+                    case 'oct(0B1111)':
+                        const bin1111 = parseInt('1111', 2); // 15 in decimal
+                        output = `${example} = oct(${bin1111}) = '0o${bin1111.toString(8)}'`;
+                        break;
+                    case 'oct(0X123)':
+                        const hex123 = parseInt('123', 16); // 291 in decimal
+                        output = `${example} = oct(${hex123}) = '0o${hex123.toString(8)}'`;
+                        break;
+                    case 'hex(100)':
+                        output = `${example} = '0x${(100).toString(16)}'`;
+                        break;
+                    case 'hex(0B111111)':
+                        const bin111111 = parseInt('111111', 2); // 63 in decimal
+                        output = `${example} = hex(${bin111111}) = '0x${bin111111.toString(16)}'`;
+                        break;
+                    case 'hex(0o12345)':
+                        const oct12345 = parseInt('12345', 8); // 5349 in decimal
+                        output = `${example} = hex(${oct12345}) = '0x${oct12345.toString(16)}'`;
+                        break;
+                }
+                
+                result.innerHTML = `<strong>Testing:</strong> ${example}<br><strong>Result:</strong> ${output}`;
+                result.style.color = '#38a169';
+                result.style.background = '#c6f6d5';
+                result.style.border = '1px solid #38a169';
+                
+            } catch (e) {
+                result.innerHTML = `<strong>Error testing ${example}:</strong> ${e.message}`;
+                result.style.color = '#e53e3e';
+                result.style.background = '#fed7d7';
+                result.style.border = '1px solid #e53e3e';
+            }
+            
+            // Add animation
+            result.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                result.style.transition = 'transform 0.2s ease';
+                result.style.transform = 'scale(1)';
+            }, 50);
+        }
+
+        // Add some dynamic background effects
+        function createFloatingNumber() {
+            const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+            const number = document.createElement('div');
+            number.textContent = numbers[Math.floor(Math.random() * numbers.length)];
+            number.style.position = 'fixed';
+            number.style.left = Math.random() * window.innerWidth + 'px';
+            number.style.top = window.innerHeight + 'px';
+            number.style.color = 'rgba(255, 255, 255, 0.1)';
+            number.style.fontSize = '2rem';
+            number.style.fontWeight = 'bold';
+            number.style.pointerEvents = 'none';
+            number.style.zIndex = '-1';
+            number.style.transition = 'all 3s linear';
+            
+            document.body.appendChild(number);
+            
+            setTimeout(() => {
+                number.style.transform = `translateY(-${window.innerHeight + 100}px) rotate(360deg)`;
+                number.style.opacity = '0';
+            }, 100);
+            
+            setTimeout(() => {
+                document.body.removeChild(number);
+            }, 3000);
+        }
+
+        // Create floating numbers periodically
+        setInterval(createFloatingNumber, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Bool Data Type - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ea66a6 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f0e1e1, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.4s; }
+        .card:nth-child(4) { animation-delay: 0.6s; }
+        .card:nth-child(5) { animation-delay: 0.8s; }
+
+        .card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .basics-icon { background: linear-gradient(45deg, #ff6b6b, #ff8787); }
+        .values-icon { background: linear-gradient(45deg, #4ecdc4, #44a08d); }
+        .operations-icon { background: linear-gradient(45deg, #45b7d1, #96c93f); }
+        .playground-icon { background: linear-gradient(45deg, #f093fb, #f5576c); }
+
+        .bool-display {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .bool-value {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bool-value::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .bool-value:hover::before {
+            animation: shimmer 0.6s ease-in-out;
+        }
+
+        .true-value {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .false-value {
+            background: linear-gradient(135deg, #f44336, #FF5722);
+            color: white;
+        }
+
+        .bool-value h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .bool-value p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4ecdc4, transparent);
+            animation: codeScanner 2s infinite;
+        }
+
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .number { color: #b5cea8; }
+        .comment { color: #6a9955; font-style: italic; }
+        .boolean { color: #4fc3f7; }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .demo-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .demo-output {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .truth-table {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .table-cell {
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .table-cell:hover {
+            background: rgba(255,255,255,1);
+            transform: scale(1.05);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .highlight-box h4 {
+            color: #d63384;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-true {
+            top: 20%;
+            right: 10%;
+            font-size: 8rem;
+            color: #4CAF50;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-false {
+            bottom: 20%;
+            left: 10%;
+            font-size: 8rem;
+            color: #f44336;
+            animation: float 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        @keyframes codeScanner {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse { animation: pulse 2s infinite; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .bool-display { flex-direction: column; gap: 20px; }
+            .demo-controls { justify-content: center; }
+            .truth-table { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-element floating-true">True</div>
+    <div class="floating-element floating-false">False</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Python Boolean Data Type</h1>
+            <p>Interactive Guide to Understanding bool in Python</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon basics-icon">🔍</span>What is Boolean?</h2>
+            <p>The Boolean data type in Python represents logical values with only two possible states: <strong>True</strong> and <strong>False</strong>. Named after mathematician George Boole, this data type is fundamental to logic and decision-making in programming.</p>
+            
+            <div class="bool-display">
+                <div class="bool-value true-value" onclick="animateValue(this)">
+                    <h3>True</h3>
+                    <p>Internally: 1</p>
+                </div>
+                <div class="bool-value false-value" onclick="animateValue(this)">
+                    <h3>False</h3>
+                    <p>Internally: 0</p>
+                </div>
+            </div>
+<pre>
+            <div class="code-block">
+<span class="comment"># Creating boolean variables</span>
+b = <span class="boolean">True</span>
+<span class="keyword">print</span>(<span class="keyword">type</span>(b))  <span class="comment"># Output: &lt;class 'bool'&gt;</span>
+
+is_python_awesome = <span class="boolean">True</span>
+is_learning_hard = <span class="boolean">False</span>
+            </div>
+        </div>
+    </pre>
+        <div class="card">
+            <h2><span class="icon values-icon">⚡</span>Boolean Values & Creation</h2>
+            <p>Booleans can be created directly or as results of comparisons and logical operations:</p>
+            <pre>
+            <div class="code-block">
+<span class="comment"># Direct assignment</span>
+direct_true = <span class="boolean">True</span>
+direct_false = <span class="boolean">False</span>
+
+<span class="comment"># From comparisons</span>
+a = <span class="number">10</span>
+b = <span class="number">20</span>
+c = a &lt; b  <span class="comment"># Results in True</span>
+<span class="keyword">print</span>(c)  <span class="comment"># Output: True</span>
+
+<span class="comment"># From functions</span>
+bool_from_string = <span class="keyword">bool</span>(<span class="string">"Hello"</span>)  <span class="comment"># True</span>
+bool_from_zero = <span class="keyword">bool</span>(<span class="number">0</span>)        <span class="comment"># False</span>
+            </div>
+</pre>
+            <div class="highlight-box">
+                <h4>💡 Truthy and Falsy Values</h4>
+                <p><strong>Falsy values:</strong> False, None, 0, 0.0, '', [], {}, set()<br>
+                <strong>Truthy values:</strong> Everything else including True, non-zero numbers, non-empty strings, non-empty collections</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon operations-icon">🧮</span>Boolean Operations & Arithmetic</h2>
+            <p>Python allows arithmetic operations on booleans since True = 1 and False = 0 internally:</p>
+            
+            <div class="interactive-demo">
+                <h3>Try Boolean Arithmetic!</h3>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="runDemo('True + True')">True + True</button>
+                    <button class="demo-btn" onclick="runDemo('True - False')">True - False</button>
+                    <button class="demo-btn" onclick="runDemo('False * True')">False × True</button>
+                    <button class="demo-btn" onclick="runDemo('True / True')">True ÷ True</button>
+                    <button class="demo-btn" onclick="runDemo('True ** False')">True ** False</button>
+                </div>
+                <div class="demo-output" id="demoOutput">Click any operation above!</div>
+            </div>
+
+            <div class="code-block">
+<span class="comment"># Boolean arithmetic examples</span>
+<span class="keyword">print</span>(<span class="boolean">True</span> + <span class="boolean">True</span>)   <span class="comment"># Output: 2</span>
+<span class="keyword">print</span>(<span class="boolean">True</span> - <span class="boolean">False</span>)  <span class="comment"># Output: 1</span>
+<span class="keyword">print</span>(<span class="boolean">False</span> * <span class="number">5</span>)     <span class="comment"># Output: 0</span>
+<span class="keyword">print</span>(<span class="boolean">True</span> * <span class="number">3.14</span>)   <span class="comment"># Output: 3.14</span>
+            </div>
+
+            <h3>Logical Operations Truth Table</h3>
+            <div class="truth-table">
+                <div class="table-header">A</div>
+                <div class="table-header">B</div>
+                <div class="table-header">A and B</div>
+                <div class="table-header">A or B</div>
+                
+                <div class="table-cell">True</div>
+                <div class="table-cell">True</div>
+                <div class="table-cell">True</div>
+                <div class="table-cell">True</div>
+                
+                <div class="table-cell">True</div>
+                <div class="table-cell">False</div>
+                <div class="table-cell">False</div>
+                <div class="table-cell">True</div>
+                
+                <div class="table-cell">False</div>
+                <div class="table-cell">True</div>
+                <div class="table-cell">False</div>
+                <div class="table-cell">True</div>
+                
+                <div class="table-cell">False</div>
+                <div class="table-cell">False</div>
+                <div class="table-cell">False</div>
+                <div class="table-cell">False</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon playground-icon">🎮</span>Interactive Boolean Playground</h2>
+            <p>Experiment with boolean expressions and see real-time results:</p>
+            
+            <div class="interactive-demo">
+                <h3>Boolean Expression Evaluator</h3>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="evaluateExpression('5 > 3')">5 > 3</button>
+                    <button class="demo-btn" onclick="evaluateExpression('10 == 10')">10 == 10</button>
+                    <button class="demo-btn" onclick="evaluateExpression('True and False')">True and False</button>
+                    <button class="demo-btn" onclick="evaluateExpression('not False')">not False</button>
+                    <button class="demo-btn" onclick="evaluateExpression('bool(0)')">bool(0)</button>
+                    <button class="demo-btn" onclick="evaluateExpression('bool("Hello")')">bool("Hello")</button>
+                </div>
+                <div class="demo-output" id="expressionOutput">Select an expression to evaluate!</div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🚀 Key Points to Remember</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Boolean values are case-sensitive: <code>True</code> and <code>False</code> (not <code>true</code> or <code>false</code>)</li>
+                    <li>Python internally treats <code>True</code> as 1 and <code>False</code> as 0</li>
+                    <li>Any non-zero number, non-empty string, or non-empty collection is <code>True</code></li>
+                    <li>Boolean operations follow short-circuit evaluation</li>
+                    <li>Booleans can be used in arithmetic operations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🎯 Practical Applications</h2>
+            <pre>
+            <div class="code-block">
+<span class="comment"># Conditional statements</span>
+age = <span class="number">18</span>
+is_adult = age >= <span class="number">18</span>
+<span class="keyword">if</span> is_adult:
+    <span class="keyword">print</span>(<span class="string">"You can vote!"</span>)
+
+<span class="comment"># Loop control</span>
+keep_running = <span class="boolean">True</span>
+<span class="keyword">while</span> keep_running:
+    user_input = <span class="keyword">input</span>(<span class="string">"Continue? (y/n): "</span>)
+    keep_running = user_input.lower() == <span class="string">'y'</span>
+
+<span class="comment"># Function returns</span>
+<span class="keyword">def</span> is_even(number):
+    <span class="keyword">return</span> number % <span class="number">2</span> == <span class="number">0</span>
+
+<span class="keyword">print</span>(is_even(<span class="number">4</span>))  <span class="comment"># True</span>
+<span class="keyword">print</span>(is_even(<span class="number">7</span>))  <span class="comment"># False</span>
+            </div>
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        function animateValue(element) {
+            element.classList.add('pulse');
+            setTimeout(() => {
+                element.classList.remove('pulse');
+            }, 1000);
+        }
+
+        function runDemo(operation) {
+            const output = document.getElementById('demoOutput');
+            output.innerHTML = `<span style="color: #ffeb3b;">${operation}</span> = `;
+            
+            setTimeout(() => {
+                let result;
+                switch(operation) {
+                    case 'True + True':
+                        result = 2;
+                        break;
+                    case 'True - False':
+                        result = 1;
+                        break;
+                    case 'False * True':
+                        result = 0;
+                        break;
+                    case 'True / True':
+                        result = 1.0;
+                        break;
+                    case 'True ** False':
+                        result = 1;
+                        break;
+                }
+                
+                output.innerHTML += `<span style="color: #4CAF50; font-weight: bold; font-size: 1.4em;">${result}</span>`;
+                
+                // Add some visual flair
+                output.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    output.style.transform = 'scale(1)';
+                }, 300);
+            }, 500);
+        }
+
+        function evaluateExpression(expr) {
+            const output = document.getElementById('expressionOutput');
+            output.innerHTML = `<span style="color: #ffeb3b;">${expr}</span> = `;
+            
+            setTimeout(() => {
+                let result;
+                switch(expr) {
+                    case '5 > 3':
+                        result = 'True';
+                        break;
+                    case '10 == 10':
+                        result = 'True';
+                        break;
+                    case 'True and False':
+                        result = 'False';
+                        break;
+                    case 'not False':
+                        result = 'True';
+                        break;
+                    case 'bool(0)':
+                        result = 'False';
+                        break;
+                    case 'bool("Hello")':
+                        result = 'True';
+                        break;
+                }
+                
+                const color = result === 'True' ? '#4CAF50' : '#f44336';
+                output.innerHTML += `<span style="color: ${color}; font-weight: bold; font-size: 1.4em;">${result}</span>`;
+                
+                // Add animation
+                output.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    output.style.transform = 'scale(1)';
+                }, 300);
+            }, 500);
+        }
+
+        // Add some interactive hover effects to truth table
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableCells = document.querySelectorAll('.table-cell');
+            tableCells.forEach(cell => {
+                cell.addEventListener('mouseenter', () => {
+                    cell.style.background = 'rgba(103, 126, 234, 0.2)';
+                });
+                cell.addEventListener('mouseleave', () => {
+                    cell.style.background = 'rgba(255,255,255,0.8)';
+                });
+            });
+        });
+
+        // Add scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

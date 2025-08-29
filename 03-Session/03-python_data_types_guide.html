@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Data Types - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #353e66 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            animation: gradientShift 10s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background: linear-gradient(135deg, #0d0e12 0%, #764ba2 50%, #f093fb 100%);
+            }
+            
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.4); }
+        }
+
+        .python-features {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .data-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .data-type-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: block;            /* makes the whole card clickable */
+            text-decoration: none;     /* removes underline */
+            color: inherit;            /* keeps original text colors */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .data-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.8), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .data-type-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .data-type-card:hover::before {
+            left: 100%;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .type-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        .type-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .type-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .code-example {
+            display: block;
+            white-space: pre;  
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #00ff41;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .code-example::before {
+            content: 'Python';
+            position: absolute;
+            top: 2px;
+            right: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        .try-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .try-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .try-button:active {
+            transform: scale(0.98);
+        }
+
+        .output {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: monospace;
+            color: #495057;
+            min-height: 30px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .builtin-functions {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .function-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .function-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            padding: 20px;
+            border-radius: 15px;
+            color: #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .function-card:hover {
+            transform: scale(1.05) rotate(1deg);
+            border-color: rgba(255, 154, 158, 0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .interactive-demo {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .demo-input {
+            padding: 15px;
+            border: 2px solid #4facfe;
+            border-radius: 10px;
+            width: 300px;
+            max-width: 100%;
+            margin: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.3);
+            transform: scale(1.02);
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .result-display {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #00ff41;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { border-color: rgba(0, 255, 65, 0.3); }
+            50% { border-color: rgba(0, 255, 65, 0.6); }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            color: rgba(255,255,255,0.1);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(90deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            75% { transform: translateY(-10px) rotate(270deg); }
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .numeric { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
+        .sequence { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
+        .mapping { background: linear-gradient(135deg, #45b7d1, #2980b9); }
+        .set-type { background: linear-gradient(135deg, #96ceb4, #85c1a3); }
+        .boolean { background: linear-gradient(135deg, #feca57, #ff9f43); }
+        .none-type { background: linear-gradient(135deg, #778ca3, #596275); }
+
+        .stats-display {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .memory-usage {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .comparison-tool {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .comparison-inputs {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .comparison-inputs input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .data-types-grid { grid-template-columns: 1fr; }
+            .demo-input { width: 100%; }
+            .comparison-inputs { flex-direction: column; }
+            .comparison-inputs input { min-width: auto; }
+        }
+        .data-type-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="left: 10%; animation-delay: 0s;">🐍</div>
+        <div class="floating-element" style="left: 20%; animation-delay: 1s;">{}</div>
+        <div class="floating-element" style="left: 30%; animation-delay: 2s;">[]</div>
+        <div class="floating-element" style="left: 40%; animation-delay: 3s;">()</div>
+        <div class="floating-element" style="left: 50%; animation-delay: 4s;">""</div>
+        <div class="floating-element" style="left: 60%; animation-delay: 5s;">123</div>
+        <div class="floating-element" style="left: 70%; animation-delay: 1.5s;">True</div>
+        <div class="floating-element" style="left: 80%; animation-delay: 2.5s;">None</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Python Data Types</h1>
+            <p>Explore Python's rich ecosystem of built-in data types with interactive examples and animations. Python is dynamically typed - the type is determined automatically based on the value assigned!</p>
+        </div>
+
+        <div class="python-features">
+            <h2>🚀 Python's Dynamic Nature</h2>
+            <div class="features-grid">
+                <div class="feature-card" onclick="showFeatureInfo('dynamic')">
+                    <h3>🔄 Dynamic Typing</h3>
+                    <p>No need to declare types explicitly - Python figures it out automatically!</p>
+                </div>
+                <div class="feature-card" onclick="showFeatureInfo('object')">
+                    <h3>🗂️ Everything is an Object</h3>
+                    <p>All data in Python are objects with methods and attributes</p>
+                </div>
+                <div class="feature-card" onclick="showFeatureInfo('runtime')">
+                    <h3>🔍 Runtime Type Checking</h3>
+                    <p>Types are checked during execution, not compilation</p>
+                </div>
+                <div class="feature-card" onclick="showFeatureInfo('duck')">
+                    <h3>🎯 Duck Typing</h3>
+                    <p>"If it walks like a duck and quacks like a duck, it's a duck"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-types-grid">
+            <!-- Numeric Types -->
+            
+            <div class="data-type-card">
+                
+                <div class="category-badge numeric">NUMERIC</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">1</div>
+                    <a class="data-type-card" target="_blank" href="Datatypes/01-Fundamental Datatypes/01-python_int_datatypes.html">
+                        <div class="type-name">Integer (int)</div>
+                    </a>
+                </div>
+                <div class="type-description">Whole numbers without decimal points. Can be positive, negative, or zero. Python 3 integers have unlimited precision!</div>
+                <div class="code-example">
+x = 42
+y = -17
+z = 0
+big_num = 123456789012345678901234567890</div>
+                <button class="try-button" onclick="demonstrateType('int')">Try It!</button>
+                <div class="output" id="int-output"></div>
+                </div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge numeric">NUMERIC</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">1.0</div>
+                    <a class="data-type-card" target="_blank" href="Datatypes/01-Fundamental Datatypes/02-python-float-explorer.html">
+                        <div class="type-name">Float</div>
+                    </a>
+                </div>
+                <div class="type-description">Numbers with decimal points. Represented in double precision floating-point format.</div>
+                <div class="code-example">
+pi = 3.14159
+scientific = 1.23e-4  # Scientific notation
+infinity = float('inf')</div>
+                <button class="try-button" onclick="demonstrateType('float')">Try It!</button>
+                <div class="output" id="float-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge numeric">NUMERIC</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">i</div>
+                    <a class="data-type-card" target="_blank" href="Datatypes/01-Fundamental Datatypes/03-complex_numbers_guide.html">
+                     <div class="type-name">Complex</div>
+                    </a>
+                </div>
+                <div class="type-description">Numbers with real and imaginary parts. Written as (real + imaginary*j).</div>
+                <div class="code-example">
+z1 = 3 + 4j
+z2 = complex(2, -3)  # 2 - 3j
+real_part = z1.real  # 3.0
+imag_part = z1.imag  # 4.0</div>
+                <button class="try-button" onclick="demonstrateType('complex')">Try It!</button>
+                <div class="output" id="complex-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge boolean">BOOLEAN</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #feca57, #ff9f43);">T/F</div>
+                    <a class="data-type-card" target="_blank" href="Datatypes/01-Fundamental Datatypes/04-python_bool_guide.html">
+                        <div class="type-name">Boolean (bool)</div>
+                    </a>
+                </div>
+                <div class="type-description">Represents truth values: True or False. Subclass of int where True=1 and False=0.</div>
+                <div class="code-example">
+is_python_awesome = True
+is_boring = False
+result = True + True  # 2 (because True = 1)</div>
+                <button class="try-button" onclick="demonstrateType('bool')">Try It!</button>
+                <div class="output" id="bool-output"></div>
+            </div>
+
+            <!-- Sequence Types -->
+            <div class="data-type-card">
+                <div class="category-badge sequence">SEQUENCE</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">"A"</div>
+                    <a class="data-type-card" target="_blank" href="Datatypes/01-Fundamental Datatypes/05-python_strings_demo.html">
+                        <div class="type-name">String (str)</div>
+                    </a>
+                </div>
+                <div class="type-description">Immutable sequence of Unicode characters. Can be created with single, double, or triple quotes.</div>
+                <div class="code-example">
+name = "Python"
+multiline = """This is a
+multiline string"""
+f_string = f"Hello, {name}!"</div>
+                <button class="try-button" onclick="demonstrateType('str')">Try It!</button>
+                <div class="output" id="str-output"></div>
+            </div>
+            <div class="data-type-card">
+                <div class="category-badge sequence">Notes</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">📒</div>
+                    <a class="data-type-card"  href="Datatypes/01-Fundamental Datatypes/06-notes-python_datatypes_guide.html" target="_blank">
+                        <div class="type-name">Fundamental Datatypes in Python</div>
+                </a>
+                </div>
+                <div class="type-description">In Python, int, float, complex, bool, str  data types are considered as Fundamental Data types</div>
+                </div>
+
+            <div class="data-type-card">
+                <div class="category-badge sequence">SEQUENCE</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">[]</div>
+                    <div class="type-name">List</div>
+                </div>
+                <div class="type-description">Mutable, ordered collection of items. Can contain different data types and supports indexing and slicing.</div>
+                <div class="code-example">
+fruits = ["apple", "banana", "cherry"]
+mixed = [1, "hello", 3.14, True]
+nested = [[1, 2], [3, 4]]</div>
+                <button class="try-button" onclick="demonstrateType('list')">Try It!</button>
+                <div class="output" id="list-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge sequence">SEQUENCE</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">()</div>
+                    <div class="type-name">Tuple</div>
+                </div>
+                <div class="type-description">Immutable, ordered collection of items. Often used for coordinates, database records, or function returns.</div>
+                <div class="code-example">
+coordinates = (3, 4)
+colors = ("red", "green", "blue")
+single = (42,)  # Note the comma!</div>
+                <button class="try-button" onclick="demonstrateType('tuple')">Try It!</button>
+                <div class="output" id="tuple-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge sequence">SEQUENCE</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">R</div>
+                    <div class="type-name">Range</div>
+                </div>
+                <div class="type-description">Immutable sequence of numbers, commonly used for loops. Memory-efficient for large ranges.</div>
+                <div class="code-example">
+numbers = range(5)      # 0, 1, 2, 3, 4
+evens = range(0, 10, 2) # 0, 2, 4, 6, 8
+countdown = range(10, 0, -1)</div>
+                <button class="try-button" onclick="demonstrateType('range')">Try It!</button>
+                <div class="output" id="range-output"></div>
+            </div>
+
+            <!-- Set Types -->
+            <div class="data-type-card">
+                <div class="category-badge set-type">SET</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #96ceb4, #85c1a3);">{}</div>
+                    <div class="type-name">Set</div>
+                </div>
+                <div class="type-description">Mutable, unordered collection of unique items. Great for removing duplicates and set operations.</div>
+                <div class="code-example">
+unique_numbers = {1, 2, 3, 4, 5}
+fruits = set(["apple", "banana", "apple"])
+# Result: {"apple", "banana"}</div>
+                <button class="try-button" onclick="demonstrateType('set')">Try It!</button>
+                <div class="output" id="set-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge set-type">SET</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #96ceb4, #85c1a3);">❄️</div>
+                    <div class="type-name">Frozenset</div>
+                </div>
+                <div class="type-description">Immutable version of set. Can be used as dictionary keys or elements in other sets.</div>
+                <div class="code-example">
+immutable_set = frozenset([1, 2, 3, 4])
+nested_sets = {frozenset([1, 2]), frozenset([3, 4])}</div>
+                <button class="try-button" onclick="demonstrateType('frozenset')">Try It!</button>
+                <div class="output" id="frozenset-output"></div>
+            </div>
+
+            <!-- Mapping Type -->
+            <div class="data-type-card">
+                <div class="category-badge mapping">MAPPING</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #45b7d1, #2980b9);">{:}</div>
+                    <div class="type-name">Dictionary (dict)</div>
+                </div>
+                <div class="type-description">Mutable, unordered collection of key-value pairs. Keys must be immutable and unique.</div>
+                <div class="code-example">
+person = {"name": "Alice", "age": 30}
+nested = {"coords": {"x": 10, "y": 20}}
+mixed_keys = {1: "one", "two": 2}</div>
+                <button class="try-button" onclick="demonstrateType('dict')">Try It!</button>
+                <div class="output" id="dict-output"></div>
+            </div>
+
+            <!-- Binary Sequence Types -->
+            <div class="data-type-card">
+                <div class="category-badge sequence">BINARY</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #6c5ce7, #5f3dc4);">b''</div>
+                    <div class="type-name">Bytes</div>
+                </div>
+                <div class="type-description">Immutable sequence of bytes (0-255). Used for binary data like images, files, or network protocols.</div>
+                <div class="code-example">
+data = b"Hello"
+encoded = "Hello".encode('utf-8')
+hex_bytes = bytes.fromhex('48656c6c6f')</div>
+                <button class="try-button" onclick="demonstrateType('bytes')">Try It!</button>
+                <div class="output" id="bytes-output"></div>
+            </div>
+
+            <div class="data-type-card">
+                <div class="category-badge sequence">BINARY</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #6c5ce7, #5f3dc4);">[]b</div>
+                    <div class="type-name">Bytearray</div>
+                </div>
+                <div class="type-description">Mutable sequence of bytes. Like bytes, but you can modify individual elements.</div>
+                <div class="code-example">
+data = bytearray(b"Hello")
+data[0] = ord('h')  # Change 'H' to 'h'
+# Result: bytearray(b'hello')</div>
+                <button class="try-button" onclick="demonstrateType('bytearray')">Try It!</button>
+                <div class="output" id="bytearray-output"></div>
+            </div>
+
+            <!-- None Type -->
+            <div class="data-type-card">
+                <div class="category-badge none-type">NONE</div>
+                <div class="card-header">
+                    <div class="type-icon" style="background: linear-gradient(135deg, #778ca3, #596275);">∅</div>
+                    <div class="type-name">NoneType (None)</div>
+                </div>
+                <div class="type-description">Represents the absence of a value. Often used as a default value or to indicate "no data".</div>
+                <div class="code-example">
+result = None
+def no_return():
+    pass  # Returns None implicitly
+value = no_return()  # None</div>
+                <button class="try-button" onclick="demonstrateType('none')">Try It!</button>
+                <div class="output" id="none-output"></div>
+            </div>
+        </div>
+
+        <div class="builtin-functions">
+            <h2>🛠️ Essential Built-in Functions</h2>
+            <p>Python provides several built-in functions to work with data types and objects:</p>
+            
+            <div class="function-demo">
+                <div class="function-card" onclick="demonstrateFunction('type')">
+                    <h3>type()</h3>
+                    <p>Returns the type of an object</p>
+                    <div class="code-example">type(42)  # &lt;class 'int'&gt;</div>
+                </div>
+                
+                <div class="function-card" onclick="demonstrateFunction('id')">
+                    <h3>id()</h3>
+                    <p>Returns unique identifier (memory address) of an object</p>
+                    <div class="code-example">id("hello")  # 140712234567408</div>
+                </div>
+                
+                <div class="function-card" onclick="demonstrateFunction('isinstance')">
+                    <h3>isinstance()</h3>
+                    <p>Checks if an object is an instance of a specific type</p>
+                    <div class="code-example">isinstance(42, int)  # True</div>
+                </div>
+                
+                <div class="function-card" onclick="demonstrateFunction('len')">
+                    <h3>len()</h3>
+                    <p>Returns the length of a sequence or collection</p>
+                    <div class="code-example">len([1, 2, 3])  # 3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-tool">
+            <h2>🔍 Type Comparison Tool</h2>
+            <p>Compare two values and see their types, equality, and identity:</p>
+            
+            <div class="comparison-inputs">
+                <input type="text" id="value1" placeholder="Enter first value (e.g., 42)" value="42">
+                <input type="text" id="value2" placeholder="Enter second value (e.g., '42')" value="'42'">
+                <button class="demo-button" onclick="compareValues()">Compare Values</button>
+            </div>
+            
+            <div class="result-display" id="comparisonResult">
+                Enter two values above to compare them!
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2>🎮 Interactive Type Explorer</h2>
+            <p>Enter any Python value below and see its type, properties, and available methods!</p>
+            
+            <div>
+                <input type="text" class="demo-input" id="userInput" placeholder="Enter a Python value (e.g., 42, 'hello', [1,2,3])" value="42">
+                <button class="demo-button" onclick="exploreType()">Explore Type</button>
+                <button class="demo-button" onclick="clearResults()">Clear</button>
+            </div>
+            
+            <div class="result-display" id="typeResult">
+                Enter a value above to see its type information!
+            </div>
+            
+            <div class="stats-display" id="statsDisplay">
+                <div class="memory-usage" id="memoryInfo"></div>
+                <div class="memory-usage" id="sizeInfo"></div>
+                <div class="memory-usage" id="methodCount"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data type demonstrations
+        const typeExamples = {
+            'int': () => {
+                const examples = [42, -17, 0, 999999999999999999999999999999];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Integer\nSize: ${example.toString().length} digits\nMemory-efficient unlimited precision!`;
+            },
+            
+            'float': () => {
+                const examples = [3.14159, -2.5, 1.23e-4, 'Infinity'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Float\nPrecision: Double precision floating-point\nSpecial values: inf, -inf, nan`;
+            },
+            
+            'complex': () => {
+                const examples = ['3 + 4j', '2 - 3j', '1j', '5 + 0j'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Complex\nReal and imaginary components\nUseful for mathematical calculations`;
+            },
+            
+            'bool': () => {
+                const examples = [true, false];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Boolean\n${example} is equivalent to ${example ? 1 : 0}\nInherits from int class`;
+            },
+            
+            'str': () => {
+                const examples = ['"Hello, World!"', "'Python'", '"""Multiline string"""', 'f"Formatted {variable}"'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: String\nImmutable Unicode sequence\nSupports slicing and formatting`;
+            },
+            
+            'list': () => {
+                const examples = ['[1, 2, 3]', "['apple', 'banana']", '[1, "mixed", 3.14, True]', '[[1, 2], [3, 4]]'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: List\nMutable, ordered collection\nSupports indexing, slicing, append, extend`;
+            },
+            
+            'tuple': () => {
+                const examples = ['(1, 2, 3)', "('red', 'green', 'blue')", '(42,)', '((1, 2), (3, 4))'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Tuple\nImmutable, ordered collection\nHashable (can be dict key)`;
+            },
+            
+            'range': () => {
+                const examples = ['range(5)', 'range(0, 10, 2)', 'range(10, 0, -1)', 'range(1000000)'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Range\nMemory-efficient number sequence\nLazy evaluation - generates on demand`;
+            },
+            
+            'set': () => {
+                const examples = ['{1, 2, 3, 4}', "{'apple', 'banana'}", 'set([1, 2, 2, 3])', '{x for x in range(5)}'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Set\nUnique elements, no duplicates\nSupports set operations: union, intersection`;
+            },
+            
+            'frozenset': () => {
+                const examples = ['frozenset([1, 2, 3])', 'frozenset("abc")', 'frozenset({1, 2, 3})'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Frozenset\nImmutable set, hashable\nCan be used as dictionary key`;
+            },
+            
+            'dict': () => {
+                const examples = [
+                    "{'name': 'Alice', 'age': 30}",
+                    '{1: "one", 2: "two"}',
+                    '{"nested": {"key": "value"}}',
+                    '{x: x**2 for x in range(5)}'
+                ];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Dictionary\nKey-value mapping\nKeys must be immutable and unique`;
+            },
+            
+            'bytes': () => {
+                const examples = ['b"Hello"', 'b"\\x48\\x65\\x6c\\x6c\\x6f"', '"Hello".encode("utf-8")'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Bytes\nImmutable binary data\nUsed for file I/O and network protocols`;
+            },
+            
+            'bytearray': () => {
+                const examples = ['bytearray(b"Hello")', 'bytearray([72, 101, 108, 108, 111])'];
+                const example = examples[Math.floor(Math.random() * examples.length)];
+                return `Value: ${example}\nType: Bytearray\nMutable binary data\nCan modify individual bytes`;
+            },
+            
+            'none': () => {
+                return `Value: None\nType: NoneType\nRepresents absence of value\nSingleton object (only one None exists)`;
+            }
+        };
+
+        function demonstrateType(type) {
+            const output = document.getElementById(`${type}-output`);
+            const result = typeExamples[type]();
+            
+            output.innerHTML = result;
+            output.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                output.style.display = 'none';
+            }, 5000);
+        }
+
+        function demonstrateFunction(funcName) {
+            const examples = {
+                'type': () => {
+                    const values = ['42', '"hello"', '[1,2,3]', 'True', 'None'];
+                    const value = values[Math.floor(Math.random() * values.length)];
+                    return `type(${value}) → Returns the class/type of the object\nUseful for debugging and type checking`;
+                },
+                'id': () => {
+                    return `id(object) → Returns unique integer identifier\nRepresents memory address\nUnique for object's lifetime`;
+                },
+                'isinstance': () => {
+                    const examples = ['isinstance(42, int)', 'isinstance("hello", str)', 'isinstance([1,2], list)'];
+                    const example = examples[Math.floor(Math.random() * examples.length)];
+                    return `${example} → True\nChecks if object is instance of class\nBetter than type() for inheritance`;
+                },
+                'len': () => {
+                    const examples = ['len("hello")', 'len([1,2,3,4])', 'len({1,2,3})'];
+                    const example = examples[Math.floor(Math.random() * examples.length)];
+                    return `${example} → Returns number of items\nWorks with sequences and collections\nCalls object's __len__() method`;
+                }
+            };
+            
+            alert(examples[funcName]());
+        }
+
+        function showFeatureInfo(feature) {
+            const info = {
+                'dynamic': 'Dynamic Typing: Variables can change type during runtime. No need to declare types explicitly like in C++ or Java.',
+                'object': 'Everything is an Object: Numbers, strings, functions - all are objects with methods and attributes. Try: (42).__add__(8)',
+                'runtime': 'Runtime Type Checking: Type errors are caught when code executes, not when it\'s written. Allows for more flexibility.',
+                'duck': 'Duck Typing: If an object has the right methods, it can be used regardless of its actual type. "If it quacks like a duck..."'
+            };
+            
+            alert(info[feature]);
+        }
+
+        function parseValue(input) {
+            input = input.trim();
+            
+            // Handle None
+            if (input === 'None') return null;
+            
+            // Handle booleans
+            if (input === 'True') return true;
+            if (input === 'False') return false;
+            
+            // Handle strings (quoted)
+            if ((input.startsWith('"') && input.endsWith('"')) || 
+                (input.startsWith("'") && input.endsWith("'"))) {
+                return input.slice(1, -1);
+            }
+            
+            // Handle lists
+            if (input.startsWith('[') && input.endsWith(']')) {
+                try {
+                    return JSON.parse(input);
+                } catch {
+                    return input; // Return as string if can't parse
+                }
+            }
+            
+            // Handle numbers
+            if (!isNaN(input) && !isNaN(parseFloat(input))) {
+                return input.includes('.') ? parseFloat(input) : parseInt(input);
+            }
+            
+            // Return as string
+            return input;
+        }
+
+        function getDetailedType(value) {
+            if (value === null) return 'NoneType';
+            if (Array.isArray(value)) return 'list';
+            if (typeof value === 'string') return 'str';
+            if (typeof value === 'number') {
+                return Number.isInteger(value) ? 'int' : 'float';
+            }
+            if (typeof value === 'boolean') return 'bool';
+            if (typeof value === 'object') return 'dict';
+            return typeof value;
+        }
+
+        function exploreType() {
+            const input = document.getElementById('userInput').value;
+            const result = document.getElementById('typeResult');
+            const stats = document.getElementById('statsDisplay');
+            
+            try {
+                const value = parseValue(input);
+                const type = getDetailedType(value);
+                const jsType = typeof value;
+                
+                let output = `Input: ${input}\n`;
+                output += `Parsed Value: ${JSON.stringify(value)}\n`;
+                output += `Python Type: ${type}\n`;
+                output += `JavaScript Type: ${jsType}\n`;
+                output += `Length: ${value?.length || (typeof value === 'string' ? value.length : 'N/A')}\n`;
+                
+                if (value !== null && typeof value === 'object') {
+                    output += `Properties: ${Object.keys(value).length}\n`;
+                }
+                
+                // Memory info (simulated)
+                const memorySize = JSON.stringify(value).length;
+                output += `Estimated Size: ${memorySize} bytes`;
+                
+                result.textContent = output;
+                
+                // Show stats
+                document.getElementById('memoryInfo').textContent = `Memory: ~${memorySize}B`;
+                document.getElementById('sizeInfo').textContent = `Length: ${value?.length || 'N/A'}`;
+                document.getElementById('methodCount').textContent = `Type: ${type}`;
+                stats.style.display = 'block';
+                
+            } catch (error) {
+                result.textContent = `Error parsing input: ${error.message}`;
+                stats.style.display = 'none';
+            }
+        }
+
+        function compareValues() {
+            const value1Input = document.getElementById('value1').value;
+            const value2Input = document.getElementById('value2').value;
+            const result = document.getElementById('comparisonResult');
+            
+            try {
+                const val1 = parseValue(value1Input);
+                const val2 = parseValue(value2Input);
+                
+                const type1 = getDetailedType(val1);
+                const type2 = getDetailedType(val2);
+                
+                let output = `Value 1: ${JSON.stringify(val1)} (${type1})\n`;
+                output += `Value 2: ${JSON.stringify(val2)} (${type2})\n\n`;
+                output += `Types Equal: ${type1 === type2}\n`;
+                output += `Values Equal (==): ${val1 == val2}\n`;
+                output += `Values Identical (===): ${val1 === val2}\n`;
+                output += `Both Truthy: ${!!val1 && !!val2}\n`;
+                
+                if (typeof val1 === 'string' && typeof val2 === 'string') {
+                    output += `Length Comparison: ${val1.length} vs ${val2.length}`;
+                }
+                
+                result.textContent = output;
+                
+            } catch (error) {
+                result.textContent = `Error comparing values: ${error.message}`;
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('typeResult').textContent = 'Enter a value above to see its type information!';
+            document.getElementById('statsDisplay').style.display = 'none';
+            document.getElementById('userInput').value = '';
+        }
+
+        // Initialize with some random floating elements
+        function createFloatingElements() {
+            const container = document.querySelector('.floating-elements');
+            const symbols = ['🐍', '{}', '[]', '()', '""', '123', 'True', 'None', '3.14', 'λ'];
+            
+            setInterval(() => {
+                if (container.children.length < 15) {
+                    const element = document.createElement('div');
+                    element.className = 'floating-element';
+                    element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    element.style.left = Math.random() * 100 + '%';
+                    element.style.animationDelay = Math.random() * 6 + 's';
+                    element.style.fontSize = (15 + Math.random() * 10) + 'px';
+                    container.appendChild(element);
+                    
+                    // Remove element after animation
+                    setTimeout(() => {
+                        if (element.parentNode) {
+                            element.parentNode.removeChild(element);
+                        }
+                    }, 12000);
+                }
+            }, 2000);
+        }
+
+        // Auto-demo mode
+        function startAutoDemo() {
+            const types = Object.keys(typeExamples);
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance every 3 seconds
+                    const type = types[currentIndex];
+                    demonstrateType(type);
+                    currentIndex = (currentIndex + 1) % types.length;
+                }
+            }, 3000);
+        }
+
+        // Initialize interactive features
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingElements();
+            
+            // Add enter key support for inputs
+            document.getElementById('userInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') exploreType();
+            });
+            
+            document.getElementById('value1').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') compareValues();
+            });
+            
+            document.getElementById('value2').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') compareValues();
+            });
+            
+            // Start auto demo after 5 seconds
+            setTimeout(startAutoDemo, 5000);
+        });
+    </script>
+</body>
+</html>
