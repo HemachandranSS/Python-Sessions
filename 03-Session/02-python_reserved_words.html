@@ -377,12 +377,12 @@
     <div class="container">
         <div class="hero">
             <h1>Python Reserved Words</h1>
-            <p>Interactive guide to Python's 33 built-in reserved keywords</p>
+            <p>Interactive guide to Python's 35 built-in reserved keywords</p>
         </div>
 
         <div class="stats-container">
             <div class="stat-card">
-                <span class="stat-number">33</span>
+                <span class="stat-number">35</span>
                 <span class="stat-label">Total Reserved Words</span>
             </div>
             <div class="stat-card">
@@ -594,6 +594,25 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="category">
+                    <h3>
+                        <div class="category-icon" style="background: #27ae60;">A</div>
+                        Asynchronous Code
+                    </h3>
+                    <p>Keywords for perform tasks concurrently without blocking the execution of your program</p>
+                    <div class="keywords">
+                        <div class="keyword tooltip">
+                            async
+                            <span class="tooltiptext">Used to define a coroutine</span>
+                        </div>
+                        <div class="keyword tooltip">
+                            await
+                            <span class="tooltiptext">pauses the coroutine until an awaited task completes, allowing other tasks to run in the meantime.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -603,7 +622,7 @@
                 <div style="color: #68d391; margin-bottom: 10px;">>>> import keyword</div>
                 <div style="color: #68d391; margin-bottom: 10px;">>>> keyword.kwlist</div>
                 <div style="color: #fbb6ce; line-height: 1.6;">
-                    ['False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
+                    ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
                 </div>
             </div>
             <h3 class="demo-title">🔍 Reserved Word Validator</h3>
@@ -633,7 +652,7 @@
                 </div>
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107;">
                     <h4 style="color: #333; margin-bottom: 10px;">📊 Current Count</h4>
-                    <p style="color: #666;">Python currently has <strong>33 reserved words</strong>. This number may change in future versions.</p>
+                    <p style="color: #666;">Python currently has <strong>35 reserved words</strong>. This number may change in future versions.</p>
                 </div>
             </div>
         </div>
@@ -654,13 +673,7 @@
         }
 
         // Reserved words list
-        const reservedWords = [
-            'False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 
-            'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 
-            'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 
-            'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 
-            'while', 'with', 'yield'
-        ];
+        const reservedWords = ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'];
 
         // Word validator
         function validateWord() {
