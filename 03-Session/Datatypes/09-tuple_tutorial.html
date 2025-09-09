@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Tuples - Interactive Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1123 0%, #e7e5ea 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section h2 {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .data-structure {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .data-structure:hover {
+            transform: translateY(-10px);
+        }
+
+        .data-structure.tuple {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .data-structure h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-example::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            animation: rainbow 3s linear infinite;
+        }
+
+        .code-line {
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+        .python-keyword {
+            color: #ff7b7b;
+        }
+
+        .python-string {
+            color: #a8e6cf;
+        }
+
+        .python-number {
+            color: #ffd93d;
+        }
+
+        .python-error {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .interactive-demo {
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .visual-tuple {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .tuple-element {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 20px;
+            margin: 5px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(238, 90, 36, 0.3);
+            animation: bounce 0.5s ease-out;
+        }
+
+        .tuple-bracket {
+            font-size: 3rem;
+            color: #4facfe;
+            font-weight: bold;
+            margin: 0 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .immutable-shield {
+            position: relative;
+            display: inline-block;
+            margin: 20px auto;
+        }
+
+        .shield {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .output-display {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 10px 0;
+            border: 2px solid #00ff00;
+            min-height: 50px;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+            40%, 43% { transform: translate3d(0, -8px, 0); }
+            70% { transform: translate3d(0, -4px, 0); }
+            90% { transform: translate3d(0, -2px, 0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .error-demo {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .success-demo {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Tuples</h1>
+            <p>The Immutable Data Structure</p>
+        </div>
+
+        <div class="section">
+            <h2>📝 What are Tuples?</h2>
+            <p>Tuples are ordered collections of items that are <strong>immutable</strong> (cannot be changed after creation). Think of them as the "read-only" version of lists!</p>
+            
+            <div class="comparison-container">
+                <div class="data-structure">
+                    <h3>📋 Lists</h3>
+                    <p>✅ Mutable (changeable)</p>
+                    <p>✅ Use square brackets [ ]</p>
+                    <p>✅ Can add/remove items</p>
+                    <p>✅ Can modify existing items</p>
+                </div>
+                <div class="data-structure tuple">
+                    <h3>📦 Tuples</h3>
+                    <p>🔒 Immutable (unchangeable)</p>
+                    <p>🔒 Use parentheses ( )</p>
+                    <p>❌ Cannot add/remove items</p>
+                    <p>❌ Cannot modify existing items</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Creating Tuples</h2>
+            <div class="code-example">
+                <div class="code-line"># Creating a tuple</div>
+                <div class="code-line">t = (<span class="python-number">10</span>, <span class="python-number">20</span>, <span class="python-number">30</span>, <span class="python-number">40</span>)</div>
+                <div class="code-line"><span class="python-keyword">print</span>(<span class="python-keyword">type</span>(t))</div>
+                <div class="code-line"># Output: &lt;class 'tuple'&gt;</div>
+            </div>
+
+            <div class="visual-tuple" id="tupleVisualization">
+                <span class="tuple-bracket">(</span>
+                <div class="tuple-element">10</div>
+                <div class="tuple-element">20</div>
+                <div class="tuple-element">30</div>
+                <div class="tuple-element">40</div>
+                <span class="tuple-bracket">)</span>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <div class="immutable-shield">
+                    <div class="shield">🛡️</div>
+                </div>
+                <p><strong>Immutability Shield Active!</strong></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚠️ Immutability in Action</h2>
+            <p>Let's see what happens when we try to modify a tuple:</p>
+
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <button class="btn" onclick="tryModifyItem()">Try: t[0] = 100</button>
+                    <button class="btn" onclick="tryAppend()">Try: t.append("hema")</button>
+                    <button class="btn" onclick="tryRemove()">Try: t.remove(10)</button>
+                    <button class="btn" onclick="clearOutput()">Clear Output</button>
+                </div>
+                <div class="output-display" id="output">Click buttons above to see immutability in action!</div>
+            </div>
+
+            <div class="error-demo">
+                <h4>🚫 Item Assignment Error</h4>
+                <div class="code-example">
+                    <div class="code-line">>>> t[<span class="python-number">0</span>] = <span class="python-number">100</span></div>
+                    <div class="code-line python-error">TypeError: 'tuple' object does not support item assignment</div>
+                </div>
+            </div>
+
+            <div class="error-demo">
+                <h4>🚫 Append Method Error</h4>
+                <div class="code-example">
+                    <div class="code-line">>>> t.append(<span class="python-string">"hema"</span>)</div>
+                    <div class="code-line python-error">AttributeError: 'tuple' object has no attribute 'append'</div>
+                </div>
+            </div>
+
+            <div class="error-demo">
+                <h4>🚫 Remove Method Error</h4>
+                <div class="code-example">
+                    <div class="code-line">>>> t.remove(<span class="python-number">10</span>)</div>
+                    <div class="code-line python-error">AttributeError: 'tuple' object has no attribute 'remove'</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✨ Tuple Features & Benefits</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Immutable</h4>
+                    <p>Once created, cannot be modified</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📑</div>
+                    <h4>Ordered</h4>
+                    <p>Elements maintain their position</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Allow Duplicates</h4>
+                    <p>Same values can appear multiple times</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏃‍♂️</div>
+                    <h4>Faster than Lists</h4>
+                    <p>More memory efficient for read-only data</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗝️</div>
+                    <h4>Hashable</h4>
+                    <p>Can be used as dictionary keys</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h4>Built-in Methods</h4>
+                    <p>count(), index(), len(), etc.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎮 Interactive Tuple Operations</h2>
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <button class="btn" onclick="showAccess()">Access Elements</button>
+                    <button class="btn" onclick="showSlicing()">Slicing</button>
+                    <button class="btn" onclick="showMethods()">Built-in Methods</button>
+                    <button class="btn" onclick="showIteration()">Iteration</button>
+                </div>
+                <div class="output-display" id="operationsOutput">Choose an operation to explore!</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤔 When to Use Tuples?</h2>
+            <div class="success-demo">
+                <h4>✅ Perfect for:</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Coordinates: <code>(x, y, z)</code></li>
+                    <li>RGB colors: <code>(255, 128, 0)</code></li>
+                    <li>Database records that shouldn't change</li>
+                    <li>Function return values with multiple items</li>
+                    <li>Configuration settings</li>
+                    <li>Dictionary keys (when you need composite keys)</li>
+                </ul>
+            </div>
+
+            <div class="code-example">
+                <div class="code-line"># Real-world examples</div>
+                <div class="code-line">coordinates = (<span class="python-number">10.5</span>, <span class="python-number">20.3</span>)</div>
+                <div class="code-line">rgb_color = (<span class="python-number">255</span>, <span class="python-number">128</span>, <span class="python-number">0</span>)</div>
+                <div class="code-line">person_info = (<span class="python-string">"John"</span>, <span class="python-number">25</span>, <span class="python-string">"Engineer"</span>)</div>
+                <div class="code-line">dimensions = (<span class="python-number">1920</span>, <span class="python-number">1080</span>)</div>
+            </div>
+        </div>
+
+        <div class="section" style="text-align: center;">
+            <h2>🎓 Summary</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6;">
+                Tuples are <strong>immutable sequences</strong> that provide a secure way to store data that shouldn't change. 
+                While they lack the flexibility of lists, they offer better performance and data integrity. 
+                Remember: <em>"Tuples are the read-only version of lists!"</em>
+            </p>
+            
+            <div style="margin-top: 30px;">
+                <div class="btn" style="display: inline-block; cursor: default; background: linear-gradient(45deg, #4caf50, #45a049);">
+                    🎉 You've mastered Python Tuples! 🎉
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTuple = [10, 20, 30, 40];
+
+        function tryModifyItem() {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <div style="color: #ff6b6b;">>>> t = (10, 20, 30, 40)</div>
+                <div style="color: #ff6b6b;">>>> t[0] = 100</div>
+                <div style="color: #ff4757;">TypeError: 'tuple' object does not support item assignment</div>
+                <div style="color: #ffd700;">🛡️ Immutability shield activated!</div>
+            `;
+            animateShield();
+        }
+
+        function tryAppend() {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <div style="color: #ff6b6b;">>>> t.append("hema")</div>
+                <div style="color: #ff4757;">AttributeError: 'tuple' object has no attribute 'append'</div>
+                <div style="color: #ffd700;">🚫 Tuples don't have append method!</div>
+            `;
+            animateShield();
+        }
+
+        function tryRemove() {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <div style="color: #ff6b6b;">>>> t.remove(10)</div>
+                <div style="color: #ff4757;">AttributeError: 'tuple' object has no attribute 'remove'</div>
+                <div style="color: #ffd700;">🚫 Tuples don't have remove method!</div>
+            `;
+            animateShield();
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = 'Click buttons above to see immutability in action!';
+        }
+
+        function animateShield() {
+            const shield = document.querySelector('.shield');
+            shield.style.animation = 'none';
+            setTimeout(() => {
+                shield.style.animation = 'glow 0.5s ease-in-out 3';
+            }, 10);
+        }
+
+        function showAccess() {
+            const output = document.getElementById('operationsOutput');
+            output.innerHTML = `
+                <div style="color: #4facfe;">>>> t = (10, 20, 30, 40)</div>
+                <div style="color: #00ff00;">>>> t[0]    # First element</div>
+                <div style="color: #ffd700;">10</div>
+                <div style="color: #00ff00;">>>> t[-1]   # Last element</div>
+                <div style="color: #ffd700;">40</div>
+                <div style="color: #00ff00;">>>> len(t)  # Length</div>
+                <div style="color: #ffd700;">4</div>
+            `;
+        }
+
+        function showSlicing() {
+            const output = document.getElementById('operationsOutput');
+            output.innerHTML = `
+                <div style="color: #4facfe;">>>> t = (10, 20, 30, 40)</div>
+                <div style="color: #00ff00;">>>> t[1:3]  # Slice from index 1 to 2</div>
+                <div style="color: #ffd700;">(20, 30)</div>
+                <div style="color: #00ff00;">>>> t[:2]   # First two elements</div>
+                <div style="color: #ffd700;">(10, 20)</div>
+                <div style="color: #00ff00;">>>> t[2:]   # From index 2 to end</div>
+                <div style="color: #ffd700;">(30, 40)</div>
+            `;
+        }
+
+        function showMethods() {
+            const output = document.getElementById('operationsOutput');
+            output.innerHTML = `
+                <div style="color: #4facfe;">>>> t = (10, 20, 30, 20)</div>
+                <div style="color: #00ff00;">>>> t.count(20)    # Count occurrences</div>
+                <div style="color: #ffd700;">2</div>
+                <div style="color: #00ff00;">>>> t.index(30)    # Find index</div>
+                <div style="color: #ffd700;">2</div>
+                <div style="color: #00ff00;">>>> 30 in t        # Check membership</div>
+                <div style="color: #ffd700;">True</div>
+            `;
+        }
+
+        function showIteration() {
+            const output = document.getElementById('operationsOutput');
+            output.innerHTML = `
+                <div style="color: #4facfe;">>>> t = (10, 20, 30, 40)</div>
+                <div style="color: #00ff00;">>>> for item in t:</div>
+                <div style="color: #00ff00;">...     print(item)</div>
+                <div style="color: #ffd700;">10</div>
+                <div style="color: #ffd700;">20</div>
+                <div style="color: #ffd700;">30</div>
+                <div style="color: #ffd700;">40</div>
+            `;
+        }
+
+        // Add some interactive animations on page load
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.tuple-element');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.animation = 'bounce 0.6s ease-out';
+                }, index * 100);
+            });
+        });
+
+        // Add hover effects to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05) rotateY(5deg)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotateY(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
