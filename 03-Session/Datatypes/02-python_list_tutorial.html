@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python List Data Type - Interactive Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #069c10 0%, #86a24b 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: rgb(127, 26, 26);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+        }
+
+        .section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            animation: expandWidth 1s ease-out 0.5s forwards;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .code-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid #667eea;
+            white-space: pre;
+        }
+
+        .code-example::before {
+            content: 'Python';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .list-visualization {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .list-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .list-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            animation: bounceIn 0.6s ease-out;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .list-item:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .index-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .input-group input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+        }
+
+        .operation-result {
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #4ecdc4;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .performance-chart {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .chart-bar {
+            display: inline-block;
+            width: 30px;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            margin: 0 5px;
+            border-radius: 15px 15px 0 0;
+            animation: growUp 1.5s ease-out;
+        }
+
+        @keyframes growUp {
+            from { height: 0; }
+        }
+
+        .type-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .type-int { background: #e3f2fd; color: #1976d2; }
+        .type-float { background: #f3e5f5; color: #7b1fa2; }
+        .type-str { background: #e8f5e8; color: #388e3c; }
+        .type-bool { background: #fff3e0; color: #f57c00; }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .header h1 { font-size: 2.5rem; }
+            .section { padding: 20px; }
+            .demo-controls { flex-direction: column; align-items: center; }
+            .input-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python List Data Type</h1>
+            <p>An Interactive Deep Dive into Lists</p>
+        </div>
+
+        <!-- Introduction Section -->
+        <div class="section">
+            <h2>📝 What is a List?</h2>
+            <p>A <strong>list</strong> in Python is an ordered, mutable, and heterogeneous collection of elements where duplicates are allowed. Think of it as a container that can hold multiple values of different types while preserving the order in which you add them.</p>
+            
+            <div class="highlight">
+                <strong>🎯 Key Point:</strong> Lists are perfect when you need to store multiple related items that can change over time, and where the order matters!
+            </div>
+        </div>
+
+        <!-- Core Features Section -->
+        <div class="section">
+            <h2>🌟 Core Features of Lists</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📋 Insertion Order Preserved</h3>
+                    <p>Items maintain their position as you add them</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎭 Heterogeneous Objects</h3>
+                    <p>Mix different data types in one list</p>
+                </div>
+                <div class="feature-card">
+                    <h3>👥 Duplicates Allowed</h3>
+                    <p>Same values can appear multiple times</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📈 Growable Nature</h3>
+                    <p>Size can increase or decrease dynamically</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔧 Mutable</h3>
+                    <p>Elements can be modified after creation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 Indexed Access</h3>
+                    <p>Access elements by position (0-based)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- List Creation Section -->
+        <div class="section">
+            <h2>🏗️ Creating Lists</h2>
+            <p>Lists are created using square brackets <code>[]</code> with elements separated by commas:</p>
+            
+            <div class="code-example">
+# Creating a heterogeneous list
+my_list = [10, 10.5, 'hema', True, 10]
+print(my_list)  # [10, 10.5, 'hema', True, 10]
+
+# Empty list
+empty_list = []
+
+# List with single type
+numbers = [1, 2, 3, 4, 5]
+            </div>
+
+            <div class="list-visualization">
+                <h3>Visual Representation</h3>
+                <div class="list-container" id="sampleList">
+                    <div class="list-item">10<span class="type-indicator type-int">int</span><div class="index-label">0</div></div>
+                    <div class="list-item">10.5<span class="type-indicator type-float">float</span><div class="index-label">1</div></div>
+                    <div class="list-item">'hema'<span class="type-indicator type-str">str</span><div class="index-label">2</div></div>
+                    <div class="list-item">True<span class="type-indicator type-bool">bool</span><div class="index-label">3</div></div>
+                    <div class="list-item">10<span class="type-indicator type-int">int</span><div class="index-label">4</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indexing and Slicing Section -->
+        <div class="section">
+            <h2>🎯 Indexing and Slicing</h2>
+            <p>Lists support both positive (0-based) and negative indexing, plus powerful slicing operations:</p>
+            
+            <div class="code-example">
+list = [10, 20, 30, 40]
+
+# Positive indexing
+print(list[0])    # 10 (first element)
+print(list[3])    # 40 (last element)
+
+# Negative indexing  
+print(list[-1])   # 40 (last element)
+print(list[-2])   # 30 (second last)
+
+# Slicing
+print(list[1:3])  # [20, 30] (elements from index 1 to 2)
+print(list[:2])   # [10, 20] (first two elements)
+print(list[2:])   # [30, 40] (from index 2 to end)
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Indexing Demo</h3>
+                <div class="list-container" id="indexDemo">
+                    <div class="list-item" data-index="0">10<div class="index-label">0</div></div>
+                    <div class="list-item" data-index="1">20<div class="index-label">1</div></div>
+                    <div class="list-item" data-index="2">30<div class="index-label">2</div></div>
+                    <div class="list-item" data-index="3">40<div class="index-label">3</div></div>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="indexInput" placeholder="Enter index" min="-4" max="3">
+                    <button class="btn" onclick="accessByIndex()">Access Element</button>
+                    <button class="btn" onclick="showNegativeIndex()">Show Negative Indexing</button>
+                </div>
+                <div id="indexResult" class="operation-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- List Mutability Section -->
+        <div class="section">
+            <h2>🔄 List Mutability</h2>
+            <p>Lists are mutable, meaning you can modify, add, or remove elements after creation:</p>
+            
+            <div class="code-example">
+# Modifying elements
+list = [10, 20, 30, 40]
+list[0] = 100  # Change first element
+print(list)    # [100, 20, 30, 40]
+
+# Adding elements
+list.append(50)      # Add to end
+list.insert(1, 15)   # Insert at specific position
+
+# Removing elements  
+list.remove(20)      # Remove first occurrence of value
+element = list.pop() # Remove and return last element
+del list[0]          # Delete by index
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎯 Interactive List Operations</h3>
+                <div class="list-container" id="operationDemo"></div>
+                <div class="demo-controls">
+                    <div class="input-group">
+                        <input type="text" id="newElement" placeholder="Enter value">
+                        <button class="btn" onclick="appendElement()">Append</button>
+                        <button class="btn" onclick="prependElement()">Prepend</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="removeIndex" placeholder="Index to remove">
+                        <button class="btn" onclick="removeByIndex()">Remove by Index</button>
+                        <button class="btn" onclick="clearList()">Clear All</button>
+                    </div>
+                    <div class="input-group">
+                        <button class="btn" onclick="multiplyList()">Multiply List (×2)</button>
+                        <button class="btn" onclick="reverseList()">Reverse</button>
+                        <button class="btn" onclick="sortList()">Sort</button>
+                    </div>
+                </div>
+                <div id="operationResult" class="operation-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Advanced Operations Section -->
+        <div class="section">
+            <h2>🚀 Advanced List Operations</h2>
+            
+            <div class="code-example">
+# List concatenation and repetition
+list1 = [1, 2, 3]
+list2 = [4, 5, 6]
+combined = list1 + list2     # [1, 2, 3, 4, 5, 6]
+repeated = list1 * 2         # [1, 2, 3, 1, 2, 3]
+
+# List comprehension
+squares = [x**2 for x in range(5)]  # [0, 1, 4, 9, 16]
+evens = [x for x in range(10) if x % 2 == 0]  # [0, 2, 4, 6, 8]
+
+# Useful methods
+numbers = [3, 1, 4, 1, 5, 9, 2, 6]
+print(len(numbers))       # 8 (length)
+print(max(numbers))       # 9 (maximum)
+print(min(numbers))       # 1 (minimum)
+print(numbers.count(1))   # 2 (count occurrences)
+print(numbers.index(4))   # 2 (first index of value)
+            </div>
+
+            <div class="performance-chart">
+                <h3>⚡ Performance Characteristics</h3>
+                <p>Time Complexity for Common Operations:</p>
+                <div style="display: flex; justify-content: space-around; align-items: end; margin: 20px 0;">
+                    <div style="text-align: center;">
+                        <div class="chart-bar" style="height: 30px;"></div>
+                        <div>Access: O(1)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="chart-bar" style="height: 60px;"></div>
+                        <div>Append: O(1)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="chart-bar" style="height: 120px;"></div>
+                        <div>Insert: O(n)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="chart-bar" style="height: 100px;"></div>
+                        <div>Remove: O(n)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="chart-bar" style="height: 80px;"></div>
+                        <div>Search: O(n)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Practices Section -->
+        <div class="section">
+            <h2>✅ Best Practices & Tips</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🎯 Use List Comprehensions</h3>
+                    <p>More readable and efficient than loops for creating lists</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Prefer append() over +</h3>
+                    <p>append() is more efficient for adding single elements</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Use 'in' for membership</h3>
+                    <p>Check if element exists using 'value in list'</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📦 Consider tuple for immutable</h3>
+                    <p>If data won't change, tuples are more efficient</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎨 Use enumerate() in loops</h3>
+                    <p>Get both index and value when iterating</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚠️ Avoid modifying while iterating</h3>
+                    <p>Create a copy or iterate backwards when modifying</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🧠 Memory Tip</h3>
+                <p><strong>MUTABLE</strong> - Remember this acronym for list characteristics:</p>
+                <ul>
+                    <li><strong>M</strong>utable - Can be changed</li>
+                    <li><strong>U</strong>nordered indexing (supports negative indices)</li>
+                    <li><strong>T</strong>ype mixing allowed</li>
+                    <li><strong>A</strong>llows duplicates</li>
+                    <li><strong>B</strong>rackets for creation []</li>
+                    <li><strong>L</strong>ength can vary</li>
+                    <li><strong>E</strong>numerable and iterable</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- When to Use Lists Section -->
+        <div class="section">
+            <h2>🤔 When to Use Lists</h2>
+            <div class="features-grid">
+                <div class="feature-card" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);">
+                    <h3>✅ Perfect For</h3>
+                    <ul style="text-align: left; list-style: none; padding: 0;">
+                        <li>• Shopping lists</li>
+                        <li>• Game scores</li>
+                        <li>• Student records</li>
+                        <li>• Menu items</li>
+                        <li>• File paths</li>
+                    </ul>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                    <h3>❌ Consider Alternatives</h3>
+                    <ul style="text-align: left; list-style: none; padding: 0;">
+                        <li>• Fixed coordinates → tuple</li>
+                        <li>• Unique items → set</li>
+                        <li>• Key-value pairs → dict</li>
+                        <li>• Large datasets → NumPy</li>
+                        <li>• Queue operations → deque</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize demo list
+        let demoList = [10, 20, 30, 40];
+        updateOperationDemo();
+
+        function updateOperationDemo() {
+            const container = document.getElementById('operationDemo');
+            container.innerHTML = '';
+            
+            demoList.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `${item}<div class="index-label">${index}</div>`;
+                div.style.animationDelay = `${index * 0.1}s`;
+                container.appendChild(div);
+            });
+
+            // Show result
+            const result = document.getElementById('operationResult');
+            result.style.display = 'block';
+            result.innerHTML = `Current List: [${demoList.join(', ')}]<br>Length: ${demoList.length}`;
+        }
+
+        function appendElement() {
+            const input = document.getElementById('newElement');
+            const value = input.value.trim();
+            if (value) {
+                // Try to convert to number if possible
+                const numValue = isNaN(value) ? value : Number(value);
+                demoList.push(numValue);
+                input.value = '';
+                updateOperationDemo();
+                animateOperation(`Appended: ${numValue}`);
+            }
+        }
+
+        function prependElement() {
+            const input = document.getElementById('newElement');
+            const value = input.value.trim();
+            if (value) {
+                const numValue = isNaN(value) ? value : Number(value);
+                demoList.unshift(numValue);
+                input.value = '';
+                updateOperationDemo();
+                animateOperation(`Prepended: ${numValue}`);
+            }
+        }
+
+        function removeByIndex() {
+            const input = document.getElementById('removeIndex');
+            const index = parseInt(input.value);
+            if (!isNaN(index) && index >= 0 && index < demoList.length) {
+                const removed = demoList.splice(index, 1)[0];
+                input.value = '';
+                updateOperationDemo();
+                animateOperation(`Removed: ${removed} at index ${index}`);
+            } else {
+                animateOperation(`Invalid index: ${index}`, 'error');
+            }
+        }
+
+        function clearList() {
+            demoList = [];
+            updateOperationDemo();
+            animateOperation('List cleared!');
+        }
+
+        function multiplyList() {
+            demoList = [...demoList, ...demoList];
+            updateOperationDemo();
+            animateOperation('List multiplied by 2!');
+        }
+
+        function reverseList() {
+            demoList.reverse();
+            updateOperationDemo();
+            animateOperation('List reversed!');
+        }
+
+        function sortList() {
+            // Only sort if all elements are numbers
+            const allNumbers = demoList.every(item => typeof item === 'number');
+            if (allNumbers) {
+                demoList.sort((a, b) => a - b);
+                updateOperationDemo();
+                animateOperation('List sorted!');
+            } else {
+                animateOperation('Cannot sort mixed types', 'error');
+            }
+        }
+
+        function accessByIndex() {
+            const input = document.getElementById('indexInput');
+            const index = parseInt(input.value);
+            const testList = [10, 20, 30, 40];
+            
+            if (!isNaN(index)) {
+                let result;
+                let actualIndex = index;
+                
+                if (index >= 0 && index < testList.length) {
+                    result = `list[${index}] = ${testList[index]}`;
+                } else if (index < 0 && Math.abs(index) <= testList.length) {
+                    actualIndex = testList.length + index;
+                    result = `list[${index}] = list[${actualIndex}] = ${testList[actualIndex]}`;
+                } else {
+                    result = `IndexError: Index ${index} out of range`;
+                    document.getElementById('indexResult').innerHTML = result;
+                    document.getElementById('indexResult').style.display = 'block';
+                    return;
+                }
+
+                // Highlight the accessed element
+                const items = document.querySelectorAll('#indexDemo .list-item');
+                items.forEach((item, i) => {

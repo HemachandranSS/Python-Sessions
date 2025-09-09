@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Authorization Flows - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #2196F3;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: rgba(33, 150, 243, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #2196F3;
+            font-weight: bold;
+        }
+
+        .nav-tab.active::before {
+            width: 100%;
+            left: 0;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .flow-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .flow-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #2196F3;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .info-card h3 {
+            color: #2196F3;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .flow-diagram {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .step:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .step.animated {
+            animation: pulse 2s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #2196F3;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(5px); }
+        }
+
+        .participants {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .participant {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .participant::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .participant:hover::before {
+            left: 100%;
+        }
+
+        .participant.user {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .participant.auth-server {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+        }
+
+        .participant.resource-server {
+            background: linear-gradient(135deg, #9C27B0, #E91E63);
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .comparison-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(33, 150, 243, 0.05);
+        }
+
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2196F3, #21CBF3);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(33, 150, 243, 0.3);
+        }
+
+        .security-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            to { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
+        }
+
+        .warning-badge {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+        }
+
+        .danger-badge {
+            background: linear-gradient(135deg, #F44336, #E91E63);
+        }
+
+        .flow-animation {
+            position: relative;
+            height: 400px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .entity {
+            position: absolute;
+            width: 100px;
+            height: 80px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .entity:hover {
+            transform: scale(1.1);
+        }
+
+        .client {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            top: 50px;
+            left: 50px;
+        }
+
+        .auth-server {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+            top: 50px;
+            right: 200px;
+        }
+
+        .resource-server {
+            background: linear-gradient(135deg, #9C27B0, #E91E63);
+            top: 250px;
+            right: 50px;
+        }
+
+        .user {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            top: 250px;
+            left: 50px;
+        }
+
+        .message {
+            position: absolute;
+            background: #2196F3;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s ease;
+            z-index: 10;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .message::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-top-color: #2196F3;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros, .cons {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pros {
+            border-left: 5px solid #4CAF50;
+        }
+
+        .cons {
+            border-left: 5px solid #F44336;
+        }
+
+        .pros h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .cons h4 {
+            color: #F44336;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-example::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2196F3, #21CBF3, #2196F3);
+        }
+
+        .highlight {
+            background: rgba(33, 150, 243, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .version-timeline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .version {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .version.deprecated {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .version.active {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #4caf50;
+            transform: scale(1.1);
+        }
+
+        .version.draft {
+            background: #fff3e0;
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+
+        .version:hover {
+            transform: scale(1.15);
+        }
+
+        .timeline-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, #f44336, #4caf50, #ff9800);
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            z-index: -1;
+        }
+
+        .interactive-demo {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .indicator-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .indicator-step.active {
+            background: #2196F3;
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .indicator-step.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+            
+            .version-timeline {
+                flex-direction: column;
+            }
+            
+            .version {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 OAuth Authorization Flows</h1>
+            <p>Interactive Guide to Understanding OAuth 2.0 Security</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-tab" onclick="showSection('authorization-code')">Authorization Code</button>
+            <button class="nav-tab" onclick="showSection('implicit')">Implicit Grant</button>
+            <button class="nav-tab" onclick="showSection('client-credentials')">Client Credentials</button>
+            <button class="nav-tab" onclick="showSection('password')">Password Grant</button>
+            <button class="nav-tab" onclick="showSection('comparison')">Comparison</button>
+        </div>
+
+        <div class="content">
+            <!-- Overview Section -->
+            <div id="overview" class="flow-section active">
+                <h2>What is OAuth?</h2>
+                <p style="font-size: 1.1em; margin-bottom: 30px; line-height: 1.6;">
+                    OAuth (Open Authorization) is an open protocol that allows users to share their private resources 
+                    with third-party applications without exposing their credentials. Think of it as a secure way to 
+                    give limited access to your accounts.
+                </p>
+
+                <div class="version-timeline">
+                    <div class="timeline-line"></div>
+                    <div class="version deprecated" onclick="showVersionInfo('1.0')">
+                        <strong>OAuth 1.0</strong>
+                        <small>Deprecated</small>
+                    </div>
+                    <div class="version active" onclick="showVersionInfo('2.0')">
+                        <strong>OAuth 2.0</strong>
+                        <small>Current</small>
+                    </div>
+                    <div class="version draft" onclick="showVersionInfo('2.1')">
+                        <strong>OAuth 2.1</strong>
+                        <small>Draft</small>
+                    </div>
+                </div>
+
+                <div class="overview-grid">
+                    <div class="info-card">
+                        <h3>🎯 Purpose</h3>
+                        <p>OAuth solves the problem of sharing access without sharing passwords. Instead of giving your Twitter password to another app, OAuth lets you grant specific permissions safely.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🔑 Key Benefit</h3>
+                        <p>Users can revoke access at any time without changing their password. The third-party app never sees your actual credentials.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>⚡ Real-world Example</h3>
+                        <p>When you "Sign in with Google" on a website, that's OAuth in action. The website gets limited access to your Google account without your password.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🛡️ Security</h3>
+                        <p>OAuth uses tokens instead of passwords. Tokens can be scoped (limited permissions) and expire automatically for enhanced security.</p>
+                    </div>
+                </div>
+
+                <div class="participants">
+                    <div class="participant user">
+                        <h4>👤 User (Resource Owner)</h4>
+                        <p>The person who owns the protected resources and can grant access to them.</p>
+                    </div>
+                    <div class="participant">
+                        <h4>📱 Client Application</h4>
+                        <p>The third-party application requesting access to user's protected resources.</p>
+                    </div>
+                    <div class="participant auth-server">
+                        <h4>🔐 Authorization Server</h4>
+                        <p>Authenticates the user and issues access tokens after getting proper authorization.</p>
+                    </div>
+                    <div class="participant resource-server">
+                        <h4>🗄️ Resource Server</h4>
+                        <p>Hosts the protected user resources and accepts tokens to grant access.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authorization Code Flow -->
+            <div id="authorization-code" class="flow-section">
+                <h2>🔐 Authorization Code Grant Flow</h2>
+                <p style="margin-bottom: 20px;">The most secure and commonly used OAuth flow. Perfect for server-side applications.</p>
+                
+                <div class="security-badge">✅ Most Secure</div>
+                <div class="security-badge">✅ Recommended for Web Apps</div>
+                <div class="security-badge">✅ Uses PKCE for Enhanced Security</div>
+
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="btn" onclick="startAuthCodeDemo()">▶️ Start Demo</button>
+                        <button class="btn" onclick="resetDemo()">🔄 Reset</button>
+                    </div>
+                    
+                    <div class="step-indicator" id="auth-code-steps">
+                        <div class="indicator-step active">1</div>
+                        <div class="indicator-step">2</div>
+                        <div class="indicator-step">3</div>
+                        <div class="indicator-step">4</div>
+                        <div class="indicator-step">5</div>
+                        <div class="indicator-step">6</div>
+                    </div>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="step-container">
+                        <div class="step" id="step1">
+                            <div class="step-number">1</div>
+                            <strong>Authorization Request</strong>
+                            <p>Client redirects user to authorization server</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step" id="step2">
+                            <div class="step-number">2</div>
+                            <strong>User Authentication</strong>
+                            <p>User logs in and grants permissions</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step" id="step3">
+                            <div class="step-number">3</div>
+                            <strong>Authorization Code</strong>
+                            <p>Server returns authorization code to client</p>
+                        </div>
+                    </div>
+                    <div class="step-container">
+                        <div class="step" id="step4">
+                            <div class="step-number">4</div>
+                            <strong>Token Request</strong>
+                            <p>Client exchanges code for access token</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step" id="step5">
+                            <div class="step-number">5</div>
+                            <strong>Token Response</strong>
+                            <p>Server validates and returns access token</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step" id="step6">
+                            <div class="step-number">6</div>
+                            <strong>Resource Access</strong>
+                            <p>Client uses token to access protected resources</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <h4>Example Authorization URL:</h4>
+                    <pre><code>https://auth.example.com/oauth/authorize?
+  response_type=<span class="highlight">code</span>&
+  client_id=<span class="highlight">your_client_id</span>&
+  redirect_uri=<span class="highlight">https://yourapp.com/callback</span>&
+  scope=<span class="highlight">read_profile write_posts</span>&
+  state=<span class="highlight">random_string_for_security</span></code></pre>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul>
+                            <li>Most secure OAuth flow</li>
+                            <li>Client secret never exposed to user</li>
+                            <li>Short-lived authorization codes</li>
+                            <li>Supports refresh tokens</li>
+                            <li>PKCE enhances security for public clients</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul>
+                            <li>Requires server-side implementation</li>
+                            <li>More complex than implicit flow</li>
+                            <li>Requires secure client credential storage</li>
+                            <li>Multiple round trips increase latency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implicit Grant Flow -->
+            <div id="implicit" class="flow-section">
+                <h2>⚡ Implicit Grant Flow</h2>
+                <p style="margin-bottom: 20px;">Simplified flow for single-page applications, but now considered less secure.</p>
+                
+                <div class="warning-badge">⚠️ Security Concerns</div>
+                <div class="warning-badge">⚠️ Being Phased Out</div>
+                <div class="security-badge">✅ Simple Implementation</div>
+
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="btn" onclick="startImplicitDemo()">▶️ Start Demo</button>
+                        <button class="btn" onclick="resetDemo()">🔄 Reset</button>
+                    </div>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="step-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <strong>Authorization Request</strong>
+                            <p>Client redirects user to authorization server</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <strong>User Authentication</strong>
+                            <p>User logs in and grants permissions</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <strong>Direct Token</strong>
+                            <p>Server returns access token directly in URL fragment</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <h4>Example Response URL:</h4>
+                    <pre><code>https://yourapp.com/callback#
+  access_token=<span class="highlight">2YotnFZFEjr1zCsicMWpAA</span>&
+  token_type=<span class="highlight">Bearer</span>&
+  expires_in=<span class="highlight">3600</span>&
+  scope=<span class="highlight">read_profile</span>&
+  state=<span class="highlight">random_string_for_security</span></code></pre>
+                </div>
+
+                <div class="info-card" style="background: #ffebee; border-left-color: #f44336;">
+                    <h3>⚠️ Why It's Being Deprecated</h3>
+                    <p>The implicit flow has several security vulnerabilities:</p>
+                    <ul style="margin-top: 10px;">
+                        <li>Tokens exposed in browser history and referrer headers</li>
+                        <li>No client authentication</li>
+                        <li>Vulnerable to token interception attacks</li>
+                        <li>No refresh token support</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-weight: bold;">
+                        Recommendation: Use Authorization Code flow with PKCE instead.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Client Credentials Flow -->
+            <div id="client-credentials" class="flow-section">
+                <h2>🤖 Client Credentials Grant Flow</h2>
+                <p style="margin-bottom: 20px;">For machine-to-machine authentication where no user interaction is required.</p>
+                
+                <div class="security-badge">✅ Server-to-Server</div>
+                <div class="security-badge">✅ No User Interaction</div>
+                <div class="security-badge">✅ Simple & Direct</div>
+
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="btn" onclick="startClientCredsDemo()">▶️ Start Demo</button>
+                        <button class="btn" onclick="resetDemo()">🔄 Reset</button>
+                    </div>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="step-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <strong>Client Authentication</strong>
+                            <p>Client sends credentials to authorization server</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <strong>Token Response</strong>
+                            <p>Server validates credentials and returns access token</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <strong>Resource Access</strong>
+                            <p>Client uses token to access protected resources</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <h4>Example Token Request:</h4>
+                    <pre><code>POST /oauth/token HTTP/1.1
+Host: auth.example.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=<span class="highlight">client_credentials</span>&
+client_id=<span class="highlight">your_client_id</span>&
+client_secret=<span class="highlight">your_client_secret</span>&
+scope=<span class="highlight">api_access</span></code></pre>
+                </div>
+
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h4>✅ Advantages</h4>
+                        <ul>
+                            <li>Simple and straightforward</li>
+                            <li>No user interaction required</li>
+                            <li>Perfect for background services</li>
+                            <li>Fast token acquisition</li>
+                            <li>Suitable for trusted applications</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>❌ Disadvantages</h4>
+                        <ul>
+                            <li>No user context or permissions</li>
+                            <li>Requires secure credential storage</li>
+                            <li>Limited to application-level access</li>
+                            <li>Not suitable for user-specific data</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>🎯 Perfect Use Cases</h3>
+                    <ul>
+                        <li><strong>API integrations:</strong> Microservices communicating with each other</li>
+                        <li><strong>Background jobs:</strong> Scheduled tasks that need API access</li>
+                        <li><strong>Server monitoring:</strong> Health checks and status updates</li>
+                        <li><strong>Data synchronization:</strong> Automated data transfers between systems</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Password Grant Flow -->
+            <div id="password" class="flow-section">
+                <h2>🔑 Password Grant Flow</h2>
+                <p style="margin-bottom: 20px;">Direct credential exchange - only for highly trusted applications.</p>
+                
+                <div class="danger-badge">⚠️ High Trust Required</div>
+                <div class="danger-badge">⚠️ Use Sparingly</div>
+                <div class="security-badge">✅ Legacy Support</div>
+
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="btn" onclick="startPasswordDemo()">▶️ Start Demo</button>
+                        <button class="btn" onclick="resetDemo()">🔄 Reset</button>
+                    </div>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="step-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <strong>Credential Collection</strong>
+                            <p>User enters username/password in client app</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <strong>Token Exchange</strong>
+                            <p>Client sends credentials directly to auth server</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <strong>Access Granted</strong>
+                            <p>Server returns access token if credentials valid</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card" style="background: #ffebee; border-left-color: #f44336;">
+                    <h3>⚠️ Security Warning</h3>
+                    <p>This flow requires the user to trust the client application with their actual credentials. Use only when:</p>
+                    <ul style="margin-top: 10px;">
+                        <li>The client is highly trusted (first-party application)</li>
+                        <li>Other flows are not feasible</li>
+                        <li>Legacy system integration requirements</li>
+                        <li>Mobile apps from the same organization</li>
+                    </ul>
+                </div>
+
+                <div class="code-example">
+                    <h4>Example Token Request:</h4>
+                    <pre><code>POST /oauth/token HTTP/1.1
+Host: auth.example.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=<span class="highlight">password</span>&
+username=<span class="highlight">user@example.com</span>&
+password=<span class="highlight">user_password</span>&
+client_id=<span class="highlight">your_client_id</span>&
+client_secret=<span class="highlight">your_client_secret</span>&
+scope=<span class="highlight">read write</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Comparison Section -->
+            <div id="comparison" class="flow-section">
+                <h2>📊 Flow Comparison & Best Practices</h2>
+                
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Flow Type</th>
+                                <th>Security Level</th>
+                                <th>Use Case</th>
+                                <th>Client Type</th>
+                                <th>User Interaction</th>
+                                <th>Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Authorization Code</strong></td>
+                                <td><span class="security-badge">High</span></td>
+                                <td>Web applications</td>
+                                <td>Confidential</td>
+                                <td>Required</td>
+                                <td><span class="security-badge">✅ Recommended</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Implicit</strong></td>
+                                <td><span class="warning-badge">Medium</span></td>
+                                <td>SPAs (legacy)</td>
+                                <td>Public</td>
+                                <td>Required</td>
+                                <td><span class="danger-badge">❌ Deprecated</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Client Credentials</strong></td>
+                                <td><span class="security-badge">High</span></td>
+                                <td>Machine-to-machine</td>
+                                <td>Confidential</td>
+                                <td>None</td>
+                                <td><span class="security-badge">✅ For M2M</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Password</strong></td>
+                                <td><span class="danger-badge">Low</span></td>
+                                <td>Trusted first-party</td>
+                                <td>Any</td>
+                                <td>Required</td>
+                                <td><span class="warning-badge">⚠️ Use Carefully</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="overview-grid">
+                    <div class="info-card">
+                        <h3>🎯 Choosing the Right Flow</h3>
+                        <ul>
+                            <li><strong>Web Apps:</strong> Authorization Code + PKCE</li>
+                            <li><strong>SPAs:</strong> Authorization Code + PKCE</li>
+                            <li><strong>Mobile Apps:</strong> Authorization Code + PKCE</li>
+                            <li><strong>APIs/Services:</strong> Client Credentials</li>
+                            <li><strong>Legacy Systems:</strong> Password (if absolutely necessary)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🛡️ Security Best Practices</h3>
+                        <ul>
+                            <li>Always use HTTPS in production</li>
+                            <li>Implement proper state parameter validation</li>
+                            <li>Use short-lived access tokens</li>
+                            <li>Implement token refresh mechanisms</li>
+                            <li>Validate redirect URIs strictly</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🔄 Token Management</h3>
+                        <ul>
+                            <li>Store tokens securely (never in localStorage for sensitive apps)</li>
+                            <li>Implement automatic token refresh</li>
+                            <li>Handle token expiration gracefully</li>
+                            <li>Provide token revocation mechanisms</li>
+                            <li>Use appropriate token scopes</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📈 Modern Trends</h3>
+                        <ul>
+                            <li>OAuth 2.1 consolidates best practices</li>
+                            <li>PKCE is now recommended for all flows</li>
+                            <li>Implicit flow is being deprecated</li>
+                            <li>Zero Trust architecture adoption</li>
+                            <li>Enhanced security with biometric authentication</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card" style="background: linear-gradient(135deg, #e8f5e8, #f1f8e9); border-left-color: #4caf50;">
+                    <h3>🚀 OAuth 2.1 Key Changes</h3>
+                    <p>OAuth 2.1 is a consolidation of OAuth 2.0 with security best practices:</p>
+                    <ul style="margin-top: 15px;">
+                        <li><strong>PKCE required</strong> for all authorization code flows</li>
+                        <li><strong>Implicit flow removed</strong> - use authorization code instead</li>
+                        <li><strong>Resource Owner Password flow discouraged</strong></li>
+                        <li><strong>Redirect URI matching</strong> must be exact</li>
+                        <li><strong>Enhanced security</strong> recommendations throughout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let demoInterval;
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.flow-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update tab states
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reset any running demos
+            resetDemo();
+        }
+
+        function startAuthCodeDemo() {
+            resetDemo();
+            const steps = document.querySelectorAll('#authorization-code .step');
+            const indicators = document.querySelectorAll('#auth-code-steps .indicator-step');
+            
+            let stepIndex = 0;
+            demoInterval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    // Animate current step
+                    steps[stepIndex].classList.add('animated');
+                    indicators[stepIndex].classList.add('active');
+                    
+                    // Mark previous steps as completed
+                    if (stepIndex > 0) {
+                        indicators[stepIndex - 1].classList.remove('active');
+                        indicators[stepIndex - 1].classList.add('completed');
+                    }
+                    
+                    // Show completion message
+                    if (stepIndex === steps.length - 1) {
+                        setTimeout(() => {
+                            showMessage('🎉 Authorization Code Flow Complete! Token acquired securely.');
+                        }, 1000);
+                    }
+                    
+                    stepIndex++;
+                } else {
+                    clearInterval(demoInterval);
+                    setTimeout(resetDemo, 3000);
+                }
+            }, 1500);
+        }
+
+        function startImplicitDemo() {
+            resetDemo();
+            showMessage('⚠️ Starting Implicit Flow Demo - Note: This flow is deprecated due to security concerns');
+            
+            setTimeout(() => {
+                const steps = document.querySelectorAll('#implicit .step');
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.classList.add('animated');
+                        if (index === steps.length - 1) {
+                            setTimeout(() => {
+                                showMessage('⚠️ Token exposed in URL - Security risk! Use Authorization Code instead.');
+                            }, 500);
+                        }
+                    }, index * 1500);
+                });
+            }, 1000);
+        }
+
+        function startClientCredsDemo() {
+            resetDemo();
+            showMessage('🤖 Starting Client Credentials Flow - Machine to Machine Authentication');
+            
+            setTimeout(() => {
+                const steps = document.querySelectorAll('#client-credentials .step');
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.classList.add('animated');
+                        if (index === steps.length - 1) {
+                            setTimeout(() => {
+                                showMessage('✅ Client Credentials Flow Complete! Perfect for server-to-server communication.');
+                            }, 500);
+                        }
+                    }, index * 1200);
+                });
+            }, 1000);
+        }
+
+        function startPasswordDemo() {
+            resetDemo();
+            showMessage('⚠️ Password Grant Flow - High trust required! Use only for first-party applications.');
+            
+            setTimeout(() => {
+                const steps = document.querySelectorAll('#password .step');
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.classList.add('animated');
+                        if (index === steps.length - 1) {
+                            setTimeout(() => {
+                                showMessage('⚠️ Credentials exposed to client app - Consider other flows when possible.');
+                            }, 500);
+                        }
+                    }, index * 1200);
+                });
+            }, 1000);
+        }
+
+        function resetDemo() {
+            clearInterval(demoInterval);
+            
+            // Reset all animations
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('animated');
+            });
+            
+            // Reset indicators
+            document.querySelectorAll('.indicator-step').forEach((indicator, index) => {
+                indicator.classList.remove('active', 'completed');
+                if (index === 0) {
+                    indicator.classList.add('active');
+                }
+            });
+            
+            // Hide messages
+            hideMessage();
+            currentStep = 0;
+        }
+
+        function showMessage(text) {
+            // Remove existing message
+            const existingMessage = document.querySelector('.floating-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const message = document.createElement('div');
+            message.className = 'floating-message';
+            message.textContent = text;
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2196F3;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(33, 150, 243, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.5s ease-out;
+                max-width: 300px;
+                font-weight: bold;
+            `;
+            
+            document.body.appendChild(message);
+            
+            // Auto hide after 4 seconds
+            setTimeout(hideMessage, 4000);
+        }
+
+        function hideMessage() {
+            const message = document.querySelector('.floating-message');
+            if (message) {
+                message.style.animation = 'slideOut 0.5s ease-in';
+                setTimeout(() => message.remove(), 500);
+            }
+        }
+
+        function showVersionInfo(version) {
+            let info = '';
+            switch(version) {
+                case '1.0':
+                    info = 'OAuth 1.0: Original specification from 2010. Deprecated due to complexity and security issues. Required cryptographic signatures for all requests.';
+                    break;
+                case '2.0':
+                    info = 'OAuth 2.0: Current standard since 2012. Simplified implementation, relies on HTTPS for security. Multiple grant types for different use cases.';
+                    break;
+                case '2.1':
+                    info = 'OAuth 2.1: Draft specification that consolidates OAuth 2.0 with security best practices. Mandates PKCE and removes less secure flows.';
+                    break;
+            }
+            showMessage(info);
+        }
+
+        // Add CSS animations for messages
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            showMessage('🚀 Welcome to the Interactive OAuth Guide! Click on any demo to see the flows in action.');
+        });
+
+        // Add interactive hover effects for code examples
+        document.querySelectorAll('.highlight').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.background = 'rgba(33, 150, 243, 0.4)';
+                element.style.transform = 'scale(1.05)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.background = 'rgba(33, 150, 243, 0.2)';
+                element.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add click events to participants for additional info
+        document.querySelectorAll('.participant').forEach(participant => {
+            participant.addEventListener('click', () => {
+                const role = participant.querySelector('h4').textContent;
+                let info = '';
+                
+                if (role.includes('User')) {
+                    info = 'The Resource Owner controls access to their protected resources. They decide which permissions to grant to applications.';
+                } else if (role.includes('Client')) {
+                    info = 'The Client Application requests access to user resources. Must be registered with the authorization server.';
+                } else if (role.includes('Authorization')) {
+                    info = 'The Authorization Server authenticates users and issues access tokens. Often the same as the resource server.';
+                } else if (role.includes('Resource')) {
+                    info = 'The Resource Server hosts protected user data and validates access tokens before granting access.';
+                }
+                
+                showMessage(info);
+            });
+        });
+    </script>
+</body>
+</html>

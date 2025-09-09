@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART on FHIR OAuth Flow - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🏥';
+            position: absolute;
+            font-size: 6em;
+            opacity: 0.1;
+            top: -20px;
+            right: -20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scenario-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .scenario-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 4px;
+            background: #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-tab:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .scenario-tab.active {
+            color: #4CAF50;
+        }
+
+        .scenario-tab.active::before {
+            width: 100%;
+            left: 0;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .scenario-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .scenario-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .analogy-section {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #FF9800;
+        }
+
+        .analogy-section h3 {
+            color: #FF6F00;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .analogy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .analogy-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tech-side {
+            border-left: 4px solid #2196F3;
+        }
+
+        .analogy-side {
+            border-left: 4px solid #FF9800;
+        }
+
+        .flow-diagram {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .step.animated {
+            animation: highlightStep 2s ease-in-out;
+        }
+
+        @keyframes highlightStep {
+            0%, 100% { transform: scale(1); }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 15px 35px rgba(76, 175, 80, 0.5);
+            }
+        }
+
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .step-content {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(100% - 50px);
+        }
+
+        .step-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 0.95em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .participants {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .participant {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .participant::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .participant:hover::before {
+            left: 100%;
+        }
+
+        .participant:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .participant-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .provider {
+            border-top: 4px solid #2196F3;
+        }
+
+        .epic {
+            border-top: 4px solid #4CAF50;
+        }
+
+        .app {
+            border-top: 4px solid #FF9800;
+        }
+
+        .patient {
+            border-top: 4px solid #9C27B0;
+        }
+
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn.reset {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+        }
+
+        .key-insight {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+
+        .key-insight h3 {
+            color: #1976D2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .difference-highlight {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #FFC107;
+        }
+
+        .comparison-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logged-in {
+            border-top: 4px solid #4CAF50;
+        }
+
+        .not-logged-in {
+            border-top: 4px solid #FF9800;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .logged-in-status {
+            background: #E8F5E8;
+            color: #2E7D32;
+            border: 2px solid #4CAF50;
+        }
+
+        .not-logged-in-status {
+            background: #FFF3E0;
+            color: #E65100;
+            border: 2px solid #FF9800;
+        }
+
+        .sequence-animation {
+            position: relative;
+            height: 500px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .entity {
+            position: absolute;
+            width: 120px;
+            height: 80px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .entity:hover {
+            transform: scale(1.1);
+        }
+
+        .provider-entity {
+            background: linear-gradient(135deg, #2196F3, #42A5F5);
+            top: 50px;
+            left: 30px;
+        }
+
+        .epic-entity {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            top: 50px;
+            left: 200px;
+        }
+
+        .app-entity {
+            background: linear-gradient(135deg, #FF9800, #FFB74D);
+            top: 50px;
+            left: 370px;
+        }
+
+        .patient-entity {
+            background: linear-gradient(135deg, #9C27B0, #BA68C8);
+            top: 200px;
+            left: 200px;
+        }
+
+        .message-arrow {
+            position: absolute;
+            height: 3px;
+            background: #4CAF50;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .message-arrow.show {
+            opacity: 1;
+        }
+
+        .message-arrow::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: -5px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-left-color: #4CAF50;
+        }
+
+        .message-label {
+            position: absolute;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.5s ease;
+        }
+
+        .message-label.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .code-block {
+            background: #263238;
+            color: #ECEFF1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        }
+
+        .code-highlight {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .analogy-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .participants {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .sequence-animation {
+                height: 600px;
+            }
+            
+            .entity {
+                width: 100px;
+                height: 70px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 SMART on FHIR OAuth Flow</h1>
+            <p>Understanding Authorization When Provider is Already Logged In</p>
+        </div>
+
+        <div class="scenario-tabs">
+            <button class="scenario-tab active" onclick="showScenario('logged-in')">🟢 Provider Already Logged In</button>
+            <button class="scenario-tab" onclick="showScenario('not-logged-in')">🟡 Provider Not Logged In</button>
+            <button class="scenario-tab" onclick="showScenario('comparison')">⚖️ Side-by-Side Comparison</button>
+        </div>
+
+        <div class="content">
+            <!-- Provider Already Logged In Scenario -->
+            <div id="logged-in" class="scenario-content active">
+                <div class="analogy-section">
+                    <h3>🏨 Hospital Badge Analogy</h3>
+                    <div class="analogy-grid">
+                        <div class="analogy-card analogy-side">
+                            <h4>🏥 Real World</h4>
+                            <p><strong>Dr. Smith is already wearing his hospital badge</strong> and working at his computer. A new medical app needs access to patient John's records. Instead of asking Dr. Smith to show his ID again, the hospital security system recognizes him and just asks: <em>"Do you want to give this app access to John's data?"</em></p>
+                        </div>
+                        <div class="analogy-card tech-side">
+                            <h4>💻 Technical Reality</h4>
+                            <p><strong>Provider is logged into Epic EHR</strong> with an active session. When a SMART app launches, Epic recognizes the existing session and skips the login screen, going straight to the authorization/consent step (if required).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="participants">
+                    <div class="participant provider">
+                        <div class="participant-icon">👨‍⚕️</div>
+                        <h4>Dr. Smith (Provider)</h4>
+                        <div class="status-indicator logged-in-status">✅ Already Logged In</div>
+                        <p>Working in Epic, treating Patient John</p>
+                    </div>
+                    <div class="participant epic">
+                        <div class="participant-icon">🏥</div>
+                        <h4>Epic EHR System</h4>
+                        <div class="status-indicator logged-in-status">✅ Session Active</div>
+                        <p>Knows provider identity & patient context</p>
+                    </div>
+                    <div class="participant app">
+                        <div class="participant-icon">📱</div>
+                        <h4>SMART App</h4>
+                        <div class="status-indicator">🔄 Requesting Access</div>
+                        <p>Needs patient data for clinical decision</p>
+                    </div>
+                    <div class="participant patient">
+                        <div class="participant-icon">🤒</div>
+                        <h4>Patient John</h4>
+                        <div class="status-indicator">📋 Current Patient</div>
+                        <p>Data subject in current encounter</p>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <h3>🎬 Interactive Demo</h3>
+                    <button class="btn" onclick="startLoggedInDemo()">▶️ Start Flow Demonstration</button>
+                    <button class="btn reset" onclick="resetDemo()">🔄 Reset</button>
+                </div>
+
+                <div class="flow-diagram">
+                    <h3>🔄 SMART on FHIR Flow (Provider Already Logged In)</h3>
+                    
+                    <div class="step" id="step1-logged">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">🏥 Provider Session Exists</div>
+                            <div class="step-description">
+                                Dr. Smith is logged into Epic EHR, viewing Patient John's chart. Epic knows:
+                                • Provider identity (Dr. Smith)
+                                • Current patient context (John's ID) 
+                                • Current encounter context
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step2-logged">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">🚀 EHR Launch</div>
+                            <div class="step-description">
+                                Epic launches the SMART app with launch parameters:
+                                • <code>iss=https://epic.hospital.com/fhir</code> (FHIR base URL)
+                                • <code>launch=abc123token</code> (context token containing patient/encounter info)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step3-logged">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">🔐 Authorization Request</div>
+                            <div class="step-description">
+                                SMART app builds OAuth request and redirects to Epic's authorization endpoint with:
+                                • PKCE challenge • Launch token • Requested scopes (patient/Encounter.read, etc.)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step4-logged">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">✅ Session Detection (Key Difference!)</div>
+                            <div class="step-description">
+                                Epic detects Dr. Smith's active session and <strong>skips the login screen</strong>! 
+                                May show consent screen if scopes require explicit approval, otherwise redirects immediately.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step5-logged">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">🎟️ Authorization Code</div>
+                            <div class="step-description">
+                                Epic redirects back to the SMART app with:
+                                • Authorization code • State parameter (for security)
+                                This happens almost instantly due to existing session!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step6-logged">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-title">🔄 Token Exchange</div>
+                            <div class="step-description">
+                                SMART app exchanges authorization code for access token using PKCE verifier.
+                                Receives access token + patient/encounter context information.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step7-logged">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-title">📊 Access Patient Data</div>
+                            <div class="step-description">
+                                SMART app uses access token to fetch Patient John's data:
+                                • <code>GET /Patient/{john-id}</code>
+                                • <code>GET /Encounter/{encounter-id}</code>
+                                • Other FHIR resources as authorized
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-insight">
+                    <h3>🔑 Key Insight: The SSO Effect</h3>
+                    <p>When the provider is already logged in, the OAuth flow feels <strong>seamless</strong> because:</p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li><strong>No password prompts</strong> - Epic reuses the existing authenticated session</li>
+                        <li><strong>Context is preserved</strong> - Patient and encounter information flows automatically</li>
+                        <li><strong>Faster authorization</strong> - Skips the most time-consuming step (user login)</li>
+                        <li><strong>Better user experience</strong> - Feels like a native EHR feature rather than external authentication</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <strong>Example Authorization Request URL:</strong><br><br>
+https://epic.hospital.com/oauth2/authorize?<br>
+&nbsp;&nbsp;<span class="code-highlight">response_type=code</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">client_id=smart-app-123</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">redirect_uri=https://smartapp.com/callback</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">scope=launch/patient patient/Encounter.read openid fhirUser</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">state=random-security-string</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">aud=https://epic.hospital.com/fhir</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">launch=abc123token</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">code_challenge=pkce-challenge</span>&<br>
+&nbsp;&nbsp;<span class="code-highlight">code_challenge_method=S256</span>
+                </div>
+            </div>
+
+            <!-- Provider Not Logged In Scenario -->
+            <div id="not-logged-in" class="scenario-content">
+                <div class="analogy-section">
+                    <h3>🏨 Hospital Security Check Analogy</h3>
+                    <div class="analogy-grid">
+                        <div class="analogy-card analogy-side">
+                            <h4>🏥 Real World</h4>
+                            <p><strong>Dr. Smith arrives at the hospital without his badge.</strong> When he tries to access a patient's records through a medical app, security first asks him to show his ID and prove he's authorized to be there. Only after verification can he access the patient data.</p>
+                        </div>
+                        <div class="analogy-card tech-side">
+                            <h4>💻 Technical Reality</h4>
+                            <p><strong>Provider has no active Epic session.</strong> When the SMART app launches, Epic must first authenticate the provider (username/password or SSO) before proceeding with the OAuth authorization flow.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="participants">
+                    <div class="participant provider">
+                        <div class="participant-icon">👨‍⚕️</div>
+                        <h4>Dr. Smith (Provider)</h4>
+                        <div class="status-indicator not-logged-in-status">❌ Not Logged In</div>
+                        <p>Needs to authenticate first</p>
+                    </div>
+                    <div class="participant epic">
+                        <div class="participant-icon">🏥</div>
+                        <h4>Epic EHR System</h4>
+                        <div class="status-indicator not-logged-in-status">❓ Unknown User</div>
+                        <p>Must verify provider identity</p>
+                    </div>
+                    <div class="participant app">
+                        <div class="participant-icon">📱</div>
+                        <h4>SMART App</h4>
+                        <div class="status-indicator">⏳ Waiting for Auth</div>
+                        <p>Cannot proceed without authentication</p>
+                    </div>
+                    <div class="participant patient">
+                        <div class="participant-icon">🤒</div>
+                        <h4>Patient John</h4>
+                        <div class="status-indicator">🔒 Protected</div>
+                        <p>Data inaccessible until provider verified</p>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <h3>🎬 Interactive Demo</h3>
+                    <button class="btn" onclick="startNotLoggedInDemo()">▶️ Start Flow Demonstration</button>
+                    <button class="btn reset" onclick="resetDemo()">🔄 Reset</button>
+                </div>
+
+                <div class="flow-diagram">
+                    <h3>🔄 SMART on FHIR Flow (Provider Not Logged In)</h3>
+                    
+                    <div class="step" id="step1-not-logged">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">❌ No Active Session</div>
+                            <div class="step-description">
+                                Dr. Smith is not logged into Epic. The EHR system has no knowledge of the provider's identity or current patient context.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step2-not-logged">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">🚀 EHR Launch (Limited)</div>
+                            <div class="step-description">
+                                Epic may launch the SMART app, but without full context:
+                                • <code>iss=https://epic.hospital.com/fhir</code>
+                                • Launch token may be limited or absent
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step3-not-logged">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">🔐 Authorization Request</div>
+                            <div class="step-description">
+                                SMART app builds OAuth request and redirects to Epic's authorization endpoint
+                                (same as logged-in scenario)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step4-not-logged">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">🔑 Login Required (Key Difference!)</div>
+                            <div class="step-description">
+                                Epic detects NO active session and <strong>shows login screen first</strong>!
+                                Dr. Smith must enter username/password or use SSO before proceeding.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step5-not-logged">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">✅ Authentication Complete</div>
+                            <div class="step-description">
+                                After successful login, Epic establishes the provider's session and identity.
+                                Now Epic knows who Dr. Smith is and his permissions.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step6-not-logged">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-title">📋 Consent/Authorization</div>
+                            <div class="step-description">
+                                Epic may show consent screen for the requested scopes.
+                                Provider approves access to patient data for the SMART app.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step7-not-logged">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-title">🎟️ Authorization Code</div>
+                            <div class="step-description">
+                                Epic redirects back to SMART app with authorization code and state parameter.
+                                This step is identical to the logged-in scenario, but took longer to reach.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step8-not-logged">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <div class="step-title">🔄 Token Exchange</div>
+                            <div class="step-description">
+                                SMART app exchanges authorization code for access token using PKCE verifier.
+                                (Same as logged-in scenario)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step" id="step9-not-logged">
+                        <div class="step-number">9</div>
+                        <div class="step-content">
+                            <div class="step-title">📊 Access Patient Data</div>
+                            <div class="step-description">
+                                SMART app uses access token to fetch patient data.
+                                Final outcome is the same, but the journey was longer!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="difference-highlight">
+                    <h4>⏱️ Time & User Experience Impact</h4>
+                    <p>When the provider isn't logged in, the flow takes <strong>significantly longer</strong> because:</p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li><strong>Additional authentication step</strong> - User must enter credentials</li>
+                        <li><strong>Context loss risk</strong> - May lose current patient/encounter context</li>
+                        <li><strong>Workflow interruption</strong> - Provider must stop current task to authenticate</li>
+                        <li><strong>Security friction</strong> - Additional verification steps slow down the process</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Comparison Section -->
+            <div id="comparison" class="scenario-content">
+                <h2>⚖️ Side-by-Side Comparison</h2>
+                
+                <div class="comparison-cards">
+                    <div class="comparison-card logged-in">
+                        <h3>🟢 Provider Already Logged In</h3>
+                        <div class="status-indicator logged-in-status">✅ Seamless Experience</div>
+                        
+                        <h4>Flow Steps:</h4>
+                        <ol style="padding-left: 20px; margin: 15px 0;">
+                            <li>Session exists ✅</li>
+                            <li>EHR launch with context ✅</li>
+                            <li>OAuth request ✅</li>
+                            <li><strong>Login skipped</strong> ⚡</li>
+                            <li>Authorization code returned ✅</li>
+                            <li>Token exchange ✅</li>
+                            <li>Data access ✅</li>
+                        </ol>
+
+                        <h4>Characteristics:</h4>
+                        <ul style="padding-left: 20px; margin: 15px 0;">
+                            <li><strong>Time:</strong> ~2-5 seconds</li>
+                            <li><strong>User interaction:</strong> Minimal/none</li>
+                            <li><strong>Context preservation:</strong> Perfect</li>
+                            <li><strong>Workflow disruption:</strong> None</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-card not-logged-in">
+                        <h3>🟡 Provider Not Logged In</h3>
+                        <div class="status-indicator not-logged-in-status">⏳ Authentication Required</div>
+                        
+                        <h4>Flow Steps:</h4>
+                        <ol style="padding-left: 20px; margin: 15px 0;">
+                            <li>No session ❌</li>
+                            <li>EHR launch (limited context) ⚠️</li>
+                            <li>OAuth request ✅</li>
+                            <li><strong>Login screen shown</strong> 🔑</li>
+                            <li>Authentication required 🔐</li>
+                            <li>Consent/authorization ✅</li>
+                            <li>Authorization code returned ✅</li>
+                            <li>Token exchange ✅</li>
+                            <li>Data access ✅</li>
+                        </ol>
+
+                        <h4>Characteristics:</h4>
+                        <ul style="padding-left: 20px; margin: 15px 0;">
+                            <li><strong>Time:</strong> ~30-60 seconds</li>
+                            <li><strong>User interaction:</strong> Username/password</li>
+                            <li><strong>Context preservation:</strong> May be lost</li>
+                            <li><strong>Workflow disruption:</strong> Significant</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="analogy-section">
+                    <h3>🏨 Complete Hospital Analogy Comparison</h3>
+                    
+                    <div class="analogy-grid">
+                        <div class="analogy-card analogy-side">
+                            <h4>🟢 Badge Already On (Logged In)</h4>
+                            <p><strong>Scenario:</strong> Dr. Smith is at his workstation, badge visible, treating Patient John. A new diagnostic app needs John's lab results.</p>
+                            <p><strong>Process:</strong> Security guard sees the badge, recognizes Dr. Smith, and immediately asks: <em>"This app wants John's lab data. Approve?"</em> Dr. Smith clicks "Yes" and gets instant access.</p>
+                            <p><strong>Result:</strong> ⚡ 5-second process, no workflow interruption</p>
+                        </div>
+                        <div class="analogy-card analogy-side">
+                            <h4>🟡 No Badge (Not Logged In)</h4>
+                            <p><strong>Scenario:</strong> Dr. Smith arrives at the hospital, no badge visible, wants to use the same diagnostic app for Patient John.</p>
+                            <p><strong>Process:</strong> Security guard stops him: <em>"Show me your ID first."</em> Dr. Smith finds his badge, scans it, enters PIN, proves identity, then gets asked about app permissions.</p>
+                            <p><strong>Result:</strong> ⏳ 60-second process, significant interruption</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-insight">
+                    <h3>🎯 Why This Matters in Clinical Practice</h3>
+                    <p>The difference between these scenarios significantly impacts healthcare delivery:</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                        <div>
+                            <h4>✅ When Provider is Logged In:</h4>
+                            <ul style="padding-left: 20px;">
+                                <li><strong>Seamless integration</strong> - Apps feel like native EHR features</li>
+                                <li><strong>No workflow interruption</strong> - Clinical decision-making continues</li>
+                                <li><strong>Better patient care</strong> - Providers can access tools instantly</li>
+                                <li><strong>Context preserved</strong> - Patient and encounter data flows automatically</li>
+                                <li><strong>Higher adoption</strong> - No friction means providers actually use the apps</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>⚠️ When Provider Must Log In:</h4>
+                            <ul style="padding-left: 20px;">
+                                <li><strong>Workflow disruption</strong> - Must stop to authenticate</li>
+                                <li><strong>Context switching</strong> - May lose focus on current patient</li>
+                                <li><strong>Time pressure</strong> - Additional delays in urgent situations</li>
+                                <li><strong>User frustration</strong> - Authentication fatigue leads to workarounds</li>
+                                <li><strong>Lower adoption</strong> - Friction discourages app usage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <h3>🎬 Compare Both Flows</h3>
+                    <button class="btn" onclick="startComparisonDemo()">▶️ Run Side-by-Side Demo</button>
+                    <button class="btn reset" onclick="resetDemo()">🔄 Reset</button>
+                </div>
+
+                <div class="difference-highlight">
+                    <h4>🔧 Technical Implementation Notes</h4>
+                    <p>For developers implementing SMART on FHIR apps:</p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li><strong>Session detection:</strong> Epic automatically detects active provider sessions</li>
+                        <li><strong>Launch context:</strong> The launch token contains patient/encounter IDs when provider is logged in</li>
+                        <li><strong>Error handling:</strong> Apps should gracefully handle both scenarios</li>
+                        <li><strong>User feedback:</strong> Show loading states during authentication flows</li>
+                        <li><strong>Context recovery:</strong> Store minimal state to recover from authentication interruptions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let demoInterval;
+        let currentDemo = null;
+
+        function showScenario(scenarioId) {
+            // Hide all scenarios
+            document.querySelectorAll('.scenario-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected scenario
+            document.getElementById(scenarioId).classList.add('active');
+            
+            // Update tab states
+            document.querySelectorAll('.scenario-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reset any running demos
+            resetDemo();
+        }
+
+        function startLoggedInDemo() {
+            resetDemo();
+            currentDemo = 'logged-in';
+            
+            showFloatingMessage('🟢 Starting demo: Provider already logged in to Epic');
+            
+            const steps = [
+                'step1-logged', 'step2-logged', 'step3-logged', 
+                'step4-logged', 'step5-logged', 'step6-logged', 'step7-logged'
+            ];
+            
+            let stepIndex = 0;
+            demoInterval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    const step = document.getElementById(steps[stepIndex]);
+                    if (step) {
+                        step.classList.add('animated');
+                        
+                        // Special message for the key difference step
+                        if (steps[stepIndex] === 'step4-logged') {
+                            setTimeout(() => {
+                                showFloatingMessage('⚡ Key Advantage: Login screen skipped! Seamless user experience.');
+                            }, 1000);
+                        }
+                        
+                        // Completion message
+                        if (stepIndex === steps.length - 1) {
+                            setTimeout(() => {
+                                showFloatingMessage('🎉 Flow complete! Total time: ~5 seconds. Provider never left their workflow.');
+                            }, 1500);
+                        }
+                    }
+                    stepIndex++;
+                } else {
+                    clearInterval(demoInterval);
+                }
+            }, 2000);
+        }
+
+        function startNotLoggedInDemo() {
+            resetDemo();
+            currentDemo = 'not-logged-in';
+            
+            showFloatingMessage('🟡 Starting demo: Provider not logged in to Epic');
+            
+            const steps = [
+                'step1-not-logged', 'step2-not-logged', 'step3-not-logged', 
+                'step4-not-logged', 'step5-not-logged', 'step6-not-logged',
+                'step7-not-logged', 'step8-not-logged', 'step9-not-logged'
+            ];
+            
+            let stepIndex = 0;
+            demoInterval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    const step = document.getElementById(steps[stepIndex]);
+                    if (step) {
+                        step.classList.add('animated');
+                        
+                        // Special message for the key difference step
+                        if (steps[stepIndex] === 'step4-not-logged') {
+                            setTimeout(() => {
+                                showFloatingMessage('🔑 Login required! Provider must stop their work to authenticate.');
+                            }, 1000);
+                        }
+                        
+                        if (steps[stepIndex] === 'step5-not-logged') {
+                            setTimeout(() => {
+                                showFloatingMessage('⏳ Authentication in progress... Username, password, maybe 2FA...');
+                            }, 1000);
+                        }
+                        
+                        // Completion message
+                        if (stepIndex === steps.length - 1) {
+                            setTimeout(() => {
+                                showFloatingMessage('✅ Flow complete! Total time: ~60 seconds. Significant workflow disruption.');
+                            }, 1500);
+                        }
+                    }
+                    stepIndex++;
+                } else {
+                    clearInterval(demoInterval);
+                }
+            }, 2500);
+        }
+
+        function startComparisonDemo() {
+            resetDemo();
+            currentDemo = 'comparison';
+            
+            showFloatingMessage('⚖️ Running side-by-side comparison of both flows');
+            
+            // Simulate timing comparison
+            setTimeout(() => {
+                showFloatingMessage('🟢 Logged-in flow: Steps 1-7 complete in 5 seconds');
+            }, 3000);
+            
+            setTimeout(() => {
+                showFloatingMessage('🟡 Not-logged-in flow: Still on authentication step...');
+            }, 6000);
+            
+            setTimeout(() => {
+                showFloatingMessage('🟡 Not-logged-in flow: Steps 1-9 complete in 60 seconds');
+            }, 12000);
+            
+            setTimeout(() => {
+                showFloatingMessage('📊 Result: Logged-in flow is 12x faster and preserves clinical workflow!');
+            }, 15000);
+        }
+
+        function resetDemo() {
+            clearInterval(demoInterval);
+            currentDemo = null;
+            
+            // Reset all step animations
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('animated');
+            });
+            
+            hideFloatingMessage();
+        }
+
+        function showFloatingMessage(text) {
+            // Remove existing message
+            const existingMessage = document.querySelector('.floating-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const message = document.createElement('div');
+            message.className = 'floating-message';
+            message.textContent = text;
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4CAF50, #8BC34A);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 15px;
+                box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+                z-index: 1000;
+                animation: slideInRight 0.5s ease-out;
+                max-width: 350px;
+                font-weight: bold;
+                line-height: 1.4;
+            `;
+            
+            document.body.appendChild(message);
+            
+            // Auto hide after 5 seconds
+            setTimeout(hideFloatingMessage, 5000);
+        }
+
+        function hideFloatingMessage() {
+            const message = document.querySelector('.floating-message');
+            if (message) {
+                message.style.animation = 'slideOutRight 0.5s ease-in forwards';
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.remove();
+                    }
+                }, 500);
+            }
+        }
+
+        // Add CSS animations for messages
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add interactive hover effects for steps
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('mouseenter', () => {
+                if (!step.classList.contains('animated')) {
+                    step.style.transform = 'translateX(10px) scale(1.02)';
+                }
+            });
+            
+            step.addEventListener('mouseleave', () => {
+                if (!step.classList.contains('animated')) {
+                    step.style.transform = '';
+                }
+            });
+        });
+
+        // Add click interactions for participants
+        document.querySelectorAll('.participant').forEach(participant => {
+            participant.addEventListener('click', () => {
+                const title = participant.querySelector('h4').textContent;
+                let message = '';
+                
+                if (title.includes('Provider')) {
+                    message = 'The healthcare provider (doctor, nurse, etc.) who needs access to patient data to provide care.';
+                } else if (title.includes('Epic')) {
+                    message = 'Epic EHR system that manages patient records and controls access through OAuth authorization.';
+                } else if (title.includes('SMART App')) {
+                    message = 'Third-party healthcare application that integrates with the EHR to provide additional clinical functionality.';
+                } else if (title.includes('Patient')) {
+                    message = 'The patient whose medical data is being accessed. Their privacy is protected by the OAuth authorization process.';
+                }
+                
+                showFloatingMessage(message);
+            });
+        });
+
+        // Initialize with welcome message
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                showFloatingMessage('🏥 Welcome! Explore how SMART on FHIR OAuth works when providers are already logged into Epic EHR.');
+            }, 1000);
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') showScenario('logged-in');
+            if (e.key === '2') showScenario('not-logged-in');
+            if (e.key === '3') showScenario('comparison');
+            if (e.key === ' ' && currentDemo === null) {
+                e.preventDefault();
+                const activeTab = document.querySelector('.scenario-tab.active');
+                if (activeTab.textContent.includes('Already Logged In')) {
+                    startLoggedInDemo();
+                } else if (activeTab.textContent.includes('Not Logged In')) {
+                    startNotLoggedInDemo();
+                } else if (activeTab.textContent.includes('Comparison')) {
+                    startComparisonDemo();
+                }
+            }
+            if (e.key === 'r') resetDemo();
+        });
+    </script>
+</body>
+</html>
