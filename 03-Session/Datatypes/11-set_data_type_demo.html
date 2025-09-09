@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Set Data Type - Interactive Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #888804 0%, rgb(246, 246, 67) 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,255,255,0.2); }
+            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.4); }
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .property-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .property-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .set-visualizer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            min-height: 80px;
+            padding: 20px;
+            border: 3px dashed #cbd5e0;
+            border-radius: 15px;
+            background: rgba(240, 248, 255, 0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .set-element {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.3);
+            animation: slideIn 0.5s ease-out;
+            transform: scale(1);
+            transition: all 0.3s ease;
+        }
+
+        .set-element:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.5);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.5);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            padding: 12px 16px;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            min-width: 150px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+            white-space: pre;
+        }
+
+        .code-example::before {
+            margin-top: 15px;
+            content: "Python Code";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #4facfe;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .highlight {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        .error-message {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background: #f7fafc;
+        }
+
+        .feature-demo {
+            margin: 30px 0;
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(240,248,255,0.9) 100%);
+        }
+
+        .animated-arrow {
+            display: inline-block;
+            animation: bounce 2s infinite;
+            color: #4facfe;
+            font-size: 1.5em;
+            margin: 0 10px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Set Data Type</h1>
+            <p>Interactive demonstration of sets: unordered collections without duplicates</p>
+        </div>
+
+        <div class="properties-grid">
+            <div class="property-card">
+                <h3><span class="icon" style="background: #ff6b6b;">1</span>No Insertion Order</h3>
+                <p>Sets don't maintain the order in which elements were inserted. The display order is determined by Python's internal hash table implementation.</p>
+            </div>
+            
+            <div class="property-card">
+                <h3><span class="icon" style="background: #4ecdc4;">2</span>No Duplicates</h3>
+                <p>Sets automatically remove duplicate values. Each element can appear only once, making sets perfect for unique collections.</p>
+            </div>
+            
+            <div class="property-card">
+                <h3><span class="icon" style="background: #45b7d1;">3</span>Heterogeneous Objects</h3>
+                <p>Sets can contain different data types (int, string, float, etc.) as long as they are hashable and immutable.</p>
+            </div>
+            
+            <div class="property-card">
+                <h3><span class="icon" style="background: #f9ca24;">4</span>No Index Access</h3>
+                <p>Unlike lists, you cannot access set elements by index. Sets are unordered, so indexing doesn't make sense.</p>
+            </div>
+            
+            <div class="property-card">
+                <h3><span class="icon" style="background: #6c5ce7;">5</span>Mutable Collection</h3>
+                <p>You can add and remove elements from sets after creation. The set itself can be modified.</p>
+            </div>
+            
+            <div class="property-card">
+                <h3><span class="icon" style="background: #a29bfe;">6</span>Growable Nature</h3>
+                <p>Sets can dynamically increase or decrease in size based on operations performed on them.</p>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎮 Interactive Set Playground</h2>
+            <p>Current Set:</p>
+            <div class="set-visualizer" id="setVisualizer">
+                <em style="color: #999;">Set is empty - add some elements!</em>
+            </div>
+            
+            <div class="controls">
+                <div class="input-group">
+                    <input type="text" id="elementInput" class="input-field" placeholder="Enter element (number or text)" />
+                    <button class="btn btn-primary" onclick="addElement()">Add Element</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="removeInput" class="input-field" placeholder="Element to remove" />
+                    <button class="btn btn-danger" onclick="removeElement()">Remove Element</button>
+                </div>
+                <button class="btn btn-primary" onclick="loadExampleSet()">Load Example Set</button>
+                <button class="btn btn-danger" onclick="clearSet()">Clear Set</button>
+            </div>
+            
+            <div id="messages"></div>
+        </div>
+
+        <div class="feature-demo">
+            <h3>🚫 Index Access Demonstration</h3>
+            <p>Try to access set elements by index (this will show an error):</p>
+            <div class="controls">
+                <input type="number" id="indexInput" class="input-field" placeholder="Index (0, 1, 2...)" />
+                <button class="btn btn-primary" onclick="tryIndexAccess()">Try Index Access</button>
+            </div>
+            <div class="code-example">
+<span class="highlight">s</span> = {100, 0, 10, 200, 10, 'hema'}
+<span class="highlight">s[0]</span>  # TypeError: 'set' object does not support indexing
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>📊 Set vs Other Data Structures</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Set</th>
+                        <th>List</th>
+                        <th>Tuple</th>
+                        <th>Dictionary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Order Preserved</td>
+                        <td>❌ No</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes (Python 3.7+)</td>
+                    </tr>
+                    <tr>
+                        <td>Duplicates Allowed</td>
+                        <td>❌ No</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes</td>
+                        <td>❌ No (keys)</td>
+                    </tr>
+                    <tr>
+                        <td>Index Access</td>
+                        <td>❌ No</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes (by key)</td>
+                    </tr>
+                    <tr>
+                        <td>Mutable</td>
+                        <td>✅ Yes</td>
+                        <td>✅ Yes</td>
+                        <td>❌ No</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Best Use Case</td>
+                        <td>Unique elements, membership testing</td>
+                        <td>Ordered collections, sequences</td>
+                        <td>Immutable sequences</td>
+                        <td>Key-value mappings</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="demo-section">
+            <h3>⚡ Set Operations & Time Complexity</h3>
+            <div class="code-example">
+# Common Set Operations (Average Time Complexity)
+<span class="highlight">add()</span>         # O(1) - Add element
+<span class="highlight">remove()</span>      # O(1) - Remove element (raises KeyError if not found)
+<span class="highlight">discard()</span>     # O(1) - Remove element (no error if not found)
+<span class="highlight">clear()</span>       # O(n) - Remove all elements
+<span class="highlight">len()</span>         # O(1) - Get size
+<span class="highlight">in</span>            # O(1) - Membership testing
+<span class="highlight">union()</span>       # O(len(s) + len(t)) - Combine sets
+<span class="highlight">intersection()</span> # O(min(len(s), len(t))) - Common elements
+            </div>
+        </div>
+
+        <div class="feature-demo">
+            <h3>🎯 Key Advantages of Sets</h3>
+            <div class="properties-grid">
+                <div class="property-card pulse">
+                    <h3><span class="icon" style="background: #ff9ff3;">⚡</span>Fast Membership Testing</h3>
+                    <p>Checking if an element exists in a set is O(1) on average, much faster than lists O(n).</p>
+                </div>
+                <div class="property-card pulse">
+                    <h3><span class="icon" style="background: #54a0ff;">🎯</span>Automatic Deduplication</h3>
+                    <p>Perfect for removing duplicates from collections without writing extra logic.</p>
+                </div>
+                <div class="property-card pulse">
+                    <h3><span class="icon" style="background: #5f27cd;">🔄</span>Mathematical Operations</h3>
+                    <p>Built-in support for union, intersection, difference, and symmetric difference operations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSet = new Set();
+
+        function addElement() {
+            const input = document.getElementById('elementInput');
+            const value = input.value.trim();
+            
+            if (!value) {
+                showMessage('Please enter a value!', 'error');
+                return;
+            }
+
+            // Convert to number if possible, otherwise keep as string
+            const element = isNaN(value) ? value : (value.includes('.') ? parseFloat(value) : parseInt(value));
+            
+            const sizeBefore = currentSet.size;
+            currentSet.add(element);
+            
+            if (currentSet.size > sizeBefore) {
+                showMessage(`Added: ${element}`, 'success');
+            } else {
+                showMessage(`Duplicate ignored: ${element} already exists in set`, 'warning');
+            }
+            
+            updateVisualizer();
+            input.value = '';
+        }
+
+        function removeElement() {
+            const input = document.getElementById('removeInput');
+            const value = input.value.trim();
+            
+            if (!value) {
+                showMessage('Please enter a value to remove!', 'error');
+                return;
+            }
+
+            const element = isNaN(value) ? value : (value.includes('.') ? parseFloat(value) : parseInt(value));
+            
+            if (currentSet.has(element)) {
+                currentSet.delete(element);
+                showMessage(`Removed: ${element}`, 'success');
+            } else {
+                showMessage(`Element not found: ${element}`, 'error');
+            }
+            
+            updateVisualizer();
+            input.value = '';
+        }
+
+        function loadExampleSet() {
+            currentSet.clear();
+            const exampleElements = [100, 0, 10, 200, 'hema'];
+            exampleElements.forEach(el => currentSet.add(el));
+            showMessage('Loaded example set from the tutorial!', 'success');
+            updateVisualizer();
+        }
+
+        function clearSet() {
+            currentSet.clear();
+            showMessage('Set cleared!', 'success');
+            updateVisualizer();
+        }
+
+        function tryIndexAccess() {
+            const indexInput = document.getElementById('indexInput');
+            const index = indexInput.value.trim();
+            
+            if (currentSet.size === 0) {
+                showMessage('Set is empty! Add some elements first.', 'error');
+                return;
+            }
+
+            showMessage(`TypeError: 'set' object does not support indexing. Cannot access s[${index}]`, 'error');
+        }
+
+        function updateVisualizer() {
+            const visualizer = document.getElementById('setVisualizer');
+            
+            if (currentSet.size === 0) {
+                visualizer.innerHTML = '<em style="color: #999;">Set is empty - add some elements!</em>';
+                return;
+            }
+
+            visualizer.innerHTML = '';
+            const elements = Array.from(currentSet);
+            
+            elements.forEach((element, index) => {
+                const elementDiv = document.createElement('div');
+                elementDiv.className = 'set-element';
+                elementDiv.textContent = typeof element === 'string' ? `'${element}'` : element;
+                elementDiv.style.animationDelay = `${index * 0.1}s`;
+                visualizer.appendChild(elementDiv);
+            });
+
+            // Add set notation
+            const notation = document.createElement('div');
+            notation.style.width = '100%';
+            notation.style.textAlign = 'center';
+            notation.style.marginTop = '15px';
+            notation.style.fontSize = '14px';
+            notation.style.color = '#666';
+            notation.innerHTML = `Python Set: {${elements.map(el => typeof el === 'string' ? `'${el}'` : el).join(', ')}}`;
+            visualizer.appendChild(notation);
+        }
+
+        function showMessage(message, type = 'info') {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            
+            let className = 'error-message';
+            if (type === 'success') {
+                messageEl.style.background = 'linear-gradient(45deg, #00b894, #00cec9)';
+            } else if (type === 'warning') {
+                messageEl.style.background = 'linear-gradient(45deg, #fdcb6e, #e17055)';
+            }
+            
+            messageEl.className = className;
+            messageEl.textContent = message;
+            
+            messagesDiv.innerHTML = '';
+            messagesDiv.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 4000);
+        }
+
+        // Initialize with example
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExampleSet();
+            
+            // Add enter key support
+            document.getElementById('elementInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addElement();
+            });
+            
+            document.getElementById('removeInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') removeElement();
+            });
+            
+            document.getElementById('indexInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') tryIndexAccess();
+            });
+        });
+
+        // Add floating animation to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.property-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'slideIn 0.6s ease-out forwards';
+            });
+        });
+    </script>
+</body>
+</html>
