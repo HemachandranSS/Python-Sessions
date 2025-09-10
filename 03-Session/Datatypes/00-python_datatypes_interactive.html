@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Data Types - Interactive Table</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            animation: slideUp 1s ease-out;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 12px 25px;
+            display: inline-block;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .table-wrapper {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: tableSlide 1.2s ease-out;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .data-table th:first-child {
+            border-radius: 15px 0 0 0;
+        }
+
+        .data-table th:last-child {
+            border-radius: 0 15px 0 0;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.3s ease;
+            animation: rowSlide 0.8s ease-out forwards;
+            transform: translateX(-50px);
+            opacity: 0;
+        }
+
+        .data-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        .data-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+        .data-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+        .data-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+        .data-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+        .data-table tbody tr:nth-child(6) { animation-delay: 0.6s; }
+        .data-table tbody tr:nth-child(7) { animation-delay: 0.7s; }
+        .data-table tbody tr:nth-child(8) { animation-delay: 0.8s; }
+        .data-table tbody tr:nth-child(9) { animation-delay: 0.9s; }
+        .data-table tbody tr:nth-child(10) { animation-delay: 1.0s; }
+        .data-table tbody tr:nth-child(11) { animation-delay: 1.1s; }
+        .data-table tbody tr:nth-child(12) { animation-delay: 1.2s; }
+        .data-table tbody tr:nth-child(13) { animation-delay: 1.3s; }
+
+        .data-table tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10;
+            position: relative;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .data-table tbody tr:nth-child(odd) {
+            background: white;
+        }
+
+        .data-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+            position: relative;
+        }
+
+        .datatype-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .datatype-emoji {
+            font-size: 1.2rem;
+        }
+
+        .description-cell {
+            line-height: 1.6;
+            color: #555;
+            max-width: 300px;
+        }
+
+        .mutability-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .immutable {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .mutable {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .code-cell {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #f8f8f2;
+            max-width: 350px;
+            position: relative;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+
+        .code-cell::before {
+            content: '💻';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            opacity: 0.5;
+        }
+
+        .python-keyword { color: #ff79c6; }
+        .python-string { color: #f1fa8c; }
+        .python-number { color: #bd93f9; }
+        .python-comment { color: #6272a4; }
+        .python-builtin { color: #50fa7b; }
+
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 25px;
+            background: #44475a;
+            border: none;
+            color: #f8f8f2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-cell:hover .copy-btn {
+            opacity: 0.8;
+        }
+
+        .copy-btn:hover {
+            opacity: 1 !important;
+            background: #6272a4;
+        }
+
+        .none-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px;
+            margin-top: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .none-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ecf0f1;
+        }
+
+        .none-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .none-example {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #f8f8f2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            padding: 0 30px 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+        }
+
+        .interactive-controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .control-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes tableSlide {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rowSlide {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 15px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .code-cell {
+                max-width: 250px;
+                font-size: 0.8rem;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Data Types Reference</h1>
+            <p>Comprehensive tabular guide to Python's fundamental data types</p>
+            <div class="author">
+                📚 Hema's Tech Solutions - Interactive Learning
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="data-table" id="dataTypesTable">
+                <thead>
+                    <tr>
+                        <th>🏷️ Data Type</th>
+                        <th>📝 Description</th>
+                        <th>🔒 Mutability</th>
+                        <th>💻 Examples</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-category="numeric">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🔢</span>
+                                Int
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents whole/integral numbers. Python integers have unlimited precision and no overflow.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Integer examples</span><br>
+                                a = <span class="python-number">10</span><br>
+                                <span class="python-builtin">type</span>(a)  <span class="python-comment"># &lt;class 'int'&gt;</span><br>
+                                big = <span class="python-number">123456789012345</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="numeric">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🔢</span>
+                                Float
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents decimal/floating point numbers using IEEE 754 double precision standard.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Float examples</span><br>
+                                b = <span class="python-number">10.5</span><br>
+                                <span class="python-builtin">type</span>(b)  <span class="python-comment"># &lt;class 'float'&gt;</span><br>
+                                sci = <span class="python-number">1.5e-4</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="numeric">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🔢</span>
+                                Complex
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents complex numbers with real and imaginary parts. Useful for mathematical computations.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Complex examples</span><br>
+                                c = <span class="python-number">10</span>+<span class="python-number">5j</span><br>
+                                c.real   <span class="python-comment"># 10.0</span><br>
+                                c.imag   <span class="python-comment"># 5.0</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="logical">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">✅</span>
+                                Bool
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents logical values. Only two values: True and False. Subclass of int where True=1, False=0.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Boolean examples</span><br>
+                                flag = <span class="python-keyword">True</span><br>
+                                flag = <span class="python-keyword">False</span><br>
+                                <span class="python-builtin">type</span>(flag)  <span class="python-comment"># &lt;class 'bool'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="text">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">📝</span>
+                                Str
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents sequence of Unicode characters. Supports rich text operations and formatting.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># String examples</span><br>
+                                s = <span class="python-string">'hema'</span><br>
+                                s = <span class="python-string">"hema"</span><br>
+                                s = <span class="python-string">'''Hema Software Solutions'''</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="binary">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🔐</span>
+                                Bytes
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents sequence of byte values from 0-255. Used for binary data and file operations.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Bytes examples</span><br>
+                                <span class="python-builtin">list</span> = [<span class="python-number">1</span>,<span class="python-number">2</span>,<span class="python-number">3</span>,<span class="python-number">4</span>]<br>
+                                b = <span class="python-builtin">bytes</span>(<span class="python-builtin">list</span>)<br>
+                                <span class="python-builtin">type</span>(b)  <span class="python-comment"># &lt;class 'bytes'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="binary">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🔐</span>
+                                ByteArray
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Mutable sequence of byte values from 0-255. Allows in-place modifications unlike bytes.
+                        </td>
+                        <td>
+                            <span class="mutability-badge mutable">Mutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># ByteArray examples</span><br>
+                                <span class="python-builtin">list</span> = [<span class="python-number">10</span>,<span class="python-number">20</span>,<span class="python-number">30</span>]<br>
+                                ba = <span class="python-builtin">bytearray</span>(<span class="python-builtin">list</span>)<br>
+                                <span class="python-builtin">type</span>(ba)  <span class="python-comment"># &lt;class 'bytearray'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="sequence">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🎯</span>
+                                Range
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Represents range of values efficiently. Memory-optimized for generating number sequences.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Range examples</span><br>
+                                r = <span class="python-builtin">range</span>(<span class="python-number">10</span>)<br>
+                                r1 = <span class="python-builtin">range</span>(<span class="python-number">0</span>,<span class="python-number">10</span>)<br>
+                                r2 = <span class="python-builtin">range</span>(<span class="python-number">0</span>,<span class="python-number">10</span>,<span class="python-number">2</span>)
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="collection">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">📚</span>
+                                List
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Ordered collection of objects. Supports indexing, slicing, and dynamic resizing.
+                        </td>
+                        <td>
+                            <span class="mutability-badge mutable">Mutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># List examples</span><br>
+                                l = [<span class="python-number">10</span>,<span class="python-number">11</span>,<span class="python-number">12</span>,<span class="python-number">13</span>,<span class="python-number">14</span>,<span class="python-number">15</span>]<br>
+                                <span class="python-builtin">type</span>(l)  <span class="python-comment"># &lt;class 'list'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="collection">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">📦</span>
+                                Tuple
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Ordered collection of objects. Immutable alternative to lists, perfect for fixed data.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Tuple examples</span><br>
+                                t = (<span class="python-number">1</span>,<span class="python-number">2</span>,<span class="python-number">3</span>,<span class="python-number">4</span>,<span class="python-number">5</span>)<br>
+                                <span class="python-builtin">type</span>(t)  <span class="python-comment"># &lt;class 'tuple'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="collection">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🎲</span>
+                                Set
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Unordered collection of unique objects. Supports mathematical set operations.
+                        </td>
+                        <td>
+                            <span class="mutability-badge mutable">Mutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Set examples</span><br>
+                                s = {<span class="python-number">1</span>,<span class="python-number">2</span>,<span class="python-number">3</span>,<span class="python-number">4</span>,<span class="python-number">5</span>,<span class="python-number">6</span>}<br>
+                                <span class="python-builtin">type</span>(s)  <span class="python-comment"># &lt;class 'set'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="collection">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">❄️</span>
+                                FrozenSet
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Immutable version of set. Unordered collection of unique objects that cannot be modified.
+                        </td>
+                        <td>
+                            <span class="mutability-badge immutable">Immutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># FrozenSet examples</span><br>
+                                s = {<span class="python-number">11</span>,<span class="python-number">2</span>,<span class="python-number">3</span>,<span class="python-string">'Hema'</span>,<span class="python-number">100</span>}<br>
+                                fs = <span class="python-builtin">frozenset</span>(s)<br>
+                                <span class="python-builtin">type</span>(fs)  <span class="python-comment"># &lt;class 'frozenset'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-category="collection">
+                        <td>
+                            <div class="datatype-name">
+                                <span class="datatype-emoji">🗂️</span>
+                                Dict
+                            </div>
+                        </td>
+                        <td class="description-cell">
+                            Collection of key-value pairs. Ordered since Python 3.7 with O(1) average lookup time.
+                        </td>
+                        <td>
+                            <span class="mutability-badge mutable">Mutable</span>
+                        </td>
+                        <td>
+                            <div class="code-cell">
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                <span class="python-comment"># Dict examples</span><br>
+                                d = {<span class="python-number">101</span>:<span class="python-string">'hema'</span>, <span class="python-number">102</span>:<span class="python-string">'ravi'</span>,<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="python-number">103</span>:<span class="python-string">'hari'</span>}<br>
+                                <span class="python-builtin">type</span>(d)  <span class="python-comment"># &lt;class 'dict'&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="interactive-controls">
+            <div class="control-title">🎛️ Interactive Filters</div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterTable('all')">Show All</button>
+                <button class="filter-btn" onclick="filterTable('numeric')">Numeric Types</button>
+                <button class="filter-btn" onclick="filterTable('collection')">Collections</button>
+                <button class="filter-btn" onclick="filterTable('mutable')">Mutable Only</button>
+                <button class="filter-btn" onclick="filterTable('immutable')">Immutable Only</button>
+            </div>
+        </div>
+
+        <div class="none-section">
+            <h2>🚫 None Data Type</h2>
+            <div class="none-description">
+                None represents nothing or no value associated. If the value is not available, 
+                then to handle such cases None is introduced. It's similar to null value in Java.
+            </div>
+            
+            <div class="none-example">
+                <span class="python-keyword">def</span> <span class="python-string">process_data</span>():
+    data = <span class="python-string">"Processing..."</span>
+    <span class="python-comment"># No explicit return statement</span>
+
+result = process_data()
+<span class="python-builtin">print</span>(result)  <span class="python-comment"># Output: None</span>
+
+<span class="python-comment"># None comparison</span>
+<span class="python-keyword">if</span> result <span class="python-keyword">is</span> <span class="python-keyword">None</span>:
+    <span class="python-builtin">print</span>(<span class="python-string">"No value returned"</span>)
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">14</div>
+                    <div class="stat-label">Total Data Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">9</div>
+                    <div class="stat-label">Immutable Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Mutable Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Programming Possibilities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.parentElement;
+            const codeText = codeBlock.textContent.replace('Copy', '').trim();
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#50fa7b';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#44475a';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                button.textContent = 'Error';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Table filtering functionality
+        function filterTable(category) {
+            const table = document.getElementById('dataTypesTable');
+            const rows = table.querySelectorAll('tbody tr');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter rows
+            rows.forEach((row, index) => {
+                const shouldShow = shouldShowRow(row, category);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    // Re-animate visible rows
+                    setTimeout(() => {
+                        row.style.animation = 'none';
+                        row.offsetHeight; // Trigger reflow
+                        row.style.animation = `rowSlide 0.6s ease-out forwards`;
+                        row.style.animationDelay = `${index * 0.1}s`;
+                    }, 50);
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Add filter notification
+            showFilterNotification(category, getVisibleRowCount());
+        }
+
+        function shouldShowRow(row, category) {
+            const dataCategory = row.getAttribute('data-category');
+            const mutabilityBadge = row.querySelector('.mutability-badge');
+            const isMutable = mutabilityBadge && mutabilityBadge.classList.contains('mutable');
+            
+            switch (category) {
+                case 'all':
+                    return true;
+                case 'mutable':
+                    return isMutable;
+                case 'immutable':
+                    return !isMutable;
+                default:
+                    return dataCategory === category;
+            }
+        }
+
+        function getVisibleRowCount() {
+            const rows = document.querySelectorAll('#dataTypesTable tbody tr');
+            let count = 0;
+            rows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    count++;
+                }
+            });
+            return count;
+        }
+
+        function showFilterNotification(category, count) {
+            // Remove existing notification
+            const existing = document.querySelector('.filter-notification');
+            if (existing) {
+                existing.remove();
+            }
+            
+            // Create new notification
+            const notification = document.createElement('div');
+            notification.className = 'filter-notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4ecdc4, #44a08d);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideInRight 0.5s ease-out;
+            `;
+            
+            const categoryName = category === 'all' ? 'All Types' : 
+                               category.charAt(0).toUpperCase() + category.slice(1) + ' Types';
+            notification.textContent = `Showing ${count} ${categoryName}`;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Add CSS for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(300px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(300px);
+                    opacity: 0;
+                }
+            }
+            
+            .highlight-search {
+                background: yellow !important;
+                color: black !important;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-weight: bold;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Enhanced table interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add search functionality
+            addSearchBox();
+            
+            // Add row click effects
+            const rows = document.querySelectorAll('#dataTypesTable tbody tr');
+            rows.forEach(row => {
+                row.addEventListener('click', function() {
+                    // Remove previous highlights
+                    rows.forEach(r => r.classList.remove('row-selected'));
+                    
+                    // Highlight selected row
+                    this.classList.add('row-selected');
+                    
+                    // Show details
+                    showRowDetails(this);
+                });
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+        });
+
+        function addSearchBox() {
+            const controlsDiv = document.querySelector('.interactive-controls');
+            const searchContainer = document.createElement('div');
+            searchContainer.style.cssText = `
+                margin-top: 20px;
+                text-align: center;
+            `;
+            
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.placeholder = '🔍 Search data types...';
+            searchInput.style.cssText = `
+                padding: 12px 20px;
+                border: 2px solid #e9ecef;
+                border-radius: 25px;
+                font-size: 1rem;
+                width: 300px;
+                max-width: 90%;
+                outline: none;
+                transition: all 0.3s ease;
+            `;
+            
+            searchInput.addEventListener('focus', function() {
+                this.style.borderColor = '#667eea';
+                this.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.style.borderColor = '#e9ecef';
+                this.style.boxShadow = 'none';
+            });
+            
+            searchInput.addEventListener('input', function() {
+                searchTable(this.value);
+            });
+            
+            searchContainer.appendChild(searchInput);
+            controlsDiv.appendChild(searchContainer);
+        }
+
+        function searchTable(searchTerm) {
+            const rows = document.querySelectorAll('#dataTypesTable tbody tr');
+            const term = searchTerm.toLowerCase().trim();
+            
+            if (!term) {
+                // Show all rows and remove highlights
+                rows.forEach(row => {
+                    row.style.display = '';
+                    removeHighlights(row);
+                });
+                return;
+            }
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    row.style.display = '';
+                    highlightSearchTerm(row, term);
+                } else {
+                    row.style.display = 'none';
+                    removeHighlights(row);
+                }
+            });
+        }
+
+        function highlightSearchTerm(row, term) {
+            removeHighlights(row);
+            const walker = document.createTreeWalker(
+                row,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+            
+            textNodes.forEach(textNode => {
+                const parent = textNode.parentNode;
+                if (parent.classList && parent.classList.contains('code-cell')) {
+                    return; // Skip highlighting in code cells
+                }
+                
+                const text = textNode.textContent;
+                const lowerText = text.toLowerCase();
+                const index = lowerText.indexOf(term);
+                
+                if (index !== -1) {
+                    const beforeText = text.substring(0, index);
+                    const matchText = text.substring(index, index + term.length);
+                    const afterText = text.substring(index + term.length);
+                    
+                    const fragment = document.createDocumentFragment();
+                    
+                    if (beforeText) {
+                        fragment.appendChild(document.createTextNode(beforeText));
+                    }
+                    
+                    const highlight = document.createElement('span');
+                    highlight.className = 'highlight-search';
+                    highlight.textContent = matchText;
+                    fragment.appendChild(highlight);
+                    
+                    if (afterText) {
+                        fragment.appendChild(document.createTextNode(afterText));
+                    }
+                    
+                    parent.replaceChild(fragment, textNode);
+                }
+            });
+        }
+
+        function removeHighlights(element) {
+            const highlights = element.querySelectorAll('.highlight-search');
+            highlights.forEach(highlight => {
+                const parent = highlight.parentNode;
+                parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                parent.normalize();
+            });
+        }
+
+        function showRowDetails(row) {
+            const dataTypeName = row.querySelector('.datatype-name').textContent.trim();
+            const description = row.querySelector('.description-cell').textContent.trim();
+            
+            // Create modal or tooltip with additional details
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 30px;
+                border-radius: 20px;
+                box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+                z-index: 10000;
+                max-width: 500px;
+                width: 90%;
+                animation: modalAppear 0.3s ease-out;
+            `;
+            
+            modal.innerHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 15px; font-size: 1.5rem;">
+                    ${dataTypeName} Details
+                </h3>
+                <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">
+                    ${description}
+                </p>
+                <button onclick="this.parentElement.remove(); document.querySelector('.modal-overlay').remove();" 
+                        style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                               color: white; border: none; padding: 10px 20px; 
+                               border-radius: 25px; cursor: pointer; font-weight: 600;">
+                    Close
+                </button>
+            `;
+            
+            // Add overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 9999;
+                animation: overlayAppear 0.3s ease-out;
+            `;
+            
+            overlay.addEventListener('click', function() {
+                modal.remove();
+                this.remove();
+            });
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+        }
+
+        function handleKeyboardNavigation(event) {
+            const rows = Array.from(document.querySelectorAll('#dataTypesTable tbody tr'));
+            const visibleRows = rows.filter(row => row.style.display !== 'none');
+            const currentRow = document.querySelector('.row-selected');
+            
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                
+                let currentIndex = currentRow ? visibleRows.indexOf(currentRow) : -1;
+                let newIndex;
+                
+                if (event.key === 'ArrowDown') {
+                    newIndex = currentIndex < visibleRows.length - 1 ? currentIndex + 1 : 0;
+                } else {
+                    newIndex = currentIndex > 0 ? currentIndex - 1 : visibleRows.length - 1;
+                }
+                
+                if (visibleRows[newIndex]) {
+                    rows.forEach(row => row.classList.remove('row-selected'));
+                    visibleRows[newIndex].classList.add('row-selected');
+                    visibleRows[newIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else if (event.key === 'Enter' && currentRow) {
+                showRowDetails(currentRow);
+            }
+        }
+
+        // Add additional CSS for row selection and modal animations
+        const additionalStyle = document.createElement('style');
+        additionalStyle.textContent = `
+            .row-selected {
+                background: linear-gradient(135deg, #667eea, #764ba2) !important;
+                color: white !important;
+                transform: scale(1.02) !important;
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3) !important;
+                z-index: 10 !important;
+                position: relative !important;
+            }
+            
+            .row-selected .mutability-badge {
+                background: rgba(255,255,255,0.2) !important;
+                color: white !important;
+            }
+            
+            .row-selected .code-cell {
+                background: rgba(0,0,0,0.3) !important;
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            
+            @keyframes modalAppear {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+            
+            @keyframes overlayAppear {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(additionalStyle);
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize table with a welcome animation
+        setTimeout(() => {
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #4ecdc4, #44a08d);
+                color: white;
+                padding: 20px 40px;
+                border-radius: 25px;
+                font-size: 1.2rem;
+                font-weight: 600;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: welcomeAnimation 2s ease-out forwards;
+                text-align: center;
+            `;
+            
+            welcomeMsg.innerHTML = `
+                🎉 Welcome to Hema's Interactive Python Data Types Guide!<br>
+                <small style="font-size: 0.9rem; opacity: 0.9;">Click on rows, use filters, and explore!</small>
+            `;
+            
+            document.body.appendChild(welcomeMsg);
+            
+            setTimeout(() => {
+                welcomeMsg.style.animation = 'welcomeAnimation 1s ease-out reverse forwards';
+                setTimeout(() => welcomeMsg.remove(), 1000);
+            }, 2000);
+        }, 1000);
+
+        // Add welcome animation CSS
+        const welcomeStyle = document.createElement('style');
+        welcomeStyle.textContent = `
+            @keyframes welcomeAnimation {
+                0% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.5);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1.1);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+            }
+        `;
+        document.head.appendChild(welcomeStyle);
+    </script>
+</body>
+</html>
