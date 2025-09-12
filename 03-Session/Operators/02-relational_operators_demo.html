@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Relational Operators</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.4s; }
+        .section:nth-child(4) { animation-delay: 0.6s; }
+        .section:nth-child(5) { animation-delay: 0.8s; }
+
+        .section-title {
+            font-size: 2rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .operator-card {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .operator-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .operator-card h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .operator-card p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .example-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: 'Python Code';
+            position: absolute;
+            top: 5px;
+            left: 900px;
+            background: #4a5568;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .result {
+            background: linear-gradient(135deg, #48bb78, #68d391);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .result::before {
+            content: 'Output';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #38a169;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #4299e1, #63b3ed);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ed8936, #f6ad55);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(237, 137, 54, 0.4);
+        }
+
+        .comparison-result {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .chaining-demo {
+            background: linear-gradient(135deg, #805ad5, #9f7aea);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .chain-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .chain-input input {
+            width: 80px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .chain-input select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .error-demo {
+            background: linear-gradient(135deg, #e53e3e, #fc8181);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(102, 126, 234, 0.6); }
+        }
+
+        .animated-result {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .operators-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Relational Operators</h1>
+            <p>Interactive Guide to Comparison Operations</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📊 The Four Main Relational Operators</h2>
+            <div class="operators-grid">
+                <div class="operator-card" onclick="demonstrateOperator('>')">
+                    <h3>&gt;</h3>
+                    <p>Greater Than</p>
+                </div>
+                <div class="operator-card" onclick="demonstrateOperator('>=')" style="background: linear-gradient(135deg, #4299e1, #63b3ed);">
+                    <h3>&gt;=</h3>
+                    <p>Greater Than or Equal</p>
+                </div>
+                <div class="operator-card" onclick="demonstrateOperator('<')" style="background: linear-gradient(135deg, #48bb78, #68d391);">
+                    <h3>&lt;</h3>
+                    <p>Less Than</p>
+                </div>
+                <div class="operator-card" onclick="demonstrateOperator('<=')" style="background: linear-gradient(135deg, #805ad5, #9f7aea);">
+                    <h3>&lt;=</h3>
+                    <p>Less Than or Equal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔢 Integer Comparison Examples</h2>
+            <div class="example-container">
+                <div class="code-block">
+a = 10<br>
+b = 20<br>
+print("a > b is ", a > b)<br>
+print("a >= b is ", a >= b)<br>
+print("a < b is ", a < b)<br>
+print("a <= b is ", a <= b)
+                </div>
+                <div class="result">
+                    <div>a > b is False</div>
+                    <div>a >= b is False</div>
+                    <div>a < b is True</div>
+                    <div>a <= b is True</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔤 String Comparison Examples</h2>
+            <div class="example-container">
+                <p><strong>🎯 Key Point:</strong> String comparisons work lexicographically (dictionary order)!</p>
+                <div class="code-block">
+a = "durga"<br>
+b = "durga"<br>
+print("a > b is ", a > b)<br>
+print("a >= b is ", a >= b)<br>
+print("a < b is ", a < b)<br>
+print("a <= b is ", a <= b)
+                </div>
+                <div class="result">
+                    <div>a > b is False</div>
+                    <div>a >= b is True</div>
+                    <div>a < b is False</div>
+                    <div>a <= b is True</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🎮 Interactive Comparison Tool</h2>
+            <div class="interactive-demo">
+                <h3>🧪 Test Your Own Values!</h3>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>First Value (a):</label>
+                        <input type="text" id="valueA" placeholder="Enter value" value="10">
+                    </div>
+                    <div class="input-field">
+                        <label>Operator:</label>
+                        <select id="operator">
+                            <option value=">">&gt; (Greater Than)</option>
+                            <option value=">=">&gt;= (Greater or Equal)</option>
+                            <option value="<">&lt; (Less Than)</option>
+                            <option value="<=">&lt;= (Less or Equal)</option>
+                        </select>
+                    </div>
+                    <div class="input-field">
+                        <label>Second Value (b):</label>
+                        <input type="text" id="valueB" placeholder="Enter value" value="20">
+                    </div>
+                </div>
+                <button class="btn" onclick="performComparison()">🚀 Compare Values</button>
+                <div class="comparison-result" id="comparisonResult">
+                    Click "Compare Values" to see the result!
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🔗 Operator Chaining Magic</h2>
+            <div class="chaining-demo">
+                <h3>✨ Python's Special Feature: Chain Multiple Comparisons!</h3>
+                <p>Unlike many languages, Python allows you to chain relational operators naturally:</p>
+                
+                <div class="example-container" style="background: rgba(255,255,255,0.1); border-left: 5px solid #fff;">
+                    <div class="code-block" style="background: rgba(0,0,0,0.3);">
+print(10 < 20)        # True<br>
+print(10 < 20 < 30)   # True<br>
+print(10 < 20 < 30 < 40)  # True<br>
+print(10 < 20 < 30 < 40 > 50)  # False
+                    </div>
+                </div>
+
+                <div class="chain-input">
+                    <input type="number" id="chain1" value="10">
+                    <select id="op1">
+                        <option value="<">&lt;</option>
+                        <option value="<=">&lt;=</option>
+                        <option value=">">&gt;</option>
+                        <option value=">=">&gt;=</option>
+                    </select>
+                    <input type="number" id="chain2" value="20">
+                    <select id="op2">
+                        <option value="<">&lt;</option>
+                        <option value="<=">&lt;=</option>
+                        <option value=">">&gt;</option>
+                        <option value=">=">&gt;=</option>
+                    </select>
+                    <input type="number" id="chain3" value="30">
+                    <button class="btn" onclick="evaluateChain()">🎯 Evaluate Chain</button>
+                </div>
+                <div class="comparison-result" id="chainResult">
+                    Build your chain above and click evaluate!
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">❌ Type Compatibility Errors</h2>
+            <div class="error-demo">
+                <h3>⚠️ When Comparisons Go Wrong</h3>
+                <p>Python won't let you compare incompatible types:</p>
+                <div class="code-block" style="background: rgba(0,0,0,0.3);">
+print(10 > 'durga')  # ❌ TypeError!
+                </div>
+                <p><strong>🛡️ Error Message:</strong> TypeError: '>' not supported between instances of 'int' and 'str'</p>
+                
+                <p><strong>✅ But these work fine:</strong></p>
+                <div class="code-block" style="background: rgba(0,0,0,0.3);">
+print(True > True)    # False<br>
+print(True >= True)   # True<br>
+print(10 > True)      # True (True = 1)<br>
+print(False > True)   # False (False = 0)
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🧠 Key Takeaways</h2>
+            <div class="example-container">
+                <h3>🎯 Important Points:</h3>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li style="margin: 15px 0; padding: 10px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 8px;">
+                        <strong>1.</strong> Relational operators return Boolean values (True/False)
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: linear-gradient(135deg, #48bb78, #68d391); color: white; border-radius: 8px;">
+                        <strong>2.</strong> They work with numbers, strings, and other comparable types
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: linear-gradient(135deg, #ed8936, #f6ad55); color: white; border-radius: 8px;">
+                        <strong>3.</strong> String comparison is lexicographic (alphabetical)
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: linear-gradient(135deg, #805ad5, #9f7aea); color: white; border-radius: 8px;">
+                        <strong>4.</strong> Chaining operators creates elegant, readable conditions
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: linear-gradient(135deg, #e53e3e, #fc8181); color: white; border-radius: 8px;">
+                        <strong>5.</strong> Comparing incompatible types raises TypeError
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function demonstrateOperator(op) {
+            const operators = {
+                '>': { name: 'Greater Than', example: '10 > 5 = True' },
+                '>=': { name: 'Greater Than or Equal', example: '10 >= 10 = True' },
+                '<': { name: 'Less Than', example: '5 < 10 = True' },
+                '<=': { name: 'Less Than or Equal', example: '10 <= 10 = True' }
+            };
+            
+            alert(`🎯 ${operators[op].name}\n\nExample: ${operators[op].example}`);
+        }
+
+        function performComparison() {
+            const valueA = document.getElementById('valueA').value;
+            const valueB = document.getElementById('valueB').value;
+            const operator = document.getElementById('operator').value;
+            const resultDiv = document.getElementById('comparisonResult');
+            
+            try {
+                // Try to parse as numbers first
+                let a = valueA;
+                let b = valueB;
+                
+                // Check if both values are numeric
+                if (!isNaN(valueA) && !isNaN(valueB)) {
+                    a = parseFloat(valueA);
+                    b = parseFloat(valueB);
+                }
+                
+                let result;
+                switch(operator) {
+                    case '>':
+                        result = a > b;
+                        break;
+                    case '>=':
+                        result = a >= b;
+                        break;
+                    case '<':
+                        result = a < b;
+                        break;
+                    case '<=':
+                        result = a <= b;
+                        break;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div style="font-size: 1.4rem;">
+                        ${valueA} ${operator} ${valueB} = <span style="color: ${result ? '#48bb78' : '#e53e3e'}; font-weight: bold;">${result}</span>
+                    </div>
+                    <div style="font-size: 1rem; margin-top: 10px; opacity: 0.8;">
+                        Type: ${typeof a} ${operator} ${typeof b}
+                    </div>
+                `;
+                resultDiv.classList.add('animated-result');
+                
+                setTimeout(() => {
+                    resultDiv.classList.remove('animated-result');
+                }, 2000);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="color: #e53e3e;">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function evaluateChain() {
+            const chain1 = parseFloat(document.getElementById('chain1').value);
+            const op1 = document.getElementById('op1').value;
+            const chain2 = parseFloat(document.getElementById('chain2').value);
+            const op2 = document.getElementById('op2').value;
+            const chain3 = parseFloat(document.getElementById('chain3').value);
+            const resultDiv = document.getElementById('chainResult');
+            
+            try {
+                let result1, result2, finalResult;
+                
+                switch(op1) {
+                    case '>': result1 = chain1 > chain2; break;
+                    case '>=': result1 = chain1 >= chain2; break;
+                    case '<': result1 = chain1 < chain2; break;
+                    case '<=': result1 = chain1 <= chain2; break;
+                }
+                
+                switch(op2) {
+                    case '>': result2 = chain2 > chain3; break;
+                    case '>=': result2 = chain2 >= chain3; break;
+                    case '<': result2 = chain2 < chain3; break;
+                    case '<=': result2 = chain2 <= chain3; break;
+                }
+                
+                finalResult = result1 && result2;
+                
+                resultDiv.innerHTML = `
+                    <div style="font-size: 1.4rem;">
+                        ${chain1} ${op1} ${chain2} ${op2} ${chain3} = 
+                        <span style="color: ${finalResult ? '#48bb78' : '#e53e3e'}; font-weight: bold;">${finalResult}</span>
+                    </div>
+                    <div style="font-size: 1rem; margin-top: 10px; opacity: 0.8;">
+                        Breakdown: (${chain1} ${op1} ${chain2}) = ${result1} AND (${chain2} ${op2} ${chain3}) = ${result2}
+                    </div>
+                `;
+                
+                resultDiv.classList.add('animated-result');
+                setTimeout(() => {
+                    resultDiv.classList.remove('animated-result');
+                }, 2000);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: #e53e3e;">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Add some dynamic animations
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    section.style.transform = 'translateY(0)';
+                    section.style.opacity = '1';
+                }
+            });
+        });
+
+        // Initialize with some example comparisons
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                performComparison();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
