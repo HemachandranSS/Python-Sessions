@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Arithmetic Operators Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d0f19 0%, #a39fa6 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .operator-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .operator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: height 0.3s ease;
+        }
+
+        .operator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .operator-card:hover::before {
+            height: 8px;
+        }
+
+        .operator-symbol {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .operator-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .operator-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .example-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .interactive-demo {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .demo-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .demo-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 2px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .result-operation {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .special-notes {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            animation: fadeInUp 1s ease-out 0.7s both;
+        }
+
+        .special-notes h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .note-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .string-demo {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .string-demo h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .string-example {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .error-demo {
+            background: #dc3545;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .success-demo {
+            background: #28a745;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .operators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 Python Arithmetic Operators</h1>
+            <p>Master the fundamental building blocks of Python mathematics</p>
+        </div>
+
+        <div class="operators-grid">
+            <div class="operator-card">
+                <div class="operator-symbol">+</div>
+                <div class="operator-name">Addition</div>
+                <div class="operator-description">Adds two numbers or concatenates strings</div>
+                <div class="example-section">
+                    <div class="code-block">10 + 5 = 15<br>"Hello" + " World" = "Hello World"</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">-</div>
+                <div class="operator-name">Subtraction</div>
+                <div class="operator-description">Subtracts the second number from the first</div>
+                <div class="example-section">
+                    <div class="code-block">10 - 5 = 5<br>3.5 - 1.2 = 2.3</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">*</div>
+                <div class="operator-name">Multiplication</div>
+                <div class="operator-description">Multiplies two numbers or repeats strings</div>
+                <div class="example-section">
+                    <div class="code-block">10 * 5 = 50<br>"Hi" * 3 = "HiHiHi"</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">/</div>
+                <div class="operator-name">Division</div>
+                <div class="operator-description">Divides numbers (always returns float)</div>
+                <div class="example-section">
+                    <div class="code-block">10 / 3 = 3.333...<br>9 / 3 = 3.0</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">//</div>
+                <div class="operator-name">Floor Division</div>
+                <div class="operator-description">Divides and rounds down to nearest integer</div>
+                <div class="example-section">
+                    <div class="code-block">10 // 3 = 3<br>10.5 // 2 = 5.0</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">%</div>
+                <div class="operator-name">Modulo</div>
+                <div class="operator-description">Returns the remainder after division</div>
+                <div class="example-section">
+                    <div class="code-block">10 % 3 = 1<br>15 % 4 = 3</div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-symbol">**</div>
+                <div class="operator-name">Exponent/Power</div>
+                <div class="operator-description">Raises first number to the power of second</div>
+                <div class="example-section">
+                    <div class="code-block">2 ** 3 = 8<br>5 ** 2 = 25</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2 class="demo-title">🧮 Interactive Calculator</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Enter two numbers and see all arithmetic operations in action!
+            </p>
+            
+            <div class="input-group">
+                <div class="input-field">
+                    <label for="num1">First Number (a)</label>
+                    <input type="number" id="num1" value="10" step="any">
+                </div>
+                <div class="input-field">
+                    <label for="num2">Second Number (b)</label>
+                    <input type="number" id="num2" value="2" step="any">
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateAll()">
+                🔢 Calculate All Operations
+            </button>
+
+            <div id="results" class="results-grid"></div>
+        </div>
+
+        <div class="special-notes">
+            <h3>🔍 Important Notes & Observations</h3>
+            
+            <div class="note-item">
+                <strong>Division Operator (/):</strong> Always performs floating-point arithmetic and returns a float value, even when dividing integers that result in whole numbers.
+                <div class="code-block" style="margin-top: 10px; background: rgba(255,255,255,0.1);">
+                    10 / 2 = 5.0  # Note: result is float, not int
+                </div>
+            </div>
+
+            <div class="note-item">
+                <strong>Floor Division (//):</strong> Can perform both integer and floating-point arithmetic. If both operands are integers, result is integer. If at least one operand is float, result is float.
+                <div class="code-block" style="margin-top: 10px; background: rgba(255,255,255,0.1);">
+                    10 // 3 = 3      # int result<br>
+                    10.0 // 3 = 3.0  # float result
+                </div>
+            </div>
+
+            <div class="note-item">
+                <strong>Zero Division Error:</strong> Division by zero (/) and modulo by zero (%) always raise ZeroDivisionError.
+                <div id="error-demo" class="error-demo" style="margin-top: 10px;">
+                    Click below to see zero division errors in action!
+                </div>
+                <button onclick="demonstrateZeroDivision()" style="background: white; color: #dc3545; border: none; padding: 8px 16px; border-radius: 4px; margin-top: 10px; cursor: pointer;">
+                    Show Zero Division Errors
+                </button>
+            </div>
+        </div>
+
+        <div class="string-demo">
+            <h3>🔤 String Operations Demo</h3>
+            
+            <div class="string-example">
+                <strong>String Concatenation (+):</strong><br>
+                "Python" + " is" + " awesome!" = "Python is awesome!"
+            </div>
+
+            <div class="string-example">
+                <strong>String Multiplication (*):</strong><br>
+                "Ha" * 5 = "HaHaHaHaHa"<br>
+                3 * "Cool! " = "Cool! Cool! Cool! "
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 10px;">Try String Operations:</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <input type="text" id="str1" placeholder="Enter string" value="Python" style="padding: 8px; border: none; border-radius: 4px;">
+                    <input type="text" id="str2" placeholder="Enter string" value=" rocks!" style="padding: 8px; border: none; border-radius: 4px;">
+                    <input type="number" id="repeat" placeholder="Repeat times" value="3" style="padding: 8px; border: none; border-radius: 4px; width: 100px;">
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="demonstrateStringOps()" style="background: white; color: #667eea; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                        Test String Operations
+                    </button>
+                </div>
+                <div id="string-results" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateAll() {
+            const a = parseFloat(document.getElementById('num1').value) || 0;
+            const b = parseFloat(document.getElementById('num2').value) || 0;
+            const resultsContainer = document.getElementById('results');
+            
+            // Add pulse animation to button
+            document.querySelector('.calculate-btn').classList.add('pulse');
+            setTimeout(() => {
+                document.querySelector('.calculate-btn').classList.remove('pulse');
+            }, 500);
+
+            const operations = [
+                { name: 'Addition', symbol: '+', result: a + b, operation: `${a} + ${b}` },
+                { name: 'Subtraction', symbol: '-', result: a - b, operation: `${a} - ${b}` },
+                { name: 'Multiplication', symbol: '*', result: a * b, operation: `${a} * ${b}` },
+                { name: 'Division', symbol: '/', result: b !== 0 ? a / b : 'Error: Division by zero', operation: `${a} / ${b}` },
+                { name: 'Floor Division', symbol: '//', result: b !== 0 ? Math.floor(a / b) : 'Error: Division by zero', operation: `${a} // ${b}` },
+                { name: 'Modulo', symbol: '%', result: b !== 0 ? a % b : 'Error: Division by zero', operation: `${a} % ${b}` },
+                { name: 'Exponent', symbol: '**', result: Math.pow(a, b), operation: `${a} ** ${b}` }
+            ];
+
+            resultsContainer.innerHTML = '';
+            
+            operations.forEach((op, index) => {
+                setTimeout(() => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'result-item';
+                    resultDiv.innerHTML = `
+                        <div class="result-operation">${op.operation}</div>
+                        <div class="result-value">${typeof op.result === 'number' ? (op.result % 1 === 0 ? op.result.toString() : op.result.toFixed(4)) : op.result}</div>
+                    `;
+                    resultsContainer.appendChild(resultDiv);
+                }, index * 100);
+            });
+        }
+
+        function demonstrateZeroDivision() {
+            const errorDemo = document.getElementById('error-demo');
+            errorDemo.innerHTML = `
+                <div style="margin: 10px 0;">
+                    <strong>10 / 0</strong> → ZeroDivisionError: division by zero
+                </div>
+                <div style="margin: 10px 0;">
+                    <strong>15 % 0</strong> → ZeroDivisionError: integer division or modulo by zero
+                </div>
+                <div style="margin: 10px 0; color: #ffeb3b;">
+                    ⚠️ These operations will crash your Python program if not handled properly!
+                </div>
+            `;
+        }
+
+        function demonstrateStringOps() {
+            const str1 = document.getElementById('str1').value;
+            const str2 = document.getElementById('str2').value;
+            const repeat = parseInt(document.getElementById('repeat').value) || 1;
+            const resultsContainer = document.getElementById('string-results');
+
+            try {
+                const concatenation = str1 + str2;
+                const multiplication1 = str1.repeat(repeat);
+                const multiplication2 = repeat + " * \"" + str1 + "\"";
+
+                resultsContainer.innerHTML = `
+                    <div class="success-demo">
+                        <strong>Concatenation:</strong> "${str1}" + "${str2}" = "${concatenation}"
+                    </div>
+                    <div class="success-demo">
+                        <strong>Multiplication:</strong> "${str1}" * ${repeat} = "${multiplication1}"
+                    </div>
+                `;
+
+                // Demonstrate common errors
+                if (str1 && !isNaN(str1)) {
+                    resultsContainer.innerHTML += `
+                        <div class="error-demo">
+                            <strong>Error Example:</strong> "${str1}" + 10 → TypeError: can only concatenate str to str
+                        </div>
+                    `;
+                }
+
+                if (repeat !== Math.floor(repeat) || repeat < 0) {
+                    resultsContainer.innerHTML += `
+                        <div class="error-demo">
+                            <strong>Error Example:</strong> "${str1}" * ${repeat} → TypeError: can't multiply sequence by non-int
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                resultsContainer.innerHTML = `
+                    <div class="error-demo">
+                        Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize with default calculation
+        window.onload = function() {
+            calculateAll();
+        };
+
+        // Add input event listeners for real-time updates
+        document.getElementById('num1').addEventListener('input', calculateAll);
+        document.getElementById('num2').addEventListener('input', calculateAll);
+    </script>
+</body>
+</html>
