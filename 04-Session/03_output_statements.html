@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Python print() — Complete Guide with Examples</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --secondary: #7c3aed;
+      --accent: #0ea5e9;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+      color: var(--dark);
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%);
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 48px;
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: var(--gray);
+      margin-bottom: 36px;
+      font-weight: 400;
+      border-left: 4px solid var(--accent);
+      padding-left: 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-top: 48px;
+      margin-bottom: 20px;
+      color: var(--dark);
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #334155;
+      font-size: 17px;
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, #dbeafe 0%, #e0f2fe 100%);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    pre {
+      background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+      color: #e2e8f0;
+      padding: 24px;
+      border-radius: var(--radius);
+      overflow: auto;
+      margin: 20px 0;
+      border-left: 5px solid var(--accent);
+      box-shadow: var(--shadow);
+      font-size: 15px;
+      position: relative;
+    }
+
+    pre::before {
+      content: 'Python';
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent);
+      color: white;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border-bottom-left-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 1px;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .note {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-left: 5px solid var(--warning);
+      padding: 22px;
+      border-radius: var(--radius);
+      margin: 24px 0;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+    }
+
+    .note ul {
+      margin-left: 20px;
+    }
+
+    .note li {
+      margin-bottom: 8px;
+    }
+
+    .example {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-left: 5px solid var(--primary);
+      padding: 22px;
+      border-radius: var(--radius);
+      margin: 24px 0;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 10px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    thead {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    th {
+      padding: 18px 16px;
+      text-align: left;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    tr:hover {
+      background-color: var(--primary-light);
+      transition: background-color 0.2s;
+    }
+
+    ol,
+    ul {
+      margin-left: 24px;
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      color: #334155;
+    }
+
+    .form-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-right: 10px;
+    }
+
+    .footer-note {
+      margin-top: 48px;
+      padding: 24px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: var(--radius);
+      text-align: center;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 28px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .python-logo {
+      display: inline-block;
+      background: linear-gradient(90deg, #306998, #FFD43B);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 32px 24px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      pre {
+        padding: 18px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 12px;
+      }
+
+      .container {
+        padding: 24px 18px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+      }
+    }
+
+    /* Animation for code blocks */
+    pre {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="python-logo">PYTHON</div>
+    <h1>Python <code>print()</code> — Complete Output Guide</h1>
+    <p class="subtitle">Master the print() function with comprehensive examples and best practices — with <span
+        class="highlight">Durga</span> replaced by <span class="highlight">Hema</span>.</p>
+
+    <p>We can use the <code>print()</code> function to display output in Python. Below are all the forms, rules, and
+      practical examples.</p>
+
+    <h2><span class="form-badge">Form-1</span> <code>print()</code> without any argument</h2>
+    <p>Simply prints a new line character (blank line).</p>
+    <pre><code>print()
+# Output: (blank line)</code></pre>
+
+    <h2><span class="form-badge">Form-2</span> Printing strings and escape characters</h2>
+    <ol>
+      <li><code>print(String)</code></li>
+      <li><code>print("Hello World")</code></li>
+      <li>Escape characters work too:</li>
+    </ol>
+    <pre><code>print("Hello \n World")    # Hello
+                              #  World
+print("Hello\tWorld")     # Hello    World
+</code></pre>
+    <p>Repeat strings using the repetition operator <code>*</code>:</p>
+    <pre><code>print(10 * "Hello")   # prints "Hello" 10 times
+print("Hello" * 10)       # same effect
+</code></pre>
+    <p>Concatenation using <code>+</code>:</p>
+    <pre><code>print("Hello" + "World")  # HelloWorld
+</code></pre>
+    <div class="note">
+      <strong>Important Notes:</strong>
+      <ul>
+        <li>If both operands are strings, <code>+</code> concatenates them.</li>
+        <li>If one operand is a string and the other is a non-string (e.g., int), you'll get a <code>TypeError</code>.
+        </li>
+        <li>If both operands are numbers, <code>+</code> adds them arithmetically.</li>
+      </ul>
+    </div>
+
+    <p>Example showing the difference:</p>
+    <pre><code>print("Hello" + "World")   # HelloWorld
+print("Hello", "World")     # Hello World (note the space)
+</code></pre>
+
+    <h2><span class="form-badge">Form-3</span> <code>print()</code> with variable number of arguments</h2>
+    <p>By default, values are separated by a space. Use <code>sep</code> to change the separator.</p>
+    <pre><code>a, b, c = 10, 20, 30
+print("The Values are :", a, b, c)
+# Output: The Values are : 10 20 30
+
+print(a, b, c, sep=',')   # 10,20,30
+print(a, b, c, sep=':')   # 10:20:30
+</code></pre>
+
+    <h2><span class="form-badge">Form-4</span> <code>print()</code> with <code>end</code> attribute</h2>
+    <p>The default value for <code>end</code> is <code>'\n'</code> (new line). Use <code>end</code> to stay on same
+      line.</p>
+    <pre><code>print("Hello")
+print("Hema")
+print("Soft")
+# Output:
+# Hello
+# Hema
+# Soft
+
+# To print on same line:
+print("Hello", end=' ')
+print("Hema", end=' ')
+print("Soft")
+# Output: Hello Hema Soft
+</code></pre>
+
+    <h2><span class="form-badge">Form-5</span> <code>print(object)</code> — printing collections</h2>
+    <p>You can pass any object (list, tuple, set, dict) to <code>print()</code>.</p>
+    <pre><code>l = [10, 20, 30, 40]
+t = (10, 20, 30, 40)
+print(l)   # [10, 20, 30, 40]
+print(t)   # (10, 20, 30, 40)
+</code></pre>
+
+    <h2><span class="form-badge">Form-6</span> <code>print(string, variable list)</code></h2>
+    <pre><code>s = "Hema"
+a = 48
+s1 = "Java"
+s2 = "Python"
+print("Hello", s, "Your Age is", a)
+# Output: Hello Hema Your Age is 48
+print("You are teaching", s1, "and", s2)
+# Output: You are teaching Java and Python
+</code></pre>
+
+    <h2><span class="form-badge">Form-7</span> Formatted strings using % placeholders</h2>
+    <p>Placeholders:</p>
+    <ul>
+      <li><code>%i</code> / <code>%d</code> — integers</li>
+      <li><code>%f</code> — float</li>
+      <li><code>%s</code> — string</li>
+    </ul>
+    <pre><code>a = 10
+b = 20
+c = 30
+print("a value is %i" % a)
+print("b value is %d and c value is %d" % (b, c))
+# Output:
+# a value is 10
+# b value is 20 and c value is 30
+
+s = "Hema"
+my_list = [10, 20, 30, 40]
+print("Hello %s ...The List of Items are %s" % (s, my_list))
+# Output: Hello Hema ...The List of Items are [10, 20, 30, 40]
+</code></pre>
+
+    <h2><span class="form-badge">Form-8</span> <code>print()</code> with replacement operator <code>{}</code>
+      (str.format)</h2>
+    <pre><code>name = "Hema"
+salary = 10000
+gf = "Sunny"
+print("Hello {0} your salary is {1} and Your Friend {2} is waiting".format(name, salary, gf))
+print("Hello {x} your salary is {y} and Your Friend {z} is waiting".format(x=name, y=salary, z=gf))
+# Output:
+# Hello Hema your salary is 10000 and Your Friend Sunny is waiting
+# Hello Hema your salary is 10000 and Your Friend Sunny is waiting
+</code></pre>
+
+    <div class="example">
+      <h2 style="border-bottom: none; padding-bottom: 0; margin-top: 0;">Quick Reference Table</h2>
+      <p style="margin-bottom: 20px;">All <code>print()</code> forms at a glance:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Form</th>
+            <th>Description</th>
+            <th>Key Feature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Form-1</strong></td>
+            <td>Empty <code>print()</code></td>
+            <td>Prints a new line</td>
+          </tr>
+          <tr>
+            <td><strong>Form-2</strong></td>
+            <td>Strings & escapes</td>
+            <td>Repetition, concatenation</td>
+          </tr>
+          <tr>
+            <td><strong>Form-3</strong></td>
+            <td>Multiple arguments</td>
+            <td>Custom <code>sep</code> parameter</td>
+          </tr>
+          <tr>
+            <td><strong>Form-4</strong></td>
+            <td>Line control</td>
+            <td>Custom <code>end</code> parameter</td>
+          </tr>
+          <tr>
+            <td><strong>Form-5</strong></td>
+            <td>Print objects</td>
+            <td>Collections, custom objects</td>
+          </tr>
+          <tr>
+            <td><strong>Form-6</strong></td>
+            <td>Mixed output</td>
+            <td>Strings with variables</td>
+          </tr>
+          <tr>
+            <td><strong>Form-7</strong></td>
+            <td>% formatting</td>
+            <td>Old-style placeholders</td>
+          </tr>
+          <tr>
+            <td><strong>Form-8</strong></td>
+            <td><code>str.format()</code></td>
+            <td>Replacement fields</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Add subtle interactivity to code blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      pre.addEventListener('click', function () {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(this.querySelector('code'));
+        selection.removeAllRanges();
+        selection.addRange(range);
+      });
+    });
+
+    // Make the download button functional
+    document.querySelector('.download-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+      alert('To save this page, use your browser\'s "Save As" feature (Ctrl+S or Cmd+S).\n\nFor a PDF version, use "Print to PDF" from the print dialog.');
+    });
+  </script>
+</body>
+
+</html>

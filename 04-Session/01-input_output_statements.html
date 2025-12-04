@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input & Output - Interactive Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #581c87 0%, #7e22ce 50%, #a855f7 100%);
+      min-height: 100vh;
+      color: #f1f5f9;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Version Comparison */
+    .version-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out 0.1s backwards;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #c084fc;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .version-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 900px) {
+      .version-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .version-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(168, 85, 247, 0.2);
+      border-radius: 15px;
+      padding: 30px;
+    }
+
+    .version-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #a78bfa;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .function-list {
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .function-item {
+      background: rgba(139, 92, 246, 0.1);
+      border-left: 4px solid #8b5cf6;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .function-name {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.2rem;
+      color: #c084fc;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .function-desc {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .code-block {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 15px;
+      font-family: 'Fira Code', monospace;
+      color: #cbd5e1;
+      margin: 15px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .code-keyword {
+      color: #c084fc;
+    }
+
+    .code-function {
+      color: #22d3ee;
+    }
+
+    .code-string {
+      color: #86efac;
+    }
+
+    .code-comment {
+      color: #64748b;
+    }
+
+    /* Examples Section */
+    .examples-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+
+    .examples-section:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .examples-section:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 25px;
+      margin-top: 25px;
+    }
+
+    .example-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(168, 85, 247, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(168, 85, 247, 0.5);
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+    }
+
+    .example-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #e879f9;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .example-desc {
+      color: #cbd5e1;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .warning-box {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .warning-title {
+      color: #f87171;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .warning-text {
+      color: #fca5a5;
+      line-height: 1.7;
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+      border: 2px solid rgba(34, 197, 94, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .tip-title {
+      color: #4ade80;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .output-content {
+      color: #86efac;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-keyboard"></i> Input & Output</h1>
+      <p class="subtitle">
+        Learn how to read dynamic input from the keyboard and display output in Python.
+        Master the <code
+          style="background: rgba(168, 85, 247, 0.2); padding: 3px 8px; border-radius: 6px;">input()</code>
+        function, <code
+          style="background: rgba(168, 85, 247, 0.2); padding: 3px 8px; border-radius: 6px;">eval()</code>,
+        and various techniques for handling user input.
+      </p>
+    </header>
+
+    <!-- Python Version Comparison -->
+    <div class="version-section">
+      <h2 class="section-title">
+        <i class="fas fa-code-branch"></i>
+        Python 2 vs Python 3
+      </h2>
+
+      <div class="version-grid">
+        <!-- Python 2 -->
+        <div class="version-card">
+          <div class="version-title">
+            <i class="fab fa-python"></i>
+            Python 2
+          </div>
+          <ul class="function-list">
+            <li class="function-item">
+              <div class="function-name">raw_input()</div>
+              <div class="function-desc">Always returns a string</div>
+            </li>
+            <li class="function-item">
+              <div class="function-name">input()</div>
+              <div class="function-desc">Evaluates input and returns natural type</div>
+            </li>
+          </ul>
+          <div class="code-block">
+            <span class="code-comment"># example</span><br>
+            x = <span class="code-function">raw_input</span>(<span class="code-string">"Enter First Number:"</span>)<br>
+            <span class="code-keyword">print</span>(<span class="code-function">type</span>(x)) <span
+              class="code-comment"># will print &lt;type 'str'&gt;</span>
+          </div>
+        </div>
+
+        <!-- Python 3 -->
+        <div class="version-card">
+          <div class="version-title">
+            <i class="fab fa-python"></i>
+            Python 3
+          </div>
+          <ul class="function-list">
+            <li class="function-item">
+              <div class="function-name">input()</div>
+              <div class="function-desc">Always returns a string (like Python 2's raw_input)</div>
+            </li>
+          </ul>
+          <div class="code-block">
+            <span class="code-comment">&gt;&gt; type(input("Enter value:"))</span><br>
+            Enter value:10<br>
+            &lt;class 'str'&gt;
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">
+              <i class="fas fa-info-circle"></i>
+              Note
+            </div>
+            <div class="tip-text">
+              Python 3 removed <code
+                style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">raw_input()</code>.
+              The <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">input()</code>
+              function now behaves like Python 2's raw_input().
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="examples-section">
+      <h2 class="section-title">
+        <i class="fas fa-code"></i>
+        Examples
+      </h2>
+
+      <div class="examples-grid">
+        <!-- Example 1 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-1"></i> Read Two Numbers (Multi-step)</h3>
+          <p class="example-desc">Read two numbers and print their sum using separate type conversion steps.</p>
+          <div class="code-block">
+            x = <span class="code-function">input</span>(<span class="code-string">"Enter First Number:"</span>)<br>
+            y = <span class="code-function">input</span>(<span class="code-string">"Enter Second Number:"</span>)<br>
+            i = <span class="code-function">int</span>(x)<br>
+            j = <span class="code-function">int</span>(y)<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"The Sum:"</span>, i + j)<br>
+            <br>
+            <span class="code-comment"># Sample run</span><br>
+            <span class="code-comment"># Enter First Number: 100</span><br>
+            <span class="code-comment"># Enter Second Number: 200</span><br>
+            <span class="code-comment"># The Sum: 300</span>
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">Enter First Number: 100
+              Enter Second Number: 200
+              The Sum: 300</div>
+          </div>
+        </div>
+
+        <!-- Example 2 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-2"></i> Read Two Numbers (Compact)</h3>
+          <p class="example-desc">A more compact version using inline type conversion.</p>
+          <div class="code-block">
+            x = <span class="code-function">int</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter First Number:"</span>))<br>
+            y = <span class="code-function">int</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter Second Number:"</span>))<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"The Sum:"</span>, x + y)<br>
+            <br>
+            <span class="code-comment"># or even more compact</span><br>
+            <span class="code-keyword">print</span>(<span class="code-string">"The Sum:"</span>, <span
+              class="code-function">int</span>(<span class="code-function">input</span>(<span class="code-string">"Enter
+              First Number:"</span>)) + <span class="code-function">int</span>(<span
+              class="code-function">input</span>(<span class="code-string">"Enter Second Number:"</span>)))
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">Enter First Number: 100
+              Enter Second Number: 200
+              The Sum: 300</div>
+          </div>
+        </div>
+
+        <!-- Example 3 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-3"></i> Employee Data</h3>
+          <p class="example-desc">Read multiple types of employee data and display formatted information.</p>
+          <div class="code-block">
+            eno = <span class="code-function">int</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter Employee No:"</span>))<br>
+            ename = <span class="code-function">input</span>(<span class="code-string">"Enter Employee
+              Name:"</span>)<br>
+            esal = <span class="code-function">float</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter Employee Salary:"</span>))<br>
+            eaddr = <span class="code-function">input</span>(<span class="code-string">"Enter Employee
+              Address:"</span>)<br>
+            married = <span class="code-function">bool</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Employee Married ?[True|False]:"</span>))<br>
+            <br>
+            <span class="code-keyword">print</span>(<span class="code-string">"Please Confirm Information"</span>)<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"Employee No :"</span>, eno)<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"Employee Name :"</span>, ename)<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"Employee Salary :"</span>, esal)
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">Enter Employee No: 100
+              Enter Employee Name: Sunny
+              Enter Employee Salary: 1000
+              Enter Employee Address: Mumbai
+              Employee Married ?[True|False]: True
+              Please Confirm Information
+              Employee No : 100
+              Employee Name : Sunny
+              Employee Salary : 1000.0</div>
+          </div>
+        </div>
+
+        <!-- Example 4 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-4"></i> Multiple Values (split)</h3>
+          <p class="example-desc">Read multiple values from a single line using split() and list comprehension.</p>
+          <div class="code-block">
+            a, b = [<span class="code-function">int</span>(x) <span class="code-keyword">for</span> x <span
+              class="code-keyword">in</span> <span class="code-function">input</span>(<span class="code-string">"Enter 2
+              numbers :"</span>).<span class="code-function">split</span>()]<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"Product is :"</span>, a * b)<br>
+            <br>
+            <span class="code-comment"># Sample run</span><br>
+            <span class="code-comment"># Enter 2 numbers :10 20</span><br>
+            <span class="code-comment"># Product is : 200</span>
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">Enter 2 numbers : 10 20
+              Product is : 200</div>
+          </div>
+          <div class="tip-box">
+            <div class="tip-title">
+              <i class="fas fa-lightbulb"></i>
+              Tip
+            </div>
+            <div class="tip-text">
+              <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">split()</code>
+              uses whitespace as the default separator, but you can pass any separator.
+            </div>
+          </div>
+        </div>
+
+        <!-- Example 5 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-5"></i> Comma-Separated Input</h3>
+          <p class="example-desc">Read 3 float numbers separated by commas and calculate their sum.</p>
+          <div class="code-block">
+            a, b, c = [<span class="code-function">float</span>(x) <span class="code-keyword">for</span> x <span
+              class="code-keyword">in</span> <span class="code-function">input</span>(<span class="code-string">"Enter 3
+              float numbers :"</span>).<span class="code-function">split</span>(<span
+              class="code-string">','</span>)]<br>
+            <span class="code-keyword">print</span>(<span class="code-string">"The Sum is :"</span>, a + b + c)<br>
+            <br>
+            <span class="code-comment"># Sample run</span><br>
+            <span class="code-comment"># Enter 3 float numbers :10.5,20.6,20.1</span><br>
+            <span class="code-comment"># The Sum is : 51.2</span>
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">Enter 3 float numbers : 10.5,20.6,20.1
+              The Sum is : 51.2</div>
+          </div>
+        </div>
+
+        <!-- Example 6 -->
+        <div class="example-card">
+          <h3 class="example-title"><i class="fas fa-calculator"></i> eval() Function</h3>
+          <p class="example-desc">Evaluate Python expressions dynamically using eval().</p>
+          <div class="code-block">
+            <span class="code-comment"># examples</span><br>
+            x = <span class="code-function">eval</span>(<span class="code-string">"10+20+30"</span>)<br>
+            <span class="code-keyword">print</span>(x) <span class="code-comment"># =&gt; 60</span><br>
+            <br>
+            <span class="code-comment"># evaluate an expression entered by the user</span><br>
+            x = <span class="code-function">eval</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter Expression"</span>))<br>
+            <span class="code-comment"># Enter Expression: 10+2*3/4</span><br>
+            <span class="code-comment"># Output: 11.5</span><br>
+            <br>
+            <span class="code-comment"># eval() can also evaluate lists, tuples, etc.</span><br>
+            l = <span class="code-function">eval</span>(<span class="code-function">input</span>(<span
+              class="code-string">"Enter List"</span>))<br>
+            <span class="code-keyword">print</span>(<span class="code-function">type</span>(l))
+          </div>
+          <div class="output-box">
+            <div class="output-label"><i class="fas fa-terminal"></i> Output:</div>
+            <div class="output-content">60
+
+              Enter Expression: 10+2*3/4
+              11.5</div>
+          </div>
+          <div class="warning-box">
+            <div class="warning-title">
+              <i class="fas fa-exclamation-triangle"></i>
+              Security Warning
+            </div>
+            <div class="warning-text">
+              <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">eval()</code>
+              executes arbitrary code and can be dangerous with untrusted input. Use safer alternatives like
+              <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">json.loads()</code>
+              or validate input before using eval().
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
