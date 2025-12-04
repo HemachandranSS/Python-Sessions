@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment Operators - Interactive Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+      min-height: 100vh;
+      color: #f1f5f9;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 800px;
+      margin: 0 auto 10px;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    /* Operators Grid */
+    .operators-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out 0.1s backwards;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .operators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+    }
+
+    .operator-badge {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fbbf24;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .operator-badge:hover {
+      transform: translateY(-5px) scale(1.05);
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.3));
+      box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+    }
+
+    /* Interactive Demo */
+    .demo-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 1000px) {
+      .demo-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 35px;
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+
+    .demo-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .demo-card:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .demo-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #a78bfa;
+    }
+
+    .code-display {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      font-family: 'Fira Code', monospace;
+      border: 1px solid rgba(167, 139, 250, 0.2);
+    }
+
+    .code-line {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .line-number {
+      color: #64748b;
+      min-width: 30px;
+    }
+
+    .code-text {
+      color: #cbd5e1;
+    }
+
+    .code-keyword {
+      color: #c084fc;
+    }
+
+    .code-number {
+      color: #fbbf24;
+    }
+
+    .code-operator {
+      color: #f472b6;
+      font-weight: 700;
+    }
+
+    .code-comment {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .output {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+      border: 2px solid rgba(34, 197, 94, 0.3);
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-top: 15px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .output-label {
+      color: #86efac;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .output-value {
+      color: #22c55e;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    /* Interactive Calculator */
+    .calculator {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    }
+
+    .calc-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      font-family: 'Fira Code', monospace;
+      transition: all 0.3s ease;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #fbbf24;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+    }
+
+    .calc-result {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 25px;
+      margin-top: 20px;
+    }
+
+    .step-by-step {
+      margin-bottom: 15px;
+    }
+
+    .step {
+      background: rgba(167, 139, 250, 0.1);
+      border-left: 4px solid #a78bfa;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .step-label {
+      color: #a78bfa;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .final-result {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .final-result-label {
+      color: #fbbf24;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .final-result-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fbbf24;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Flow Diagram */
+    .flow-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      animation: fadeInUp 0.8s ease-out 0.5s backwards;
+    }
+
+    .flow-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    .flow-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 30px;
+    }
+
+    .flow-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px 35px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .flow-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .flow-box-1 {
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(100, 116, 139, 0.2));
+      border-color: #94a3b8;
+      color: #cbd5e1;
+    }
+
+    .flow-box-2 {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(139, 92, 246, 0.2));
+      border-color: #a78bfa;
+      color: #c4b5fd;
+    }
+
+    .flow-box-3 {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+      border-color: #22c55e;
+      color: #86efac;
+    }
+
+    .flow-arrow {
+      font-size: 2rem;
+      color: #fbbf24;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-equals"></i> Assignment Operators</h1>
+      <p class="subtitle">
+        Master compound assignment operators to write cleaner, more efficient Python code.
+        Combine assignment with arithmetic, bitwise, and other operations in a single step.
+      </p>
+      <p class="subtitle">
+        <span class="highlight">x += 10</span> is equivalent to <span class="highlight">x = x + 10</span>
+      </p>
+    </header>
+
+    <!-- Operators Grid -->
+    <div class="operators-section">
+      <h2 class="section-title">
+        <i class="fas fa-list"></i>
+        All Compound Assignment Operators
+      </h2>
+      <div class="operators-grid">
+        <div class="operator-badge" title="Addition assignment">+=</div>
+        <div class="operator-badge" title="Subtraction assignment">-=</div>
+        <div class="operator-badge" title="Multiplication assignment">*=</div>
+        <div class="operator-badge" title="Division assignment">/=</div>
+        <div class="operator-badge" title="Modulus assignment">%=</div>
+        <div class="operator-badge" title="Floor division assignment">//=</div>
+        <div class="operator-badge" title="Exponentiation assignment">**=</div>
+        <div class="operator-badge" title="Bitwise AND assignment">&=</div>
+        <div class="operator-badge" title="Bitwise OR assignment">|=</div>
+        <div class="operator-badge" title="Bitwise XOR assignment">^=</div>
+        <div class="operator-badge" title="Right shift assignment">>>=</div>
+        <div class="operator-badge" title="Left shift assignment">
+          <<= </div>
+        </div>
+
+        <!-- Example Demos -->
+        <div class="demo-section">
+          <!-- Example 1 -->
+          <div class="demo-card">
+            <h3 class="demo-title"><i class="fas fa-code"></i> Example 1: Addition Assignment</h3>
+            <div class="code-display">
+              <div class="code-line">
+                <span class="line-number">1</span>
+                <span class="code-text">x = <span class="code-number">10</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">2</span>
+                <span class="code-text">x <span class="code-operator">+=</span> <span
+                    class="code-number">20</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">3</span>
+                <span class="code-text"><span class="code-keyword">print</span>(x)</span>
+              </div>
+            </div>
+            <div class="output">
+              <div class="output-label">Output:</div>
+              <div class="output-value">30</div>
+            </div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="demo-card">
+            <h3 class="demo-title"><i class="fas fa-code"></i> Example 2: Bitwise AND Assignment</h3>
+            <div class="code-display">
+              <div class="code-line">
+                <span class="line-number">1</span>
+                <span class="code-text">x = <span class="code-number">10</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">2</span>
+                <span class="code-text">x <span class="code-operator">&=</span> <span
+                    class="code-number">5</span></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">3</span>
+                <span class="code-text"><span class="code-keyword">print</span>(x)</span>
+              </div>
+            </div>
+            <div class="output">
+              <div class="output-label">Output:</div>
+              <div class="output-value">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Calculator -->
+        <div class="calculator">
+          <h2 class="calc-title"><i class="fas fa-calculator"></i> Interactive Assignment Calculator</h2>
+
+          <div class="calc-grid">
+            <div>
+              <div class="input-group">
+                <label for="initialValue">Initial Value (x)</label>
+                <input type="number" id="initialValue" value="10">
+              </div>
+
+              <div class="input-group">
+                <label for="operator">Compound Operator</label>
+                <select id="operator">
+                  <option value="+">+= (Addition)</option>
+                  <option value="-">-= (Subtraction)</option>
+                  <option value="*">*= (Multiplication)</option>
+                  <option value="/">/= (Division)</option>
+                  <option value="%">%= (Modulus)</option>
+                  <option value="//">//= (Floor Division)</option>
+                  <option value="**">**= (Exponentiation)</option>
+                  <option value="&">&= (Bitwise AND)</option>
+                  <option value="|">|= (Bitwise OR)</option>
+                  <option value="^">^= (Bitwise XOR)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label for="operandValue">Operand Value</label>
+                <input type="number" id="operandValue" value="20">
+              </div>
+
+              <button class="btn" onclick="calculate()">
+                <i class="fas fa-play"></i> Calculate
+              </button>
+            </div>
+
+            <div id="calcResult" class="calc-result" style="display: none;">
+              <div class="step-by-step">
+                <div class="step">
+                  <div class="step-label">Step 1: Initial Value</div>
+                  <div id="step1">x = 10</div>
+                </div>
+                <div class="step">
+                  <div class="step-label">Step 2: Operation</div>
+                  <div id="step2">x += 20</div>
+                </div>
+                <div class="step">
+                  <div class="step-label">Step 3: Equivalent</div>
+                  <div id="step3">x = x + 20</div>
+                </div>
+              </div>
+              <div class="final-result">
+                <div class="final-result-label">Final Result</div>
+                <div class="final-result-value" id="finalValue">30</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flow Diagram -->
+        <div class="flow-section">
+          <h2 class="flow-title"><i class="fas fa-project-diagram"></i> Operation Flow</h2>
+          <div class="flow-container">
+            <div class="flow-box flow-box-1">x = 10</div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-box flow-box-2">x += 20<br><small style="opacity: 0.7;">(x = x + 20)</small></div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-box flow-box-3">x = 30</div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function calculate() {
+          const initial = parseFloat(document.getElementById('initialValue').value) || 0;
+          const operator = document.getElementById('operator').value;
+          const operand = parseFloat(document.getElementById('operandValue').value) || 0;
+
+          let result;
+          let operatorSymbol;
+          let operatorName;
+
+          switch (operator) {
+            case '+':
+              result = initial + operand;
+              operatorSymbol = '+=';
+              operatorName = 'Addition';
+              break;
+            case '-':
+              result = initial - operand;
+              operatorSymbol = '-=';
+              operatorName = 'Subtraction';
+              break;
+            case '*':
+              result = initial * operand;
+              operatorSymbol = '*=';
+              operatorName = 'Multiplication';
+              break;
+            case '/':
+              result = operand !== 0 ? initial / operand : 'Error: Division by zero';
+              operatorSymbol = '/=';
+              operatorName = 'Division';
+              break;
+            case '%':
+              result = operand !== 0 ? initial % operand : 'Error: Division by zero';
+              operatorSymbol = '%=';
+              operatorName = 'Modulus';
+              break;
+            case '//':
+              result = operand !== 0 ? Math.floor(initial / operand) : 'Error: Division by zero';
+              operatorSymbol = '//=';
+              operatorName = 'Floor Division';
+              break;
+            case '**':
+              result = Math.pow(initial, operand);
+              operatorSymbol = '**=';
+              operatorName = 'Exponentiation';
+              break;
+            case '&':
+              result = initial & operand;
+              operatorSymbol = '&=';
+              operatorName = 'Bitwise AND';
+              break;
+            case '|':
+              result = initial | operand;
+              operatorSymbol = '|=';
+              operatorName = 'Bitwise OR';
+              break;
+            case '^':
+              result = initial ^ operand;
+              operatorSymbol = '^=';
+              operatorName = 'Bitwise XOR';
+              break;
+          }
+
+          // Update steps
+          document.getElementById('step1').textContent = `x = ${initial}`;
+          document.getElementById('step2').textContent = `x ${operatorSymbol} ${operand}`;
+          document.getElementById('step3').textContent = `x = ${initial} ${operator} ${operand}`;
+
+          // Format result
+          if (typeof result === 'number') {
+            result = result % 1 === 0 ? result : result.toFixed(4);
+          }
+
+          document.getElementById('finalValue').textContent = result;
+          document.getElementById('calcResult').style.display = 'block';
+        }
+
+        // Initial calculation
+        window.addEventListener('load', () => {
+          calculate();
+        });
+
+        // Add click animation to operator badges
+        document.querySelectorAll('.operator-badge').forEach(badge => {
+          badge.addEventListener('click', function () {
+            const op = this.textContent.trim();
+            const operatorMap = {
+              '+=': '+', '-=': '-', '*=': '*', '/=': '/',
+              '%=': '%', '//=': '//', '**=': '**',
+              '&=': '&', '|=': '|', '^=': '^'
+            };
+
+            if (operatorMap[op]) {
+              document.getElementById('operator').value = operatorMap[op];
+              calculate();
+
+              // Scroll to calculator
+              document.querySelector('.calculator').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              });
+            }
+          });
+        });
+      </script>
+</body>
+
+</html>

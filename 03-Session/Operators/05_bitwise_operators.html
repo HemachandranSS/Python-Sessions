@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitwise Operators Guide | Hema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(76, 201, 240, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a5b4fc;
+            margin-bottom: 15px;
+        }
+
+        .hema-highlight {
+            color: #f72585;
+            font-weight: bold;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .operators-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .operators-table h2,
+        .interactive-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #4cc9f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .operators-table h2 i,
+        .interactive-section h2 i {
+            color: #f72585;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .operator-symbol {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #f72585;
+            background: rgba(247, 37, 133, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .interactive-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #a5b4fc;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #4cc9f0;
+            box-shadow: 0 0 0 2px rgba(76, 201, 240, 0.2);
+        }
+
+        .bit-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .bit {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: monospace;
+            transition: all 0.3s ease;
+        }
+
+        .bit-1 {
+            background: #f72585;
+            color: white;
+        }
+
+        .bit-0 {
+            background: #4cc9f0;
+            color: #0f3460;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #4cc9f0;
+        }
+
+        .result h3 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f72585;
+            margin: 10px 0;
+        }
+
+        .notes-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .notes-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notes-list {
+            list-style-type: none;
+        }
+
+        .notes-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .notes-list li:last-child {
+            border-bottom: none;
+        }
+
+        .note-icon {
+            color: #f72585;
+            margin-top: 3px;
+        }
+
+        .important-note {
+            background: rgba(247, 37, 133, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #f72585;
+        }
+
+        .important-note h3 {
+            color: #f72585;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #a5b4fc;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            background: rgba(67, 97, 238, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(67, 97, 238, 0.5);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-btn:hover {
+            background: rgba(67, 97, 238, 0.4);
+            color: white;
+        }
+
+        .example-title {
+            margin-top: 25px;
+            color: #4cc9f0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> Bitwise Operators Guide</h1>
+            <p class="subtitle">Interactive tutorial on bitwise operations by <span class="hema-highlight">Hema</span>
+            </p>
+            <p>Learn how bitwise operators work with integers and boolean values through interactive examples</p>
+        </header>
+
+        <div class="content-wrapper">
+            <section class="operators-table">
+                <h2><i class="fas fa-table"></i> Bitwise Operators Reference</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="operator-symbol">&</span></td>
+                            <td>If both bits are 1 then only result is 1 otherwise result is 0 (AND)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="operator-symbol">|</span></td>
+                            <td>If at least one bit is 1 then result is 1 otherwise result is 0 (OR)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="operator-symbol">^</span></td>
+                            <td>If bits are different then only result is 1 otherwise result is 0 (XOR)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="operator-symbol">~</span></td>
+                            <td>Bitwise complement operator i.e. 1 means 0 and 0 means 1 (NOT)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="operator-symbol">
+                                    << </span>
+                            </td>
+                            <td>Bitwise Left shift Operator</td>
+                        </tr>
+                        <tr>
+                            <td><span class="operator-symbol">>></span></td>
+                            <td>Bitwise Right shift Operator</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="interactive-section">
+                <h2><i class="fas fa-cogs"></i> Interactive Bitwise Calculator</h2>
+
+                <div class="input-group">
+                    <label for="value1">First Value (Integer)</label>
+                    <input type="number" id="value1" value="4" min="0" max="255">
+
+                    <p class="example-title">Try these examples from Hema's guide:</p>
+                    <div class="examples">
+                        <div class="example-btn" data-val1="4" data-val2="5">4 & 5</div>
+                        <div class="example-btn" data-val1="10" data-val2="5">10 | 5</div>
+                        <div class="example-btn" data-val1="4" data-val2="5">4 ^ 5</div>
+                        <div class="example-btn" data-val1="5" data-val2="0">~5 (use NOT)</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="operator">Bitwise Operator</label>
+                    <select id="operator">
+                        <option value="&">AND (&)</option>
+                        <option value="|">OR (|)</option>
+                        <option value="^">XOR (^)</option>
+                        <option value="~">NOT (~) - ignores second value</option>
+                        <option value="<<">Left Shift (<<)< /option>
+                        <option value=">>">Right Shift (>>)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="value2">Second Value (Integer) - not used for NOT operator</label>
+                    <input type="number" id="value2" value="5" min="0" max="255">
+                </div>
+
+                <div id="bitDisplay1" class="bit-display">
+                    <!-- First value bits will be displayed here -->
+                </div>
+
+                <div id="bitDisplay2" class="bit-display">
+                    <!-- Second value bits will be displayed here -->
+                </div>
+
+                <button class="btn" id="calculateBtn">
+                    <i class="fas fa-calculator"></i> Calculate Bitwise Operation
+                </button>
+
+                <div id="result" class="result" style="display: none;">
+                    <h3>Result</h3>
+                    <div id="resultBits" class="bit-display">
+                        <!-- Result bits will be displayed here -->
+                    </div>
+                    <div class="result-value" id="resultValue">0</div>
+                    <p id="resultExplanation">Explanation of the operation will appear here</p>
+                </div>
+            </section>
+        </div>
+
+        <section class="notes-section">
+            <h2><i class="fas fa-sticky-note"></i> Important Notes from Hema's Guide</h2>
+            <ul class="notes-list">
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>These operators are applicable only for int and boolean types.</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>By mistake if we are trying to apply for any other type then we will get Error.</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>print(4&5) → Valid (result is 4)</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>print(10.5 & 5.6) → TypeError: unsupported operand type(s) for &: 'float' and 'float'</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>print(True & True) → Valid</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>print(4|5) → 5</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle note-icon"></i>
+                    <span>print(4^5) → 1</span>
+                </li>
+            </ul>
+
+            <div class="important-note">
+                <h3><i class="fas fa-exclamation-triangle"></i> Bitwise Complement Operator (~)</h3>
+                <p>We have to apply complement for total bits. For example: print(~5) → -6</p>
+                <p><strong>Note:</strong> The most significant bit acts as sign bit. 0 value represents +ve number where
+                    as 1 represents -ve value. Positive numbers will be represented directly in the memory where as -ve
+                    numbers will be represented indirectly in 2's complement form.</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Bitwise Operators Interactive Guide | Created by <span class="hema-highlight">Hema</span> | All examples
+                are demonstrated for educational purposes</p>
+            <p>These operators are applicable only for int and boolean types according to Hema's guide.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Function to convert decimal to binary and display bits
+        function decimalToBinaryBits(num, bits = 8) {
+            // Handle negative numbers for display purposes
+            let displayNum = num;
+            if (num < 0) {
+                // For negative numbers, show two's complement representation
+                displayNum = (1 << bits) + num;
+            }
+
+            let binary = displayNum.toString(2);
+            // Pad with zeros to make it 8 bits
+            while (binary.length < bits) {
+                binary = '0' + binary;
+            }
+            // If longer than bits (for negative numbers), take the last 'bits' bits
+            if (binary.length > bits) {
+                binary = binary.slice(-bits);
+            }
+
+            return binary;
+        }
+
+        // Function to create bit display
+        function createBitDisplay(binaryStr, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            // Add bit position labels (7 to 0, left to right)
+            const bitPositions = document.createElement('div');
+            bitPositions.style.cssText = 'width:100%; display:flex; gap:5px; margin-bottom:5px; font-size:0.8rem; color:#a5b4fc;';
+            for (let i = binaryStr.length - 1; i >= 0; i--) {
+                const position = document.createElement('div');
+                position.textContent = i;
+                position.style.width = '40px';
+                position.style.textAlign = 'center';
+                bitPositions.appendChild(position);
+            }
+            container.appendChild(bitPositions);
+
+            // Add bits in reverse order to match position labels (MSB to LSB, left to right)
+            for (let i = 0; i < binaryStr.length; i++) {
+                const bit = document.createElement('div');
+                bit.className = `bit bit-${binaryStr[i]}`;
+                bit.textContent = binaryStr[i];
+
+                // Highlight most significant bit (sign bit for signed numbers)
+                if (i === 0) {
+                    bit.style.border = '2px solid #f72585';
+                }
+
+                container.appendChild(bit);
+            }
+        }
+
+        // Function to calculate bitwise operation
+        function calculateBitwise() {
+            const val1 = parseInt(document.getElementById('value1').value) || 0;
+            const val2 = parseInt(document.getElementById('value2').value) || 0;
+            const operator = document.getElementById('operator').value;
+
+            let result;
+            let explanation;
+
+            // Calculate based on operator
+            switch (operator) {
+                case '&':
+                    result = val1 & val2;
+                    explanation = `AND Operation: ${val1} & ${val2} = ${result}. Each bit is 1 only if both corresponding bits are 1.`;
+                    break;
+                case '|':
+                    result = val1 | val2;
+                    explanation = `OR Operation: ${val1} | ${val2} = ${result}. Each bit is 1 if at least one of the corresponding bits is 1.`;
+                    break;
+                case '^':
+                    result = val1 ^ val2;
+                    explanation = `XOR Operation: ${val1} ^ ${val2} = ${result}. Each bit is 1 only if the corresponding bits are different.`;
+                    break;
+                case '~':
+                    result = ~val1;
+                    explanation = `NOT Operation: ~${val1} = ${result}. Each bit is flipped (1 becomes 0, 0 becomes 1).`;
+                    break;
+                case '<<':
+                    result = val1 << val2;
+                    explanation = `Left Shift: ${val1} << ${val2} = ${result}. Bits are shifted left by ${val2} positions, filling with 0s from the right.`;
+                    break;
+                case '>>':
+                    result = val1 >> val2;
+                    explanation = `Right Shift: ${val1} >> ${val2} = ${result}. Bits are shifted right by ${val2} positions, filling with the sign bit from the left.`;
+                    break;
+                default:
+                    result = 0;
+                    explanation = "Invalid operator selected.";
+            }
+
+            // Display bits for input values
+            createBitDisplay(decimalToBinaryBits(val1), 'bitDisplay1');
+
+            if (operator !== '~') {
+                createBitDisplay(decimalToBinaryBits(val2), 'bitDisplay2');
+                document.getElementById('bitDisplay2').style.display = 'flex';
+            } else {
+                document.getElementById('bitDisplay2').style.display = 'none';
+            }
+
+            // Display result bits and value
+            createBitDisplay(decimalToBinaryBits(result), 'resultBits');
+            document.getElementById('resultValue').textContent = result;
+            document.getElementById('resultExplanation').textContent = explanation;
+
+            // Show result container
+            document.getElementById('result').style.display = 'block';
+        }
+
+        // Function to load example values
+        function loadExample(val1, val2) {
+            document.getElementById('value1').value = val1;
+            document.getElementById('value2').value = val2;
+
+            // Set appropriate operator based on the example
+            const exampleText = `${val1} & ${val2}`;
+            if (val1 === 5 && val2 === 0) {
+                document.getElementById('operator').value = '~';
+            } else if (val1 === 4 && val2 === 5) {
+                // Check which button was clicked (could be AND or XOR)
+                const eventTarget = event.target;
+                if (eventTarget.textContent.includes('^')) {
+                    document.getElementById('operator').value = '^';
+                } else {
+                    document.getElementById('operator').value = '&';
+                }
+            } else if (val1 === 10 && val2 === 5) {
+                document.getElementById('operator').value = '|';
+            }
+
+            // Calculate after loading example
+            setTimeout(calculateBitwise, 100);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set initial bit displays
+            calculateBitwise();
+
+            // Add event listeners
+            document.getElementById('calculateBtn').addEventListener('click', calculateBitwise);
+
+            // Add event listeners to example buttons
+            document.querySelectorAll('.example-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const val1 = this.getAttribute('data-val1');
+                    const val2 = this.getAttribute('data-val2');
+                    loadExample(parseInt(val1), parseInt(val2));
+                });
+            });
+
+            // Add event listeners to inputs for real-time update
+            document.getElementById('value1').addEventListener('input', calculateBitwise);
+            document.getElementById('value2').addEventListener('input', calculateBitwise);
+            document.getElementById('operator').addEventListener('change', calculateBitwise);
+        });
+    </script>
+</body>
+
+</html>

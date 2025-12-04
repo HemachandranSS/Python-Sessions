@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Precedence - Interactive Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #7e22ce 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f59e0b, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Quick Examples */
+        .quick-examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        .example-card {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .example-expr {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+
+        .example-result {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f97316;
+        }
+
+        /* Precedence Table */
+        .precedence-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.6s ease-out 0.1s backwards;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #fbbf24;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .precedence-list {
+            counter-reset: precedence;
+            list-style: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .precedence-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            counter-increment: precedence;
+        }
+
+        .precedence-item:hover {
+            transform: translateX(10px);
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .precedence-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #f59e0b;
+            min-width: 40px;
+        }
+
+        .precedence-number::before {
+            content: counter(precedence);
+        }
+
+        .precedence-operator {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            min-width: 150px;
+        }
+
+        .precedence-desc {
+            color: #cbd5e1;
+            flex: 1;
+        }
+
+        /* Interactive Calculator */
+        .calculator-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1000px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .steps-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .step {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #a78bfa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .step-label {
+            color: #a78bfa;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .step-content {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .final-result {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.2));
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result-label {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f97316;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Examples Section */
+        .examples-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            animation: fadeInUp 0.6s ease-out 0.3s backwards;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #c084fc;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            color: #cbd5e1;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .quick-examples {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-layer-group"></i> Operator Precedence</h1>
+            <p class="subtitle">
+                When multiple operators are present in an expression, operator precedence determines the order of
+                evaluation.
+                Understanding precedence is crucial for writing correct Python code.
+            </p>
+
+            <div class="quick-examples">
+                <div class="example-card">
+                    <div class="example-expr">3 + 10 * 2</div>
+                    <div class="example-result">= 23</div>
+                </div>
+                <div class="example-card">
+                    <div class="example-expr">(3 + 10) * 2</div>
+                    <div class="example-result">= 26</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Precedence Table -->
+        <div class="precedence-section">
+            <h2 class="section-title">
+                <i class="fas fa-list-ol"></i>
+                Operator Precedence (Highest to Lowest)
+            </h2>
+            <ol class="precedence-list">
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">()</div>
+                    <div class="precedence-desc">Parentheses</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">**</div>
+                    <div class="precedence-desc">Exponential operator</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">~, -</div>
+                    <div class="precedence-desc">Bitwise complement, unary minus</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">*, /, %, //</div>
+                    <div class="precedence-desc">Multiplication, division, modulo, floor division</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">+, -</div>
+                    <div class="precedence-desc">Addition, subtraction</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">
+                        <<,>>
+                    </div>
+                    <div class="precedence-desc">Left and right shift</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">&</div>
+                    <div class="precedence-desc">Bitwise AND</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">^</div>
+                    <div class="precedence-desc">Bitwise XOR</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">|</div>
+                    <div class="precedence-desc">Bitwise OR</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">>, >=, <, <=,==, !=</div>
+                            <div class="precedence-desc">Relational / comparison operators</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">=, +=, -=, *=, ...</div>
+                    <div class="precedence-desc">Assignment operators</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">is, is not</div>
+                    <div class="precedence-desc">Identity operators</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">in, not in</div>
+                    <div class="precedence-desc">Membership operators</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">not</div>
+                    <div class="precedence-desc">Logical NOT</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">and</div>
+                    <div class="precedence-desc">Logical AND</div>
+                </li>
+                <li class="precedence-item">
+                    <div class="precedence-number"></div>
+                    <div class="precedence-operator">or</div>
+                    <div class="precedence-desc">Logical OR</div>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Interactive Calculator -->
+        <div class="calculator-section">
+            <h2 class="section-title">
+                <i class="fas fa-calculator"></i>
+                Interactive Expression Evaluator
+            </h2>
+
+            <div class="calc-grid">
+                <div class="input-area">
+                    <label for="expression">Enter Expression</label>
+                    <input type="text" id="expression" value="3/2*4 + 3 + (10/5)**3 - 2" placeholder="e.g., 3 + 10 * 2">
+                    <button class="btn" onclick="evaluateExpression()">
+                        <i class="fas fa-play"></i> Evaluate Step-by-Step
+                    </button>
+                </div>
+
+                <div class="steps-area" id="stepsContainer">
+                    <div style="text-align: center; color: #94a3b8; padding: 40px;">
+                        Enter an expression and click Evaluate
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Worked Examples -->
+        <div class="examples-section">
+            <h2 class="section-title">
+                <i class="fas fa-book"></i>
+                Worked Examples
+            </h2>
+
+            <div class="example-box">
+                <div class="example-title">Example 1: Basic Precedence</div>
+                <div class="code-block">
+                    a = 30<br>
+                    b = 20<br>
+                    c = 10<br>
+                    d = 5<br>
+                    <br>
+                    print((a + b) * c / d) → <span class="highlight">100.0</span><br>
+                    print((a + b) * (c / d)) → <span class="highlight">100.0</span><br>
+                    print(a + (b * c) / d) → <span class="highlight">70.0</span>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">Example 2: Complex Expression</div>
+                <div class="code-block">
+                    Expression: <span class="highlight">3/2*4 + 3 + (10/5)**3 - 2</span><br>
+                    <br>
+                    Step 1: 3 / 2 * 4 + 3 + <span class="highlight">(10 / 5)</span> ** 3 - 2<br>
+                    Step 2: 3 / 2 * 4 + 3 + <span class="highlight">2.0 ** 3</span> - 2<br>
+                    Step 3: 3 / 2 * 4 + 3 + <span class="highlight">8.0</span> - 2<br>
+                    Step 4: <span class="highlight">1.5</span> * 4 + 3 + 8.0 - 2<br>
+                    Step 5: <span class="highlight">6.0</span> + 3 + 8.0 - 2<br>
+                    Step 6: <span class="highlight">15.0</span><br>
+                    <br>
+                    Result: <span class="highlight">15.0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function evaluateExpression() {
+            const expr = document.getElementById('expression').value.trim();
+
+            if (!expr) {
+                document.getElementById('stepsContainer').innerHTML = `
+                    <div style="text-align: center; color: #ef4444; padding: 40px;">
+                        Please enter an expression
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // Evaluate the expression
+                const result = eval(expr);
+
+                // Create step-by-step display
+                let stepsHTML = `
+                    <div class="step">
+                        <div class="step-label">Original Expression</div>
+                        <div class="step-content">${expr}</div>
+                    </div>
+                `;
+
+                // Add evaluation note
+                stepsHTML += `
+                    <div class="step">
+                        <div class="step-label">Evaluation Order</div>
+                        <div class="step-content">
+                            1. Parentheses ( )<br>
+                            2. Exponentiation **<br>
+                            3. Multiplication/Division *, /, %, //<br>
+                            4. Addition/Subtraction +, -
+                        </div>
+                    </div>
+                `;
+
+                // Show result
+                stepsHTML += `
+                    <div class="final-result">
+                        <div class="result-label">Final Result</div>
+                        <div class="result-value">${result}</div>
+                    </div>
+                `;
+
+                document.getElementById('stepsContainer').innerHTML = stepsHTML;
+
+            } catch (error) {
+                document.getElementById('stepsContainer').innerHTML = `
+                    <div style="text-align: center; color: #ef4444; padding: 40px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i><br>
+                        Invalid expression: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Initial evaluation
+        window.addEventListener('load', () => {
+            evaluateExpression();
+        });
+
+        // Allow Enter key to evaluate
+        document.getElementById('expression').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                evaluateExpression();
+            }
+        });
+    </script>
+</body>
+
+</html>

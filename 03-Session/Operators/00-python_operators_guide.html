@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Operators - Interactive Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --surface: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #06d6a0, #3b82f6, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+        
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+        
+        .nav-btn.active {
+            background: var(--primary);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .operator-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+        }
+        
+        .operator-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .section-header:hover {
+            transform: translateX(10px);
+        }
+        
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        
+        .toggle-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .operator-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .operator-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .operator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .operator-card:hover::before {
+            opacity: 1;
+        }
+        
+        .operator-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .operator-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .operator-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .code-example {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code-example::before {
+            content: 'Python';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--accent);
+            opacity: 0.6;
+        }
+        
+        .try-it-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .try-it-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .result {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(6, 214, 160, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            display: none;
+        }
+        
+        .precedence-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+        
+        .precedence-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .precedence-table th,
+        .precedence-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .precedence-table th {
+            background: rgba(59, 130, 246, 0.2);
+            font-weight: 600;
+        }
+        
+        .precedence-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .collapsed .operator-grid {
+            display: none;
+        }
+        
+        .collapsed .toggle-btn {
+            transform: rotate(180deg);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.6; transform: translateX(-50%) scale(1.1); }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(6, 214, 160, 0.5); }
+            to { text-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 40px rgba(139, 92, 246, 0.3); }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .container { padding: 1rem; }
+            .operator-grid { grid-template-columns: 1fr; }
+            .navigation { gap: 0.5rem; }
+            .nav-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape" style="left: 10%; width: 80px; height: 80px; animation-delay: 0s;"></div>
+        <div class="shape" style="left: 20%; width: 120px; height: 120px; animation-delay: 2s;"></div>
+        <div class="shape" style="left: 70%; width: 60px; height: 60px; animation-delay: 4s;"></div>
+        <div class="shape" style="left: 80%; width: 100px; height: 100px; animation-delay: 6s;"></div>
+        <div class="shape" style="left: 30%; width: 140px; height: 140px; animation-delay: 8s;"></div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Python Operators</h1>
+            <p>Master the complete guide to Python operators with interactive examples, explanations, and beautiful visualizations</p>
+        </div>
+
+        <nav class="navigation">
+            <a href="#arithmetic" class="nav-btn active" data-section="arithmetic">Arithmetic</a>
+            <a href="#comparison" class="nav-btn" data-section="comparison">Comparison</a>
+            <a href="#logical" class="nav-btn" data-section="logical">Logical</a>
+            <a href="#bitwise" class="nav-btn" data-section="bitwise">Bitwise</a>
+            <a href="#assignment" class="nav-btn" data-section="assignment">Assignment</a>
+            <a href="#special" class="nav-btn" data-section="special">Special</a>
+            <a href="#precedence" class="nav-btn" data-section="precedence">Precedence</a>
+        </nav>
+
+        <!-- Arithmetic Operators -->
+        <div class="operator-section" id="arithmetic">
+            <div class="section-header">
+                <div class="section-icon">🧮</div>
+                <h2 class="section-title">Arithmetic Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">+</span>
+                    <div class="operator-name">Addition</div>
+                    <div class="operator-desc">Adds two operands together</div>
+                    <div class="code-example">a = 10<br>b = 5<br>result = a + b  # 15</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 10; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">+=</span>
+                    <div class="operator-name">Add and Assign</div>
+                    <div class="operator-desc">Adds right operand to left operand and assigns result to left operand</div>
+                    <div class="code-example">x = 10<br>x += 5  # x = x + 5<br>print(x)  # 15</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 10; x += 5; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">-=</span>
+                    <div class="operator-name">Subtract and Assign</div>
+                    <div class="operator-desc">Subtracts right operand from left operand and assigns result</div>
+                    <div class="code-example">x = 10<br>x -= 3  # x = x - 3<br>print(x)  # 7</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 10; x -= 3; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">*=</span>
+                    <div class="operator-name">Multiply and Assign</div>
+                    <div class="operator-desc">Multiplies left operand by right operand and assigns result</div>
+                    <div class="code-example">x = 5<br>x *= 4  # x = x * 4<br>print(x)  # 20</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 5; x *= 4; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">/=</span>
+                    <div class="operator-name">Divide and Assign</div>
+                    <div class="operator-desc">Divides left operand by right operand and assigns result</div>
+                    <div class="code-example">x = 20<br>x /= 4  # x = x / 4<br>print(x)  # 5.0</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 20; x /= 4; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">%=</span>
+                    <div class="operator-name">Modulus and Assign</div>
+                    <div class="operator-desc">Applies modulus operation and assigns result</div>
+                    <div class="code-example">x = 17<br>x %= 5  # x = x % 5<br>print(x)  # 2</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'x = 17; x %= 5; print(x)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Operators -->
+        <div class="operator-section" id="special">
+            <div class="section-header">
+                <div class="section-icon">✨</div>
+                <h2 class="section-title">Special Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">is</span>
+                    <div class="operator-name">Identity</div>
+                    <div class="operator-desc">Returns True if both operands refer to the same object</div>
+                    <div class="code-example">a = [1, 2, 3]<br>b = a<br>c = [1, 2, 3]<br>print(a is b)  # True<br>print(a is c)  # False</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'a = [1, 2, 3]; b = a; c = [1, 2, 3]; print(a is b); print(a is c)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">is not</span>
+                    <div class="operator-name">Identity (Negative)</div>
+                    <div class="operator-desc">Returns True if operands refer to different objects</div>
+                    <div class="code-example">a = [1, 2]<br>b = [1, 2]<br>print(a is not b)  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'a = [1, 2]; b = [1, 2]; print(a is not b)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">in</span>
+                    <div class="operator-name">Membership</div>
+                    <div class="operator-desc">Returns True if value is found in sequence</div>
+                    <div class="code-example">fruits = ['apple', 'banana']<br>print('apple' in fruits)  # True<br>print('orange' in fruits)  # False</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'fruits = [\"apple\", \"banana\"]; print(\"apple\" in fruits); print(\"orange\" in fruits)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">not in</span>
+                    <div class="operator-name">Membership (Negative)</div>
+                    <div class="operator-desc">Returns True if value is not found in sequence</div>
+                    <div class="code-example">numbers = [1, 2, 3, 4]<br>print(5 not in numbers)  # True<br>print(2 not in numbers)  # False</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'numbers = [1, 2, 3, 4]; print(5 not in numbers); print(2 not in numbers)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">? :</span>
+                    <div class="operator-name">Ternary (Conditional)</div>
+                    <div class="operator-desc">Python's conditional expression (inline if-else)</div>
+                    <div class="code-example">age = 20<br>status = "adult" if age >= 18 else "minor"<br>print(status)  # adult</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'age = 20; status = \"adult\" if age >= 18 else \"minor\"; print(status)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">:=</span>
+                    <div class="operator-name">Walrus Operator</div>
+                    <div class="operator-desc">Assignment expression (Python 3.8+)</div>
+                    <div class="code-example"># Assign and use in one expression<br>if (n := len("Python")) > 5:<br>&nbsp;&nbsp;&nbsp;&nbsp;print(f"Length is {n}")  # Length is 6</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'if (n := len(\"Python\")) > 5: print(f\"Length is {n}\")')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operator Precedence -->
+        <div class="operator-section" id="precedence">
+            <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <h2 class="section-title">Operator Precedence</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="precedence-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Operator</th>
+                            <th>Description</th>
+                            <th>Associativity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1 (Highest)</td>
+                            <td>()</td>
+                            <td>Parentheses</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>**</td>
+                            <td>Exponentiation</td>
+                            <td>Right to Left</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>+x, -x, ~x</td>
+                            <td>Unary plus, minus, bitwise NOT</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>*, /, //, %</td>
+                            <td>Multiplication, Division, Floor division, Modulus</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>+, -</td>
+                            <td>Addition, Subtraction</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>&lt;&lt;, &gt;&gt;</td>
+                            <td>Bitwise shift operators</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>&amp;</td>
+                            <td>Bitwise AND</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>^</td>
+                            <td>Bitwise XOR</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>|</td>
+                            <td>Bitwise OR</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>==, !=, &lt;, &lt;=, &gt;, &gt;=, is, is not, in, not in</td>
+                            <td>Comparison operators</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>not</td>
+                            <td>Logical NOT</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>and</td>
+                            <td>Logical AND</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>or</td>
+                            <td>Logical OR</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>if-else</td>
+                            <td>Conditional expression</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>15 (Lowest)</td>
+                            <td>=, +=, -=, *=, /=, //=, %=, **=, &amp;=, |=, ^=, &gt;&gt;=, &lt;&lt;=</td>
+                            <td>Assignment operators</td>
+                            <td>Right to Left</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="operator-grid" style="margin-top: 2rem;">
+                <div class="operator-card">
+                    <span class="operator-symbol">Example</span>
+                    <div class="operator-name">Precedence in Action</div>
+                    <div class="operator-desc">See how operator precedence affects evaluation</div>
+                    <div class="code-example">result = 2 + 3 * 4 ** 2<br># Evaluated as: 2 + (3 * (4 ** 2))<br># = 2 + (3 * 16) = 2 + 48 = 50</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(2 + 3 * 4 ** 2); print(\"Step by step:\"); print(\"4 ** 2 =\", 4 ** 2); print(\"3 * 16 =\", 3 * 16); print(\"2 + 48 =\", 2 + 48)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Update active navigation
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show/hide sections
+                const targetSection = btn.dataset.section;
+                document.querySelectorAll('.operator-section').forEach(section => {
+                    section.style.display = section.id === targetSection ? 'block' : 'none';
+                });
+                
+                // Scroll to section
+                document.getElementById(targetSection).scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            });
+        });
+
+        // Toggle section collapse
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.parentElement;
+                section.classList.toggle('collapsed');
+            });
+        });
+
+        // Code execution simulation
+        function runCode(button, code) {
+            const resultDiv = button.nextElementSibling;
+            resultDiv.style.display = 'block';
+            
+            try {
+                // Simple code evaluation simulation
+                let result = '';
+                
+                // Handle print statements
+                if (code.includes('print(')) {
+                    const printRegex = /print\(([^)]+)\)/g;
+                    let match;
+                    const outputs = [];
+                    
+                    while ((match = printRegex.exec(code)) !== null) {
+                        try {
+                            const expr = match[1];
+                            // Simple evaluation for demo purposes
+                            if (expr.includes('"') || expr.includes("'")) {
+                                // String literal
+                                outputs.push(expr.replace(/['"]/g, ''));
+                            } else if (expr.includes('f"') || expr.includes("f'")) {
+                                // F-string (simplified)
+                                outputs.push(expr.replace(/f['"]/g, '').replace(/['"]/g, ''));
+                            } else {
+                                // Mathematical expression
+                                const evalResult = eval(expr);
+                                outputs.push(evalResult);
+                            }
+                        } catch (e) {
+                            // Handle some special cases
+                            if (expr.includes('bin(')) {
+                                const num = parseInt(expr.match(/bin\((\d+)\)/)[1]);
+                                outputs.push(`0b${num.toString(2)}`);
+                            } else if (expr.includes('len(')) {
+                                const str = expr.match(/len\("([^"]+)"\)/)[1];
+                                outputs.push(str.length);
+                            } else {
+                                outputs.push('Error in evaluation');
+                            }
+                        }
+                    }
+                    
+                    result = outputs.join('\n');
+                } else if (code.includes(';')) {
+                    // Handle multiple statements
+                    const statements = code.split(';');
+                    let lastResult = '';
+                    for (let stmt of statements) {
+                        stmt = stmt.trim();
+                        if (stmt.includes('=') && !stmt.includes('==')) {
+                            // Assignment
+                            const [varName, value] = stmt.split('=').map(s => s.trim());
+                            if (stmt.includes('print')) continue;
+                            lastResult = `${varName} = ${eval(value)}`;
+                        }
+                    }
+                    result = lastResult || 'Assignment completed';
+                } else {
+                    // Simple expression
+                    result = eval(code);
+                }
+                
+                resultDiv.innerHTML = `<strong>Output:</strong><br><code>${result}</code>`;
+                
+                // Add animation
+                resultDiv.style.opacity = '0';
+                resultDiv.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    resultDiv.style.transition = 'all 0.3s ease';
+                    resultDiv.style.opacity = '1';
+                    resultDiv.style.transform = 'translateY(0)';
+                }, 100);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Output:</strong><br><code style="color: #ef4444;">Error: ${error.message}</code>`;
+            }
+        }
+
+        // Initialize - show first section
+        document.getElementById('arithmetic').style.display = 'block';
+        document.querySelectorAll('.operator-section').forEach((section, index) => {
+            if (index > 0) section.style.display = 'none';
+        });
+
+        // Add staggered animation delays
+        document.querySelectorAll('.operator-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>it-btn" onclick="runCode(this, 'print(10 + 5)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">-</span>
+                    <div class="operator-name">Subtraction</div>
+                    <div class="operator-desc">Subtracts right operand from left operand</div>
+                    <div class="code-example">a = 10<br>b = 3<br>result = a - b  # 7</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(10 - 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">*</span>
+                    <div class="operator-name">Multiplication</div>
+                    <div class="operator-desc">Multiplies two operands</div>
+                    <div class="code-example">a = 7<br>b = 3<br>result = a * b  # 21</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(7 * 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">/</span>
+                    <div class="operator-name">Division</div>
+                    <div class="operator-desc">Divides left operand by right operand (returns float)</div>
+                    <div class="code-example">a = 15<br>b = 4<br>result = a / b  # 3.75</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(15 / 4)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">//</span>
+                    <div class="operator-name">Floor Division</div>
+                    <div class="operator-desc">Returns floor of the division (integer result)</div>
+                    <div class="code-example">a = 15<br>b = 4<br>result = a // b  # 3</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(15 // 4)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">%</span>
+                    <div class="operator-name">Modulus</div>
+                    <div class="operator-desc">Returns remainder of division</div>
+                    <div class="code-example">a = 15<br>b = 4<br>result = a % b  # 3</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(15 % 4)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">**</span>
+                    <div class="operator-name">Exponentiation</div>
+                    <div class="operator-desc">Raises left operand to the power of right operand</div>
+                    <div class="code-example">a = 2<br>b = 3<br>result = a ** b  # 8</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(2 ** 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Operators -->
+        <div class="operator-section" id="comparison">
+            <div class="section-header">
+                <div class="section-icon">⚖️</div>
+                <h2 class="section-title">Comparison Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">==</span>
+                    <div class="operator-name">Equal To</div>
+                    <div class="operator-desc">Returns True if both operands are equal</div>
+                    <div class="code-example">a = 5<br>b = 5<br>result = a == b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(5 == 5), print(5 == 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">!=</span>
+                    <div class="operator-name">Not Equal To</div>
+                    <div class="operator-desc">Returns True if operands are not equal</div>
+                    <div class="code-example">a = 5<br>b = 3<br>result = a != b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(5 != 3), print(5 != 5)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">></span>
+                    <div class="operator-name">Greater Than</div>
+                    <div class="operator-desc">Returns True if left operand is greater than right</div>
+                    <div class="code-example">a = 8<br>b = 5<br>result = a > b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(8 > 5), print(3 > 5)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol"><</span>
+                    <div class="operator-name">Less Than</div>
+                    <div class="operator-desc">Returns True if left operand is less than right</div>
+                    <div class="code-example">a = 3<br>b = 7<br>result = a < b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(3 < 7), print(7 < 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">>=</span>
+                    <div class="operator-name">Greater Than or Equal</div>
+                    <div class="operator-desc">Returns True if left operand is greater than or equal to right</div>
+                    <div class="code-example">a = 5<br>b = 5<br>result = a >= b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(5 >= 5), print(8 >= 3)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol"><=</span>
+                    <div class="operator-name">Less Than or Equal</div>
+                    <div class="operator-desc">Returns True if left operand is less than or equal to right</div>
+                    <div class="code-example">a = 4<br>b = 7<br>result = a <= b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(4 <= 7), print(4 <= 4)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logical Operators -->
+        <div class="operator-section" id="logical">
+            <div class="section-header">
+                <div class="section-icon">🧠</div>
+                <h2 class="section-title">Logical Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">and</span>
+                    <div class="operator-name">Logical AND</div>
+                    <div class="operator-desc">Returns True if both operands are True</div>
+                    <div class="code-example">a = True<br>b = False<br>result = a and b  # False</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(True and True), print(True and False)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">or</span>
+                    <div class="operator-name">Logical OR</div>
+                    <div class="operator-desc">Returns True if at least one operand is True</div>
+                    <div class="code-example">a = True<br>b = False<br>result = a or b  # True</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(True or False), print(False or False)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">not</span>
+                    <div class="operator-name">Logical NOT</div>
+                    <div class="operator-desc">Returns True if operand is False, and vice versa</div>
+                    <div class="code-example">a = True<br>result = not a  # False</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(not True), print(not False)')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bitwise Operators -->
+        <div class="operator-section" id="bitwise">
+            <div class="section-header">
+                <div class="section-icon">🔢</div>
+                <h2 class="section-title">Bitwise Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">&</span>
+                    <div class="operator-name">Bitwise AND</div>
+                    <div class="operator-desc">Performs bitwise AND operation</div>
+                    <div class="code-example">a = 12  # 1100<br>b = 10  # 1010<br>result = a & b  # 8 (1000)</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(12 & 10), print(bin(12)), print(bin(10))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">|</span>
+                    <div class="operator-name">Bitwise OR</div>
+                    <div class="operator-desc">Performs bitwise OR operation</div>
+                    <div class="code-example">a = 12  # 1100<br>b = 10  # 1010<br>result = a | b  # 14 (1110)</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(12 | 10), print(bin(12 | 10))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">^</span>
+                    <div class="operator-name">Bitwise XOR</div>
+                    <div class="operator-desc">Performs bitwise XOR operation</div>
+                    <div class="code-example">a = 12  # 1100<br>b = 10  # 1010<br>result = a ^ b  # 6 (0110)</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(12 ^ 10), print(bin(12 ^ 10))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">~</span>
+                    <div class="operator-name">Bitwise NOT</div>
+                    <div class="operator-desc">Performs bitwise NOT operation (complement)</div>
+                    <div class="code-example">a = 12<br>result = ~a  # -13</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(~12), print(bin(12))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol"><<</span>
+                    <div class="operator-name">Left Shift</div>
+                    <div class="operator-desc">Shifts bits to the left</div>
+                    <div class="code-example">a = 5  # 101<br>result = a << 2  # 20 (10100)</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(5 << 2), print(bin(5)), print(bin(5 << 2))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+                <div class="operator-card">
+                    <span class="operator-symbol">>></span>
+                    <div class="operator-name">Right Shift</div>
+                    <div class="operator-desc">Shifts bits to the right</div>
+                    <div class="code-example">a = 20  # 10100<br>result = a >> 2  # 5 (101)</div>
+                    <button class="try-it-btn" onclick="runCode(this, 'print(20 >> 2), print(bin(20)), print(bin(20 >> 2))')">Try It!</button>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Operators -->
+        <div class="operator-section" id="assignment">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2 class="section-title">Assignment Operators</h2>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="operator-grid">
+                <div class="operator-card">
+                    <span class="operator-symbol">=</span>
+                    <div class="operator-name">Assignment</div>
+                    <div class="operator-desc">Assigns value to variable</div>
+                    <div class="code-example">x = 10<br>print(x)  # 10</div>
+                    <button class="try-

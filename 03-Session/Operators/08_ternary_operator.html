@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ternary Operator - Interactive Guide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+      min-height: 100vh;
+      color: #f1f5f9;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #c084fc, #e879f9, #f0abfc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 900px;
+      margin: 0 auto 20px;
+      line-height: 1.7;
+    }
+
+    .syntax-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(192, 132, 252, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 700px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+    }
+
+    .syntax-keyword {
+      color: #c084fc;
+      font-weight: 700;
+    }
+
+    .syntax-value {
+      color: #f0abfc;
+    }
+
+    /* Visual Flow */
+    .flow-section {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.6s ease-out 0.1s backwards;
+    }
+
+    .flow-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #c084fc;
+      text-align: center;
+    }
+
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .flow-item {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 20px 30px;
+      font-family: 'Fira Code', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .flow-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(192, 132, 252, 0.3);
+    }
+
+    .flow-condition {
+      background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(168, 85, 247, 0.2));
+      border-color: #c084fc;
+      color: #e9d5ff;
+    }
+
+    .flow-true {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+      border-color: #22c55e;
+      color: #86efac;
+    }
+
+    .flow-false {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    .flow-arrow {
+      font-size: 2rem;
+      color: #c084fc;
+    }
+
+    /* Interactive Demos */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .demo-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 35px;
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+
+    .demo-card:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .demo-card:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .demo-card:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .demo-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #e879f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      font-family: 'Fira Code', monospace;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #c084fc;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    }
+
+    .result-box {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      min-height: 100px;
+    }
+
+    .result-label {
+      color: #c084fc;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .result-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e879f9;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .code-display {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      color: #cbd5e1;
+    }
+
+    .highlight {
+      color: #f0abfc;
+      font-weight: 600;
+    }
+
+    .tip-box {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 40px;
+      animation: fadeInUp 0.8s ease-out 0.5s backwards;
+    }
+
+    .tip-icon {
+      color: #fbbf24;
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+
+    .tip-text {
+      color: #fde68a;
+      line-height: 1.7;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-diagram {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-question-circle"></i> Ternary Operator</h1>
+      <p class="subtitle">
+        The ternary operator (also called conditional operator) is a concise way to write simple if-else statements in a
+        single line.
+      </p>
+      <div class="syntax-box">
+        <span class="syntax-value">x</span> =
+        <span class="syntax-value">firstValue</span>
+        <span class="syntax-keyword">if</span>
+        <span class="syntax-value">condition</span>
+        <span class="syntax-keyword">else</span>
+        <span class="syntax-value">secondValue</span>
+      </div>
+    </header>
+
+    <!-- Visual Flow -->
+    <div class="flow-section">
+      <h2 class="flow-title"><i class="fas fa-project-diagram"></i> How It Works</h2>
+      <div class="flow-diagram">
+        <div class="flow-item flow-condition">
+          <div style="font-size: 0.9rem; opacity: 0.8;">Condition</div>
+          <div style="font-size: 1.3rem; margin-top: 5px;">a < b</div>
+          </div>
+
+          <div class="flow-arrow"><i class="fas fa-arrow-down"></i></div>
+
+          <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <div class="flow-item flow-true">
+              <div style="font-size: 0.9rem; opacity: 0.8;">If True</div>
+              <div style="font-size: 1.3rem; margin-top: 5px;">firstValue</div>
+            </div>
+
+            <div class="flow-item flow-false">
+              <div style="font-size: 0.9rem; opacity: 0.8;">If False</div>
+              <div style="font-size: 1.3rem; margin-top: 5px;">secondValue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Demos -->
+      <div class="demo-grid">
+        <!-- Demo 1: Simple Comparison -->
+        <div class="demo-card">
+          <h3 class="demo-title"><i class="fas fa-play-circle"></i> Simple Comparison</h3>
+
+          <div class="input-group">
+            <label for="demo1-a">Value A</label>
+            <input type="number" id="demo1-a" value="10">
+          </div>
+
+          <div class="input-group">
+            <label for="demo1-b">Value B</label>
+            <input type="number" id="demo1-b" value="20">
+          </div>
+
+          <button class="btn" onclick="runDemo1()">
+            <i class="fas fa-play"></i> Execute
+          </button>
+
+          <div class="result-box" id="demo1-result">
+            <div class="result-label">Result:</div>
+            <div class="result-value">Click Execute</div>
+          </div>
+
+          <div class="code-display" id="demo1-code">
+            x = 30 if a < b else 40 </div>
+          </div>
+
+          <!-- Demo 2: Find Minimum -->
+          <div class="demo-card">
+            <h3 class="demo-title"><i class="fas fa-sort-amount-down"></i> Find Minimum</h3>
+
+            <div class="input-group">
+              <label for="demo2-a">First Number</label>
+              <input type="number" id="demo2-a" value="15">
+            </div>
+
+            <div class="input-group">
+              <label for="demo2-b">Second Number</label>
+              <input type="number" id="demo2-b" value="25">
+            </div>
+
+            <button class="btn" onclick="runDemo2()">
+              <i class="fas fa-play"></i> Find Minimum
+            </button>
+
+            <div class="result-box" id="demo2-result">
+              <div class="result-label">Minimum Value:</div>
+              <div class="result-value">Click Execute</div>
+            </div>
+
+            <div class="code-display" id="demo2-code">
+              min_val = a if a < b else b </div>
+            </div>
+
+            <!-- Demo 3: Minimum of 3 Numbers -->
+            <div class="demo-card">
+              <h3 class="demo-title"><i class="fas fa-layer-group"></i> Minimum of 3 Numbers</h3>
+
+              <div class="input-group">
+                <label for="demo3-a">First Number</label>
+                <input type="number" id="demo3-a" value="15">
+              </div>
+
+              <div class="input-group">
+                <label for="demo3-b">Second Number</label>
+                <input type="number" id="demo3-b" value="10">
+              </div>
+
+              <div class="input-group">
+                <label for="demo3-c">Third Number</label>
+                <input type="number" id="demo3-c" value="25">
+              </div>
+
+              <button class="btn" onclick="runDemo3()">
+                <i class="fas fa-play"></i> Find Minimum
+              </button>
+
+              <div class="result-box" id="demo3-result">
+                <div class="result-label">Minimum Value:</div>
+                <div class="result-value">Click Execute</div>
+              </div>
+
+              <div class="code-display" id="demo3-code">
+                min_val = a if (a < b and a < c) else (b if b < c else c) </div>
+              </div>
+
+              <!-- Demo 4: Compare Numbers -->
+              <div class="demo-card">
+                <h3 class="demo-title"><i class="fas fa-balance-scale"></i> Compare Numbers</h3>
+
+                <div class="input-group">
+                  <label for="demo4-a">First Number</label>
+                  <input type="number" id="demo4-a" value="10">
+                </div>
+
+                <div class="input-group">
+                  <label for="demo4-b">Second Number</label>
+                  <input type="number" id="demo4-b" value="10">
+                </div>
+
+                <button class="btn" onclick="runDemo4()">
+                  <i class="fas fa-play"></i> Compare
+                </button>
+
+                <div class="result-box" id="demo4-result">
+                  <div class="result-label">Comparison Result:</div>
+                  <div class="result-value">Click Execute</div>
+                </div>
+
+                <div class="code-display" id="demo4-code">
+                  result = "Equal" if a == b else ("Less" if a < b else "Greater" ) </div>
+                </div>
+              </div>
+
+              <!-- Tip Box -->
+              <div class="tip-box">
+                <div style="display: flex; align-items: flex-start; gap: 15px;">
+                  <i class="fas fa-lightbulb tip-icon"></i>
+                  <div class="tip-text">
+                    <strong>Pro Tip:</strong> While ternary operators are great for simple conditions, use traditional
+                    <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">if/elif/else</code>
+                    statements for complex logic to maintain code readability. Ternary is best for short, simple
+                    conditional assignments.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              function runDemo1() {
+                const a = parseFloat(document.getElementById('demo1-a').value) || 0;
+                const b = parseFloat(document.getElementById('demo1-b').value) || 0;
+
+                const x = a < b ? 30 : 40;
+
+                document.getElementById('demo1-result').innerHTML = `
+                <div class="result-label">Result (x):</div>
+                <div class="result-value">${x}</div>
+                <div style="margin-top: 10px; color: #cbd5e1; font-size: 0.95rem;">
+                    Since ${a} ${a < b ? '<' : '>='} ${b}, x = ${x}
+                </div>
+            `;
+
+                document.getElementById('demo1-code').innerHTML = `
+                a = ${a}, b = ${b}<br>
+                x = 30 if a < b else 40<br>
+                # Result: x = ${x}
+            `;
+              }
+
+              function runDemo2() {
+                const a = parseFloat(document.getElementById('demo2-a').value) || 0;
+                const b = parseFloat(document.getElementById('demo2-b').value) || 0;
+
+                const min_val = a < b ? a : b;
+
+                document.getElementById('demo2-result').innerHTML = `
+                <div class="result-label">Minimum Value:</div>
+                <div class="result-value">${min_val}</div>
+            `;
+
+                document.getElementById('demo2-code').innerHTML = `
+                a = ${a}, b = ${b}<br>
+                min_val = a if a < b else b<br>
+                # Result: ${min_val}
+            `;
+              }
+
+              function runDemo3() {
+                const a = parseFloat(document.getElementById('demo3-a').value) || 0;
+                const b = parseFloat(document.getElementById('demo3-b').value) || 0;
+                const c = parseFloat(document.getElementById('demo3-c').value) || 0;
+
+                const min_val = (a < b && a < c) ? a : (b < c ? b : c);
+
+                document.getElementById('demo3-result').innerHTML = `
+                <div class="result-label">Minimum Value:</div>
+                <div class="result-value">${min_val}</div>
+            `;
+
+                document.getElementById('demo3-code').innerHTML = `
+                a = ${a}, b = ${b}, c = ${c}<br>
+                min_val = a if (a < b and a < c) else (b if b < c else c)<br>
+                # Result: ${min_val}
+            `;
+              }
+
+              function runDemo4() {
+                const a = parseFloat(document.getElementById('demo4-a').value) || 0;
+                const b = parseFloat(document.getElementById('demo4-b').value) || 0;
+
+                const result = a === b ? "Both numbers are equal" :
+                  (a < b ? "First Number is Less than Second Number" :
+                    "First Number is Greater than Second Number");
+
+                document.getElementById('demo4-result').innerHTML = `
+                <div class="result-label">Comparison Result:</div>
+                <div class="result-value" style="font-size: 1.3rem;">${result}</div>
+            `;
+
+                document.getElementById('demo4-code').innerHTML = `
+                a = ${a}, b = ${b}<br>
+                result = "Equal" if a == b else ("Less" if a < b else "Greater")<br>
+                # Result: ${result}
+            `;
+              }
+
+              // Initial runs
+              window.addEventListener('load', () => {
+                runDemo1();
+                runDemo2();
+                runDemo3();
+                runDemo4();
+              });
+            </script>
+</body>
+
+</html>

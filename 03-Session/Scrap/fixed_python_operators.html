@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Operators - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #506c04 0%, #8be8ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 255, 255, 0.2); }
+            to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.4); }
+        }
+
+        .intro {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .operator-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .operator-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .operator-card:hover::before {
+            animation: shimmer 1.5s ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        .operator-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .operator-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+/* 
+        .operator-title a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .operator-title a:hover {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .operator-title .clickable {
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .operator-title .clickable:hover {
+            color: #667eea;
+        } */
+/* 
+        .operator-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            animation: pulse 2s infinite;
+        } */
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .arithmetic { background: linear-gradient(45deg, #ff6b6b, #ffa500); }
+        .relational { background: linear-gradient(45deg, #4ecdc4, #44a08d); }
+        .logical { background: linear-gradient(45deg, #a8edea, #fed6e3); }
+        .bitwise { background: linear-gradient(45deg, #f093fb, #f5576c); }
+        .assignment { background: linear-gradient(45deg, #4facfe, #00f2fe); }
+        .special { background: linear-gradient(45deg, #43e97b, #38f9d7); }
+
+        .operator-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .examples-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .example {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-family: 'Courier New', monospace;
+        }
+
+        .example:last-child {
+            border-bottom: none;
+        }
+
+        .operator-symbol {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .example-code {
+            flex-grow: 1;
+            margin: 0 15px;
+            color: #2c3e50;
+        }
+
+        .result {
+            background: #e8f5e8;
+            color: #2e7d2e;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .interactive-demo {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .demo-title {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .calculator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .calc-input {
+            padding: 12px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            width: 80px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .operator-select {
+            padding: 12px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calc-result {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: resultGlow 0.5s ease when result changes;
+        }
+
+        @keyframes resultGlow {
+            0% { background: rgba(255, 255, 255, 0.9); }
+            50% { background: rgba(102, 126, 234, 0.3); }
+            100% { background: rgba(255, 255, 255, 0.9); }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .shape:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .shape:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        .code-highlight {
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: highlight 2s infinite;
+        }
+
+        @keyframes highlight {
+            0%, 100% { background-position: -100% 0; }
+            50% { background-position: 100% 0; }
+        }
+
+        .expand-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .expand-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .hidden-content.expanded {
+            max-height: 500px;
+        }
+
+        .link-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .operators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape" style="width: 100px; height: 100px; background: linear-gradient(45deg, #ff6b6b, #ffa500); border-radius: 50%;"></div>
+        <div class="shape" style="width: 80px; height: 80px; background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 10px;"></div>
+        <div class="shape" style="width: 120px; height: 120px; background: linear-gradient(45deg, #a8edea, #fed6e3); clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"></div>
+    </div>
+
+    <div class="container">
+        <h1>🐍 PYTHON OPERATORS</h1>
+        <div class="intro">
+            Operators are symbols that perform specific operations on values and variables. 
+            Python provides six main categories of operators to manipulate data and control program flow.
+        </div>
+
+        <div class="operators-grid">
+            <div class="operator-card">
+                <div class="operator-title">
+                        <a href="Operators/01-python_arithmetic_guide.html" target="_blank"> 
+                            1. Arithmetic Operators
+                        </a>
+                </div>
+                <div class="operator-description">
+                    Perform mathematical operations like addition, subtraction, multiplication, and division.
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">+</div>
+                        <div class="example-code">5 + 3</div>
+                        <div class="result">8</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">-</div>
+                        <div class="example-code">10 - 4</div>
+                        <div class="result">6</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">*</div>
+                        <div class="example-code">6 * 7</div>
+                        <div class="result">42</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">/</div>
+                        <div class="example-code">15 / 3</div>
+                        <div class="result">5.0</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">//</div>
+                        <div class="example-code">17 // 5</div>
+                        <div class="result">3</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">%</div>
+                        <div class="example-code">17 % 5</div>
+                        <div class="result">2</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">**</div>
+                        <div class="example-code">2 ** 3</div>
+                        <div class="result">8</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>Floor Division (//):</strong> Returns the largest integer less than or equal to the result.</p>
+                    <p><strong>Modulus (%):</strong> Returns the remainder after division.</p>
+                    <p><strong>Exponentiation (**):</strong> Raises the first number to the power of the second.</p>
+                    <div class="link-placeholder">
+                        📝 Detailed guide coming soon: Operators/01-python_arithmetic_guide.html
+                    </div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-title">
+                    <div class="operator-icon relational">=</div>
+                    <span class="clickable" onclick="showOperatorDetails('relational')">
+                        2. Relational/Comparison Operators
+                    </span>
+                </div>
+                <div class="operator-description">
+                    Compare values and return Boolean results (True or False).
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">==</div>
+                        <div class="example-code">5 == 5</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">!=</div>
+                        <div class="example-code">5 != 3</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&gt;</div>
+                        <div class="example-code">8 > 5</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&lt;</div>
+                        <div class="example-code">3 < 7</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&gt;=</div>
+                        <div class="example-code">6 >= 6</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&lt;=</div>
+                        <div class="example-code">4 <= 9</div>
+                        <div class="result">True</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>Equality (==):</strong> Checks if values are equal.</p>
+                    <p><strong>Not Equal (!=):</strong> Checks if values are different.</p>
+                    <p><strong>Greater/Less:</strong> Compares numerical or lexicographical order.</p>
+                    <div class="link-placeholder">
+                        📝 Detailed guide coming soon: Operators/02-relational_operators_demo.html
+                    </div>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-title">
+                    <div class="operator-icon logical">∧</div>
+                    <span class="clickable" onclick="showOperatorDetails('logical')">
+                        3. Logical Operators
+                    </span>
+                </div>
+                <div class="operator-description">
+                    Combine conditional statements and work with Boolean values.
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">and</div>
+                        <div class="example-code">True and False</div>
+                        <div class="result">False</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">or</div>
+                        <div class="example-code">True or False</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">not</div>
+                        <div class="example-code">not True</div>
+                        <div class="result">False</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">and</div>
+                        <div class="example-code">(5 > 3) and (2 < 4)</div>
+                        <div class="result">True</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>AND:</strong> Returns True only if both operands are True.</p>
+                    <p><strong>OR:</strong> Returns True if at least one operand is True.</p>
+                    <p><strong>NOT:</strong> Returns the opposite Boolean value.</p>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-title">
+                    <div class="operator-icon bitwise">01</div>
+                    <span class="clickable" onclick="showOperatorDetails('bitwise')">
+                        4. Bitwise Operators
+                    </span>
+                </div>
+                <div class="operator-description">
+                    Perform operations on binary representations of numbers.
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">&</div>
+                        <div class="example-code">5 & 3</div>
+                        <div class="result">1</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">|</div>
+                        <div class="example-code">5 | 3</div>
+                        <div class="result">7</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">^</div>
+                        <div class="example-code">5 ^ 3</div>
+                        <div class="result">6</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">~</div>
+                        <div class="example-code">~5</div>
+                        <div class="result">-6</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&lt;&lt;</div>
+                        <div class="example-code">5 << 1</div>
+                        <div class="result">10</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">&gt;&gt;</div>
+                        <div class="example-code">10 >> 1</div>
+                        <div class="result">5</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>AND (&):</strong> Sets bit to 1 if both bits are 1.</p>
+                    <p><strong>OR (|):</strong> Sets bit to 1 if any bit is 1.</p>
+                    <p><strong>XOR (^):</strong> Sets bit to 1 if bits are different.</p>
+                    <p><strong>NOT (~):</strong> Inverts all bits.</p>
+                    <p><strong>Left Shift (<<):</strong> Shifts bits left, multiplies by 2^n.</p>
+                    <p><strong>Right Shift (>>):</strong> Shifts bits right, divides by 2^n.</p>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-title">
+                    <div class="operator-icon assignment">=</div>
+                    <span class="clickable" onclick="showOperatorDetails('assignment')">
+                        5. Assignment Operators
+                    </span>
+                </div>
+                <div class="operator-description">
+                    Assign values to variables and perform operations simultaneously.
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">=</div>
+                        <div class="example-code">x = 5</div>
+                        <div class="result">x = 5</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">+=</div>
+                        <div class="example-code">x += 3</div>
+                        <div class="result">x = 8</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">-=</div>
+                        <div class="example-code">x -= 2</div>
+                        <div class="result">x = 6</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">*=</div>
+                        <div class="example-code">x *= 2</div>
+                        <div class="result">x = 12</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">/=</div>
+                        <div class="example-code">x /= 3</div>
+                        <div class="result">x = 4.0</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>Compound Assignment:</strong> Combines operation with assignment.</p>
+                    <p><strong>Example:</strong> x += 5 is equivalent to x = x + 5</p>
+                    <p><strong>Available:</strong> +=, -=, *=, /=, //=, %=, **=, &=, |=, ^=, <<=, >>=</p>
+                </div>
+            </div>
+
+            <div class="operator-card">
+                <div class="operator-title">
+                    <div class="operator-icon special">✦</div>
+                    <span class="clickable" onclick="showOperatorDetails('special')">
+                        6. Special Operators
+                    </span>
+                </div>
+                <div class="operator-description">
+                    Identity and membership operators for advanced comparisons.
+                </div>
+                <div class="examples-container">
+                    <div class="example">
+                        <div class="operator-symbol">is</div>
+                        <div class="example-code">x is y</div>
+                        <div class="result">Identity</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">is not</div>
+                        <div class="example-code">x is not y</div>
+                        <div class="result">Not Identity</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">in</div>
+                        <div class="example-code">'a' in 'apple'</div>
+                        <div class="result">True</div>
+                    </div>
+                    <div class="example">
+                        <div class="operator-symbol">not in</div>
+                        <div class="example-code">'z' not in 'apple'</div>
+                        <div class="result">True</div>
+                    </div>
+                </div>
+                <button class="expand-btn" onclick="toggleDetails(this)">Show Details</button>
+                <div class="hidden-content">
+                    <p><strong>Identity (is):</strong> Checks if variables point to the same object.</p>
+                    <p><strong>Membership (in):</strong> Checks if value exists in a sequence.</p>
+                    <p><strong>Difference:</strong> 'is' checks object identity, '==' checks value equality.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="interactive-demo">
+            <div class="demo-title">🧮 Interactive Calculator</div>
+            <div class="calculator">
+                <input type="number" class="calc-input" id="num1" placeholder="5" value="5">
+                <select class="operator-select" id="operator">
+                    <option value="+">+ (Add)</option>
+                    <option value="-">- (Subtract)</option>
+                    <option value="*">* (Multiply)</option>
+                    <option value="/">&divide; (Divide)</option>
+                    <option value="//">// (Floor Divide)</option>
+                    <option value="%">% (Modulus)</option>
+                    <option value="**">** (Power)</option>
+                    <option value="==">== (Equal)</option>
+                    <option value="!=">!= (Not Equal)</option>
+                    <option value=">">> (Greater)</option>
+                    <option value="<">< (Less)</option>
+                    <option value=">=">>= (Greater Equal)</option>
+                    <option value="<="><= (Less Equal)</option>
+                </select>
+                <input type="number" class="calc-input" id="num2" placeholder="3" value="3">
+            </div>
+            <div class="calc-result" id="result">8</div>
+        </div> -->
+    </div>
+
+    <script>
+        function toggleDetails(button) {
+            const hiddenContent = button.nextElementSibling;
+            hiddenContent.classList.toggle('expanded');
+            
+            if (hiddenContent.classList.contains('expanded')) {
+                button.textContent = 'Hide Details';
+                button.style.background = 'linear-gradient(45deg, #f5576c, #f093fb)';
+            } else {
+                button.textContent = 'Show Details';
+                button.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+            }
+        }
+
+        function showOperatorDetails(type) {
+            const messages = {
+                arithmetic: "🔢 Arithmetic operators perform basic mathematical operations. Click 'Show Details' below for more info!",
+                relational: "⚖️ Relational operators compare values and return True/False. Perfect for conditions and loops!",
+                logical: "🧠 Logical operators combine Boolean values. Essential for complex decision-making in code!",
+                bitwise: "💻 Bitwise operators work on binary representations. Used in low-level programming and optimization!",
+                assignment: "📝 Assignment operators assign values and perform operations in one step. Great for concise code!",
+                special: "⭐ Special operators check identity and membership. Useful for object comparison and sequence checks!"
+            };
+            
+            alert(messages[type] || "Learn more about Python operators!");
+        }
+
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const operator = document.getElementById('operator').value;
+            const resultElement = document.getElementById('result');
+            
+            let result;
+            
+            try {
+                switch(operator) {
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        result = num2 !== 0 ? num1 / num2 : 'Division by zero!';
+                        break;
+                    case '//':
+                        result = num2 !== 0 ? Math.floor(num1 / num2) : 'Division by zero!';
+                        break;
+                    case '%':
+                        result = num2 !== 0 ? num1 % num2 : 'Division by zero!';
+                        break;
+                    case '**':
+                        result = Math.pow(num1, num2);
+                        break;
+                    case '==':
+                        result = num1 === num2;
+                        break;
+                    case '!=':
+                        result = num1 !== num2;
+                        break;
+                    case '>':
+                        result = num1 > num2;
+                        break;
+                    case '<':
+                        result = num1 < num2;
+                        break;
+                    case '>=':
+                        result = num1 >= num2;
+                        break;
+                    case '<=':
+                        result = num1 <= num2;
+                        break;
+                    default:
+                        result = 'Invalid operator';
+                }
+                
+                resultElement.textContent = result;
+                resultElement.style.animation = 'none';
+                setTimeout(() => {
+                    resultElement.style.animation = 'resultGlow 0.5s ease';
+                }, 10);
+                
+            } catch (error) {
+                resultElement.textContent = 'Error!';
+            }
+        }
+
+        // Add event listeners for real-time calculation
+        document.getElementById('num1').addEventListener('input', calculate);
+        document.getElementById('num2').addEventListener('input', calculate);
+        document.getElementById('operator').addEventListener('change', calculate);
+
+        // Add hover effects to operator cards
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click effects to examples
+        document.querySelectorAll('.example').forEach(example => {
+            example.addEventListener('click', function() {
+                this.style.background = 'linear-gradient(90deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))';
+                this.style.transform = 'scale(1.02)';
+                
+                setTimeout(() => {
+                    this.style.background = '';
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+
+        // Add floating animation to operator icons
+        // document.querySelectorAll('.operator-icon').forEach(icon => {
+        //     icon.addEventListener('mouseenter', function() {
+        //         this.style.animation = 'pulse 0.5s ease, float 2s ease-in-out infinite';
+        //     });
+            
+        //     icon.addEventListener('mouseleave', function() {
+        //         this.style.animation = 'pulse 2s infinite';
+        //     });
+        // });
+
+        // Add dynamic background color change
+        function changeBackgroundGradient() {
+            const gradients = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
+            ];
+            
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % gradients.length;
+                document.body.style.background = gradients[currentIndex];
+            }, 10000); // Change every 10 seconds
+        }
+
+        // Initialize dynamic background
+        changeBackgroundGradient();
+
+        // Add typewriter effect for title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Observe all operator cards
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            observer.observe(card);
+        });
+
+        // Add CSS animation for fade in up
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add particle system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 4 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1000';
+            particle.style.opacity = '0.7';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 10;
+            
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            
+            document.body.appendChild(particle);
+            
+            const animation = particle.animate([
+                { transform: `translate(0, 0) scale(1)`, opacity: 0.7 },
+                { transform: `translate(${(Math.random() - 0.5) * 100}px, -${window.innerHeight + 100}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 3000 + Math.random() * 2000,
+                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+
+        // Add keyboard shortcuts for calculator
+        document.addEventListener('keydown', (e) => {
+            const num1Input = document.getElementById('num1');
+            const num2Input = document.getElementById('num2');
+            const operatorSelect = document.getElementById('operator');
+            
+            switch(e.key) {
+                case '+':
+                    e.preventDefault();
+                    operatorSelect.value = '+';
+                    calculate();
+                    break;
+                case '-':
+                    e.preventDefault();
+                    operatorSelect.value = '-';
+                    calculate();
+                    break;
+                case '*':
+                    e.preventDefault();
+                    operatorSelect.value = '*';
+                    calculate();
+                    break;
+                case '/':
+                    e.preventDefault();
+                    operatorSelect.value = '/';
+                    calculate();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    calculate();
+                    break;
+            }
+        });
+
+        // Add sound effects (using Web Audio API)
+        function createBeep(frequency = 800, duration = 100) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration / 1000);
+            } catch (error) {
+                // Silently handle audio context errors
+                console.log('Audio not supported');
+            }
+        }
+
+        // Add sound to calculator operations
+        document.getElementById('operator').addEventListener('change', () => {
+            createBeep(600, 50);
+        });
+
+        // Add hover sound to cards
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                createBeep(400, 30);
+            });
+        });
+
+        // Performance monitoring
+        let performanceData = {
+            animationFrames: 0,
+            startTime: performance.now()
+        };
+
+        function trackPerformance() {
+            performanceData.animationFrames++;
+            requestAnimationFrame(trackPerformance);
+        }
+
+        trackPerformance();
+
+        // Initialize everything
+        window.addEventListener('load', () => {
+            // Initial calculation
+            calculate();
+            
+            // Start title animation after a delay
+            setTimeout(() => {
+                const title = document.querySelector('h1');
+                const originalText = title.textContent;
+                typeWriter(title, originalText, 150);
+            }, 1000);
+            
+            console.log('🐍 Python Operators Guide loaded successfully!');
+            console.log('🎮 Use keyboard shortcuts: +, -, *, / for quick calculations');
+            console.log('🎵 Sound effects enabled for interactive elements');
+            console.log('💡 Click on operator titles for quick info!');
+        });

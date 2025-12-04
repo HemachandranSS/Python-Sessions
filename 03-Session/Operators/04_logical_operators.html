@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logical Operators: Interactive Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #4dabf7;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            color: #ff6b6b;
+        }
+        
+        .operator-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .operator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .operator {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .operator:hover {
+            background: rgba(77, 171, 247, 0.1);
+            border-color: #4dabf7;
+        }
+        
+        .operator-name {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd43b;
+        }
+        
+        .truth-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        
+        .truth-table th {
+            background: rgba(77, 171, 247, 0.2);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .truth-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .true {
+            color: #69db7c;
+            font-weight: bold;
+        }
+        
+        .false {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .interactive-section {
+            margin-top: 40px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .input-box {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-box label {
+            display: block;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+        
+        .input-box input, .input-box select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .input-box input:focus, .input-box select:focus {
+            outline: none;
+            border-color: #4dabf7;
+        }
+        
+        .operator-select {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .operator-btn {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffd43b;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .operator-btn:hover {
+            background: rgba(77, 171, 247, 0.2);
+            border-color: #4dabf7;
+        }
+        
+        .operator-btn.active {
+            background: rgba(77, 171, 247, 0.3);
+            border-color: #4dabf7;
+            box-shadow: 0 0 15px rgba(77, 171, 247, 0.5);
+        }
+        
+        .result-box {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .result-label {
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd43b;
+        }
+        
+        .result-details {
+            color: #aaa;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .examples {
+            margin-top: 40px;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .example {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4dabf7;
+        }
+        
+        .example code {
+            font-size: 1.2rem;
+            color: #ffd43b;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .example .output {
+            color: #69db7c;
+            font-size: 1.1rem;
+        }
+        
+        .note {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #ffd43b;
+            padding: 20px;
+            border-radius: 0 15px 15px 0;
+            margin-top: 30px;
+        }
+        
+        .note h3 {
+            color: #ffd43b;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .highlight {
+            color: #ffd43b;
+            font-weight: bold;
+        }
+        
+        .replacement-note {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #ffa8a8;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code-branch"></i> Logical Operators in Programming</h1>
+            <p class="subtitle">Learn how logical operators <span class="highlight">AND</span>, <span class="highlight">OR</span>, and <span class="highlight">NOT</span> work with boolean and non-boolean types. Interactive examples included.</p>
+            <div class="replacement-note">
+                <i class="fas fa-info-circle"></i> Note: All instances of "durga" in the original content have been replaced with "hema" as requested.
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <div class="card">
+                <h2><i class="fas fa-toggle-on"></i> Boolean Behavior</h2>
+                <p>Logical operators work differently with boolean values (True/False):</p>
+                
+                <div class="operator-grid">
+                    <div class="operator">
+                        <div class="operator-name">AND</div>
+                        <p>If <span class="highlight">both</span> arguments are True then result is True</p>
+                        <div class="example-small">
+                            <p>True AND False → <span class="false">False</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="operator">
+                        <div class="operator-name">OR</div>
+                        <p>If <span class="highlight">at least one</span> argument is True then result is True</p>
+                        <div class="example-small">
+                            <p>True OR False → <span class="true">True</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="operator">
+                        <div class="operator-name">NOT</div>
+                        <p>Returns the <span class="highlight">complement</span> (opposite) value</p>
+                        <div class="example-small">
+                            <p>NOT False → <span class="true">True</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Truth Table</h3>
+                <table class="truth-table">
+                    <thead>
+                        <tr>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>A AND B</th>
+                            <th>A OR B</th>
+                            <th>NOT A</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="true">True</td>
+                            <td class="true">True</td>
+                            <td class="true">True</td>
+                            <td class="true">True</td>
+                            <td class="false">False</td>
+                        </tr>
+                        <tr>
+                            <td class="true">True</td>
+                            <td class="false">False</td>
+                            <td class="false">False</td>
+                            <td class="true">True</td>
+                            <td class="false">False</td>
+                        </tr>
+                        <tr>
+                            <td class="false">False</td>
+                            <td class="true">True</td>
+                            <td class="false">False</td>
+                            <td class="true">True</td>
+                            <td class="true">True</td>
+                        </tr>
+                        <tr>
+                            <td class="false">False</td>
+                            <td class="false">False</td>
+                            <td class="false">False</td>
+                            <td class="false">False</td>
+                            <td class="true">True</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-sliders-h"></i> Non-Boolean Behavior</h2>
+                <p>For non-boolean types, values are evaluated as Truthy or Falsy:</p>
+                
+                <div class="example">
+                    <p><span class="highlight">Falsy</span> values: 0, empty string (""), False</p>
+                    <p><span class="highlight">Truthy</span> values: Non-zero numbers, non-empty strings, True</p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Rules for Non-Boolean Types</h3>
+                
+                <div class="rule">
+                    <h4><span class="highlight">X AND Y</span></h4>
+                    <p>If X evaluates to Falsy, returns X. Otherwise returns Y.</p>
+                    <div class="example-small">
+                        <p>10 AND 20 → <span class="true">20</span></p>
+                        <p>0 AND 20 → <span class="false">0</span></p>
+                    </div>
+                </div>
+                
+                <div class="rule" style="margin-top: 20px;">
+                    <h4><span class="highlight">X OR Y</span></h4>
+                    <p>If X evaluates to Truthy, returns X. Otherwise returns Y.</p>
+                    <div class="example-small">
+                        <p>10 OR 20 → <span class="true">10</span></p>
+                        <p>0 OR 20 → <span class="true">20</span></p>
+                    </div>
+                </div>
+                
+                <div class="rule" style="margin-top: 20px;">
+                    <h4><span class="highlight">NOT X</span></h4>
+                    <p>If X evaluates to Falsy, returns True. Otherwise returns False.</p>
+                    <div class="example-small">
+                        <p>NOT 10 → <span class="false">False</span></p>
+                        <p>NOT 0 → <span class="true">True</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="interactive-section">
+            <div class="card">
+                <h2><i class="fas fa-play-circle"></i> Interactive Operator Tester</h2>
+                <p>Enter values to test how logical operators work with different data types:</p>
+                
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="value1">First Value (X):</label>
+                        <input type="text" id="value1" value="hema">
+                        <div class="hint">Try: "hema", 10, 0, ""</div>
+                    </div>
+                    
+                    <div class="input-box">
+                        <label for="value2">Second Value (Y):</label>
+                        <input type="text" id="value2" value="hemasoft">
+                        <div class="hint">Try: "hemasoft", 20, "", 0</div>
+                    </div>
+                </div>
+                
+                <div class="operator-select">
+                    <button class="operator-btn" data-operator="and">AND</button>
+                    <button class="operator-btn" data-operator="or">OR</button>
+                    <button class="operator-btn" data-operator="not">NOT</button>
+                </div>
+                
+                <div class="result-box">
+                    <div class="result-label">Result:</div>
+                    <div class="result-value" id="result">-</div>
+                    <div class="result-details" id="result-details">Select an operator to see the result</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="examples">
+            <div class="card">
+                <h2><i class="fas fa-code"></i> Example Evaluations</h2>
+                <p>These examples demonstrate how logical operators work with non-boolean values:</p>
+                
+                <div class="examples-grid">
+                    <div class="example">
+                        <code>"hema" AND "hemasoft"</code>
+                        <div class="output">Result: "hemasoft" (First is truthy, so returns second)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>"" AND "hema"</code>
+                        <div class="output">Result: "" (First is falsy, so returns first)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>"hema" AND ""</code>
+                        <div class="output">Result: "" (First is truthy, so returns second)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>"" OR "hema"</code>
+                        <div class="output">Result: "hema" (First is falsy, so returns second)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>"hema" OR ""</code>
+                        <div class="output">Result: "hema" (First is truthy, so returns first)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>NOT ""</code>
+                        <div class="output">Result: True (Empty string is falsy)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>NOT "hema"</code>
+                        <div class="output">Result: False (Non-empty string is truthy)</div>
+                    </div>
+                    
+                    <div class="example">
+                        <code>10 AND 20</code>
+                        <div class="output">Result: 20 (First is truthy, so returns second)</div>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <h3><i class="fas fa-lightbulb"></i> Key Points to Remember</h3>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>For boolean types: AND requires both True, OR requires at least one True</li>
+                        <li>For non-boolean types: 0 means False, non-zero means True</li>
+                        <li>Empty string "" is always treated as False</li>
+                        <li>X AND Y: If X is falsy, return X; otherwise return Y</li>
+                        <li>X OR Y: If X is truthy, return X; otherwise return Y</li>
+                        <li>NOT X: If X is falsy, return True; otherwise return False</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Logical Operators Interactive Tutorial | Created with HTML, CSS & JavaScript</p>
+            <p>All instances of "durga" replaced with "hema" as requested</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const operatorButtons = document.querySelectorAll('.operator-btn');
+            const value1Input = document.getElementById('value1');
+            const value2Input = document.getElementById('value2');
+            const resultElement = document.getElementById('result');
+            const resultDetailsElement = document.getElementById('result-details');
+            
+            let selectedOperator = 'and';
+            
+            // Initialize active button
+            operatorButtons[0].classList.add('active');
+            
+            // Operator button click event
+            operatorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    operatorButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Set selected operator
+                    selectedOperator = this.getAttribute('data-operator');
+                    
+                    // Calculate and display result
+                    calculateResult();
+                });
+            });
+            
+            // Input change events
+            value1Input.addEventListener('input', calculateResult);
+            value2Input.addEventListener('input', calculateResult);
+            
+            // Calculate result based on inputs and selected operator
+            function calculateResult() {
+                const x = parseValue(value1Input.value);
+                const y = parseValue(value2Input.value);
+                
+                let result;
+                let details;
+                
+                switch(selectedOperator) {
+                    case 'and':
+                        result = logicalAnd(x, y);
+                        details = `X AND Y: Since X is ${getTruthiness(x)}, ${getAndExplanation(x, y)}`;
+                        break;
+                    case 'or':
+                        result = logicalOr(x, y);
+                        details = `X OR Y: Since X is ${getTruthiness(x)}, ${getOrExplanation(x, y)}`;
+                        break;
+                    case 'not':
+                        result = logicalNot(x);
+                        details = `NOT X: Since X is ${getTruthiness(x)}, ${getNotExplanation(x)}`;
+                        break;
+                }
+                
+                // Display result
+                resultElement.textContent = formatResult(result);
+                resultElement.className = 'result-value ' + (isTruthy(result) ? 'true' : 'false');
+                resultDetailsElement.textContent = details;
+            }
+            
+            // Parse input value to maintain type
+            function parseValue(value) {
+                // Check if it's a number
+                if (!isNaN(value) && value.trim() !== '') {
+                    return Number(value);
+                }
+                // Check if it's a boolean string
+                if (value.toLowerCase() === 'true') return true;
+                if (value.toLowerCase() === 'false') return false;
+                // Otherwise return as string
+                return value;
+            }
+            
+            // Logical operators implementation
+            function logicalAnd(x, y) {
+                return isTruthy(x) ? y : x;
+            }
+            
+            function logicalOr(x, y) {
+                return isTruthy(x) ? x : y;
+            }
+            
+            function logicalNot(x) {
+                return !isTruthy(x);
+            }
+            
+            // Check if value is truthy
+            function isTruthy(value) {
+                if (typeof value === 'number') {
+                    return value !== 0;
+                } else if (typeof value === 'string') {
+                    return value !== '';
+                } else {
+                    return Boolean(value);
+                }
+            }
+            
+            // Get truthiness description
+            function getTruthiness(value) {
+                return isTruthy(value) ? 'truthy' : 'falsy';
+            }
+            
+            // Format result for display
+            function formatResult(result) {
+                if (result === '') return '"" (empty string)';
+                if (typeof result === 'string') return `"${result}"`;
+                if (typeof result === 'boolean') return result ? 'True' : 'False';
+                return result.toString();
+            }
+            
+            // Explanation generators
+            function getAndExplanation(x, y) {
+                if (isTruthy(x)) {
+                    return `the result is Y (${formatResult(y)})`;
+                } else {
+                    return `the result is X (${formatResult(x)})`;
+                }
+            }
+            
+            function getOrExplanation(x, y) {
+                if (isTruthy(x)) {
+                    return `the result is X (${formatResult(x)})`;
+                } else {
+                    return `the result is Y (${formatResult(y)})`;
+                }
+            }
+            
+            function getNotExplanation(x) {
+                if (isTruthy(x)) {
+                    return `the result is False`;
+                } else {
+                    return `the result is True`;
+                }
+            }
+            
+            // Initial calculation
+            calculateResult();
+        });
+    </script>
+</body>
+</html>

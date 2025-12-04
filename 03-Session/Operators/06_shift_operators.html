@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Operators - Interactive Visual Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #1e293b 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1000px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-left {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+
+        .icon-right {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+
+        .description {
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .example-label {
+            color: #a78bfa;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Bit Display */
+        .bit-container {
+            margin: 25px 0;
+        }
+
+        .bit-labels {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+
+        .bit-label {
+            width: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .bit-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .bit {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .bit-1 {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+            border-color: #f472b6;
+            color: white;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .bit-0 {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border-color: #60a5fa;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .bit-removed {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            position: relative;
+            opacity: 0.5;
+        }
+
+        .bit-removed::after {
+            content: '✘';
+            position: absolute;
+            color: #ef4444;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .bit-new {
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+            border-color: #34d399;
+            animation: newBitPulse 1s ease-in-out;
+        }
+
+        @keyframes newBitPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 2rem;
+            color: #a78bfa;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .result-display {
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Interactive Calculator */
+        .calculator {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .calc-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #a78bfa;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #a78bfa;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Boolean Examples */
+        .boolean-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .boolean-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #60a5fa;
+        }
+
+        .boolean-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .boolean-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #8b5cf6;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .boolean-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(5px);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-arrows-left-right"></i> Shift Operators</h1>
+            <p class="subtitle">Interactive Visual Guide to Bitwise Shifting</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left Shift -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="icon-left"><i class="fas fa-arrow-left"></i></span>
+                    Left Shift (<<) </h2>
+                        <p class="description">
+                            Shifts bits to the left and fills empty cells with zeros. Each left shift multiplies the
+                            number by 2.
+                        </p>
+
+                        <div class="example-label">Example: 10 << 2=40</div>
+
+                                <div class="bit-container">
+                                    <div class="bit-labels">
+                                        <div class="bit-label">7</div>
+                                        <div class="bit-label">6</div>
+                                        <div class="bit-label">5</div>
+                                        <div class="bit-label">4</div>
+                                        <div class="bit-label">3</div>
+                                        <div class="bit-label">2</div>
+                                        <div class="bit-label">1</div>
+                                        <div class="bit-label">0</div>
+                                    </div>
+                                    <div class="bit-row">
+                                        <div class="bit bit-removed">0</div>
+                                        <div class="bit bit-removed">0</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-1">1</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-1">1</div>
+                                        <div class="bit bit-0">0</div>
+                                    </div>
+                                </div>
+
+                                <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+
+                                <div class="bit-container">
+                                    <div class="bit-row">
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-1">1</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-1">1</div>
+                                        <div class="bit bit-0">0</div>
+                                        <div class="bit bit-new">0</div>
+                                        <div class="bit bit-new">0</div>
+                                    </div>
+                                </div>
+
+                                <div class="result-display">
+                                    <div class="result-value">40</div>
+                                </div>
+                        </div>
+
+                        <!-- Right Shift -->
+                        <div class="card">
+                            <h2 class="card-title">
+                                <span class="icon-right"><i class="fas fa-arrow-right"></i></span>
+                                Right Shift (>>)
+                            </h2>
+                            <p class="description">
+                                Shifts bits to the right and fills empty cells with the sign bit (0 for positive, 1 for
+                                negative). Each right shift divides by 2.
+                            </p>
+
+                            <div class="example-label">Example: 10 >> 2 = 2</div>
+
+                            <div class="bit-container">
+                                <div class="bit-labels">
+                                    <div class="bit-label">7</div>
+                                    <div class="bit-label">6</div>
+                                    <div class="bit-label">5</div>
+                                    <div class="bit-label">4</div>
+                                    <div class="bit-label">3</div>
+                                    <div class="bit-label">2</div>
+                                    <div class="bit-label">1</div>
+                                    <div class="bit-label">0</div>
+                                </div>
+                                <div class="bit-row">
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-1">1</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-removed">1</div>
+                                    <div class="bit bit-removed">0</div>
+                                </div>
+                            </div>
+
+                            <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+
+                            <div class="bit-container">
+                                <div class="bit-row">
+                                    <div class="bit bit-new">0</div>
+                                    <div class="bit bit-new">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-0">0</div>
+                                    <div class="bit bit-1">1</div>
+                                    <div class="bit bit-0">0</div>
+                                </div>
+                            </div>
+
+                            <div class="result-display">
+                                <div class="result-value">2</div>
+                            </div>
+                        </div>
+            </div>
+
+            <!-- Interactive Calculator -->
+            <div class="calculator">
+                <h2 class="calc-title"><i class="fas fa-calculator"></i> Interactive Shift Calculator</h2>
+
+                <div class="input-group">
+                    <label for="value">Enter a Number (0-255)</label>
+                    <input type="number" id="value" value="10" min="0" max="255">
+                </div>
+
+                <div class="input-group">
+                    <label for="operation">Select Operation</label>
+                    <select id="operation">
+                        <option value="left">Left Shift (<<) </option>
+                        <option value="right">Right Shift (>>)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="positions">Number of Positions to Shift</label>
+                    <input type="number" id="positions" value="2" min="0" max="7">
+                </div>
+
+                <button class="btn" onclick="calculateShift()">
+                    <i class="fas fa-play"></i> Calculate Shift
+                </button>
+
+                <div id="calcResult" style="display: none; margin-top: 30px;">
+                    <div class="bit-container">
+                        <div class="bit-labels" id="calcLabels"></div>
+                        <div class="bit-row" id="calcBefore"></div>
+                    </div>
+                    <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+                    <div class="bit-container">
+                        <div class="bit-row" id="calcAfter"></div>
+                    </div>
+                    <div class="result-display">
+                        <div class="result-value" id="calcValue">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boolean Examples -->
+            <div class="boolean-section">
+                <h2 class="boolean-title"><i class="fas fa-toggle-on"></i> Bitwise Operators with Booleans</h2>
+                <div class="boolean-grid">
+                    <div class="boolean-item">True & False → <span style="color: #ef4444;">False</span></div>
+                    <div class="boolean-item">True | False → <span style="color: #34d399;">True</span></div>
+                    <div class="boolean-item">True ^ False → <span style="color: #34d399;">True</span></div>
+                    <div class="boolean-item">~True → <span style="color: #a78bfa;">-2</span></div>
+                    <div class="boolean-item">True << 2 → <span style="color: #60a5fa;">4</span></div>
+                    <div class="boolean-item">True >> 2 → <span style="color: #60a5fa;">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function decimalToBinary(num, bits = 8) {
+                let binary = (num >>> 0).toString(2);
+                while (binary.length < bits) {
+                    binary = '0' + binary;
+                }
+                return binary.slice(-bits);
+            }
+
+            function calculateShift() {
+                const value = parseInt(document.getElementById('value').value) || 0;
+                const operation = document.getElementById('operation').value;
+                const positions = parseInt(document.getElementById('positions').value) || 0;
+
+                let result;
+                if (operation === 'left') {
+                    result = value << positions;
+                } else {
+                    result = value >> positions;
+                }
+
+                // Display result
+                const beforeBinary = decimalToBinary(value);
+                const afterBinary = decimalToBinary(result);
+
+                // Create labels
+                const labelsContainer = document.getElementById('calcLabels');
+                labelsContainer.innerHTML = '';
+                for (let i = 7; i >= 0; i--) {
+                    const label = document.createElement('div');
+                    label.className = 'bit-label';
+                    label.textContent = i;
+                    labelsContainer.appendChild(label);
+                }
+
+                // Create before bits
+                const beforeContainer = document.getElementById('calcBefore');
+                beforeContainer.innerHTML = '';
+                for (let i = 0; i < 8; i++) {
+                    const bit = document.createElement('div');
+                    bit.className = `bit bit-${beforeBinary[i]}`;
+                    bit.textContent = beforeBinary[i];
+                    beforeContainer.appendChild(bit);
+                }
+
+                // Create after bits
+                const afterContainer = document.getElementById('calcAfter');
+                afterContainer.innerHTML = '';
+                for (let i = 0; i < 8; i++) {
+                    const bit = document.createElement('div');
+                    bit.className = `bit bit-${afterBinary[i]}`;
+                    bit.textContent = afterBinary[i];
+
+                    // Highlight new bits
+                    if (operation === 'left' && i >= 8 - positions) {
+                        bit.classList.add('bit-new');
+                    } else if (operation === 'right' && i < positions) {
+                        bit.classList.add('bit-new');
+                    }
+
+                    afterContainer.appendChild(bit);
+                }
+
+                document.getElementById('calcValue').textContent = result;
+                document.getElementById('calcResult').style.display = 'block';
+            }
+
+            // Initial calculation
+            window.addEventListener('load', () => {
+                calculateShift();
+            });
+        </script>
+</body>
+
+</html>
