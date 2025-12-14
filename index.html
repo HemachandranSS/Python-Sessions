@@ -122,6 +122,14 @@
             font-size: 24px;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #pp {
+            scroll-margin-top: 80px; /* adjust to navbar height */
+        }
+
         .file-title {
             font-size: 1.2rem;
             font-weight: 600;
@@ -339,7 +347,7 @@
         </div>
 
         <div class="category-section">
-            <h2 class="category-title">🐍 Python Programming</h2>
+            <h2 id="pp" class="category-title">🐍 Python Programming</h2>
             <div class="files-grid">
                 <div class="file-card" data-file="02-Session/03-python_history_interactive.html">
                     <div class="file-icon">🐍</div>
