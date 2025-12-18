@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Packages Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: #e0e1dd;
+            line-height: 1.8;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(26, 35, 53, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid #415a77;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #4cc9f0;
+        }
+        
+        h1 {
+            color: #4cc9f0;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        h2 {
+            color: #a3d9ff;
+            font-weight: 400;
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: rgba(33, 42, 62, 0.8);
+            padding: 35px;
+            margin: 40px 0;
+            border-radius: 15px;
+            border-left: 5px solid #4cc9f0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        h3 {
+            color: #4cc9f0;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        h3 i {
+            color: #a3d9ff;
+            background: rgba(76, 201, 240, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #3a3a5e;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        
+        .code-block .keyword {
+            color: #569cd6;
+        }
+        
+        .code-block .function {
+            color: #dcdcaa;
+        }
+        
+        .code-block .string {
+            color: #ce9178;
+        }
+        
+        .code-block .comment {
+            color: #6a9955;
+        }
+        
+        .code-block .module {
+            color: #c586c0;
+        }
+        
+        .output {
+            background: #0a2f2f;
+            color: #98fb98;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #20b2aa;
+        }
+        
+        .note {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 25px;
+            margin: 25px 0;
+            color: #ffef96;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .highlight {
+            background: rgba(76, 201, 240, 0.25);
+            padding: 4px 10px;
+            border-radius: 5px;
+            color: #4cc9f0;
+            font-weight: bold;
+        }
+        
+        .hema-highlight {
+            background: rgba(255, 105, 180, 0.25);
+            color: #ff69b4;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .file-structure {
+            background: rgba(40, 40, 60, 0.8);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            border: 1px dashed #4cc9f0;
+        }
+        
+        .package-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+            background: rgba(33, 42, 62, 0.6);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #415a77;
+        }
+        
+        .package-level {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .package-box {
+            background: #1b3a4b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 180px;
+            border: 2px solid #4cc9f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .package-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .module-box {
+            background: #144552;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px;
+            border: 1px solid #20b2aa;
+        }
+        
+        .function-box {
+            background: #0d3b2a;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        
+        .tree-arrow {
+            color: #4cc9f0;
+            margin-right: 10px;
+        }
+        
+        .folder-icon {
+            color: #ffd700;
+            margin-right: 10px;
+        }
+        
+        .file-icon {
+            color: #a3d9ff;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .package-level {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-box-open"></i> Python Packages</h1>
+            <h2>Organizing Python Code with Packages and Subpackages</h2>
+        </header>
+        
+        <div class="section" id="intro">
+            <h3><i class="fas fa-info-circle"></i> Introduction to Packages</h3>
+            
+            <p>A package in Python is an encapsulation mechanism to group related modules into a single unit. A package is essentially a folder or directory that represents a collection of Python modules.</p>
+            
+            <div class="note">
+                <p><strong>Key Point:</strong> Any folder or directory that contains an <span class="highlight">__init__.py</span> file is considered a Python package. This file can be empty.</p>
+            </div>
+            
+            <!-- <div class="note">
+                <p><strong>Note:</strong> All instances of "durga" have been replaced with <span class="hema-highlight">"hema"</span> throughout this tutorial.</p>
+            </div> -->
+            
+            <h4>Advantages of Packages:</h4>
+            <ol>
+                <li><span class="highlight">Resolve naming conflicts</span> - Different packages can have modules with the same name</li>
+                <li><span class="highlight">Unique component identification</span> - Packages provide namespace organization</li>
+                <li><span class="highlight">Improved modularity</span> - Better organization of large projects</li>
+            </ol>
+            
+            <div class="package-diagram">
+                <div class="package-level">
+                    <div class="package-box">
+                        <h4>Root Package</h4>
+                        <i class="fas fa-folder fa-2x" style="color: #ffd700; margin: 10px 0;"></i>
+                        <p>__init__.py</p>
+                    </div>
+                </div>
+                
+                <div class="package-level">
+                    <div class="package-box">
+                        <h4>Subpackage 1</h4>
+                        <i class="fas fa-folder fa-2x" style="color: #ffd700; margin: 10px 0;"></i>
+                        <p>__init__.py</p>
+                        <div class="module-box">module1.py</div>
+                        <div class="module-box">module2.py</div>
+                    </div>
+                    
+                    <div class="package-box">
+                        <h4>Subpackage 2</h4>
+                        <i class="fas fa-folder fa-2x" style="color: #ffd700; margin: 10px 0;"></i>
+                        <p>__init__.py</p>
+                        <div class="module-box">module3.py</div>
+                        <div class="module-box">module4.py</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="basic-package">
+            <h3><i class="fas fa-box"></i> Basic Package Structure</h3>
+            
+            <p><strong>Example 1: Simple Package Structure</strong></p>
+            
+            <div class="file-structure">
+                <div><i class="fas fa-folder folder-icon"></i>D:\Python_classes\</div>
+                <div style="margin-left: 20px;"><i class="fas fa-file file-icon"></i>test.py</div>
+                <div style="margin-left: 20px;"><i class="fas fa-folder folder-icon"></i>pack1/</div>
+                <div style="margin-left: 40px;"><i class="fas fa-file file-icon"></i>__init__.py <span style="color: #6a9955;"># empty file</span></div>
+                <div style="margin-left: 40px;"><i class="fas fa-file file-icon"></i>module1.py</div>
+            </div>
+            
+            <p><strong>__init__.py file:</strong></p>
+            <div class="code-block">
+<span class="comment"># This file can be empty</span>
+<span class="comment"># Its presence makes the directory a Python package</span>
+            </div>
+            
+            <p><strong>module1.py file:</strong></p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="function">print</span>(<span class="string">"Hello this is from module1 present in pack1"</span>)
+            </div>
+            
+            <p><strong>test.py - Version 1 (Full import):</strong></p>
+            <div class="code-block">
+<span class="keyword">import</span> <span class="module">pack1.module1</span>
+pack1.module1.f1()
+            </div>
+            
+            <p><strong>test.py - Version 2 (Selective import):</strong></p>
+            <div class="code-block">
+<span class="keyword">from</span> <span class="module">pack1.module1</span> <span class="keyword">import</span> f1
+f1()
+            </div>
+        </div>
+        
+        <div class="section" id="nested-package">
+            <h3><i class="fas fa-sitemap"></i> Nested Package Structure</h3>
+            
+            <p><strong>Example 2: Package with Subpackage</strong></p>
+            
+            <div class="file-structure">
+                <div><i class="fas fa-folder folder-icon"></i>D:\Python_classes\</div>
+                <div style="margin-left: 20px;"><i class="fas fa-file file-icon"></i>test.py</div>
+                <div style="margin-left: 20px;"><i class="fas fa-folder folder-icon"></i>com/</div>
+                <div style="margin-left: 40px;"><i class="fas fa-file file-icon"></i>__init__.py</div>
+                <div style="margin-left: 40px;"><i class="fas fa-file file-icon"></i>module1.py</div>
+                <div style="margin-left: 40px;"><i class="fas fa-folder folder-icon"></i>hema/</div>
+                <div style="margin-left: 60px;"><i class="fas fa-file file-icon"></i>__init__.py</div>
+                <div style="margin-left: 60px;"><i class="fas fa-file file-icon"></i>module2.py</div>
+            </div>
+            
+            <p><strong>__init__.py files:</strong></p>
+            <div class="code-block">
+<span class="comment"># Both __init__.py files can be empty</span>
+<span class="comment"># They just mark directories as Python packages</span>
+            </div>
+            
+            <p><strong>module1.py in com package:</strong></p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="function">print</span>(<span class="string">"Hello this is from module1 present in com"</span>)
+            </div>
+            
+            <p><strong>module2.py in com.hema subpackage:</strong></p>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">f2</span>():
+    <span class="function">print</span>(<span class="string">"Hello this is from module2 present in com.hema"</span>)
+            </div>
+            
+            <p><strong>test.py file:</strong></p>
+            <div class="code-block">
+<span class="keyword">from</span> <span class="module">com.module1</span> <span class="keyword">import</span> f1
+<span class="keyword">from</span> <span class="module">com.hema.module2</span> <span class="keyword">import</span> f2
+f1()
+f2()
+            </div>
+            
+            <div class="output">
+                <strong>Output:</strong>
+                Hello this is from module1 present in com
+                Hello this is from module2 present in com.hema
+            </div>
+        </div>
+        
+        <div class="section" id="hierarchy">
+            <h3><i class="fas fa-project-diagram"></i> Package Hierarchy Diagram</h3>
+            
+            <p>The complete hierarchy of Python code organization:</p>
+            
+            <div class="package-diagram">
+                <div class="package-level">
+                    <div class="package-box">
+                        <h4>Library</h4>
+                        <p>Collection of Packages</p>
+                        <i class="fas fa-book fa-2x" style="color: #a3d9ff; margin: 15px 0;"></i>
+                    </div>
+                </div>
+                
+                <div class="package-level">
+                    <div class="package-box">
+                        <h4>Package 1</h4>
+                        <div class="module-box">
+                            module1.py
+                            <div class="function-box">function1()</div>
+                            <div class="function-box">function2()</div>
+                        </div>
+                        <div class="module-box">
+                            module2.py
+                            <div class="function-box">function3()</div>
+                        </div>
+                    </div>
+                    
+                    <div class="package-box">
+                        <h4>Package 2</h4>
+                        <div class="module-box">
+                            module1.py
+                            <div class="function-box">function4()</div>
+                        </div>
+                        <div class="module-box">
+                            module2.py
+                            <div class="function-box">function5()</div>
+                            <div class="function-box">function6()</div>
+                        </div>
+                    </div>
+                    
+                    <div class="package-box">
+                        <h4>Package 3</h4>
+                        <div class="module-box">
+                            module1.py
+                            <div class="function-box">function7()</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <h4>Hierarchy Summary:</h4>
+                <ul>
+                    <li><span class="highlight">Functions</span> → Basic building blocks</li>
+                    <li><span class="highlight">Modules</span> → Collections of functions, classes, and variables</li>
+                    <li><span class="highlight">Packages</span> → Collections of related modules</li>
+                    <li><span class="highlight">Libraries</span> → Collections of packages</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section" id="best-practices">
+            <h3><i class="fas fa-check-circle"></i> Best Practices</h3>
+            
+            <h4>1. __init__.py File:</h4>
+            <ul>
+                <li>Can be empty but must exist to make a directory a package</li>
+                <li>Can contain initialization code for the package</li>
+                <li>Can define <span class="highlight">__all__</span> list to control what gets imported with <span class="highlight">from package import *</span></li>
+            </ul>
+            
+            <div class="code-block">
+<span class="comment"># Example __init__.py with __all__</span>
+<span class="keyword">__all__</span> = [<span class="string">"module1"</span>, <span class="string">"module2"</span>]
+
+<span class="comment"># Package initialization code can go here</span>
+<span class="function">print</span>(<span class="string">"Initializing hema package..."</span>)
+            </div>
+            
+            <h4>2. Naming Conventions:</h4>
+            <ul>
+                <li>Use lowercase for package names</li>
+                <li>Use underscores for multi-word names: <span class="highlight">my_package</span> not <span class="highlight">myPackage</span></li>
+                <li>Keep names descriptive but concise</li>
+            </ul>
+            
+            <h4>3. Import Guidelines:</h4>
+            <ul>
+                <li>Use absolute imports: <span class="highlight">from package.subpackage import module</span></li>
+                <li>Be explicit about what you import</li>
+                <li>Avoid <span class="highlight">from package import *</span> in production code</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add syntax highlighting and proper indentation
+        document.querySelectorAll('.code-block').forEach(block => {
+            // Fix indentation in displayed code
+            const lines = block.innerHTML.split('\n');
+            // Find minimum indentation
+            let minIndent = Infinity;
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed.length > 0) {
+                    const indent = line.search(/\S/);
+                    if (indent !== -1 && indent < minIndent) {
+                        minIndent = indent;
+                    }
+                }
+            });
+            
+            // Normalize indentation
+            const normalizedLines = lines.map(line => {
+                if (line.trim().length === 0) return '';
+                return line.substring(minIndent);
+            });
+            
+            block.innerHTML = normalizedLines.join('\n');
+        });
+        
+        // Add click handlers for package boxes
+        document.querySelectorAll('.package-box').forEach(box => {
+            box.addEventListener('click', function() {
+                this.style.transform = 'translateY(-5px)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(0)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

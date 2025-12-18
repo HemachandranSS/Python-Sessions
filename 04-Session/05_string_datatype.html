@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python String Data Type</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-section {
+            padding: 40px;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .subsection {
+            margin-bottom: 40px;
+        }
+        
+        .subsection-title {
+            color: #3498db;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #3498db;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            white-space: pre;
+            tab-size: 4;
+        }
+        
+        .code-block code {
+            display: block;
+            font-family: inherit;
+        }
+        
+        .io-example {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .io-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .io-title::before {
+            content: "📝";
+            margin-right: 10px;
+        }
+        
+        .input-section, .output-section {
+            margin-bottom: 15px;
+        }
+        
+        .input-label, .output-label {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .input-content, .output-content {
+            background-color: white;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .note-title {
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .note-title::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+        
+        .example-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .example-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #9b59b6;
+            transition: transform 0.3s;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .example-title {
+            color: #9b59b6;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .method-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .method-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .method-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .method-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .method-table tr:hover {
+            background-color: #edf2f7;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
+            .example-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python String Data Type</h1>
+            <p class="subtitle">The most commonly used object in any project and in any programming language</p>
+        </header>
+        
+        <div class="content-section">
+            <h2 class="section-title">What is String?</h2>
+            <p>Any sequence of characters within either single quotes or double quotes is considered as a String.</p>
+            
+            <div class="code-block"><code># Syntax
+s = 'hema'
+s = "hema"</code></div>
+            
+            <div class="note">
+                <div class="note-title">Note:</div>
+                <p>In most other languages like C, C++, Java, a single character within single quotes is treated as char data type value. But in Python we don't have char data type. Hence it is treated as String only.</p>
+            </div>
+            
+            <div class="io-example">
+                <div class="io-title">Example: Character Type</div>
+                <div class="code-block"><code>>>> ch = 'a'
+>>> type(ch)
+&lt;class 'str'&gt;</code></div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Multi-line String Literals</h3>
+                <p>We can define multi-line String literals by using triple single or double quotes.</p>
+                
+                <div class="code-block"><code>>>> s = '''hema
+software
+solutions'''</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Examples with Quotes</div>
+                    <div class="code-block"><code>1) s = 'This is ' single quote symbol'    # Invalid
+2) s = 'This is \' single quote symbol'   # Valid
+3) s = "This is ' single quote symbol"    # Valid
+4) s = 'This is " double quotes symbol'   # Valid
+5) s = 'The "Python Notes" by 'hema' is very helpful'    # Invalid
+6) s = "The "Python Notes" by 'hema' is very helpful"    # Invalid
+7) s = 'The \"Python Notes\" by \'hema\' is very helpful' # Valid
+8) s = '''The "Python Notes" by 'hema' is very helpful''' # Valid</code></div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Accessing Characters of a String</h3>
+                <p>We can access characters of a string by using:</p>
+                <ol>
+                    <li>By using index</li>
+                    <li>By using slice operator</li>
+                </ol>
+                
+                <h4>1) Accessing Characters By using Index</h4>
+                <p>Python supports both +ve and -ve Index:</p>
+                <ul>
+                    <li>+ve Index means Left to Right (Forward Direction)</li>
+                    <li>-ve Index means Right to Left (Backward Direction)</li>
+                </ul>
+                
+                <div class="code-block"><code>>>> s = 'hema'
+>>> s[0]
+'h'
+>>> s[3]
+'a'
+>>> s[-1]
+'a'
+>>> s[10]
+IndexError: string index out of range</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Program: Display Characters by Index</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+i = 0
+for x in s:
+    print(f"The character at +ve index {i} and -ve index {i-len(s)} is {x}")
+    i = i + 1</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">The character at +ve index 0 and -ve index -4 is h
+The character at +ve index 1 and -ve index -3 is e
+The character at +ve index 2 and -ve index -2 is m
+The character at +ve index 3 and -ve index -1 is a</div>
+                    </div>
+                </div>
+                
+                <h4>2) Accessing Characters by using Slice Operator</h4>
+                <p><strong>Syntax:</strong> s[begin:end:step]</p>
+                
+                <div class="code-block"><code>>>> s = "Learning Python is very very easy!!!"
+>>> s[1:7:1]
+'earnin'
+>>> s[1:7]
+'earnin'
+>>> s[1:7:2]
+'eri'
+>>> s[:7]
+'Learnin'
+>>> s[7:]
+'g Python is very very easy!!!'
+>>> s[::]
+'Learning Python is very very easy!!!'
+>>> s[:]
+'Learning Python is very very easy!!!'
+>>> s[::-1]
+'!!!ysae yrev yrev si nohtyP gninraeL'</code></div>
+                
+                <div class="note">
+                    <div class="note-title">Note:</div>
+                    <ul>
+                        <li>If begin index is not specified, it starts from beginning</li>
+                        <li>If end index is not specified, it goes to end of string</li>
+                        <li>Default step value is 1</li>
+                        <li>Slice operator never raises IndexError</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Mathematical Operators for String</h3>
+                
+                <div class="code-block"><code>>>> print("hema" + "soft")
+hemasoft
+>>> print("hema" * 2)
+hemahema</code></div>
+                
+                <div class="note">
+                    <div class="note-title">Note:</div>
+                    <p>1) To use + operator for Strings, both arguments must be str type<br>
+                    2) To use * operator for Strings, one argument must be str and other must be int</p>
+                </div>
+                
+                <h4>len() function</h4>
+                <div class="code-block"><code>>>> s = 'hema'
+>>> print(len(s))
+4</code></div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Checking Membership</h3>
+                
+                <div class="code-block"><code>s = 'hema'
+print('h' in s)  # True
+print('z' in s)  # False</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Program: Check Substring</div>
+                    <div class="code-block"><code>s = input("Enter main string: ")
+subs = input("Enter sub string: ")
+if subs in s:
+    print(subs, "is found in main string")
+else:
+    print(subs, "is not found in main string")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter main string: hemasoftwaresolutions
+Enter sub string: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">hema is found in main string</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">String Methods</h3>
+                
+                <table class="method-table">
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>strip()</td>
+                        <td>Remove spaces from both sides</td>
+                        <td>"  hema  ".strip() → "hema"</td>
+                    </tr>
+                    <tr>
+                        <td>find()</td>
+                        <td>Find substring (returns -1 if not found)</td>
+                        <td>"hema".find('e') → 1</td>
+                    </tr>
+                    <tr>
+                        <td>index()</td>
+                        <td>Find substring (raises ValueError if not found)</td>
+                        <td>"hema".index('e') → 1</td>
+                    </tr>
+                    <tr>
+                        <td>count()</td>
+                        <td>Count occurrences of substring</td>
+                        <td>"abcabc".count('a') → 2</td>
+                    </tr>
+                    <tr>
+                        <td>replace()</td>
+                        <td>Replace old string with new string</td>
+                        <td>"hema".replace('e','a') → "hama"</td>
+                    </tr>
+                    <tr>
+                        <td>split()</td>
+                        <td>Split string into list</td>
+                        <td>"hema software".split() → ['hema', 'software']</td>
+                    </tr>
+                    <tr>
+                        <td>join()</td>
+                        <td>Join list/tuple into string</td>
+                        <td>"-".join(['a','b','c']) → "a-b-c"</td>
+                    </tr>
+                    <tr>
+                        <td>upper()</td>
+                        <td>Convert to uppercase</td>
+                        <td>"hema".upper() → "HEMA"</td>
+                    </tr>
+                    <tr>
+                        <td>lower()</td>
+                        <td>Convert to lowercase</td>
+                        <td>"HEMA".lower() → "hema"</td>
+                    </tr>
+                    <tr>
+                        <td>startswith()</td>
+                        <td>Check if string starts with substring</td>
+                        <td>"hema".startswith('h') → True</td>
+                    </tr>
+                    <tr>
+                        <td>endswith()</td>
+                        <td>Check if string ends with substring</td>
+                        <td>"hema".endswith('a') → True</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h2 class="section-title">Important String Programs</h2>
+            
+            <div class="example-list">
+                <div class="example-card">
+                    <div class="example-title">1) Reverse a String</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+# Method 1
+print(s[::-1])
+# Method 2
+print(''.join(reversed(s)))</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">ameh</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">2) Reverse Order of Words</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+l = s.split()
+output = ' '.join(l[::-1])
+print(output)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: Learning Python is very Easy</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Easy very is Python Learning</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">3) Reverse Internal Content of Words</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+words = s.split()
+reversed_words = [word[::-1] for word in words]
+output = ' '.join(reversed_words)
+print(output)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: Hema Software Solutions</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">ameh erawtfoS snoituloS</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">4) Print Odd & Even Position Characters</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+print("Characters at Even Position:", s[0::2])
+print("Characters at Odd Position:", s[1::2])</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: python</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Characters at Even Position: pto
+Characters at Odd Position: yhn</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-list">
+                <div class="example-card">
+                    <div class="example-title">5) Merge Two Strings Alternately</div>
+                    <div class="code-block"><code>s1 = input("Enter First String: ")
+s2 = input("Enter Second String: ")
+output = ''
+i, j = 0, 0
+while i < len(s1) or j < len(s2):
+    if i < len(s1):
+        output = output + s1[i]
+        i += 1
+    if j < len(s2):
+        output = output + s2[j]
+        j += 1
+print(output)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter First String: hema
+Enter Second String: ravisoft</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">hreamavisoft</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">6) Sort Characters: Alphabets then Numbers</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+alphabets = ''.join(sorted([x for x in s if x.isalpha()]))
+numbers = ''.join(sorted([x for x in s if x.isdigit()]))
+output = alphabets + numbers
+print(output)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: B4A1D3</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">ABD134</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">7) Expand String (a4b3c2 → aaaabbbcc)</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+output = ''
+for i in range(0, len(s), 2):
+    char = s[i]
+    count = int(s[i+1])
+    output += char * count
+print(output)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: a4b3c2</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">aaaabbbcc</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">8) Remove Duplicate Characters</div>
+                    <div class="code-block"><code>s = input("Enter Some String: ")
+result = ''
+for char in s:
+    if char not in result:
+        result += char
+print(result)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Some String: ABCABCABBCDE</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">ABCDE</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">String Formatting</h3>
+                
+                <div class="code-block"><code>name = 'hema'
+salary = 10000
+age = 28
+
+# Default formatting
+print("{}'s salary is {} and age is {}".format(name, salary, age))
+
+# Positional arguments
+print("{0}'s salary is {1} and age is {2}".format(name, salary, age))
+
+# Keyword arguments
+print("{n}'s salary is {s} and age is {a}".format(n=name, s=salary, a=age))
+
+# F-strings (Python 3.6+)
+print(f"{name}'s salary is {salary} and age is {age}")</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Number Formatting Examples</div>
+                    <div class="code-block"><code># Integer formatting
+print("Integer: {:5d}".format(123))       # '  123'
+print("Integer: {:05d}".format(123))      # '00123'
+
+# Float formatting
+print("Float: {:8.3f}".format(123.4567))  # ' 123.457'
+print("Float: {:08.3f}".format(123.4567)) # '0123.457'
+
+# Number systems
+print("Binary: {:b}".format(10))          # '1010'
+print("Octal: {:o}".format(10))           # '12'
+print("Hex: {:x}".format(255))            # 'ff'
+print("Hex: {:X}".format(255))            # 'FF'
+
+# Alignment
+print("{:<10}".format("left"))            # 'left      '
+print("{:>10}".format("right"))           # '     right'
+print("{:^10}".format("center"))          # '  center  '
+print("{:*^10}".format("center"))         # '**center**'</code></div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div class="note-title">Key Points about Strings:</div>
+                <ol>
+                    <li>Strings are immutable in Python</li>
+                    <li>String objects support both positive and negative indexing</li>
+                    <li>Slice operator s[begin:end:step] is very powerful</li>
+                    <li>Python has rich set of string methods for manipulation</li>
+                    <li>Strings can be formatted using format() method or f-strings</li>
+                    <li>Special characters can be escaped using backslash (\)</li>
+                    <li>Triple quotes allow multi-line strings</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

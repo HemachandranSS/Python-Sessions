@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Flow Control Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .flowchart-section {
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .flowchart {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .flowchart-category {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+        }
+        
+        .category-title {
+            color: #3498db;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .flowchart-items {
+            list-style-type: none;
+        }
+        
+        .flowchart-item {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s;
+        }
+        
+        .flowchart-item:hover {
+            transform: translateX(5px);
+            background-color: #edf2f7;
+        }
+        
+        .content-section {
+            padding: 40px;
+        }
+        
+        .content-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .subsection {
+            margin-bottom: 40px;
+        }
+        
+        .subsection-title {
+            color: #3498db;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+        
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.4;
+            white-space: pre;
+            tab-size: 4;
+        }
+        
+        .code-block code {
+            display: block;
+            font-family: inherit;
+        }
+        
+        .io-example {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .io-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .io-title::before {
+            content: "📝";
+            margin-right: 10px;
+        }
+        
+        .input-section, .output-section {
+            margin-bottom: 15px;
+        }
+        
+        .input-label, .output-label {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .input-content, .output-content {
+            background-color: white;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .note-title {
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .note-title::before {
+            content: "💡";
+            margin-right: 10px;
+        }
+        
+        .example-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .example-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #9b59b6;
+            transition: transform 0.3s;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .example-title {
+            color: #9b59b6;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .flowchart {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .flowchart-category {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Flow Control</h1>
+            <p class="subtitle">Flow control describes the order in which statements will be executed at runtime.</p>
+        </header>
+        
+        <div class="flowchart-section">
+            <h2 class="section-title">Python Flow Control Types</h2>
+            <div class="flowchart">
+                <div class="flowchart-category">
+                    <div class="category-title">Conditional Statements</div>
+                    <ul class="flowchart-items">
+                        <li class="flowchart-item">if</li>
+                        <li class="flowchart-item">if-elif</li>
+                        <li class="flowchart-item">if-elif-else</li>
+                    </ul>
+                </div>
+                
+                <div class="flowchart-category">
+                    <div class="category-title">Iterative Statements</div>
+                    <ul class="flowchart-items">
+                        <li class="flowchart-item">for</li>
+                        <li class="flowchart-item">while</li>
+                    </ul>
+                </div>
+                
+                <div class="flowchart-category">
+                    <div class="category-title">Transfer Statements</div>
+                    <ul class="flowchart-items">
+                        <li class="flowchart-item">break</li>
+                        <li class="flowchart-item">continue</li>
+                        <li class="flowchart-item">pass</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="content-title">I. Conditional Statements</h2>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">1) if Statement</h3>
+                <p>If condition is true then statements will be executed.</p>
+                
+                <div class="code-block"><code># Syntax
+if condition:
+    statement-1
+    statement-2
+    statement-3</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example: Simple if statement</div>
+                    <div class="code-block"><code>name = input("Enter Name: ")
+if name == "hema":
+    print("Hello Hema Good Morning")
+print("How are you!!!")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Name: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Hello Hema Good Morning
+How are you!!!</div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Name: Ravi</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">How are you!!!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">2) if-else Statement</h3>
+                <p>If condition is true then Action-1 will be executed otherwise Action-2 will be executed.</p>
+                
+                <div class="code-block"><code># Syntax
+if condition:
+    Action-1
+else:
+    Action-2</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example: if-else statement</div>
+                    <div class="code-block"><code>name = input("Enter Name: ")
+if name == "hema":
+    print("Hello Hema Good Morning")
+else:
+    print("Hello Guest Good Morning")
+print("How are you!!!")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Name: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Hello Hema Good Morning
+How are you!!!</div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Name: Ravi</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Hello Guest Good Morning
+How are you!!!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">3) if-elif-else Statement</h3>
+                <p>Based on condition the corresponding action will be executed.</p>
+                
+                <div class="code-block"><code># Syntax
+if condition1:
+    Action-1
+elif condition2:
+    Action-2
+elif condition3:
+    Action-3
+    ...
+else:
+    Default Action</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example: if-elif-else statement</div>
+                    <div class="code-block"><code>brand = input("Enter Your Favourite Brand: ")
+if brand == "RC":
+    print("It is childrens brand")
+elif brand == "KF":
+    print("It is not that much kick")
+elif brand == "FO":
+    print("Buy one get Free One")
+else:
+    print("Other Brands are not recommended")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Your Favourite Brand: RC</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">It is childrens brand</div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Your Favourite Brand: KF</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">It is not that much kick</div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Your Favourite Brand: KALYANI</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Other Brands are not recommended</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div class="note-title">Note:</div>
+                <p>1) else part is always optional. Hence the following are various possible syntaxes:</p>
+                <ul>
+                    <li>if</li>
+                    <li>if-else</li>
+                    <li>if-elif-else</li>
+                    <li>if-elif</li>
+                </ul>
+                <p>2) There is no switch statement in Python</p>
+            </div>
+            
+            <h3 class="subsection-title">Practice Examples</h3>
+            
+            <div class="example-list">
+                <div class="example-card">
+                    <div class="example-title">Find biggest of 2 numbers</div>
+                    <div class="code-block"><code>n1 = int(input("Enter First Number:"))
+n2 = int(input("Enter Second Number:"))
+if n1 > n2:
+    print("Biggest Number is:", n1)
+else:
+    print("Biggest Number is:", n2)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter First Number: 10
+Enter Second Number: 20</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Biggest Number is: 20</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Find biggest of 3 numbers</div>
+                    <div class="code-block"><code>n1 = int(input("Enter First Number:"))
+n2 = int(input("Enter Second Number:"))
+n3 = int(input("Enter Third Number:"))
+if n1 > n2 and n1 > n3:
+    print("Biggest Number is:", n1)
+elif n2 > n3:
+    print("Biggest Number is:", n2)
+else:
+    print("Biggest Number is:", n3)</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter First Number: 10
+Enter Second Number: 30
+Enter Third Number: 20</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Biggest Number is: 30</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Check if number is between 1 and 10</div>
+                    <div class="code-block"><code>n = int(input("Enter Number:"))
+if n >= 1 and n <= 10:
+    print("The number", n, "is in between 1 to 10")
+else:
+    print("The number", n, "is not in between 1 to 10")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Number: 5</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">The number 5 is in between 1 to 10</div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter Number: 15</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">The number 15 is not in between 1 to 10</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">Convert digit to English word</div>
+                    <div class="code-block"><code>n = int(input("Enter a digit from 0 to 9:"))
+if n == 0:
+    print("ZERO")
+elif n == 1:
+    print("ONE")
+elif n == 2:
+    print("TWO")
+elif n == 3:
+    print("THREE")
+elif n == 4:
+    print("FOUR")
+elif n == 5:
+    print("FIVE")
+elif n == 6:
+    print("SIX")
+elif n == 7:
+    print("SEVEN")
+elif n == 8:
+    print("EIGHT")
+elif n == 9:
+    print("NINE")
+else:
+    print("PLEASE ENTER A DIGIT FROM 0 TO 9")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter a digit from 0 to 9: 5</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">FIVE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="content-title">II. Iterative Statements</h2>
+            <p>If we want to execute a group of statements multiple times then we should go for iterative statements.</p>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">1) for loop</h3>
+                <p>If we want to execute some action for every element present in some sequence (it may be string or collection) then we should go for for loop.</p>
+                
+                <div class="code-block"><code># Syntax
+for x in sequence:
+    Body</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: Print numbers from 0 to 10</div>
+                    <div class="code-block"><code>for x in range(11):
+    print(x, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">0 1 2 3 4 5 6 7 8 9 10</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Print odd numbers from 0 to 20</div>
+                    <div class="code-block"><code>for x in range(21):
+    if (x % 2 != 0):
+        print(x, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">1 3 5 7 9 11 13 15 17 19</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 3: Print sum of numbers in a list</div>
+                    <div class="code-block"><code>list = [10, 20, 30, 40]
+sum = 0
+for x in list:
+    sum = sum + x
+print("The Sum =", sum)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">The Sum = 100</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 4: Print characters in string</div>
+                    <div class="code-block"><code>s = "Hema"
+for x in s:
+    print(x)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">H
+e
+m
+a</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">2) while loop</h3>
+                <p>If we want to execute a group of statements iteratively until some condition false, then we should go for while loop.</p>
+                
+                <div class="code-block"><code># Syntax
+while condition:
+    body</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: Print numbers from 1 to 10</div>
+                    <div class="code-block"><code>x = 1
+while x <= 10:
+    print(x, end=" ")
+    x = x + 1</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">1 2 3 4 5 6 7 8 9 10</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Sum of first n numbers</div>
+                    <div class="code-block"><code>n = 5
+sum = 0
+i = 1
+while i <= n:
+    sum = sum + i
+    i = i + 1
+print("The sum of first", n, "numbers is:", sum)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">The sum of first 5 numbers is: 15</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 3: Prompt until entering Hema</div>
+                    <div class="code-block"><code>name = ""
+while name != "hema":
+    name = input("Enter Name: ")
+print("Thanks for confirmation")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input Sequence:</div>
+                        <div class="input-content">Enter Name: Ravi
+Enter Name: Sunita
+Enter Name: hema</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Thanks for confirmation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Nested Loops</h3>
+                <p>Sometimes we can take a loop inside another loop, which are also known as nested loops.</p>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: Basic nested loop</div>
+                    <div class="code-block"><code>for i in range(4):
+    for j in range(4):
+        print("i=", i, " j=", j)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">i= 0 j= 0
+i= 0 j= 1
+i= 0 j= 2
+i= 0 j= 3
+i= 1 j= 0
+i= 1 j= 1
+i= 1 j= 2
+i= 1 j= 3
+i= 2 j= 0
+i= 2 j= 1
+i= 2 j= 2
+i= 2 j= 3
+i= 3 j= 0
+i= 3 j= 1
+i= 3 j= 2
+i= 3 j= 3</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Right-angled triangle pattern</div>
+                    <div class="code-block"><code>n = 5
+for i in range(1, n+1):
+    for j in range(1, i+1):
+        print("*", end=" ")
+    print()</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">* 
+* * 
+* * * 
+* * * * 
+* * * * * </div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 3: Pyramid pattern</div>
+                    <div class="code-block"><code>n = 5
+for i in range(1, n+1):
+    print(" " * (n-i), end="")
+    print("* " * i)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">    * 
+   * * 
+  * * * 
+ * * * * 
+* * * * * </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h2 class="content-title">III. Transfer Statements</h2>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">1) break statement</h3>
+                <p>We can use break statement inside loops to break loop execution based on some condition.</p>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: Break when i equals 7</div>
+                    <div class="code-block"><code>for i in range(10):
+    if i == 7:
+        print("processing is enough..plz break")
+        break
+    print(i, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">0 1 2 3 4 5 6 
+processing is enough..plz break</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Shopping cart with break</div>
+                    <div class="code-block"><code>cart = [10, 20, 600, 60, 70]
+for item in cart:
+    if item > 500:
+        print("To place this order insurance must be required")
+        break
+    print(item, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">10 20 
+To place this order insurance must be required</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">2) continue statement</h3>
+                <p>We can use continue statement to skip current iteration and continue next iteration.</p>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: Print odd numbers using continue</div>
+                    <div class="code-block"><code>for i in range(10):
+    if i % 2 == 0:
+        continue
+    print(i, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">1 3 5 7 9</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Shopping cart with continue</div>
+                    <div class="code-block"><code>cart = [10, 20, 500, 700, 50, 60]
+for item in cart:
+    if item >= 500:
+        print("We cannot process this item :", item)
+        continue
+    print(item, end=" ")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">10 20 
+We cannot process this item : 500
+We cannot process this item : 700
+50 60 </div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 3: Skip division by zero</div>
+                    <div class="code-block"><code>numbers = [10, 20, 0, 5, 0, 30]
+for n in numbers:
+    if n == 0:
+        print("Hey how we can divide with zero..just skipping")
+        continue
+    print("100/{} = {}".format(n, 100/n))</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">100/10 = 10.0
+100/20 = 5.0
+Hey how we can divide with zero..just skipping
+100/5 = 20.0
+Hey how we can divide with zero..just skipping
+100/30 = 3.3333333333333335</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">3) pass statement</h3>
+                <p>pass is a keyword in Python. It's an empty statement that does nothing. Useful as a placeholder.</p>
+                
+                <div class="io-example">
+                    <div class="io-title">Example: Using pass</div>
+                    <div class="code-block"><code>for i in range(100):
+    if i % 9 == 0:
+        print(i, end=" ")
+    else:
+        pass</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">0 9 18 27 36 45 54 63 72 81 90 99</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Loops with else block</h3>
+                <p>Inside loop execution, if break statement not executed, then only else part will be executed. Else means loop without break.</p>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 1: No break executed</div>
+                    <div class="code-block"><code>cart = [10, 20, 30, 40, 50]
+for item in cart:
+    if item >= 500:
+        print("We cannot process this order")
+        break
+    print(item, end=" ")
+else:
+    print("\nCongrats ...all items processed successfully")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">10 20 30 40 50 
+Congrats ...all items processed successfully</div>
+                    </div>
+                </div>
+                
+                <div class="io-example">
+                    <div class="io-title">Example 2: Break executed</div>
+                    <div class="code-block"><code>cart = [10, 20, 600, 30, 40, 50]
+for item in cart:
+    if item >= 500:
+        print("\nWe cannot process this order")
+        break
+    print(item, end=" ")
+else:
+    print("\nCongrats ...all items processed successfully")</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">10 20 
+We cannot process this order</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div class="note-title">Quick Quiz:</div>
+                <p><strong>Q) What is the difference between for loop and while loop in Python?</strong></p>
+                <p>A) We can use loops to repeat code execution. Repeat code for every item in sequence → for loop. Repeat code as long as condition is true → while loop.</p>
+                
+                <p><strong>Q) How to exit from the loop?</strong></p>
+                <p>A) By using break statement</p>
+                
+                <p><strong>Q) How to skip some iterations inside loop?</strong></p>
+                <p>A) By using continue statement</p>
+                
+                <p><strong>Q) When else part will be executed wrt loops?</strong></p>
+                <p>A) If loop executed without break</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

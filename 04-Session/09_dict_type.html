@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Dictionary Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(25, 25, 40, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #2a2a4a;
+        }
+
+        .header {
+            background: linear-gradient(to right, #0f3460, #1a1a2e);
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid #00adb5;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #00adb5, #a3d9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            color: #a3d9ff;
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .institute-info {
+            background-color: rgba(15, 52, 96, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: inline-block;
+            border-left: 4px solid #00adb5;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            background: rgba(42, 42, 74, 0.8);
+            padding: 25px;
+            border-radius: 10px;
+            margin-right: 30px;
+            height: fit-content;
+            border: 1px solid #3a3a5e;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .section {
+            background: rgba(30, 30, 50, 0.8);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #00adb5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section h3 {
+            color: #00adb5;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 i {
+            color: #a3d9ff;
+        }
+
+        .code-block {
+            background-color: #1e1e2e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #3a3a5e;
+            overflow-x: auto;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .output {
+            background-color: #0d2818;
+            color: #b5e5a5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .note {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ffd54f;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight {
+            background-color: rgba(0, 173, 181, 0.2);
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #00adb5;
+            font-weight: bold;
+        }
+
+        .important {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            color: #f8d7da;
+            border-radius: 0 8px 8px 0;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar h4 {
+            color: #a3d9ff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #00adb5;
+            padding-bottom: 10px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            color: #d4d4d4;
+            text-decoration: none;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #00adb5;
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background-color: rgba(15, 52, 96, 0.8);
+            border-top: 1px solid #2a2a4a;
+            font-size: 0.9rem;
+            color: #a3d9ff;
+        }
+
+        .page-indicator {
+            display: none;
+            background-color: #00adb5;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .hema-highlight {
+            background-color: rgba(255, 105, 180, 0.2);
+            color: #ff69b4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book"></i> Python Dictionary Tutorial</h1>
+            <h2>Complete Guide to Dictionary Data Structure</h2>
+            <!-- <div class="institute-info">
+                <p><i class="fas fa-map-marker-alt"></i> 131 DURGASOFT, # 202, 2<sup>nd</sup> Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038</p>
+                <p><i class="fas fa-phone"></i> 040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | <i class="fas fa-globe"></i> www.durgasoft.com</p>
+            </div> -->
+        </div>
+
+        <div class="content">
+            <div class="sidebar">
+                <h4><i class="fas fa-list"></i> Tutorial Contents</h4>
+                <ul>
+                    <li><a href="#intro"><i class="fas fa-play"></i> Introduction</a></li>
+                    <li><a href="#create"><i class="fas fa-plus-circle"></i> Creating Dictionary</a></li>
+                    <li><a href="#access"><i class="fas fa-key"></i> Accessing Data</a></li>
+                    <li><a href="#update"><i class="fas fa-sync-alt"></i> Updating Dictionary</a></li>
+                    <li><a href="#delete"><i class="fas fa-trash-alt"></i> Deleting Elements</a></li>
+                    <li><a href="#functions"><i class="fas fa-cogs"></i> Dictionary Functions</a></li>
+                    <li><a href="#programs"><i class="fas fa-code"></i> Practice Programs</a></li>
+                    <li><a href="#comprehension"><i class="fas fa-bolt"></i> Dictionary Comprehension</a></li>
+                </ul>
+
+                <h4><i class="fas fa-lightbulb"></i> Key Points</h4>
+                <ul>
+                    <li><span class="highlight">No duplicate keys</span></li>
+                    <li><span class="highlight">Values can be duplicated</span></li>
+                    <li><span class="highlight">Mutable & Dynamic</span></li>
+                    <li><span class="highlight">Insertion order not preserved</span></li>
+                    <li><span class="highlight">Heterogeneous objects allowed</span></li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="section" id="intro">
+                    <span class="page-indicator">Page 1-2</span>
+                    <h3><i class="fas fa-info-circle"></i> Introduction to Dictionary</h3>
+                    <p>We can use List, Tuple and Set to represent a group of individual objects as a single entity. If
+                        we want to represent a group of objects as key-value pairs then we should go for Dictionary.</p>
+
+                    <p><strong>Examples:</strong></p>
+                    <ul>
+                        <li>rollno --- name</li>
+                        <li>phone number -- address</li>
+                        <li>ipaddress --- domain name</li>
+                    </ul>
+
+                    <div class="note">
+                        <p><strong>Note:</strong> In C++ and Java Dictionaries are known as "Map" where as in Perl and
+                            Ruby it is known as "Hash".</p>
+                    </div>
+
+                    <div class="important">
+                        <p><strong>Dictionary Characteristics:</strong></p>
+                        <ul>
+                            <li>Duplicate keys are not allowed but values can be duplicated</li>
+                            <li>Hetrogeneous objects are allowed for both key and values</li>
+                            <li>Insertion order is not preserved</li>
+                            <li>Dictionaries are mutable</li>
+                            <li>Dictionaries are dynamic</li>
+                            <li>Indexing and slicing concepts are not applicable</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section" id="create">
+                    <span class="page-indicator">Page 2</span>
+                    <h3><i class="fas fa-plus-circle"></i> How to Create Dictionary?</h3>
+
+                    <p><strong>1. Empty Dictionary:</strong></p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {} <span class="comment"># OR d = dict()</span><br>
+                        <span class="comment"># We can add entries as follows</span><br>
+                        <span class="keyword">d</span>[<span class="number">100</span>] = <span
+                            class="string">"hema"</span><br>
+                        <span class="keyword">d</span>[<span class="number">200</span>] = <span
+                            class="string">"ravi"</span><br>
+                        <span class="keyword">d</span>[<span class="number">300</span>] = <span
+                            class="string">"shiva"</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>) <span class="comment">#
+                            {100: 'hema', 200: 'ravi', 300: 'shiva'}</span>
+                    </div>
+
+                    <p><strong>2. Dictionary with predefined data:</strong></p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">'hema'</span>, <span class="number">200</span>:<span
+                            class="string">'ravi'</span>, <span class="number">300</span>:<span
+                            class="string">'shiva'</span>}<br>
+                        <span class="comment"># General format: d = {key:value, key:value}</span>
+                    </div>
+                </div>
+
+                <div class="section" id="access">
+                    <span class="page-indicator">Page 2-3</span>
+                    <h3><i class="fas fa-key"></i> How to Access Data from the Dictionary?</h3>
+                    <p>We can access data by using keys.</p>
+
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">'hema'</span>, <span class="number">200</span>:<span
+                            class="string">'ravi'</span>, <span class="number">300</span>:<span
+                            class="string">'shiva'</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>[<span
+                            class="number">100</span>]) <span class="comment"># hema</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>[<span
+                            class="number">300</span>]) <span class="comment"># shiva</span>
+                    </div>
+
+                    <p>If the specified key is not available then we will get <span class="highlight">KeyError</span>.
+                    </p>
+
+                    <div class="code-block">
+                        <span class="function">print</span>(<span class="keyword">d</span>[<span
+                            class="number">400</span>]) <span class="comment"># KeyError: 400</span>
+                    </div>
+
+                    <p>We can prevent this by checking whether key is already available or not by using <span
+                            class="highlight">in</span> operator.</p>
+
+                    <div class="code-block">
+                        <span class="keyword">if</span> <span class="number">400</span> <span class="keyword">in</span>
+                        <span class="keyword">d</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(<span class="keyword">d</span>[<span
+                            class="number">400</span>])
+                    </div>
+
+                    <div class="note">
+                        <p><strong>Note:</strong> <span class="function">has_key()</span> function was available in
+                            Python 2 but not in Python 3. Hence we have to use <span class="highlight">in</span>
+                            operator.</p>
+                    </div>
+                </div>
+
+                <div class="section" id="update">
+                    <span class="page-indicator">Page 4</span>
+                    <h3><i class="fas fa-sync-alt"></i> How to Update Dictionaries?</h3>
+                    <p><strong>d[key] = value</strong></p>
+                    <ul>
+                        <li>If the key is not available then a new entry will be added to the dictionary with the
+                            specified key-value pair</li>
+                        <li>If the key is already available then old value will be replaced with new value.</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">d</span>[<span class="number">400</span>] = <span
+                            class="string">"pavan"</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">d</span>[<span class="number">100</span>] = <span
+                            class="string">"sunny"</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)
+                    </div>
+
+                    <div class="output">
+                        <strong>Output:</strong><br>
+                        {100: 'hema', 200: 'ravi', 300: 'shiva'}<br>
+                        {100: 'hema', 200: 'ravi', 300: 'shiva', 400: 'pavan'}<br>
+                        {100: 'sunny', 200: 'ravi', 300: 'shiva', 400: 'pavan'}
+                    </div>
+                </div>
+
+                <div class="section" id="delete">
+                    <span class="page-indicator">Page 4-5</span>
+                    <h3><i class="fas fa-trash-alt"></i> How to Delete Elements from Dictionary?</h3>
+
+                    <p><strong>1. del d[key]</strong> - Deletes entry associated with the specified key.</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">del</span> <span class="keyword">d</span>[<span
+                            class="number">100</span>]<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">del</span> <span class="keyword">d</span>[<span class="number">400</span>]
+                        <span class="comment"># KeyError: 400</span>
+                    </div>
+
+                    <p><strong>2. d.clear()</strong> - Removes all entries from the dictionary.</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">d</span>.<span class="function">clear</span>()<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>) <span class="comment">#
+                            {}</span>
+                    </div>
+
+                    <p><strong>3. del d</strong> - Deletes total dictionary.</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>)<br>
+                        <span class="keyword">del</span> <span class="keyword">d</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>) <span class="comment">#
+                            NameError: name 'd' is not defined</span>
+                    </div>
+                </div>
+
+                <div class="section" id="functions">
+                    <span class="page-indicator">Page 5-8</span>
+                    <h3><i class="fas fa-cogs"></i> Important Functions of Dictionary</h3>
+
+                    <p><strong>1. dict()</strong> - To create a dictionary</p>
+                    <div class="code-block">
+                        <span class="keyword">d1</span> = <span class="function">dict</span>() <span class="comment">#
+                            Empty dictionary</span><br>
+                        <span class="keyword">d2</span> = <span class="function">dict</span>({<span
+                            class="number">100</span>:<span class="string">"hema"</span>, <span
+                            class="number">200</span>:<span class="string">"ravi"</span>})<br>
+                        <span class="keyword">d3</span> = <span class="function">dict</span>([(<span
+                            class="number">100</span>,<span class="string">"hema"</span>),(<span
+                            class="number">200</span>,<span class="string">"shiva"</span>),(<span
+                            class="number">300</span>,<span class="string">"ravi"</span>)])
+                    </div>
+
+                    <p><strong>2. len()</strong> - Returns the number of items in the dictionary.</p>
+
+                    <p><strong>3. clear()</strong> - To remove all elements from the dictionary.</p>
+
+                    <p><strong>4. get()</strong> - To get the value associated with the key</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>[<span
+                            class="number">100</span>]) <span class="comment"># hema</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">get</span>(<span class="number">100</span>)) <span class="comment">#
+                            hema</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">get</span>(<span class="number">400</span>)) <span class="comment">#
+                            None</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">get</span>(<span class="number">100</span>,<span
+                            class="string">"Guest"</span>)) <span class="comment"># hema</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">get</span>(<span class="number">400</span>,<span
+                            class="string">"Guest"</span>)) <span class="comment"># Guest</span>
+                    </div>
+
+                    <p><strong>5. pop()</strong> - Removes entry associated with specified key and returns value</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">pop</span>(<span class="number">100</span>)) <span class="comment">#
+                            hema</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>) <span class="comment">#
+                            {200: 'ravi', 300: 'shiva'}</span>
+                    </div>
+
+                    <p><strong>6. popitem()</strong> - Removes arbitrary item and returns it</p>
+
+                    <p><strong>7. keys()</strong> - Returns all keys</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">keys</span>()) <span class="comment"># dict_keys([100, 200, 300])</span>
+                    </div>
+
+                    <p><strong>8. values()</strong> - Returns all values</p>
+
+                    <p><strong>9. items()</strong> - Returns key-value pairs as tuples</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="keyword">for</span> k,v <span class="keyword">in</span> <span
+                            class="keyword">d</span>.<span class="function">items</span>():<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(k, <span class="string">"--"</span>,
+                        v)
+                    </div>
+
+                    <p><strong>10. copy()</strong> - Creates duplicate dictionary (cloned copy)</p>
+                    <div class="code-block">
+                        <span class="keyword">d1</span> = <span class="keyword">d</span>.<span
+                            class="function">copy</span>()
+                    </div>
+
+                    <p><strong>11. setdefault()</strong></p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = {<span class="number">100</span>:<span
+                            class="string">"hema"</span>, <span class="number">200</span>:<span
+                            class="string">"ravi"</span>, <span class="number">300</span>:<span
+                            class="string">"shiva"</span>}<br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">setdefault</span>(<span class="number">400</span>,<span
+                            class="string">"pavan"</span>)) <span class="comment"># pavan</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>) <span class="comment">#
+                            {100: 'hema', 200: 'ravi', 300: 'shiva', 400: 'pavan'}</span><br>
+                        <span class="function">print</span>(<span class="keyword">d</span>.<span
+                            class="function">setdefault</span>(<span class="number">100</span>,<span
+                            class="string">"sachin"</span>)) <span class="comment"># hema</span>
+                    </div>
+
+                    <p><strong>12. update()</strong> - Adds all items from another dictionary</p>
+                    <div class="code-block">
+                        <span class="keyword">d</span>.<span class="function">update</span>(x) <span class="comment">#
+                            All items in x added to d</span>
+                    </div>
+                </div>
+
+                <div class="section" id="programs">
+                    <span class="page-indicator">Page 3, 8-10</span>
+                    <h3><i class="fas fa-code"></i> Practice Programs</h3>
+
+                    <p><strong>1. Enter Name and Percentage Marks in a Dictionary</strong></p>
+                    <div class="code-block">
+                        rec = {}<br>
+                        n = <span class="function">int</span>(<span class="function">input</span>(<span
+                            class="string">"Enter number of students: "</span>))<br>
+                        i = <span class="number">1</span><br>
+                        <span class="keyword">while</span> i <= n:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;name = <span class="function">input</span>(<span
+                                class="string">"Enter Student Name: "</span>)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;marks = <span class="function">input</span>(<span
+                                class="string">"Enter % of Marks of Student: "</span>)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;rec[name] = marks<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;i = i + <span class="number">1</span><br>
+                            <span class="function">print</span>(<span class="string">"\nName of Student"</span>, <span
+                                class="string">"\t"</span>, <span class="string">"% of marks"</span>)<br>
+                            <span class="keyword">for</span> x <span class="keyword">in</span> rec:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(<span
+                                class="string">"\t"</span>, x, <span class="string">"\t\t"</span>, rec[x])
+                    </div>
+
+                    <p><strong>2. Sum of Values in Dictionary</strong></p>
+                    <div class="code-block">
+                        <span class="keyword">d</span> = <span class="function">eval</span>(<span
+                            class="function">input</span>(<span class="string">"Enter dictionary:"</span>))<br>
+                        s = <span class="function">sum</span>(<span class="keyword">d</span>.<span
+                            class="function">values</span>())<br>
+                        <span class="function">print</span>(<span class="string">"Sum="</span>, s)
+                    </div>
+
+                    <p><strong>3. Occurrences of each Letter in String</strong></p>
+                    <div class="code-block">
+                        word = <span class="function">input</span>(<span class="string">"Enter any word: "</span>)<br>
+                        <span class="keyword">d</span> = {}<br>
+                        <span class="keyword">for</span> x <span class="keyword">in</span> word:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">d</span>[x] = <span class="keyword">d</span>.<span
+                            class="function">get</span>(x, <span class="number">0</span>) + <span
+                            class="number">1</span><br>
+                        <span class="keyword">for</span> k,v <span class="keyword">in</span> <span
+                            class="keyword">d</span>.<span class="function">items</span>():<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(k, <span class="string">"occurred
+                            "</span>, v, <span class="string">" times"</span>)
+                    </div>
+
+                    <p><strong>4. Student Marks Dictionary</strong></p>
+                    <div class="code-block">
+                        n = <span class="function">int</span>(<span class="function">input</span>(<span
+                            class="string">"Enter the number of students: "</span>))<br>
+                        <span class="keyword">d</span> = {}<br>
+                        <span class="keyword">for</span> i <span class="keyword">in</span> <span
+                            class="function">range</span>(n):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name = <span class="function">input</span>(<span class="string">"Enter
+                            Student Name: "</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;marks = <span class="function">input</span>(<span class="string">"Enter
+                            Student Marks: "</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">d</span>[name] = marks<br>
+                        <span class="keyword">while</span> <span class="keyword">True</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name = <span class="function">input</span>(<span class="string">"Enter
+                            Student Name to get Marks: "</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;marks = <span class="keyword">d</span>.<span
+                            class="function">get</span>(name, -<span class="number">1</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> marks == -<span
+                            class="number">1</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(<span
+                            class="string">"Student Not Found"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">else</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">print</span>(<span
+                            class="string">"The Marks of"</span>, name, <span class="string">"are"</span>, marks)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;option = <span class="function">input</span>(<span class="string">"Do
+                            you want to find another student marks[Yes|No]"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> option == <span
+                            class="string">"No"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span><br>
+                        <span class="function">print</span>(<span class="string">"Thanks for using our
+                            application"</span>)
+                    </div>
+                </div>
+
+                <div class="section" id="comprehension">
+                    <span class="page-indicator">Page 11</span>
+                    <h3><i class="fas fa-bolt"></i> Dictionary Comprehension</h3>
+                    <p>Comprehension concept applicable for dictionaries also.</p>
+
+                    <div class="code-block">
+                        squares = {x:x*x <span class="keyword">for</span> x <span class="keyword">in</span> <span
+                            class="function">range</span>(<span class="number">1</span>,<span
+                            class="number">6</span>)}<br>
+                        <span class="function">print</span>(squares)<br>
+                        doubles = {x:<span class="number">2</span>*x <span class="keyword">for</span> x <span
+                            class="keyword">in</span> <span class="function">range</span>(<span
+                            class="number">1</span>,<span class="number">6</span>)}<br>
+                        <span class="function">print</span>(doubles)
+                    </div>
+
+                    <div class="output">
+                        <strong>Output:</strong><br>
+                        {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}<br>
+                        {1: 2, 2: 4, 3: 6, 4: 8, 5: 10}
+                    </div>
+
+                    <!-- <div class="note">
+                        <p><i class="fas fa-heart"></i> All instances of "durga" have been replaced with <span class="hema-highlight">"hema"</span> throughout this tutorial as requested.</p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="footer">
+            <p>Python Dictionary Tutorial | DURGASOFT, # 202, 2<sup>nd</sup> Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038</p>
+            <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.durgasoft.com</p>
+            <p style="margin-top: 15px; color: #00adb5;"><i class="fas fa-code"></i> Complete Python Dictionary Reference with "durga" replaced by "hema"</p>
+        </div> -->
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add active class to current section in sidebar
+        const sections = document.querySelectorAll('.section');
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                    link.style.backgroundColor = '#00adb5';
+                    link.style.color = '#fff';
+                    link.style.paddingLeft = '20px';
+                } else {
+                    link.style.backgroundColor = '';
+                    link.style.color = '#d4d4d4';
+                    link.style.paddingLeft = '12px';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

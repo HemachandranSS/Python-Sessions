@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Tuple Data Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(45deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            color: #ecf0f1;
+        }
+        
+        .content-section {
+            padding: 50px;
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(45deg, #3498db, #9b59b6) 1;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+        }
+        
+        .subsection {
+            margin-bottom: 50px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .subsection-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .subsection-title::before {
+            content: "▶";
+            margin-right: 15px;
+            color: #3498db;
+            font-size: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        ul, ol {
+            margin-left: 40px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        li::before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: -20px;
+        }
+        
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre;
+            tab-size: 4;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: "Python";
+            position: absolute;
+            top: -7px;
+            left: 20px;
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .code-block code {
+            display: block;
+            font-family: inherit;
+        }
+        
+        .io-example {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 5px solid #2ecc71;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+        
+        .io-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .io-title::before {
+            content: "⚡";
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .input-section, .output-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-label, .output-label {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1rem;
+        }
+        
+        .input-content, .output-content {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+        
+        .note {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note::before {
+            content: "💡";
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+        
+        .note-title {
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+        
+        .note-title::before {
+            content: "📌";
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .example-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .example-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid;
+            border-image: linear-gradient(45deg, #9b59b6, #3498db) 1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .example-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(45deg, #9b59b6, #3498db);
+        }
+        
+        .example-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .example-title::before {
+            content: "🎯";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .method-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .method-table th {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+        }
+        
+        .method-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1.1rem;
+        }
+        
+        .method-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .method-table tr:hover {
+            background: #edf2f7;
+            transform: scale(1.01);
+            transition: transform 0.2s ease;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border: none;
+        }
+        
+        .comparison-table td {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            font-size: 1.1rem;
+            vertical-align: top;
+        }
+        
+        .comparison-table tr:nth-child(odd) {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .index-diagram {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            gap: 15px;
+        }
+        
+        .index-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0 5px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            min-width: 100px;
+            background: white;
+            box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .index-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(52, 152, 219, 0.3);
+        }
+        
+        .index-value {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .index-label {
+            color: #7f8c8d;
+            font-size: 1rem;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #3498db;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        
+        .feature-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .feature-description {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #ecf0f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 30px;
+            }
+            
+            .example-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .index-box {
+                min-width: 80px;
+                padding: 15px;
+                margin: 5px;
+            }
+            
+            .method-table, .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        .highlight {
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .immutable-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .tuple-syntax {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Tuple Data Structure</h1>
+            <p class="subtitle">The Immutable Sequence Type - Read-only version of Lists</p>
+        </header>
+        
+        <div class="content-section">
+            <h2 class="section-title">Introduction to Tuples</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">Immutable</div>
+                    <div class="feature-description">Once created, tuple objects cannot be modified. This makes them perfect for fixed data.</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📖</div>
+                    <div class="feature-title">Read-Only</div>
+                    <div class="feature-description">Think of tuples as read-only versions of lists. Safe for constant data.</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Efficient</div>
+                    <div class="feature-description">Tuples are more memory efficient than lists and faster for iteration.</div>
+                </div>
+            </div>
+            
+            <div class="tuple-syntax">
+                t = (10, 20, 30, 40)  # Parentheses are optional but recommended
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Key Characteristics <span class="immutable-badge">IMMUTABLE</span></h3>
+                
+                <ul>
+                    <li><span class="highlight">Immutable</span> - Once created, cannot be changed</li>
+                    <li><span class="highlight">Order Preserved</span> - Insertion order is maintained</li>
+                    <li><span class="highlight">Duplicates Allowed</span> - Can have same values multiple times</li>
+                    <li><span class="highlight">Heterogeneous</span> - Can contain different data types</li>
+                    <li><span class="highlight">Indexed</span> - Supports both positive and negative indexing</li>
+                    <li><span class="highlight">Parentheses Optional</span> - But recommended for clarity</li>
+                </ul>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Valid Tuple Examples</h3>
+                
+                <div class="code-block"><code># Valid Tuple Creations
+t1 = ()                    # Empty tuple
+t2 = 10, 20, 30, 40        # Parentheses optional
+t3 = (10,)                 # Single value tuple (comma required!)
+t4 = 10,                   # Also valid single value
+t5 = (10, 20, 30, 40)      # Standard notation
+t6 = tuple([10, 20, 30])   # From list using tuple()
+t7 = tuple(range(5))       # From range</code></div>
+                
+                <div class="note">
+                    <div class="note-title">⚠️ Important Note:</div>
+                    <p>For single-value tuples, the comma is <span class="highlight">compulsory</span>. Without it, Python treats it as a regular value, not a tuple.</p>
+                    <div class="code-block"><code>t = (10)      # ❌ NOT a tuple, it's an integer
+print(type(t))  # &lt;class 'int'&gt;
+
+t = (10,)     # ✅ Proper single-value tuple
+print(type(t))  # &lt;class 'tuple'&gt;</code></div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Accessing Tuple Elements</h3>
+                
+                <h4>1. Using Index</h4>
+                <div class="index-diagram">
+                    <div class="index-box">
+                        <div class="index-value">10</div>
+                        <div class="index-label">0 / -6</div>
+                    </div>
+                    <div class="index-box">
+                        <div class="index-value">20</div>
+                        <div class="index-label">1 / -5</div>
+                    </div>
+                    <div class="index-box">
+                        <div class="index-value">30</div>
+                        <div class="index-label">2 / -4</div>
+                    </div>
+                    <div class="index-box">
+                        <div class="index-value">40</div>
+                        <div class="index-label">3 / -3</div>
+                    </div>
+                    <div class="index-box">
+                        <div class="index-value">50</div>
+                        <div class="index-label">4 / -2</div>
+                    </div>
+                    <div class="index-box">
+                        <div class="index-value">60</div>
+                        <div class="index-label">5 / -1</div>
+                    </div>
+                </div>
+                
+                <div class="code-block"><code>t = (10, 20, 30, 40, 50, 60)
+
+print(t[0])     # 10 (first element)
+print(t[-1])    # 60 (last element)
+print(t[2])     # 30 (third element)
+print(t[-3])    # 40 (fourth from end)
+
+# print(t[100])  # ❌ IndexError: tuple index out of range</code></div>
+                
+                <h4>2. Using Slice Operator</h4>
+                <div class="code-block"><code>t = (10, 20, 30, 40, 50, 60)
+
+print(t[2:5])     # (30, 40, 50)
+print(t[2:100])   # (30, 40, 50, 60) - No error!
+print(t[::2])     # (10, 30, 50) - Every 2nd element
+print(t[:3])      # (10, 20, 30) - First 3 elements
+print(t[-3:])     # (40, 50, 60) - Last 3 elements</code></div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Immutability Demonstration</h3>
+                
+                <div class="io-example">
+                    <div class="io-title">Tuples Cannot Be Modified</div>
+                    <div class="code-block"><code>t = (10, 20, 30, 40)
+print("Original tuple:", t)  # (10, 20, 30, 40)
+
+# Try to modify an element
+try:
+    t[1] = 777  # This will fail!
+    print("Modified successfully")
+except TypeError as e:
+    print("❌ Error:", e)  # 'tuple' object does not support item assignment
+
+print("Tuple remains unchanged:", t)  # (10, 20, 30, 40)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Original tuple: (10, 20, 30, 40)
+❌ Error: 'tuple' object does not support item assignment
+Tuple remains unchanged: (10, 20, 30, 40)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Mathematical Operations</h2>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">1. Concatenation Operator (+)</h3>
+                
+                <div class="code-block"><code>t1 = (10, 20, 30)
+t2 = (40, 50, 60)
+t3 = t1 + t2
+print("Concatenated:", t3)  # (10, 20, 30, 40, 50, 60)
+
+# Note: Both must be tuples
+# t4 = t1 + 70          # ❌ TypeError
+t4 = t1 + (70,)         # ✅ Correct way</code></div>
+                
+                <h3 class="subsection-title">2. Repetition Operator (*)</h3>
+                
+                <div class="code-block"><code>t1 = (10, 20, 30)
+t2 = t1 * 3
+print("Repeated:", t2)  # (10, 20, 30, 10, 20, 30, 10, 20, 30)</code></div>
+            </div>
+            
+            <h2 class="section-title">Important Tuple Functions</h2>
+            
+            <table class="method-table">
+                <tr>
+                    <th>Function</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td><span class="highlight">len()</span></td>
+                    <td>Returns number of elements</td>
+                    <td>len((10,20,30,40))</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">count()</span></td>
+                    <td>Returns occurrences of element</td>
+                    <td>(10,20,10,10,20).count(10)</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">index()</span></td>
+                    <td>Returns first index of element</td>
+                    <td>(10,20,10,10,20).index(20)</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">sorted()</span></td>
+                    <td>Returns sorted list from tuple</td>
+                    <td>sorted((40,10,30,20))</td>
+                    <td>[10,20,30,40]</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">min()</span></td>
+                    <td>Returns minimum value</td>
+                    <td>min((40,10,30,20))</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">max()</span></td>
+                    <td>Returns maximum value</td>
+                    <td>max((40,10,30,20))</td>
+                    <td>40</td>
+                </tr>
+            </table>
+            
+            <div class="io-example">
+                <div class="io-title">Function Examples</div>
+                <div class="code-block"><code>t = (40, 10, 30, 20, 10, 10, 30)
+
+print("Length:", len(t))            # 7
+print("Count of 10:", t.count(10))  # 3
+print("Index of 30:", t.index(30))  # 2 (first occurrence)
+
+# sorted() returns a list, not a tuple
+sorted_list = sorted(t)
+print("Sorted (ascending):", sorted_list)  # [10, 10, 10, 20, 30, 30, 40]
+
+sorted_desc = sorted(t, reverse=True)
+print("Sorted (descending):", sorted_desc) # [40, 30, 30, 20, 10, 10, 10]
+
+print("Minimum:", min(t))  # 10
+print("Maximum:", max(t))  # 40</code></div>
+            </div>
+            
+            <div class="note">
+                <div class="note-title">⚠️ Important Note about sorted()</div>
+                <p>The <span class="highlight">sorted()</span> function returns a <span class="highlight">list</span>, not a tuple. If you need a sorted tuple, convert it back:</p>
+                <div class="code-block"><code>t = (40, 10, 30, 20)
+sorted_tuple = tuple(sorted(t))
+print(sorted_tuple)  # (10, 20, 30, 40)</code></div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Tuple Packing and Unpacking</h3>
+                
+                <h4>Packing: Creating a tuple from variables</h4>
+                <div class="code-block"><code>a = 10
+b = 20
+c = 30
+d = 40
+
+# Packing multiple variables into a tuple
+t = a, b, c, d  # No parentheses needed
+print("Packed tuple:", t)  # (10, 20, 30, 40)</code></div>
+                
+                <h4>Unpacking: Extracting values from tuple</h4>
+                <div class="code-block"><code>t = (10, 20, 30, 40)
+
+# Unpacking into separate variables
+a, b, c, d = t
+print(f"a={a}, b={b}, c={c}, d={d}")  # a=10, b=20, c=30, d=40</code></div>
+                
+                <div class="io-example">
+                    <div class="io-title">⚠️ Unpacking Error Example</div>
+                    <div class="code-block"><code>t = (10, 20, 30, 40)
+
+try:
+    # Wrong number of variables
+    a, b, c = t  # Needs 4 variables, not 3
+    print("Unpacking successful")
+except ValueError as e:
+    print(f"❌ Error: {e}")  # too many values to unpack (expected 3)</code></div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">❌ Error: too many values to unpack (expected 3)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">Tuple Comprehension? Not Exactly!</h3>
+                
+                <div class="note">
+                    <div class="note-title">🚫 No Tuple Comprehension</div>
+                    <p>Python doesn't have tuple comprehension syntax. What looks like tuple comprehension actually creates a <span class="highlight">generator</span>.</p>
+                </div>
+                
+                <div class="code-block"><code># This looks like tuple comprehension but creates a generator
+t = (x**2 for x in range(1, 6))
+print("Type:", type(t))  # &lt;class 'generator'&gt;
+
+# To get a tuple, use tuple() with generator expression
+t = tuple(x**2 for x in range(1, 6))
+print("Actual tuple:", t)    # (1, 4, 9, 16, 25)
+print("Type:", type(t))      # &lt;class 'tuple'&gt;</code></div>
+            </div>
+            
+            <h2 class="section-title">Practical Examples</h2>
+            
+            <div class="example-list">
+                <div class="example-card">
+                    <div class="example-title">1. Sum and Average of Tuple</div>
+                    <div class="code-block"><code>t = eval(input("Enter tuple of numbers: "))
+total = sum(t)
+average = total / len(t)
+
+print(f"Sum: {total}")
+print(f"Average: {average}")</code></div>
+                    
+                    <div class="input-section">
+                        <div class="input-label">Input:</div>
+                        <div class="input-content">Enter tuple of numbers: (10, 20, 30, 40)</div>
+                    </div>
+                    
+                    <div class="output-section">
+                        <div class="output-label">Output:</div>
+                        <div class="output-content">Sum: 100
+Average: 25.0</div>
+                    </div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">2. Return Multiple Values from Function</div>
+                    <div class="code-block"><code>def calculate_stats(numbers):
+    """Return (sum, average, min, max) as tuple"""
+    total = sum(numbers)
+    avg = total / len(numbers)
+    return total, avg, min(numbers), max(numbers)
+
+nums = (10, 20, 30, 40, 50)
+stats = calculate_stats(nums)
+print(f"Stats: {stats}")
+
+# Unpack the result
+sum_val, avg_val, min_val, max_val = stats
+print(f"Sum={sum_val}, Avg={avg_val}, Min={min_val}, Max={max_val}")</code></div>
+                </div>
+                
+                <div class="example-card">
+                    <div class="example-title">3. Swap Two Variables</div>
+                    <div class="code-block"><code># Traditional way with temporary variable
+a = 10
+b = 20
+temp = a
+a = b
+b = temp
+print(f"a={a}, b={b}")  # a=20, b=10
+
+# Pythonic way with tuple unpacking
+x = 30
+y = 40
+x, y = y, x  # Tuple packing and unpacking in one line!
+print(f"x={x}, y={y}")  # x=40, y=30</code></div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">List vs Tuple Comparison</h2>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th colspan="3">Key Differences Between Lists and Tuples</th>
+                </tr>
+                <tr>
+                    <td style="width: 40%; background: #f8f9fa; font-weight: bold;">Feature</td>
+                    <td style="width: 30%; background: #e3f2fd; font-weight: bold;">List</td>
+                    <td style="width: 30%; background: #f3e5f5; font-weight: bold;">Tuple</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Syntax</span></td>
+                    <td>Square brackets mandatory<br>l = [10, 20, 30]</td>
+                    <td>Parentheses optional<br>t = (10, 20, 30)<br>t = 10, 20, 30</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Mutability</span></td>
+                    <td>Mutable (can change elements)<br>l[1] = 70 ✅</td>
+                    <td>Immutable (cannot change)<br>t[1] = 70 ❌ TypeError</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">When to Use</span></td>
+                    <td>When data changes frequently</td>
+                    <td>When data is fixed/constant</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Performance</span></td>
+                    <td>Slightly slower iteration</td>
+                    <td>Faster iteration</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Memory</span></td>
+                    <td>More memory usage</td>
+                    <td>Less memory usage</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Dictionary Keys</span></td>
+                    <td>Cannot be used as keys ❌</td>
+                    <td>Can be used as keys ✅</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight">Methods Available</span></td>
+                    <td>append(), insert(), remove(), pop(), sort(), reverse()</td>
+                    <td>Only count(), index()</td>
+                </tr>
+            </table>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">When to Use Tuples vs Lists</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card" style="border-top-color: #3498db;">
+                        <div class="feature-title">✅ Use Tuples When...</div>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Data shouldn't change (constants)</li>
+                            <li>Using as dictionary keys</li>
+                            <li>Returning multiple values from functions</li>
+                            <li>Performance matters (iterating large data)</li>
+                            <li>Data integrity is critical</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card" style="border-top-color: #e74c3c;">
+                        <div class="feature-title">✅ Use Lists When...</div>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Data needs to be modified</li>
+                            <li>Need to add/remove elements</li>
+                            <li>Sorting or reversing is needed</li>
+                            <li>Working with dynamic collections</li>
+                            <li>Implementing stacks/queues</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <div class="note-title">💡 Pro Tip</div>
+                <p>Tuples are <span class="highlight">hashable</span> because they are immutable. This means they can be used as dictionary keys, while lists cannot. This is a crucial difference in practice!</p>
+                <div class="code-block"><code># Valid: Tuple as dictionary key
+coordinates = {
+    (10, 20): "Point A",
+    (30, 40): "Point B"
+}
+print(coordinates[(10, 20)])  # "Point A"
+
+# Invalid: List as dictionary key (will cause TypeError)
+# locations = {
+#     [10, 20]: "City A"  # ❌ TypeError: unhashable type: 'list'
+# }</code></div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-title">Python Tuple Mastery</div>
+                <p>Tuples provide immutability, security, and performance benefits for fixed data collections.</p>
+                <p style="margin-top: 20px; opacity: 0.8;">Remember: "If it shouldn't change, make it a tuple!"</p>
+                <!-- <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.6;">All examples use "hema" instead of "durga" | Styled with modern gradients and animations</p> -->
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate code blocks on hover
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.01)';
+                });
+                block.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Add typing effect to header
+            const title = document.querySelector('h1');
+            const originalText = title.textContent;
+            title.textContent = '';
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < originalText.length) {
+                    title.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            // Start typing effect
+            setTimeout(typeWriter, 1000);
+            
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all subsections
+            document.querySelectorAll('.subsection').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

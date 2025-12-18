@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Functions Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        div[style*="max-width: 1200px"] {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(30, 41, 59, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 1px solid #334155;
+            backdrop-filter: blur(10px);
+        }
+        
+        header {
+            background: linear-gradient(to right, #7c3aed, #4f46e5, #3b82f6);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 4px solid #f59e0b;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.2;
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        header h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            position: relative;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        header h2 {
+            font-size: 1.9rem;
+            color: #c7d2fe;
+            font-weight: 400;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        div[style*="background: linear-gradient"] {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(59, 130, 246, 0.2));
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            display: inline-block;
+            border-left: 5px solid #f59e0b;
+            border-right: 5px solid #f59e0b;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 35px;
+            gap: 30px;
+        }
+        
+        nav {
+            flex: 0 0 280px;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 25px;
+            border-radius: 15px;
+            height: fit-content;
+            border: 1px solid #475569;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 30px;
+        }
+        
+        article {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        section {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 30px;
+            margin-bottom: 35px;
+            border-radius: 15px;
+            border-left: 6px solid #3b82f6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+        
+        section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+            border-left-color: #f59e0b;
+        }
+        
+        section h3 {
+            color: #60a5fa;
+            margin-bottom: 20px;
+            font-size: 1.7rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #334155;
+        }
+        
+        section h3 i {
+            color: #fbbf24;
+            background: rgba(59, 130, 246, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        pre {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            border: 1px solid #475569;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border-left: 4px solid #10b981;
+        }
+        
+        pre::before {
+            content: 'Python';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #10b981;
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            border-bottom-left-radius: 8px;
+        }
+        
+        pre .keyword {
+            color: #f472b6;
+            font-weight: bold;
+        }
+        
+        pre .function {
+            color: #60a5fa;
+        }
+        
+        pre .string {
+            color: #34d399;
+        }
+        
+        pre .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        pre .number {
+            color: #fbbf24;
+        }
+        
+        div[style*="background: #0a1f1a"] {
+            background: linear-gradient(135deg, #0a1f1a, #064e3b);
+            color: #a7f3d0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            border-left: 5px solid #10b981;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+        
+        div[style*="background: rgba(245, 158, 11, 0.15)"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            color: #fde68a;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        span[style*="background: rgba(59, 130, 246, 0.25)"] {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25));
+            padding: 5px 12px;
+            border-radius: 8px;
+            color: #93c5fd;
+            font-weight: bold;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        div[style*="background: rgba(220, 38, 38, 0.15)"] {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(185, 28, 28, 0.1));
+            border-left: 5px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            color: #fecaca;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        li::before {
+            content: '▸';
+            color: #60a5fa;
+            position: absolute;
+            left: -15px;
+        }
+        
+        nav h4 {
+            color: #c7d2fe;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+        
+        nav li {
+            margin-bottom: 15px;
+        }
+        
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        nav a:hover {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            color: #f8fafc;
+            padding-left: 20px;
+            border-color: #6366f1;
+            transform: translateX(5px);
+        }
+        
+        nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(to right, #1e293b, #0f172a);
+            border-top: 2px solid #475569;
+            font-size: 1rem;
+            color: #c7d2fe;
+        }
+        
+        span[style*="background: #3b82f6"] {
+            display: inline-block;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+        
+        span[style*="background: rgba(245, 158, 11, 0.25)"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.25));
+            color: #fbbf24;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            nav {
+                position: static;
+            }
+            
+            header h1 {
+                font-size: 2.4rem;
+            }
+        }
+        
+        /* Page indicator styling */
+        span:has(+ h3) {
+            display: inline-block;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Hema highlight */
+        .hema-highlight {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(219, 39, 119, 0.25));
+            color: #ec4899;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        /* Code line numbers */
+        pre {
+            counter-reset: line;
+        }
+        
+        pre .line-number {
+            display: inline-block;
+            width: 30px;
+            text-align: right;
+            margin-right: 15px;
+            color: #64748b;
+            user-select: none;
+        }
+        
+        pre .line-number::before {
+            counter-increment: line;
+            content: counter(line);
+        }
+        
+        /* Animation for new sections */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+            border-radius: 5px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div style="max-width: 1200px; margin: 0 auto; background-color: rgba(30, 41, 59, 0.95); border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); overflow: hidden; border: 1px solid #334155; backdrop-filter: blur(10px);">
+        <header>
+            <h1><i class="fas fa-code"></i> Python Functions Tutorial</h1>
+            <h2>Master Functions, Lambda, Recursion & More</h2>
+            <!-- <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(59, 130, 246, 0.2)); padding: 20px; border-radius: 15px; margin-top: 25px; display: inline-block; border-left: 5px solid #f59e0b; border-right: 5px solid #f59e0b; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); position: relative;">
+                <p><i class="fas fa-map-marker-alt"></i> 142 DURGASOFT, # 202, 2<sup>nd</sup> Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038</p>
+                <p><i class="fas fa-phone"></i> 040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | <i class="fas fa-globe"></i> www.durgasoft.com</p>
+            </div> -->
+        </header>
+        
+        <main>
+            <nav>
+                <h4><i class="fas fa-bars"></i> Tutorial Contents</h4>
+                <ul>
+                    <li><a href="#intro"><i class="fas fa-play-circle"></i> Introduction</a></li>
+                    <li><a href="#types"><i class="fas fa-layer-group"></i> Types of Functions</a></li>
+                    <li><a href="#syntax"><i class="fas fa-terminal"></i> Function Syntax</a></li>
+                    <li><a href="#parameters"><i class="fas fa-exchange-alt"></i> Parameters & Arguments</a></li>
+                    <li><a href="#return"><i class="fas fa-undo"></i> Return Statement</a></li>
+                    <li><a href="#recursive"><i class="fas fa-infinity"></i> Recursive Functions</a></li>
+                    <li><a href="#lambda"><i class="fas fa-bolt"></i> Lambda Functions</a></li>
+                    <li><a href="#higher"><i class="fas fa-sort-amount-up"></i> Higher-Order Functions</a></li>
+                    <li><a href="#variables"><i class="fas fa-code-branch"></i> Variable Scope</a></li>
+                    <li><a href="#advanced"><i class="fas fa-rocket"></i> Advanced Concepts</a></li>
+                </ul>
+                
+                <h4 style="margin-top: 30px;"><i class="fas fa-star"></i> Key Features</h4>
+                <ul>
+                    <li><span style="background: rgba(59, 130, 246, 0.25); padding: 5px 12px; border-radius: 8px; color: #93c5fd; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.3);">Code Reusability</span></li>
+                    <li><span style="background: rgba(59, 130, 246, 0.25); padding: 5px 12px; border-radius: 8px; color: #93c5fd; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.3);">Multiple Return Values</span></li>
+                    <li><span style="background: rgba(59, 130, 246, 0.25); padding: 5px 12px; border-radius: 8px; color: #93c5fd; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.3);">4 Types of Arguments</span></li>
+                    <li><span style="background: rgba(59, 130, 246, 0.25); padding: 5px 12px; border-radius: 8px; color: #93c5fd; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.3);">Lambda Functions</span></li>
+                    <li><span style="background: rgba(59, 130, 246, 0.25); padding: 5px 12px; border-radius: 8px; color: #93c5fd; font-weight: bold; border: 1px solid rgba(59, 130, 246, 0.3);">Recursion Support</span></li>
+                </ul>
+            </nav>
+            
+            <article>
+                <section id="intro">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 1-2</span> -->
+                    <h3><i class="fas fa-info-circle"></i> Introduction to Functions</h3>
+                    <p>If a group of statements is repeatedly required then it is not recommended to write these statements everytime separately. We have to define these statements as a single unit and we can call that unit any number of times based on our requirement without rewriting. This unit is nothing but function.</p>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.15); border-left: 5px solid #f59e0b; padding: 20px; margin: 20px 0; color: #fde68a; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><strong>The main advantage of functions is code Reusability.</strong></p>
+                        <p><em>Note:</em> In other languages functions are known as methods, procedures, subroutines etc.</p>
+                    </div>
+                </section>
+                
+                <section id="types">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 2</span> -->
+                    <h3><i class="fas fa-layer-group"></i> Types of Functions</h3>
+                    
+                    <p><strong>Python supports 2 types of functions:</strong></p>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.15); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <h4 style="color: #60a5fa; margin-bottom: 15px;">1) Built-in Functions</h4>
+                        <p>The functions which are coming along with Python software automatically, are called built in functions or pre defined functions.</p>
+                        <p><strong>Examples:</strong> <span style="color: #34d399;">id()</span>, <span style="color: #34d399;">type()</span>, <span style="color: #34d399;">input()</span>, <span style="color: #34d399;">eval()</span>, etc.</p>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.15); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <h4 style="color: #34d399; margin-bottom: 15px;">2) User Defined Functions</h4>
+                        <p>The functions which are developed by programmer explicitly according to business requirements, are called user defined functions.</p>
+                    </div>
+                </section>
+                
+                <section id="syntax">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 2-3</span> -->
+                    <h3><i class="fas fa-terminal"></i> Function Syntax</h3>
+                    
+                    <p><strong>Syntax to Create User defined Functions:</strong></p>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">function_name</span>(parameters):
+    <span class="string">""" doc string"""</span>
+    <span class="comment"># function body</span>
+    <span class="keyword">return</span> value
+                    </pre>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.15); border-left: 5px solid #f59e0b; padding: 20px; margin: 20px 0; color: #fde68a; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><strong>Note:</strong> While creating functions we can use 2 keywords:</p>
+                        <ol>
+                            <li><span style="color: #f472b6;">def</span> (mandatory)</li>
+                            <li><span style="color: #f472b6;">return</span> (optional)</li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Example 1: Write a function to print Hello</strong></p>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">wish</span>():
+    <span class="function">print</span>(<span class="string">"Hello Good Morning"</span>)
+
+<span class="function">wish</span>()
+<span class="function">wish</span>()
+<span class="function">wish</span>()
+                    </pre>
+                    
+                    <p><strong>Example 2: Function with parameters</strong></p>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">wish</span>(name):
+    <span class="function">print</span>(<span class="string">"Hello"</span>, name, <span class="string">"Good Morning"</span>)
+
+<span class="function">wish</span>(<span class="string">"Hema"</span>)   
+<span class="function">wish</span>(<span class="string">"Ravi"</span>)
+                    </pre>
+                    
+                    <div style="background: #0a1f1a; color: #a7f3d0; padding: 20px; border-radius: 12px; margin: 20px 0; font-family: 'Fira Code', 'Courier New', monospace; border-left: 5px solid #10b981; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);">
+                        <strong>Output:</strong><br>
+                        Hello Hema Good Morning<br>
+                        Hello Ravi Good Morning
+                    </div>
+                </section>
+                
+                <section id="return">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 3-4</span> -->
+                    <h3><i class="fas fa-undo"></i> Return Statement</h3>
+                    
+                    <p>Function can take input values as parameters and executes business logic, and returns output to the caller with return statement.</p>
+                    
+                    <p><strong>Q) Write a Function to accept 2 Numbers as Input and return Sum</strong></p>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">add</span>(x, y):
+    <span class="keyword">return</span> x + y
+
+result = <span class="function">add</span>(<span class="number">10</span>, <span class="number">20</span>)
+<span class="function">print</span>(<span class="string">"The sum is"</span>, result)
+<span class="function">print</span>(<span class="string">"The sum is"</span>, <span class="function">add</span>(<span class="number">100</span>, <span class="number">200</span>))
+                    </pre>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.15); border-left: 5px solid #f59e0b; padding: 20px; margin: 20px 0; color: #fde68a; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><strong>Note:</strong> If we are not writing return statement then default return value is <span style="color: #f472b6;">None</span>.</p>
+                    </div>
+                    
+                    <p><strong>Returning Multiple Values from a Function:</strong></p>
+                    <p>In other languages like C, C++ and Java, function can return atmost one value. But in Python, a function can return any number of values.</p>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">sum_sub</span>(a, b):
+    sum = a + b
+    sub = a - b
+    <span class="keyword">return</span> sum, sub
+
+x, y = <span class="function">sum_sub</span>(<span class="number">100</span>, <span class="number">50</span>)
+<span class="function">print</span>(<span class="string">"The Sum is :"</span>, x)
+<span class="function">print</span>(<span class="string">"The Subtraction is :"</span>, y)
+                    </pre>
+                </section>
+                
+                <section id="parameters">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 6-9</span> -->
+                    <h3><i class="fas fa-exchange-alt"></i> Types of Arguments</h3>
+                    
+                    <p>There are 4 types of actual arguments allowed in Python:</p>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <h4 style="color: #60a5fa; margin-bottom: 10px;">1) Positional Arguments</h4>
+                        <p>These are the arguments passed to function in correct positional order.</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">sub</span>(a, b):
+    <span class="function">print</span>(a - b)
+
+<span class="function">sub</span>(<span class="number">100</span>, <span class="number">200</span>)   <span class="comment"># -100</span>
+<span class="function">sub</span>(<span class="number">200</span>, <span class="number">100</span>)   <span class="comment"># 100</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <h4 style="color: #34d399; margin-bottom: 10px;">2) Keyword Arguments</h4>
+                        <p>We can pass argument values by keyword i.e by parameter name.</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">wish</span>(name, msg):
+    <span class="function">print</span>(<span class="string">"Hello"</span>, name, msg)
+
+<span class="function">wish</span>(name=<span class="string">"Hema"</span>, msg=<span class="string">"Good Morning"</span>)
+<span class="function">wish</span>(msg=<span class="string">"Good Morning"</span>, name=<span class="string">"Hema"</span>)
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(245, 158, 11, 0.2);">
+                        <h4 style="color: #f59e0b; margin-bottom: 10px;">3) Default Arguments</h4>
+                        <p>Sometimes we can provide default values for our positional arguments.</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">wish</span>(name=<span class="string">"Guest"</span>):
+    <span class="function">print</span>(<span class="string">"Hello"</span>, name, <span class="string">"Good Morning"</span>)
+
+<span class="function">wish</span>(<span class="string">"Hema"</span>)
+<span class="function">wish</span>()   <span class="comment"># Uses default value</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(168, 85, 247, 0.2);">
+                        <h4 style="color: #a855f7; margin-bottom: 10px;">4) Variable Length Arguments</h4>
+                        <p>We can pass variable number of arguments to our function using <span style="color: #f472b6;">*</span> symbol.</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">sum</span>(*n):
+    total = <span class="number">0</span>
+    <span class="keyword">for</span> n1 <span class="keyword">in</span> n:
+        total = total + n1
+    <span class="function">print</span>(<span class="string">"The Sum="</span>, total)
+
+<span class="function">sum</span>()
+<span class="function">sum</span>(<span class="number">10</span>)
+<span class="function">sum</span>(<span class="number">10</span>, <span class="number">20</span>)
+<span class="function">sum</span>(<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>)
+                        </pre>
+                    </div>
+                </section>
+                
+                <section id="recursive">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 13-14</span> -->
+                    <h3><i class="fas fa-infinity"></i> Recursive Functions</h3>
+                    
+                    <p>A function that calls itself is known as Recursive Function.</p>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.15); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <p><strong>Example: Factorial using Recursion</strong></p>
+                        <p>factorial(3) = 3 * factorial(2)<br>
+                           = 3 * 2 * factorial(1)<br>
+                           = 3 * 2 * 1 * factorial(0)<br>
+                           = 3 * 2 * 1 * 1<br>
+                           = 6</p>
+                        <p>factorial(n) = n * factorial(n-1)</p>
+                    </div>
+                    
+                    <pre>
+<span class="keyword">def</span> <span class="function">factorial</span>(n):
+    <span class="keyword">if</span> n == <span class="number">0</span>:
+        result = <span class="number">1</span>
+    <span class="keyword">else</span>:
+        result = n * <span class="function">factorial</span>(n - <span class="number">1</span>)
+    <span class="keyword">return</span> result
+
+<span class="function">print</span>(<span class="string">"Factorial of 4 is :"</span>, <span class="function">factorial</span>(<span class="number">4</span>))
+<span class="function">print</span>(<span class="string">"Factorial of 5 is :"</span>, <span class="function">factorial</span>(<span class="number">5</span>))
+                    </pre>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.15); border-left: 5px solid #10b981; padding: 20px; margin: 20px 0; color: #a7f3d0; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><strong>The main advantages of recursive functions are:</strong></p>
+                        <ol>
+                            <li>We can reduce length of the code and improves readability.</li>
+                            <li>We can solve complex problems very easily.</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <section id="lambda">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 14-16</span> -->
+                    <h3><i class="fas fa-bolt"></i> Lambda Functions (Anonymous Functions)</h3>
+                    
+                    <p>Sometimes we can declare a function without any name, such type of nameless functions are called anonymous functions or lambda functions. The main purpose is for instant use (one time usage).</p>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.15); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(245, 158, 11, 0.3);">
+                        <p><strong>Syntax of Lambda Function:</strong> <span style="color: #f472b6;">lambda argument_list : expression</span></p>
+                    </div>
+                    
+                    <p><strong>Normal Function vs Lambda Function:</strong></p>
+                    
+                    <pre>
+<span class="comment"># Normal Function</span>
+<span class="keyword">def</span> <span class="function">squareIt</span>(n):
+    <span class="keyword">return</span> n * n
+
+<span class="comment"># Lambda Function</span>
+square = <span class="keyword">lambda</span> n: n * n
+                    </pre>
+                    
+                    <p><strong>Q) Lambda Function to find Square of given Number:</strong></p>
+                    
+                    <pre>
+s = <span class="keyword">lambda</span> n: n * n
+<span class="function">print</span>(<span class="string">"The Square of 4 is :"</span>, <span class="function">s</span>(<span class="number">4</span>))
+<span class="function">print</span>(<span class="string">"The Square of 5 is :"</span>, <span class="function">s</span>(<span class="number">5</span>))
+                    </pre>
+                    
+                    <p><strong>Q) Lambda Function to find Biggest of given Values:</strong></p>
+                    
+                    <pre>
+s = <span class="keyword">lambda</span> a, b: a <span class="keyword">if</span> a > b <span class="keyword">else</span> b
+<span class="function">print</span>(<span class="string">"The Biggest of 10,20 is:"</span>, <span class="function">s</span>(<span class="number">10</span>, <span class="number">20</span>))
+<span class="function">print</span>(<span class="string">"The Biggest of 100,200 is:"</span>, <span class="function">s</span>(<span class="number">100</span>, <span class="number">200</span>))
+                    </pre>
+                </section>
+                
+                <section id="higher">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 16-18</span> -->
+                    <h3><i class="fas fa-sort-amount-up"></i> Higher-Order Functions</h3>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <h4 style="color: #60a5fa; margin-bottom: 10px;">filter() Function</h4>
+                        <p>We can use filter() function to filter values from the given sequence based on some condition.</p>
+                        <pre>
+<span class="comment"># Filter even numbers using lambda</span>
+l = [<span class="number">0</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">25</span>, <span class="number">30</span>]
+l1 = <span class="function">list</span>(<span class="function">filter</span>(<span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">0</span>, l))
+<span class="function">print</span>(l1)   <span class="comment"># [0, 10, 20, 30]</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <h4 style="color: #34d399; margin-bottom: 10px;">map() Function</h4>
+                        <p>For every element present in the given sequence, apply some functionality and generate new element.</p>
+                        <pre>
+<span class="comment"># Double each element using lambda</span>
+l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+l1 = <span class="function">list</span>(<span class="function">map</span>(<span class="keyword">lambda</span> x: <span class="number">2</span> * x, l))
+<span class="function">print</span>(l1)   <span class="comment"># [2, 4, 6, 8, 10]</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(245, 158, 11, 0.2);">
+                        <h4 style="color: #f59e0b; margin-bottom: 10px;">reduce() Function</h4>
+                        <p>reduce() function reduces sequence of elements into a single element by applying the specified function.</p>
+                        <pre>
+<span class="keyword">from</span> functools <span class="keyword">import</span> *
+l = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]
+result = <span class="function">reduce</span>(<span class="keyword">lambda</span> x, y: x + y, l)
+<span class="function">print</span>(result)   <span class="comment"># 150</span>
+                        </pre>
+                    </div>
+                </section>
+                
+                <section id="variables">
+                    <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 11-13</span>
+                    <h3><i class="fas fa-code-branch"></i> Variable Scope</h3>
+                    
+                    <p>Python supports 2 types of variables:</p>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <h4 style="color: #60a5fa; margin-bottom: 10px;">1) Global Variables</h4>
+                        <p>The variables which are declared outside of function are called global variables. These can be accessed in all functions.</p>
+                        <pre>
+a = <span class="number">10</span>   <span class="comment"># global variable</span>
+
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="function">print</span>(a)
+
+<span class="keyword">def</span> <span class="function">f2</span>():
+    <span class="function">print</span>(a)
+
+<span class="function">f1</span>()   <span class="comment"># 10</span>
+<span class="function">f2</span>()   <span class="comment"># 10</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <h4 style="color: #34d399; margin-bottom: 10px;">2) Local Variables</h4>
+                        <p>The variables which are declared inside a function are called local variables. Available only within that function.</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">f1</span>():
+    a = <span class="number">10</span>   <span class="comment"># local variable</span>
+    <span class="function">print</span>(a)   <span class="comment"># valid</span>
+
+<span class="keyword">def</span> <span class="function">f2</span>():
+    <span class="function">print</span>(a)   <span class="comment"># invalid - NameError</span>
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.15); border-left: 5px solid #f59e0b; padding: 20px; margin: 20px 0; color: #fde68a; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><strong>global Keyword:</strong> Used to declare global variable inside function or to modify global variable.</p>
+                        <pre>
+a = <span class="number">10</span>
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="keyword">global</span> a
+    a = <span class="number">777</span>
+    <span class="function">print</span>(a)   <span class="comment"># 777</span>
+
+<span class="function">f1</span>()
+<span class="function">print</span>(a)   <span class="comment"># 777 (global value changed)</span>
+                        </pre>
+                    </div>
+                </section>
+                
+                <section id="advanced">
+                    <!-- <span style="background: #3b82f6; color: white; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; margin-bottom: 20px; font-weight: bold; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);">Page 18-20</span> -->
+                    <h3><i class="fas fa-rocket"></i> Advanced Concepts</h3>
+                    
+                    <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <h4 style="color: #60a5fa; margin-bottom: 10px;">Function Aliasing</h4>
+                        <p>For the existing function we can give another name (function aliasing).</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">wish</span>(name):
+    <span class="function">print</span>(<span class="string">"Good Morning:"</span>, name)
+
+greeting = wish   <span class="comment"># Function aliasing</span>
+<span class="function">greeting</span>(<span class="string">"Hema"</span>)
+<span class="function">wish</span>(<span class="string">"Hema"</span>)
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <h4 style="color: #34d399; margin-bottom: 10px;">Nested Functions</h4>
+                        <p>We can declare a function inside another function (nested functions).</p>
+                        <pre>
+<span class="keyword">def</span> <span class="function">outer</span>():
+    <span class="function">print</span>(<span class="string">"outer function started"</span>)
+    
+    <span class="keyword">def</span> <span class="function">inner</span>():
+        <span class="function">print</span>(<span class="string">"inner function execution"</span>)
+    
+    <span class="function">inner</span>()
+
+<span class="function">outer</span>()
+                        </pre>
+                    </div>
+                    
+                    <div style="background: rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid rgba(168, 85, 247, 0.2);">
+                        <h4 style="color: #a855f7; margin-bottom: 10px;">Function Returning Another Function</h4>
+                        <pre>
+<span class="keyword">def</span> <span class="function">outer</span>():
+    <span class="function">print</span>(<span class="string">"outer function started"</span>)
+    
+    <span class="keyword">def</span> <span class="function">inner</span>():
+        <span class="function">print</span>(<span class="string">"inner function execution"</span>)
+    
+    <span class="keyword">return</span> inner
+
+f1 = <span class="function">outer</span>()   <span class="comment"># f1 now references inner function</span>
+<span class="function">f1</span>()   <span class="comment"># Calls inner function</span>
+                        </pre>
+                    </div>
+                    
+                    <!-- <div style="background: rgba(245, 158, 11, 0.15); border-left: 5px solid #f59e0b; padding: 20px; margin: 20px 0; color: #fde68a; border-radius: 0 12px 12px 0; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+                        <p><i class="fas fa-check-circle"></i> <strong>Note:</strong> All instances of "Durga" have been replaced with <span class="hema-highlight">"Hema"</span> throughout this tutorial as requested.</p>
+                    </div> -->
+                </section>
+            </article>
+        </main>
+        
+        <!-- <footer>
+            <p>Python Functions Tutorial | DURGASOFT, # 202, 2<sup>nd</sup> Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038</p>
+            <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.durgasoft.com</p>
+            <p style="margin-top: 15px; color: #60a5fa;"><i class="fas fa-code"></i> Complete Python Functions Reference with "Durga" replaced by "Hema"</p>
+        </footer> -->
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 30,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Active navigation highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('nav a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.style.background = 'linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3))';
+                    link.style.color = '#f8fafc';
+                    link.style.borderColor = '#6366f1';
+                } else {
+                    link.style.background = '';
+                    link.style.color = '#cbd5e1';
+                    link.style.borderColor = 'transparent';
+                }
+            });
+        });
+        
+        // Add line numbers to code blocks
+        document.querySelectorAll('pre').forEach(pre => {
+            const lines = pre.textContent.split('\n').length;
+            let lineNumbers = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumbers += `<span class="line-number"></span>${pre.textContent.split('\n')[i-1]}\n`;
+            }
+            pre.innerHTML = lineNumbers;
+        });
+    </script>
+</body>
+</html>

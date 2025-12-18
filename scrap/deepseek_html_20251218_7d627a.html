@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Modules Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c2e 0%, #1a1a4a 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .tutorial-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #334155;
+            position: relative;
+        }
+        
+        .tutorial-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6, #0ea5e9);
+            z-index: 10;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            padding: 50px 40px;
+            text-align: center;
+            border-bottom: 2px solid #475569;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233b82f6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: float 30s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            100% { transform: rotate(360deg) translate(20px, 20px); }
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h2 {
+            font-size: 1.8rem;
+            color: #c7d2fe;
+            font-weight: 400;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 0;
+            min-height: 800px;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b, #0f172a);
+            padding: 30px;
+            border-right: 2px solid #475569;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            padding: 40px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        
+        .section-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            padding: 35px;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            border-left: 6px solid #8b5cf6;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, transparent);
+        }
+        
+        .section-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-left-color: #f59e0b;
+        }
+        
+        .section-card h3 {
+            color: #60a5fa;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #334155;
+        }
+        
+        .section-card h3 i {
+            color: #fbbf24;
+            background: rgba(139, 92, 246, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+        }
+        
+        .code-container {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            border: 1px solid #475569;
+            overflow-x: auto;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border-left: 4px solid #10b981;
+        }
+        
+        .code-container::before {
+            content: 'Python';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            border-bottom-left-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .code-container .keyword {
+            color: #f472b6;
+            font-weight: bold;
+        }
+        
+        .code-container .function {
+            color: #60a5fa;
+        }
+        
+        .code-container .string {
+            color: #34d399;
+        }
+        
+        .code-container .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .code-container .number {
+            color: #fbbf24;
+        }
+        
+        .code-container .module {
+            color: #a78bfa;
+            font-weight: bold;
+        }
+        
+        .output-box {
+            background: linear-gradient(135deg, #064e3b, #0a1f1a);
+            color: #a7f3d0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            border-left: 5px solid #10b981;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+        }
+        
+        .note-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            margin: 25px 0;
+            color: #fde68a;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .important-box {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(185, 28, 28, 0.1));
+            border-left: 5px solid #ef4444;
+            padding: 25px;
+            margin: 25px 0;
+            color: #fecaca;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25));
+            padding: 4px 12px;
+            border-radius: 8px;
+            color: #93c5fd;
+            font-weight: bold;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .hema-highlight {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(219, 39, 119, 0.25));
+            color: #ec4899;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        .page-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .sidebar h4 {
+            color: #c7d2fe;
+            margin-bottom: 30px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .nav-list {
+            list-style-type: none;
+        }
+        
+        .nav-list li {
+            margin-bottom: 18px;
+            position: relative;
+        }
+        
+        .nav-list a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        .nav-list a:hover {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            color: #f8fafc;
+            transform: translateX(10px);
+            border-color: #6366f1;
+        }
+        
+        .nav-list a i {
+            width: 25px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #475569;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #60a5fa;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .function-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .function-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        li::before {
+            content: '✦';
+            color: #60a5fa;
+            position: absolute;
+            left: -20px;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 2px solid #475569;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .main-content {
+                padding: 25px;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+            border-radius: 6px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="tutorial-container">
+        <div class="hero">
+            <h1><i class="fas fa-cubes"></i> Python Modules Tutorial</h1>
+            <h2>Master Module Importing, Reloading, Math & Random Modules</h2>
+        </div>
+        
+        <div class="content-grid">
+            <div class="sidebar">
+                <h4><i class="fas fa-bars"></i> Navigation</h4>
+                <ul class="nav-list">
+                    <li><a href="#intro"><i class="fas fa-play-circle"></i> Introduction</a></li>
+                    <li><a href="#importing"><i class="fas fa-file-import"></i> Importing Modules</a></li>
+                    <li><a href="#aliasing"><i class="fas fa-tag"></i> Module Aliasing</a></li>
+                    <li><a href="#reloading"><i class="fas fa-sync-alt"></i> Reloading Modules</a></li>
+                    <li><a href="#dir"><i class="fas fa-list"></i> dir() Function</a></li>
+                    <li><a href="#name"><i class="fas fa-code"></i> __name__ Variable</a></li>
+                    <li><a href="#math"><i class="fas fa-calculator"></i> Math Module</a></li>
+                    <li><a href="#random"><i class="fas fa-random"></i> Random Module</a></li>
+                </ul>
+                
+                <h4 style="margin-top: 40px;"><i class="fas fa-star"></i> Key Concepts</h4>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-file-code fa-2x" style="color: #60a5fa;"></i>
+                        <p>Every .py file is a module</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-redo fa-2x" style="color: #f59e0b;"></i>
+                        <p>Module reloading</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-random fa-2x" style="color: #34d399;"></i>
+                        <p>Random functions</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-calculator fa-2x" style="color: #f472b6;"></i>
+                        <p>Math operations</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="section-card" id="intro">
+                    <span class="page-tag">Page 2</span>
+                    <h3><i class="fas fa-info-circle"></i> Introduction to Modules</h3>
+                    
+                    <p>A group of functions, variables and classes saved to a file, which is nothing but a module. Every Python file (.py) acts as a module.</p>
+                    
+                    <div class="note-box">
+                        <p><strong>Note:</strong> All instances of "durga" have been replaced with <span class="hema-highlight">"hema"</span> throughout this tutorial.</p>
+                    </div>
+                    
+                    <p><strong>Example: hemamath.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">x</span> = <span class="number">888</span>
+
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="function">print</span>(<span class="string">"The Sum:"</span>, a + b)
+
+<span class="keyword">def</span> <span class="function">product</span>(a, b):
+    <span class="function">print</span>(<span class="string">"The Product:"</span>, a * b)
+                    </div>
+                    
+                    <p>The hemamath module contains one variable and 2 functions. To use members of a module in our program, we should import that module.</p>
+                    
+                    <p><strong>Example: test.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">hemamath</span>
+<span class="function">print</span>(hemamath.x)
+hemamath.add(<span class="number">10</span>, <span class="number">20</span>)
+hemamath.product(<span class="number">10</span>, <span class="number">20</span>)
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        888<br>
+                        The Sum: 30<br>
+                        The Product: 200
+                    </div>
+                    
+                    <div class="note-box">
+                        <p><strong>Note:</strong> Whenever we use a module in our program, a compiled file (.pyc) will be generated and stored in the hard disk permanently.</p>
+                    </div>
+                </div>
+                
+                <div class="section-card" id="importing">
+                    <span class="page-tag">Page 3</span>
+                    <h3><i class="fas fa-file-import"></i> Importing Modules</h3>
+                    
+                    <p>Python provides multiple ways to import modules and their members.</p>
+                    
+                    <div class="important-box">
+                        <h4>Various Possibilities of import:</h4>
+                        <ol>
+                            <li><span class="highlight">import modulename</span></li>
+                            <li><span class="highlight">import module1, module2, module3</span></li>
+                            <li><span class="highlight">import module1 as m</span></li>
+                            <li><span class="highlight">import module1 as m1, module2 as m2, module3</span></li>
+                            <li><span class="highlight">from module import member</span></li>
+                            <li><span class="highlight">from module import member1, member2, member3</span></li>
+                            <li><span class="highlight">from module import member1 as x</span></li>
+                            <li><span class="highlight">from module import *</span></li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Using from ... import:</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">from</span> <span class="module">hemamath</span> <span class="keyword">import</span> x, add
+<span class="function">print</span>(x)
+add(<span class="number">10</span>, <span class="number">20</span>)
+<span class="comment"># product(10, 20)  # NameError: name 'product' is not defined</span>
+                    </div>
+                    
+                    <p><strong>Importing all members:</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">from</span> <span class="module">hemamath</span> <span class="keyword">import</span> *
+<span class="function">print</span>(x)
+add(<span class="number">10</span>, <span class="number">20</span>)
+product(<span class="number">10</span>, <span class="number">20</span>)
+                    </div>
+                </div>
+                
+                <div class="section-card" id="aliasing">
+                    <span class="page-tag">Page 3-4</span>
+                    <h3><i class="fas fa-tag"></i> Module and Member Aliasing</h3>
+                    
+                    <p><strong>Module Aliasing:</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">hemamath</span> <span class="keyword">as</span> m
+<span class="function">print</span>(m.x)
+m.add(<span class="number">10</span>, <span class="number">20</span>)
+m.product(<span class="number">10</span>, <span class="number">20</span>)
+                    </div>
+                    
+                    <p><strong>Member Aliasing:</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">from</span> <span class="module">hemamath</span> <span class="keyword">import</span> x <span class="keyword">as</span> y, add <span class="keyword">as</span> sum
+<span class="function">print</span>(y)
+sum(<span class="number">10</span>, <span class="number">20</span>)
+                    </div>
+                    
+                    <div class="important-box">
+                        <p><strong>Important:</strong> Once we define an alias name, we should use the alias name only and not the original name.</p>
+                        <div class="code-container" style="margin-top: 15px;">
+<span class="keyword">from</span> <span class="module">hemamath</span> <span class="keyword">import</span> x <span class="keyword">as</span> y
+<span class="function">print</span>(x)  <span class="comment"># NameError: name 'x' is not defined</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-card" id="reloading">
+                    <span class="page-tag">Page 4-5</span>
+                    <h3><i class="fas fa-sync-alt"></i> Reloading Modules</h3>
+                    
+                    <p>By default, a module will be loaded only once even if we import it multiple times.</p>
+                    
+                    <p><strong>Example: module1.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="function">print</span>(<span class="string">"This is from module1"</span>)
+                    </div>
+                    
+                    <p><strong>Example: test.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="function">print</span>(<span class="string">"This is test module"</span>)
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        This is from module1<br>
+                        This is test module
+                    </div>
+                    
+                    <div class="note-box">
+                        <p>The problem with this approach is that after loading a module, if it's updated outside, the updated version is not available to our program.</p>
+                    </div>
+                    
+                    <p><strong>Solution: Explicit reloading using imp module</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="keyword">import</span> <span class="module">module1</span>
+<span class="keyword">from</span> imp <span class="keyword">import</span> reload
+reload(module1)
+reload(module1)
+reload(module1)
+<span class="function">print</span>(<span class="string">"This is test module"</span>)
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        This is from module1<br>
+                        This is from module1<br>
+                        This is from module1<br>
+                        This is from module1<br>
+                        This is test module
+                    </div>
+                    
+                    <div class="note-box">
+                        <p><strong>Note:</strong> The main advantage of explicit module reloading is we can ensure that the updated version is always available to our program.</p>
+                    </div>
+                </div>
+                
+                <div class="section-card" id="dir">
+                    <span class="page-tag">Page 5-6</span>
+                    <h3><i class="fas fa-list"></i> Finding Members with dir() Function</h3>
+                    
+                    <p>Python provides the built-in function <span class="highlight">dir()</span> to list out all members of a module.</p>
+                    
+                    <div class="code-container">
+<span class="keyword">x</span> = <span class="number">10</span>
+<span class="keyword">y</span> = <span class="number">20</span>
+
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="function">print</span>(<span class="string">"Hello"</span>)
+
+<span class="function">print</span>(<span class="function">dir</span>())  <span class="comment"># List all members of current module</span>
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'f1', 'x', 'y']
+                    </div>
+                    
+                    <p><strong>Listing members of a specific module:</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">hemamath</span>
+<span class="function">print</span>(<span class="function">dir</span>(hemamath))
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        ['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'add', 'product', 'x']
+                    </div>
+                    
+                    <div class="note-box">
+                        <p><strong>Note:</strong> For every module at the time of execution, Python interpreter adds some special properties automatically for internal use:</p>
+                        <ul>
+                            <li><span class="highlight">__builtins__</span></li>
+                            <li><span class="highlight">__cached__</span></li>
+                            <li><span class="highlight">__doc__</span></li>
+                            <li><span class="highlight">__file__</span></li>
+                            <li><span class="highlight">__loader__</span></li>
+                            <li><span class="highlight">__name__</span></li>
+                            <li><span class="highlight">__package__</span></li>
+                            <li><span class="highlight">__spec__</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section-card" id="name">
+                    <span class="page-tag">Page 7</span>
+                    <h3><i class="fas fa-code"></i> The Special Variable __name__</h3>
+                    
+                    <p>For every Python program, a special variable <span class="highlight">__name__</span> is added internally. This variable stores information about whether the program is executed as an individual program or as a module.</p>
+                    
+                    <div class="important-box">
+                        <ul>
+                            <li>If executed as an individual program → <span class="highlight">__name__ = "__main__"</span></li>
+                            <li>If executed as a module from another program → <span class="highlight">__name__ = module_name</span></li>
+                        </ul>
+                    </div>
+                    
+                    <p><strong>Example: module1.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">def</span> <span class="function">f1</span>():
+    <span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+        <span class="function">print</span>(<span class="string">"The code executed as a program"</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"The code executed as a module from some other program"</span>)
+
+<span class="function">f1</span>()
+                    </div>
+                    
+                    <p><strong>Example: test.py</strong></p>
+                    
+                    <div class="code-container">
+<span class="keyword">import</span> <span class="module">module1</span>
+module1.f1()
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output when running module1.py directly:</strong><br>
+                        The code executed as a program<br><br>
+                        <strong>Output when running test.py:</strong><br>
+                        The code executed as a module from some other program<br>
+                        The code executed as a module from some other program
+                    </div>
+                </div>
+                
+                <div class="section-card" id="math">
+                    <span class="page-tag">Page 8</span>
+                    <h3><i class="fas fa-calculator"></i> Working with math Module</h3>
+                    
+                    <p>Python provides the built-in <span class="highlight">math</span> module for mathematical operations.</p>
+                    
+                    <div class="function-list">
+                        <div class="function-item">
+                            <strong>sqrt(x)</strong><br>
+                            Returns square root of x
+                        </div>
+                        <div class="function-item">
+                            <strong>ceil(x)</strong><br>
+                            Returns smallest integer ≥ x
+                        </div>
+                        <div class="function-item">
+                            <strong>floor(x)</strong><br>
+                            Returns largest integer ≤ x
+                        </div>
+                        <div class="function-item">
+                            <strong>fabs(x)</strong><br>
+                            Returns absolute value of x
+                        </div>
+                        <div class="function-item">
+                            <strong>log(x)</strong><br>
+                            Returns natural logarithm of x
+                        </div>
+                        <div class="function-item">
+                            <strong>sin(x)</strong><br>
+                            Returns sine of x radians
+                        </div>
+                        <div class="function-item">
+                            <strong>tan(x)</strong><br>
+                            Returns tangent of x radians
+                        </div>
+                    </div>
+                    
+                    <div class="code-container">
+<span class="keyword">from</span> math <span class="keyword">import</span> *
+<span class="function">print</span>(<span class="function">sqrt</span>(<span class="number">4</span>))
+<span class="function">print</span>(<span class="function">ceil</span>(<span class="number">10.1</span>))
+<span class="function">print</span>(<span class="function">floor</span>(<span class="number">10.1</span>))
+<span class="function">print</span>(<span class="function">fabs</span>(-<span class="number">10.6</span>))
+<span class="function">print</span>(<span class="function">fabs</span>(<span class="number">10.6</span>))
+                    </div>
+                    
+                    <div class="output-box">
+                        <strong>Output:</strong><br>
+                        2.0<br>
+                        11<br>
+                        10<br>
+                        10.6<br>
+                        10.6
+                    </div>
+                    
+                    <div class="note-box">
+                        <p><strong>Help for modules:</strong> We can find help for any module using the <span class="highlight">help()</span> function:</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="keyword">import</span> <span class="module">math</span>
+<span class="function">help</span>(math)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-card" id="random">
+                    <span class="page-tag">Page 8-12</span>
+                    <h3><i class="fas fa-random"></i> Working with random Module</h3>
+                    
+                    <p>The <span class="highlight">random</span> module defines several functions to generate random numbers, useful in games, cryptography, and authentication.</p>
+                    
+                    <div class="important-box">
+                        <h4>1) random() Function</h4>
+                        <p>Generates a float value between 0 and 1 (0 < x < 1)</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="keyword">from</span> random <span class="keyword">import</span> *
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    <span class="function">print</span>(<span class="function">random</span>())
+                        </div>
+                    </div>
+                    
+                    <div class="important-box">
+                        <h4>2) randint() Function</h4>
+                        <p>Generates a random integer between two given numbers (inclusive)</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="keyword">from</span> random <span class="keyword">import</span> *
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    <span class="function">print</span>(<span class="function">randint</span>(<span class="number">1</span>, <span class="number">100</span>))
+                        </div>
+                    </div>
+                    
+                    <div class="important-box">
+                        <h4>3) uniform() Function</h4>
+                        <p>Returns random float values between 2 given numbers (not inclusive)</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="keyword">from</span> random <span class="keyword">import</span> *
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    <span class="function">print</span>(<span class="function">uniform</span>(<span class="number">1</span>, <span class="number">10</span>))
+                        </div>
+                    </div>
+                    
+                    <div class="important-box">
+                        <h4>4) randrange() Function</h4>
+                        <p>Returns a random number from a range</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="function">randrange</span>(<span class="number">10</span>)        <span class="comment"># 0 to 9</span>
+<span class="function">randrange</span>(<span class="number">1</span>, <span class="number">11</span>)    <span class="comment"># 1 to 10</span>
+<span class="function">randrange</span>(<span class="number">1</span>, <span class="number">11</span>, <span class="number">2</span>) <span class="comment"># 1, 3, 5, 7, 9</span>
+                        </div>
+                    </div>
+                    
+                    <div class="important-box">
+                        <h4>5) choice() Function</h4>
+                        <p>Returns a random object from the given list or tuple</p>
+                        <div class="code-container" style="margin-top: 10px;">
+<span class="keyword">from</span> random <span class="keyword">import</span> *
+list = [<span class="string">"Sunny"</span>, <span class="string">"Bunny"</span>, <span class="string">"Chinny"</span>, <span class="string">"Vinny"</span>, <span class="string">"Pinny"</span>]
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    <span class="function">print</span>(<span class="function">choice</span>(list))
+                        </div>
+                    </div>
+                    
+                    <div class="note-box">
+                        <h4>Quick Reference:</h4>
+                        <ul>
+                            <li><span class="highlight">random()</span> → 0 < x < 1 (not inclusive)</li>
+                            <li><span class="highlight">randint(x, y)</span> → x ≤ n ≤ y (inclusive)</li>
+                            <li><span class="highlight">uniform(x, y)</span> → x < n < y (not inclusive)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-list a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Update active state
+                document.querySelectorAll('.nav-list a').forEach(link => {
+                    link.style.background = 'rgba(30, 41, 59, 0.5)';
+                });
+                this.style.background = 'linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3))';
+            });
+        });
+        
+        // Highlight current section in sidebar
+        const sections = document.querySelectorAll('.section-card');
+        const navLinks = document.querySelectorAll('.nav-list a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.style.background = 'rgba(30, 41, 59, 0.5)';
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.style.background = 'linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3))';
+                    link.style.color = '#f8fafc';
+                    link.style.borderColor = '#6366f1';
+                }
+            });
+        });
+        
+        // Add animation to cards on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Set initial state for animation
+        document.querySelectorAll('.section-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
