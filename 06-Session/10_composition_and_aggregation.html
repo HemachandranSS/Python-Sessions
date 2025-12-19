@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composition vs Aggregation - Python Concepts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid #4b6cb7;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card.composition {
+            border-top-color: #e74c3c;
+        }
+        
+        .card.aggregation {
+            border-top-color: #2ecc71;
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .card-title i {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            color: #4b6cb7;
+        }
+        
+        .card.composition .card-title i {
+            color: #e74c3c;
+        }
+        
+        .card.aggregation .card-title i {
+            color: #2ecc71;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .definition {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .definition strong {
+            color: #2c3e50;
+        }
+        
+        .example {
+            background: #f1f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .example h3 {
+            margin-bottom: 10px;
+            color: #2980b9;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+        
+        .code-block .function {
+            color: #50fa7b;
+        }
+        
+        .code-block .string {
+            color: #f1fa8c;
+        }
+        
+        .code-block .comment {
+            color: #6272a4;
+        }
+        
+        .output {
+            background: #1a202c;
+            color: #81e6d9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .note {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .note strong {
+            color: #ff9800;
+        }
+        
+        .object-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .object-box {
+            width: 200px;
+            padding: 15px;
+            text-align: center;
+            background: white;
+            border: 2px solid #4b6cb7;
+            border-radius: 8px;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .object-box.contained {
+            border-color: #2ecc71;
+        }
+        
+        .relationship {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .relationship-line {
+            width: 2px;
+            height: 40px;
+            background: #4b6cb7;
+            margin: 0 10px;
+        }
+        
+        .relationship.aggregation .relationship-line {
+            background: #2ecc71;
+        }
+        
+        .relationship-text {
+            font-weight: bold;
+            color: #4b6cb7;
+        }
+        
+        .relationship.aggregation .relationship-text {
+            color: #2ecc71;
+        }
+        
+        .conclusion {
+            background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .changed-name {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sitemap"></i> Composition vs Aggregation</h1>
+            <p class="subtitle">Understanding Object Relationships in Python</p>
+        </header>
+        
+        <div class="content">
+            <div class="card composition">
+                <div class="card-title">
+                    <i class="fas fa-cubes"></i>
+                    <h2>Composition</h2>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>Definition:</strong> Without existing container object if there is no chance of existing contained object, then the container and contained objects are strongly associated. This strong association is called <strong>Composition</strong>.</p>
+                </div>
+                
+                <div class="object-diagram">
+                    <div class="object-box">University Object<br><small>(Container Object)</small></div>
+                    <div class="relationship">
+                        <div class="relationship-line"></div>
+                        <div class="relationship-text">Composition</div>
+                        <div class="relationship-line"></div>
+                    </div>
+                    <div class="object-box contained">Department Object<br><small>(Contained Object)</small></div>
+                </div>
+                
+                <div class="example">
+                    <h3><i class="fas fa-university"></i> Example: University and Departments</h3>
+                    <p>A University contains several Departments. Without an existing University object, there is no chance of a Department object existing. Hence University and Department objects are strongly associated (Composition).</p>
+                </div>
+            </div>
+            
+            <div class="card aggregation">
+                <div class="card-title">
+                    <i class="fas fa-project-diagram"></i>
+                    <h2>Aggregation</h2>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>Definition:</strong> Without existing container object if there is a chance of existing contained object, then the container and contained objects are weakly associated. This weak association is called <strong>Aggregation</strong>.</p>
+                </div>
+                
+                <div class="object-diagram">
+                    <div class="object-box">Department Object<br><small>(Container Object)</small></div>
+                    <div class="relationship aggregation">
+                        <div class="relationship-line"></div>
+                        <div class="relationship-text">Aggregation</div>
+                        <div class="relationship-line"></div>
+                    </div>
+                    <div class="object-box contained">Professor Object<br><small>(Contained Object)</small></div>
+                </div>
+                
+                <div class="example">
+                    <h3><i class="fas fa-chalkboard-teacher"></i> Example: Department and Professors</h3>
+                    <p>A Department contains several Professors. Without an existing Department, there may still be a chance of a Professor existing (they could move to another department). Hence Department and Professor objects are weakly associated (Aggregation).</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-code"></i>
+                <h2>Coding Example</h2>
+            </div>
+            
+            <div class="definition">
+                <p>This example demonstrates both Composition and Aggregation in a single Python class. Instance variables represent <span class="highlight">Composition</span> while static/class variables represent <span class="highlight">Aggregation</span>.</p>
+            </div>
+            
+            <div class="code-block">
+                <span class="keyword">class</span> <span class="function">Student</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;collegeName = <span class="string">'HEMASOFT'</span> <span class="comment"># Static variable (Aggregation)</span><br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">self</span>.name = name <span class="comment"># Instance variable (Composition)</span><br>
+                <br>
+                <span class="comment"># Testing the class</span><br>
+                print(Student.collegeName) <span class="comment"># Accessing static variable</span><br>
+                s = Student(<span class="string">'<span class="changed-name">Hema</span>'</span>) <span class="comment"># Creating object with name 'Hema'</span><br>
+                print(s.name) <span class="comment"># Accessing instance variable</span>
+            </div>
+            
+            <div class="output">
+                <strong>Output:</strong><br>
+                HEMASOFT<br>
+                Hema
+            </div>
+            
+            <div class="note">
+                <p><strong>Explanation:</strong> Without existing Student object there is no chance of existing his name. Hence Student Object and his name are strongly associated (Composition). But without existing Student object there may be a chance of existing collegeName. Hence Student object and collegeName are weakly associated (Aggregation).</p>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h2><i class="fas fa-lightbulb"></i> Conclusion</h2>
+            <p>The relation between an object and its instance variables is always <strong>Composition</strong> whereas the relation between an object and static variables is <strong>Aggregation</strong>.</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-sticky-note"></i>
+                <h2>Important Note</h2>
+            </div>
+            
+            <div class="note">
+                <p><strong>Note:</strong> Whenever we are creating child class object then child class constructor will be executed. If the child class does not contain constructor then parent class constructor will be executed, but parent object won't be created.</p>
+            </div>
+            
+            <div class="code-block">
+                <span class="keyword">class</span> <span class="function">P</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="function">id</span>(<span class="keyword">self</span>))<br>
+                <br>
+                <span class="keyword">class</span> <span class="function">C</span>(P):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">pass</span><br>
+                <br>
+                c = C()<br>
+                print(<span class="function">id</span>(c))
+            </div>
+            
+            <div class="output">
+                <strong>Output:</strong><br>
+                6207088<br>
+                6207088
+            </div>
+            
+            <div class="note">
+                <p><strong>Explanation:</strong> Both IDs are the same because only one object (child object) is created, and the parent constructor is executed for that child object.</p>
+            </div>
+            
+            <div class="code-block">
+                <span class="keyword">class</span> <span class="function">Person</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, age):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">self</span>.name = name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">self</span>.age = age<br>
+                <br>
+                <span class="keyword">class</span> <span class="function">Student</span>(Person):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, name, age, rollno, marks):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">super</span>().<span class="function">__init__</span>(name, age)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">self</span>.rollno = rollno<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">self</span>.marks = marks<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">def</span> <span class="function">__str__</span>(<span class="keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">'Name={}\nAge={}\nRollno={}\nMarks={}'</span>.<span class="function">format</span>(<span class="keyword">self</span>.name, <span class="keyword">self</span>.age, <span class="keyword">self</span>.rollno, <span class="keyword">self</span>.marks)<br>
+                <br>
+                s1 = Student(<span class="string">'<span class="changed-name">Hema</span>'</span>, 48, 101, 90)<br>
+                print(s1)
+            </div>
+            
+            <div class="output">
+                <strong>Output:</strong><br>
+                Name=Hema<br>
+                Age=48<br>
+                Rollno=101<br>
+                Marks=90
+            </div>
+            
+            <div class="note">
+                <p><strong>Note:</strong> In the above example, when we create a child class object, both parent and child class constructors are executed to perform initialization of the child object.</p>
+            </div>
+        </div>
+        
+        <!-- <footer>
+            <p>Composition vs Aggregation Concepts | Python OOP | All instances of "Durga" have been replaced with "<span class="changed-name">Hema</span>"</p>
+            <p>Created with HTML, CSS, and JavaScript</p>
+        </footer> -->
+    </div>
+
+    <script>
+        // Simple animation for the cards when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

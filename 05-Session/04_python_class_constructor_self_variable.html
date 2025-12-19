@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Classes & Constructors Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --code-bg: #1a252f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h2 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f1f7fd;
+        }
+
+        .method-col {
+            border-right: 1px solid #eee;
+            width: 50%;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .example-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .example-title i {
+            margin-right: 8px;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 15px;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .keyword-item {
+            background-color: #e3f2fd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Classes, Constructors & Methods</h1>
+            <p class="subtitle">A comprehensive guide to object-oriented programming in Python</p>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2><i class="fas fa-table"></i>Methods vs Constructors</h2>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Method</th>
+                        <th>Constructor</th>
+                    </tr>
+                    <tr>
+                        <td class="method-col">Name of method can be any name</td>
+                        <td>Constructor name should be always <span class="highlight">__init__</span></td>
+                    </tr>
+                    <tr>
+                        <td class="method-col">Method will be executed if we call that method</td>
+                        <td>Constructor will be executed automatically at the time of object creation</td>
+                    </tr>
+                    <tr>
+                        <td class="method-col">Per object, method can be called any number of times</td>
+                        <td>Per object, constructor will be executed only once</td>
+                    </tr>
+                    <tr>
+                        <td class="method-col">Inside method we can write business logic</td>
+                        <td>Inside constructor we have to declare and initialize instance variables</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-cube"></i>What is a Class?</h2>
+                <p>In Python everything is an object. To create objects we require some Model or Plan or Blue print, which is nothing but class.</p>
+                
+                <div class="note-box">
+                    <div class="note-title"><i class="fas fa-lightbulb"></i> Key Points:</div>
+                    <p>We can write a class to represent properties (attributes) and actions (behavior) of an object.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Properties can be represented by <span class="highlight">variables</span></li>
+                        <li>Actions can be represented by <span class="highlight">methods</span></li>
+                        <li>Hence class contains both variables and methods</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 20px;">Defining a Class</h3>
+                <p>We can define a class by using the <span class="highlight">class</span> keyword:</p>
+                
+                <div class="code-block">
+                    <span class="code-keyword">class</span> <span class="code-function">className</span>:<br>
+                    &nbsp;&nbsp;<span class="code-comment">'''documentation string'''</span><br>
+                    &nbsp;&nbsp;<span class="code-comment"># variables: instance, static and local variables</span><br>
+                    &nbsp;&nbsp;<span class="code-comment"># methods: instance, static, class methods</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2><i class="fas fa-code"></i>Class Example</h2>
+                <div class="code-block">
+                    <span class="code-keyword">class</span> <span class="code-function">Student</span>:<br>
+                    &nbsp;&nbsp;<span class="code-comment">'''Developed by Hema for python demo'''</span><br>
+                    <br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = <span class="code-string">'Hema'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.age = <span class="code-string">40</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.marks = <span class="code-string">80</span><br>
+                    <br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">talk</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">print</span>(<span class="code-string">"Hello I am:"</span>, <span class="code-keyword">self</span>.name)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">print</span>(<span class="code-string">"My Age is:"</span>, <span class="code-keyword">self</span>.age)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">print</span>(<span class="code-string">"My Marks are:"</span>, <span class="code-keyword">self</span>.marks)
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-cogs"></i>Constructor Concept</h2>
+                <ul style="margin-left: 20px;">
+                    <li>Constructor is a special method in Python</li>
+                    <li>The name of the constructor should be <span class="highlight">__init__(self)</span></li>
+                    <li>Constructor executes automatically at object creation</li>
+                    <li>Main purpose: declare and initialize instance variables</li>
+                    <li>Per object, constructor executes only once</li>
+                    <li>Constructor can take at least one argument (at least self)</li>
+                    <li>Constructor is optional - Python provides default if not defined</li>
+                </ul>
+                
+                <div class="example-box">
+                    <div class="example-title"><i class="fas fa-code"></i> Constructor Example</div>
+                    <div class="code-block">
+                        <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, rollno, marks):<br>
+                        &nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                        &nbsp;&nbsp;<span class="code-keyword">self</span>.rollno = rollno<br>
+                        &nbsp;&nbsp;<span class="code-keyword">self</span>.marks = marks
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2><i class="fas fa-terminal"></i>Complete Program Example</h2>
+                <div class="code-block">
+                    <span class="code-keyword">class</span> <span class="code-function">Student</span>:<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="code-comment">''' This is student class with required data'''</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, x, y, z):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = x<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.rollno = y<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.marks = z<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">print</span>(<span class="code-string">"Student Name: {}\nRollno: {} \nMarks: {}"</span>.<span class="code-function">format</span>(<span class="code-keyword">self</span>.name, <span class="code-keyword">self</span>.rollno, <span class="code-keyword">self</span>.marks))<br>
+                    <br>
+                    s1 = Student(<span class="code-string">"Hema"</span>, <span class="code-string">101</span>, <span class="code-string">80</span>)<br>
+                    s1.display()<br>
+                    s2 = Student(<span class="code-string">"Sunny"</span>, <span class="code-string">102</span>, <span class="code-string">100</span>)<br>
+                    s2.display()
+                </div>
+                
+                <div class="output-box">
+                    Student Name: Hema<br>
+                    Rollno: 101<br>
+                    Marks: 80<br><br>
+                    Student Name: Sunny<br>
+                    Rollno: 102<br>
+                    Marks: 100
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-key"></i>Key Concepts</h2>
+                
+                <h3 style="margin-top: 20px;"><i class="fas fa-user"></i> Self Variable</h3>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li><span class="highlight">self</span> is the default variable always pointing to current object</li>
+                    <li>Similar to <span class="highlight">this</span> keyword in Java</li>
+                    <li>Using self, we can access instance variables and methods</li>
+                </ul>
+                
+                <div class="note-box">
+                    <div class="note-title"><i class="fas fa-exclamation-circle"></i> Important Notes:</div>
+                    <p>1. <span class="highlight">self</span> should be the first parameter inside constructor:<br>
+                    &nbsp;&nbsp;&nbsp;<code>def __init__(self):</code></p>
+                    <p>2. <span class="highlight">self</span> should be the first parameter inside instance methods:<br>
+                    &nbsp;&nbsp;&nbsp;<code>def talk(self):</code></p>
+                </div>
+                
+                <h3 style="margin-top: 20px;">Variable Types in Class</h3>
+                <div class="keyword-list">
+                    <div class="keyword-item">Instance Variables</div>
+                    <div class="keyword-item">Static Variables</div>
+                    <div class="keyword-item">Local Variables</div>
+                </div>
+                
+                <h3 style="margin-top: 20px;">Method Types in Class</h3>
+                <div class="keyword-list">
+                    <div class="keyword-item">Instance Methods</div>
+                    <div class="keyword-item">Class Methods</div>
+                    <div class="keyword-item">Static Methods</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Python OOP Guide | Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for learning Python Classes</p>
+            <!-- <p>All examples feature <strong>Hema</strong> as the developer instead of Durga</p> -->
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactivity to the code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+
+        // Add animation to cards when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+    </script>
+</body>
+</html>

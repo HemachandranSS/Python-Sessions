@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Relationships: HAS-A vs IS-A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --has-a-color: #9b59b6;
+            --is-a-color: #2ecc71;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --code-bg: #1a252f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--has-a-color);
+            border-right: 5px solid var(--is-a-color);
+            background: linear-gradient(to right, rgba(155, 89, 182, 0.1), rgba(46, 204, 113, 0.1));
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .section-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            border-left: 5px solid;
+        }
+
+        .has-a-header {
+            border-left-color: var(--has-a-color);
+        }
+
+        .is-a-header {
+            border-left-color: var(--is-a-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+        }
+
+        .relationship-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .has-a-badge {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--has-a-color);
+            border: 1px solid var(--has-a-color);
+        }
+
+        .is-a-badge {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--is-a-color);
+            border: 1px solid var(--is-a-color);
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .has-a-code {
+            border-left-color: var(--has-a-color);
+        }
+
+        .is-a-code {
+            border-left-color: var(--is-a-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .code-class {
+            color: #9b59b6;
+        }
+
+        .code-var {
+            color: #f1c40f;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-title i {
+            margin-right: 8px;
+        }
+
+        .comparison-box {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .comparison-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-title i {
+            margin-right: 8px;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-has-a {
+            background-color: rgba(155, 89, 182, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-is-a {
+            background-color: rgba(46, 204, 113, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .relationship-diagram {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 300px;
+            border: 2px solid;
+        }
+
+        .has-a-diagram {
+            border-color: var(--has-a-color);
+            background: linear-gradient(to bottom, white, rgba(155, 89, 182, 0.05));
+        }
+
+        .is-a-diagram {
+            border-color: var(--is-a-color);
+            background: linear-gradient(to bottom, white, rgba(46, 204, 113, 0.05));
+        }
+
+        .diagram-title {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .class-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 2px solid #3498db;
+            font-weight: 600;
+        }
+
+        .relationship-line {
+            margin: 15px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .has-a-line {
+            color: var(--has-a-color);
+        }
+
+        .is-a-line {
+            color: var(--is-a-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .diagram-container {
+                flex-direction: column;
+            }
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            display: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .combined-example {
+            background-color: #f9f7fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #9b59b6;
+            border-right: 4px solid #2ecc71;
+        }
+
+        .combined-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .combined-title i {
+            margin-right: 8px;
+        }
+
+        .benefit-box {
+            background-color: #e8f6f3;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .benefit-title {
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .benefit-title i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Relationships: HAS-A vs IS-A</h1>
+            <p class="subtitle">Composition vs Inheritance - When to Use Each</p>
+        </header>
+
+        <div class="diagram-container">
+            <div class="relationship-diagram has-a-diagram">
+                <div class="diagram-title">HAS-A Relationship</div>
+                <div class="class-box">Employee</div>
+                <div class="relationship-line has-a-line">HAS-A</div>
+                <div class="class-box">Car</div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Employee has a car</p>
+                <p style="font-size: 0.9rem;">(Composition)</p>
+            </div>
+            
+            <div class="relationship-diagram is-a-diagram">
+                <div class="diagram-title">IS-A Relationship</div>
+                <div class="class-box">Employee</div>
+                <div class="relationship-line is-a-line">IS-A</div>
+                <div class="class-box">Person</div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Employee is a person</p>
+                <p style="font-size: 0.9rem;">(Inheritance)</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><span class="relationship-type has-a-badge">HAS-A</span> Composition</h3>
+                <p>Using members of one class inside another class by creating an object.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Also called <strong>Composition</strong></li>
+                    <li>Create object of one class inside another</li>
+                    <li>Main advantage: <strong>Code Reusability</strong></li>
+                    <li>When you want to use existing functionality</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="relationship-type is-a-badge">IS-A</span> Inheritance</h3>
+                <p>Child class inherits from parent class automatically.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Also called <strong>Inheritance</strong></li>
+                    <li>Child class extends parent class</li>
+                    <li>Main advantage: <strong>Code Reusability</strong></li>
+                    <li>When you want to extend existing functionality</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-header has-a-header">
+            <i class="fas fa-link section-icon" style="color: var(--has-a-color);"></i>
+            <h2 class="section-title">HAS-A Relationship (Composition)</h2>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'has-a-demo1')">Demo 1: Engine & Car</button>
+                <button class="tab-button" onclick="openTab(event, 'has-a-demo2')">Demo 2: Employee & Car</button>
+                <button class="tab-button" onclick="openTab(event, 'has-a-demo3')">Demo 3: X & Y Classes</button>
+            </div>
+            
+            <div id="has-a-demo1" class="tab-content active">
+                <div class="card">
+                    <h3>Demo 1: <span class="highlight-has-a">Car HAS-A Engine</span></h3>
+                    <p>A Car class that contains an Engine object.</p>
+                    
+                    <div class="code-block has-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Engine</span>:<br>
+                        &nbsp;&nbsp;a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Engine Specific Functionality'</span>)<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Car</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.engine = Engine()  <span class="code-comment"># HAS-A Relationship</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Car using Engine Class Functionality'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.engine.a)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.engine.b)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.engine.m1()<br>
+                        <br>
+                        c = Car()<br>
+                        c.m2()
+                    </div>
+                    <div class="output-box">
+                        Car using Engine Class Functionality<br>
+                        10<br>
+                        20<br>
+                        Engine Specific Functionality
+                    </div>
+                    
+                    <div class="benefit-box">
+                        <div class="benefit-title"><i class="fas fa-code"></i> Code Reusability</div>
+                        <p>The Car class reuses Engine's functionality without modifying Engine class. This is the main advantage of HAS-A relationship.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="has-a-demo2" class="tab-content">
+                <div class="card">
+                    <h3>Demo 2: <span class="highlight-has-a">Employee HAS-A Car</span></h3>
+                    <p>An Employee class that contains a Car object.</p>
+                    
+                    <div class="code-block has-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Car</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, model, color):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.model = model<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.color = color<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">getinfo</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Car Name:{} , Model:{} and Color:{}"</span>.format(<span class="code-keyword">self</span>.name, <span class="code-keyword">self</span>.model, <span class="code-keyword">self</span>.color))<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Employee</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, ename, eno, car):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.ename = ename<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.eno = eno<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.car = car  <span class="code-comment"># HAS-A Relationship</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">empinfo</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Name:"</span>, <span class="code-keyword">self</span>.ename)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Number:"</span>, <span class="code-keyword">self</span>.eno)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Car Info:"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.car.getinfo()<br>
+                        <br>
+                        c = Car(<span class="code-string">"Innova"</span>, <span class="code-string">"2.5V"</span>, <span class="code-string">"Grey"</span>)<br>
+                        e = Employee(<span class="code-string">'Hema'</span>, <span class="code-string">10000</span>, c)  <span class="code-comment"># Pass Car object</span><br>
+                        e.empinfo()
+                    </div>
+                    <div class="output-box">
+                        Employee Name: Hema<br>
+                        Employee Number: 10000<br>
+                        Employee Car Info:<br>
+                        Car Name:Innova , Model:2.5V and Color:Grey
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-info-circle"></i> HAS-A Relationship</div>
+                        <p>In this program, Employee class <strong>HAS-A Car</strong> reference and hence Employee class can access all members of Car class.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="has-a-demo3" class="tab-content">
+                <div class="card">
+                    <h3>Demo 3: <span class="highlight-has-a">Class Y uses Class X</span></h3>
+                    <p>Class Y uses Class X by creating an object inside a method.</p>
+                    
+                    <div class="code-block has-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">X</span>:<br>
+                        &nbsp;&nbsp;a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"m1 method of X class"</span>)<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Y</span>:<br>
+                        &nbsp;&nbsp;c = <span class="code-string">30</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.d = <span class="code-string">40</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"m2 method of Y class"</span>)<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m3</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;x1 = X()  <span class="code-comment"># Create X object inside method</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(x1.a)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(x1.b)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;x1.m1()<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(Y.c)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.d)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.m2()<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"m3 method of Y class"</span>)<br>
+                        <br>
+                        y1 = Y()<br>
+                        y1.m3()
+                    </div>
+                    <div class="output-box">
+                        10<br>
+                        20<br>
+                        m1 method of X class<br>
+                        30<br>
+                        40<br>
+                        m2 method of Y class<br>
+                        m3 method of Y class
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-code-branch"></i> Flexible Usage</div>
+                        <p>Class Y can use Class X by creating an object inside a method. This is another way to implement HAS-A relationship.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header is-a-header">
+            <i class="fas fa-sitemap section-icon" style="color: var(--is-a-color);"></i>
+            <h2 class="section-title">IS-A Relationship (Inheritance)</h2>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-graduation-cap"></i> What is Inheritance?</h3>
+            <p>Whatever variables, methods, and constructors are available in the parent class are by default available to the child classes. We don't need to rewrite them.</p>
+            
+            <div class="benefit-box">
+                <div class="benefit-title"><i class="fas fa-star"></i> Main Advantages of Inheritance</div>
+                <p>1. <strong>Code Reusability</strong> - Reuse parent class code</p>
+                <p>2. <strong>Extend Existing Functionality</strong> - Add new features to child class</p>
+            </div>
+            
+            <div class="code-block is-a-code">
+                <span class="code-comment"># Syntax: class childclass(parentclass)</span><br>
+                <span class="code-keyword">class</span> <span class="code-class">Parent</span>:<br>
+                &nbsp;&nbsp;<span class="code-comment"># Parent class members...</span><br>
+                <br>
+                <span class="code-keyword">class</span> <span class="code-class">Child</span>(Parent):  <span class="code-comment"># Child inherits from Parent</span><br>
+                &nbsp;&nbsp;<span class="code-comment"># Child class members...</span>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'is-a-demo1')">Demo 1: Basic Inheritance</button>
+                <button class="tab-button" onclick="openTab(event, 'is-a-demo2')">Demo 2: Parent & Child Methods</button>
+                <button class="tab-button" onclick="openTab(event, 'is-a-demo3')">Demo 3: Employee is-a Person</button>
+            </div>
+            
+            <div id="is-a-demo1" class="tab-content active">
+                <div class="card">
+                    <h3>Demo 1: <span class="highlight-is-a">Basic Inheritance Example</span></h3>
+                    <p>Child class inherits all types of methods from Parent class.</p>
+                    
+                    <div class="code-block is-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">P</span>:  <span class="code-comment"># Parent class</span><br>
+                        &nbsp;&nbsp;a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Parent instance method'</span>)<br>
+                        &nbsp;&nbsp;@classmethod<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(cls):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Parent class method'</span>)<br>
+                        &nbsp;&nbsp;@staticmethod<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m3</span>():<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Parent static method'</span>)<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">C</span>(P):  <span class="code-comment"># Child class inherits from Parent</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">pass</span>  <span class="code-comment"># Empty child class</span><br>
+                        <br>
+                        c = C()<br>
+                        print(c.a)<br>
+                        print(c.b)<br>
+                        c.m1()<br>
+                        c.m2()<br>
+                        c.m3()
+                    </div>
+                    <div class="output-box">
+                        10<br>
+                        10<br>
+                        Parent instance method<br>
+                        Parent class method<br>
+                        Parent static method
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-lightbulb"></i> Code Reusability Example</div>
+                        <p>If Parent class has 10 methods and Child class has 5 methods, then Child class actually has 15 methods (10 inherited + 5 own). We don't need to rewrite parent class methods!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="is-a-demo2" class="tab-content">
+                <div class="card">
+                    <h3>Demo 2: <span class="highlight-is-a">Parent & Child Methods</span></h3>
+                    <p>Child class can have its own methods in addition to inherited ones.</p>
+                    
+                    <div class="code-block is-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">P</span>:  <span class="code-comment"># Parent class</span><br>
+                        &nbsp;&nbsp;a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">C</span>(P):  <span class="code-comment"># Child class</span><br>
+                        &nbsp;&nbsp;c = <span class="code-string">30</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>().<span class="code-function">__init__</span>()  <span class="code-comment"># Call parent constructor</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.d = <span class="code-string">40</span><br>
+                        <br>
+                        c1 = C()<br>
+                        print(c1.a, c1.b, c1.c, c1.d)
+                    </div>
+                    <div class="output-box">
+                        10 20 30 40
+                    </div>
+                    
+                    <div class="warning-box" style="background-color: #fff8e1; border-left-color: #ffb300;">
+                        <div class="note-title"><i class="fas fa-exclamation-triangle"></i> Important Note</div>
+                        <p>If we don't call <span class="code-keyword">super().__init__()</span> in the child constructor, the parent's instance variables (like <span class="code-var">b</span>) won't be available to the child class.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="is-a-demo3" class="tab-content">
+                <div class="card">
+                    <h3>Demo 3: <span class="highlight-is-a">Employee IS-A Person</span></h3>
+                    <p>Real-world example: Employee inherits from Person.</p>
+                    
+                    <div class="code-block is-a-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Person</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, age):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.age = age<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">eatndrink</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Eat Biryani and Drink Beer'</span>)<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Employee</span>(Person):  <span class="code-comment"># Employee IS-A Person</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, age, eno, esal):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>().<span class="code-function">__init__</span>(name, age)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.eno = eno<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.esal = esal<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">work</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Coding Python is very easy just like drinking Chilled Beer"</span>)<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">empinfo</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Name:"</span>, <span class="code-keyword">self</span>.name)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Age:"</span>, <span class="code-keyword">self</span>.age)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Number:"</span>, <span class="code-keyword">self</span>.eno)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Salary:"</span>, <span class="code-keyword">self</span>.esal)<br>
+                        <br>
+                        e = Employee(<span class="code-string">'Hema'</span>, <span class="code-string">48</span>, <span class="code-string">100</span>, <span class="code-string">10000</span>)<br>
+                        e.eatndrink()  <span class="code-comment"># Inherited from Person</span><br>
+                        e.work()      <span class="code-comment"># Own method</span><br>
+                        e.empinfo()   <span class="code-comment"># Own method</span>
+                    </div>
+                    <div class="output-box">
+                        Eat Biryani and Drink Beer<br>
+                        Coding Python is very easy just like drinking Chilled Beer<br>
+                        Employee Name: Hema<br>
+                        Employee Age: 48<br>
+                        Employee Number: 100<br>
+                        Employee Salary: 10000
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-check-circle"></i> Inheritance Benefits</div>
+                        <p>Employee inherits Person's methods (<span class="code-function">eatndrink()</span>) and attributes (<span class="code-var">name</span>, <span class="code-var">age</span>) while adding its own features (<span class="code-function">work()</span>, <span class="code-function">empinfo()</span>, <span class="code-var">eno</span>, <span class="code-var">esal</span>).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="combined-example">
+            <div class="combined-title"><i class="fas fa-handshake"></i> Combined Example: Employee HAS-A Car and IS-A Person</div>
+            <p>Employee extends Person functionality (IS-A) but just uses Car functionality (HAS-A).</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">class</span> <span class="code-class">Car</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, model, color):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.model = model<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.color = color<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">getinfo</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"\tCar Name:{} \n\tModel:{} \n\tColor:{}"</span>.format(<span class="code-keyword">self</span>.name, <span class="code-keyword">self</span>.model, <span class="code-keyword">self</span>.color))<br>
+                <br>
+                <span class="code-keyword">class</span> <span class="code-class">Person</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, age):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.age = age<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">eatndrink</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Eat Biryani and Drink Beer'</span>)<br>
+                <br>
+                <span class="code-keyword">class</span> <span class="code-class">Employee</span>(Person):  <span class="code-comment"># IS-A Relationship</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, age, eno, esal, car):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>().<span class="code-function">__init__</span>(name, age)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.eno = eno<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.esal = esal<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.car = car  <span class="code-comment"># HAS-A Relationship</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">work</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Coding Python is very easy just like drinking Chilled Beer"</span>)<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">empinfo</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Name:"</span>, <span class="code-keyword">self</span>.name)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Age:"</span>, <span class="code-keyword">self</span>.age)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Number:"</span>, <span class="code-keyword">self</span>.eno)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Salary:"</span>, <span class="code-keyword">self</span>.esal)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Employee Car Info:"</span>)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.car.getinfo()<br>
+                <br>
+                c = Car(<span class="code-string">"Innova"</span>, <span class="code-string">"2.5V"</span>, <span class="code-string">"Grey"</span>)<br>
+                e = Employee(<span class="code-string">'Hema'</span>, <span class="code-string">48</span>, <span class="code-string">100</span>, <span class="code-string">10000</span>, c)<br>
+                e.eatndrink()<br>
+                e.work()<br>
+                e.empinfo()
+            </div>
+            <div class="output-box">
+                Eat Biryani and Drink Beer<br>
+                Coding Python is very easy just like drinking Chilled Beer<br>
+                Employee Name: Hema<br>
+                Employee Age: 48<br>
+                Employee Number: 100<br>
+                Employee Salary: 10000<br>
+                Employee Car Info:<br>
+                Car Name:Innova<br>
+                Model:2.5V<br>
+                Color:Grey
+            </div>
+        </div>
+
+        <div class="comparison-box">
+            <div class="comparison-title"><i class="fas fa-balance-scale"></i> IS-A vs HAS-A: When to Use Each</div>
+            <div class="content-grid">
+                <div class="card">
+                    <h4><span class="relationship-type is-a-badge">IS-A Relationship</span></h4>
+                    <p><strong>Use when:</strong> You want to <strong>extend existing functionality</strong> with more features.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Employee extends Person</li>
+                        <li>Dog extends Animal</li>
+                        <li>Car extends Vehicle</li>
+                        <li>"is a kind of" relationship</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="relationship-type has-a-badge">HAS-A Relationship</span></h4>
+                    <p><strong>Use when:</strong> You just want to <strong>use existing functionality</strong> without extending.</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Employee has a Car</li>
+                        <li>Person has a Address</li>
+                        <li>University has Departments</li>
+                        <li>"has a" relationship</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h4><i class="fas fa-key"></i> Key Insight</h4>
+                <p>In the combined example: <strong>Employee class extends Person class functionality (IS-A) but just uses Car class functionality (HAS-A).</strong></p>
+                <p>Employee IS-A Person (inheritance for extending behavior)</p>
+                <p>Employee HAS-A Car (composition for using functionality)</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><i class="fas fa-check-circle"></i> Benefits of HAS-A</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Code reusability without inheritance</li>
+                    <li>Looser coupling between classes</li>
+                    <li>Easier to test and maintain</li>
+                    <li>Flexible - can change implementation easily</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-check-circle"></i> Benefits of IS-A</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Code reusability through inheritance</li>
+                    <li>Method overriding for polymorphism</li>
+                    <li>Establishes hierarchical relationships</li>
+                    <li>Natural modeling of real-world relationships</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-lightbulb"></i> Best Practices</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Favor composition (HAS-A) over inheritance (IS-A)</li>
+                    <li>Use inheritance only for true "is-a" relationships</li>
+                    <li>Keep inheritance hierarchies shallow</li>
+                    <li>All examples updated to use <strong>Hema</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Python Relationships: HAS-A vs IS-A Guide | Composition & Inheritance</p>
+            <!-- <p>Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for Python learners | All examples feature <strong>Hema</strong></p> -->
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Add interactivity to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // Animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+        
+        // Add visual effects to diagrams
+        document.querySelectorAll('.relationship-diagram').forEach(diagram => {
+            diagram.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            diagram.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Add pulse animation to badges
+        document.querySelectorAll('.relationship-type').forEach(badge => {
+            badge.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            badge.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

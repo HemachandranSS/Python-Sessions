@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Variables: Instance, Static & Local</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --code-bg: #1a252f;
+            --instance-color: #3498db;
+            --static-color: #9b59b6;
+            --local-color: #2ecc71;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .section-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            border-left: 5px solid;
+        }
+
+        .instance-header {
+            border-left-color: var(--instance-color);
+        }
+
+        .static-header {
+            border-left-color: var(--static-color);
+        }
+
+        .local-header {
+            border-left-color: var(--local-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .instance-code {
+            border-left-color: var(--instance-color);
+        }
+
+        .static-code {
+            border-left-color: var(--static-color);
+        }
+
+        .local-code {
+            border-left-color: var(--local-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .code-class {
+            color: #9b59b6;
+        }
+
+        .code-var {
+            color: #f1c40f;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-title i {
+            margin-right: 8px;
+        }
+
+        .variable-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .instance-badge {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--instance-color);
+            border: 1px solid var(--instance-color);
+        }
+
+        .static-badge {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--static-color);
+            border: 1px solid var(--static-color);
+        }
+
+        .local-badge {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--local-color);
+            border: 1px solid var(--local-color);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f1f7fd;
+        }
+
+        .comparison-table .instance-col {
+            border-right: 1px solid #eee;
+            width: 50%;
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .keyword-item {
+            background-color: #e3f2fd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-instance {
+            background-color: rgba(52, 152, 219, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-static {
+            background-color: rgba(155, 89, 182, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-local {
+            background-color: rgba(46, 204, 113, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .bank-program {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .bank-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bank-title i {
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Variables Guide</h1>
+            <p class="subtitle">Instance Variables, Static Variables & Local Variables Explained</p>
+        </header>
+
+        <div class="section-header">
+            <i class="fas fa-list section-icon" style="color: var(--primary-color);"></i>
+            <h2 class="section-title">Types of Variables in Python Classes</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><span class="variable-type instance-badge">Instance</span> Instance Variables</h3>
+                <p>If the value of a variable varies from object to object, such variables are called <span class="highlight-instance">instance variables</span>.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>For every object, a separate copy of instance variables will be created</li>
+                    <li>Also known as <strong>object-level variables</strong></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="variable-type static-badge">Static</span> Static Variables</h3>
+                <p>If the value of a variable is <strong>not</strong> varied from object to object, such variables are called <span class="highlight-static">static variables</span>.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>For the total class, only one copy of static variable will be created</li>
+                    <li>Shared by all objects of that class</li>
+                    <li>Also known as <strong>class-level variables</strong></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="variable-type local-badge">Local</span> Local Variables</h3>
+                <p>Variables declared inside a method to meet temporary requirements are called <span class="highlight-local">local variables</span>.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Created at the time of method execution</li>
+                    <li>Destroyed once method completes</li>
+                    <li>Also known as <strong>method-level variables</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Instance Variables Section -->
+        <div class="section-header instance-header">
+            <i class="fas fa-cube section-icon" style="color: var(--instance-color);"></i>
+            <h2 class="section-title">Instance Variables (Object-Level)</h2>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'declare-tab')">Declaration</button>
+                <button class="tab-button" onclick="openTab(event, 'access-tab')">Access</button>
+                <button class="tab-button" onclick="openTab(event, 'modify-tab')">Modify/Delete</button>
+                <button class="tab-button" onclick="openTab(event, 'example-tab')">Examples</button>
+            </div>
+            
+            <div id="declare-tab" class="tab-content active">
+                <h3>Where to Declare Instance Variables:</h3>
+                
+                <div class="card">
+                    <h4>1. Inside Constructor using <span class="code-keyword">self</span></h4>
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Employee</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.eno = <span class="code-string">100</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.ename = <span class="code-string">'Hema'</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.esal = <span class="code-string">10000</span><br>
+                        <br>
+                        e = Employee()<br>
+                        print(e.<span class="code-var">__dict__</span>)
+                    </div>
+                    <div class="output-box">
+                        {'eno': 100, 'ename': 'Hema', 'esal': 10000}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>2. Inside Instance Method using <span class="code-keyword">self</span></h4>
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.c = <span class="code-string">30</span><br>
+                        <br>
+                        t = Test()<br>
+                        t.m1()<br>
+                        print(t.<span class="code-var">__dict__</span>)
+                    </div>
+                    <div class="output-box">
+                        {'a': 10, 'b': 20, 'c': 30}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>3. Outside Class using Object Reference</h4>
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.c = <span class="code-string">30</span><br>
+                        <br>
+                        t = Test()<br>
+                        t.m1()<br>
+                        t.d = <span class="code-string">40</span>  <span class="code-comment"># Outside class</span><br>
+                        print(t.<span class="code-var">__dict__</span>)
+                    </div>
+                    <div class="output-box">
+                        {'a': 10, 'b': 20, 'c': 30, 'd': 40}
+                    </div>
+                </div>
+            </div>
+            
+            <div id="access-tab" class="tab-content">
+                <div class="card">
+                    <h3>How to Access Instance Variables</h3>
+                    <p>Inside class: Using <span class="code-keyword">self</span><br>
+                    Outside class: Using object reference</p>
+                    
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.a)  <span class="code-comment"># Access inside class</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.b)<br>
+                        <br>
+                        t = Test()<br>
+                        t.display()  <span class="code-comment"># Access via method</span><br>
+                        print(t.a, t.b)  <span class="code-comment"># Access outside class</span>
+                    </div>
+                    <div class="output-box">
+                        10<br>
+                        20<br>
+                        10 20
+                    </div>
+                </div>
+            </div>
+            
+            <div id="modify-tab" class="tab-content">
+                <div class="card">
+                    <h3>Modifying and Deleting Instance Variables</h3>
+                    
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.c = <span class="code-string">30</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.d = <span class="code-string">40</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">del</span> <span class="code-keyword">self</span>.d  <span class="code-comment"># Delete inside class</span><br>
+                        <br>
+                        t = Test()<br>
+                        print(t.<span class="code-var">__dict__</span>)<br>
+                        t.m1()<br>
+                        print(t.<span class="code-var">__dict__</span>)<br>
+                        <span class="code-keyword">del</span> t.c  <span class="code-comment"># Delete outside class</span><br>
+                        print(t.<span class="code-var">__dict__</span>)
+                    </div>
+                    <div class="output-box">
+                        {'a': 10, 'b': 20, 'c': 30, 'd': 40}<br>
+                        {'a': 10, 'b': 20, 'c': 30}<br>
+                        {'a': 10, 'b': 20}
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-exclamation-circle"></i> Important Note</div>
+                        <p>Instance variables deleted from one object <strong>will not be deleted</strong> from other objects. Each object maintains its own copy.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="example-tab" class="tab-content">
+                <div class="card">
+                    <h3>Instance Variable Examples</h3>
+                    
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.a = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.b = <span class="code-string">20</span><br>
+                        <br>
+                        t1 = Test()<br>
+                        t1.a = <span class="code-string">888</span>  <span class="code-comment"># Modify for t1 only</span><br>
+                        t1.b = <span class="code-string">999</span><br>
+                        <br>
+                        t2 = Test()<br>
+                        print(<span class="code-string">'t1:'</span>, t1.a, t1.b)<br>
+                        print(<span class="code-string">'t2:'</span>, t2.a, t2.b)
+                    </div>
+                    <div class="output-box">
+                        t1: 888 999<br>
+                        t2: 10 20
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-lightbulb"></i> Key Insight</div>
+                        <p>Changing instance variables of one object <strong>does not affect</strong> other objects because each object has its own separate copy of instance variables.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Variables Section -->
+        <div class="section-header static-header">
+            <i class="fas fa-share-alt section-icon" style="color: var(--static-color);"></i>
+            <h2 class="section-title">Static Variables (Class-Level)</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3>Static vs Instance Variables</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Instance Variables</th>
+                        <th>Static Variables</th>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Separate copy for each object</td>
+                        <td>One copy shared by all objects</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Declared with <span class="code-keyword">self</span></td>
+                        <td>Declared directly in class (outside methods)</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Accessed via object reference</td>
+                        <td>Accessed via class name (recommended)</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Values vary per object</td>
+                        <td>Same value for all objects</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Basic Static Variable Example</h3>
+                <div class="code-block static-code">
+                    <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                    &nbsp;&nbsp;x = <span class="code-string">10</span>  <span class="code-comment"># Static variable</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.y = <span class="code-string">20</span>  <span class="code-comment"># Instance variable</span><br>
+                    <br>
+                    t1 = Test()<br>
+                    t2 = Test()<br>
+                    print(<span class="code-string">'t1:'</span>, t1.x, t1.y)<br>
+                    print(<span class="code-string">'t2:'</span>, t2.x, t2.y)<br>
+                    <br>
+                    Test.x = <span class="code-string">888</span>  <span class="code-comment"># Modify static variable</span><br>
+                    t1.y = <span class="code-string">999</span>  <span class="code-comment"># Modify instance variable</span><br>
+                    print(<span class="code-string">'t1:'</span>, t1.x, t1.y)<br>
+                    print(<span class="code-string">'t2:'</span>, t2.x, t2.y)
+                </div>
+                <div class="output-box">
+                    t1: 10 20<br>
+                    t2: 10 20<br>
+                    t1: 888 999<br>
+                    t2: 888 20
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Where to Declare Static Variables</h3>
+            <div class="code-block static-code">
+                <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                &nbsp;&nbsp;a = <span class="code-string">10</span>  <span class="code-comment"># 1. Directly in class</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Test.b = <span class="code-string">20</span>  <span class="code-comment"># 2. In constructor</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Test.c = <span class="code-string">30</span>  <span class="code-comment"># 3. In instance method</span><br>
+                &nbsp;&nbsp;@classmethod<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(cls):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cls.d1 = <span class="code-string">40</span>  <span class="code-comment"># 4. In classmethod (cls)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Test.d2 = <span class="code-string">400</span>  <span class="code-comment"># 4. In classmethod (classname)</span><br>
+                &nbsp;&nbsp;@staticmethod<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m3</span>():<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Test.e = <span class="code-string">50</span>  <span class="code-comment"># 5. In static method</span><br>
+                <br>
+                <span class="code-comment"># Checking all declarations</span><br>
+                t = Test()<br>
+                t.m1()<br>
+                Test.m2()<br>
+                Test.m3()<br>
+                Test.f = <span class="code-string">60</span>  <span class="code-comment"># 6. Outside class</span><br>
+                print(Test.<span class="code-var">__dict__</span>)
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>How to Access Static Variables</h3>
+            <div class="code-block static-code">
+                <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                &nbsp;&nbsp;a = <span class="code-string">10</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.a)  <span class="code-comment"># Constructor: self</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(Test.a)  <span class="code-comment"># Constructor: classname</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-keyword">self</span>.a)  <span class="code-comment"># Instance method: self</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(Test.a)  <span class="code-comment"># Instance method: classname</span><br>
+                &nbsp;&nbsp;@classmethod<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(cls):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(cls.a)  <span class="code-comment"># Class method: cls</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(Test.a)  <span class="code-comment"># Class method: classname</span><br>
+                &nbsp;&nbsp;@staticmethod<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m3</span>():<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(Test.a)  <span class="code-comment"># Static method: classname</span><br>
+                <br>
+                t = Test()<br>
+                print(Test.a)  <span class="code-comment"># Outside: classname</span><br>
+                print(t.a)  <span class="code-comment"># Outside: object reference</span><br>
+                t.m1()<br>
+                t.m2()<br>
+                t.m3()
+            </div>
+        </div>
+
+        <div class="note-box">
+            <div class="note-title"><i class="fas fa-exclamation-triangle"></i> Important Warning</div>
+            <p>If you try to change a static variable using <span class="code-keyword">self</span> or object reference, Python <strong>creates a new instance variable</strong> instead of modifying the static variable!</p>
+        </div>
+
+        <!-- Local Variables Section -->
+        <div class="section-header local-header">
+            <i class="fas fa-code-branch section-icon" style="color: var(--local-color);"></i>
+            <h2 class="section-title">Local Variables (Method-Level)</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3>Local Variable Basics</h3>
+                <p>Local variables are temporary variables declared inside methods. They:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Are created when method executes</li>
+                    <li>Are destroyed when method completes</li>
+                    <li>Cannot be accessed from outside the method</li>
+                </ul>
+                
+                <div class="code-block local-code">
+                    <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;a = <span class="code-string">1000</span>  <span class="code-comment"># Local variable</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(a)<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;b = <span class="code-string">2000</span>  <span class="code-comment"># Local variable</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(b)<br>
+                    <br>
+                    t = Test()<br>
+                    t.m1()<br>
+                    t.m2()
+                </div>
+                <div class="output-box">
+                    1000<br>
+                    2000
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Local Variable Scope</h3>
+                <p>Local variables are only accessible within the method where they're declared.</p>
+                
+                <div class="code-block local-code">
+                    <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;a = <span class="code-string">1000</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(a)<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m2</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;b = <span class="code-string">2000</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment"># print(a)  # This would cause NameError!</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(b)<br>
+                    <br>
+                    t = Test()<br>
+                    t.m1()<br>
+                    t.m2()
+                </div>
+                <div class="output-box">
+                    1000<br>
+                    2000
+                </div>
+                
+                <div class="note-box">
+                    <div class="note-title"><i class="fas fa-exclamation-circle"></i> Scope Limitation</div>
+                    <p>If you uncomment <span class="code-keyword">print(a)</span> in <span class="code-function">m2()</span>, you'll get <strong>NameError: name 'a' is not defined</strong> because local variables have method-level scope only.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank Program Example -->
+        <div class="bank-program">
+            <div class="bank-title"><i class="fas fa-university"></i> Complete Bank Program Example</div>
+            <div class="code-block">
+                <span class="code-keyword">import</span> sys<br>
+                <span class="code-keyword">class</span> <span class="code-class">Customer</span>:<br>
+                &nbsp;&nbsp;<span class="code-comment">''' Customer class with bank operations '''</span><br>
+                &nbsp;&nbsp;bankname = <span class="code-string">'HEMABANK'</span>  <span class="code-comment"># Static variable</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, balance = <span class="code-string">0.0</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name  <span class="code-comment"># Instance variable</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.balance = balance  <span class="code-comment"># Instance variable</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">deposit</span>(<span class="code-keyword">self</span>, amt):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.balance = <span class="code-keyword">self</span>.balance + amt<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Balance after deposit:'</span>, <span class="code-keyword">self</span>.balance)<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">withdraw</span>(<span class="code-keyword">self</span>, amt):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> amt > <span class="code-keyword">self</span>.balance:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Insufficient Funds..cannot perform this operation'</span>)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.balance = <span class="code-keyword">self</span>.balance - amt<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Balance after withdraw:'</span>, <span class="code-keyword">self</span>.balance)<br>
+                <br>
+                print(<span class="code-string">'Welcome to'</span>, Customer.bankname)<br>
+                name = input(<span class="code-string">'Enter Your Name: '</span>)<br>
+                c = Customer(name)<br>
+                <span class="code-keyword">while</span> <span class="code-keyword">True</span>:<br>
+                &nbsp;&nbsp;print(<span class="code-string">'d-Deposit \\nw-Withdraw \\ne-exit'</span>)<br>
+                &nbsp;&nbsp;option = input(<span class="code-string">'Choose your option: '</span>)<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> option == <span class="code-string">'d'</span> <span class="code-keyword">or</span> option == <span class="code-string">'D'</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;amt = float(input(<span class="code-string">'Enter amount: '</span>))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;c.deposit(amt)<br>
+                &nbsp;&nbsp;<span class="code-keyword">elif</span> option == <span class="code-string">'w'</span> <span class="code-keyword">or</span> option == <span class="code-string">'W'</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;amt = float(input(<span class="code-string">'Enter amount: '</span>))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;c.withdraw(amt)<br>
+                &nbsp;&nbsp;<span class="code-keyword">elif</span> option == <span class="code-string">'e'</span> <span class="code-keyword">or</span> option == <span class="code-string">'E'</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Thanks for Banking'</span>)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;sys.exit()<br>
+                &nbsp;&nbsp;<span class="code-keyword">else</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Invalid option..Plz choose valid option'</span>)
+            </div>
+            <div class="output-box">
+                Welcome to HEMABANK<br>
+                Enter Your Name: Hema<br>
+                d-Deposit<br>
+                w-Withdraw<br>
+                e-exit<br>
+                Choose your option: d<br>
+                Enter amount: 10000<br>
+                Balance after deposit: 10000.0<br>
+                ... (program continues)
+            </div>
+        </div>
+
+        <footer>
+            <!-- <p>Python Variables Guide | All examples feature <strong>Hema</strong> instead of Durga</p> -->
+            <p>Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for Python learners | Proper Python indentation maintained</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Add interactivity to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // Animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+    </script>
+</body>
+</html>

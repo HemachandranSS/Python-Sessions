@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types of Inheritance in Python</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 30px;
+            background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="white" opacity="0.05"/></svg>');
+            background-size: cover;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+        
+        .inheritance-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .type-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid;
+        }
+        
+        .type-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .type-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: inherit;
+        }
+        
+        .card-1 {
+            border-color: #3498db;
+        }
+        
+        .card-2 {
+            border-color: #2ecc71;
+        }
+        
+        .card-3 {
+            border-color: #e74c3c;
+        }
+        
+        .card-4 {
+            border-color: #f39c12;
+        }
+        
+        .card-5 {
+            border-color: #9b59b6;
+        }
+        
+        .card-6 {
+            border-color: #1abc9c;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .type-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-1 .type-number { background: #3498db; }
+        .card-2 .type-number { background: #2ecc71; }
+        .card-3 .type-number { background: #e74c3c; }
+        .card-4 .type-number { background: #f39c12; }
+        .card-5 .type-number { background: #9b59b6; }
+        .card-6 .type-number { background: #1abc9c; }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .type-definition {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            font-size: 1.05rem;
+        }
+        
+        .inheritance-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            min-height: 180px;
+        }
+        
+        .class-box {
+            width: 160px;
+            padding: 15px;
+            text-align: center;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .class-box.parent {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+        
+        .class-box.child {
+            border-color: #2ecc71;
+            background: #e8f5e9;
+        }
+        
+        .class-box.grandchild {
+            border-color: #f39c12;
+            background: #fff3e0;
+        }
+        
+        .inheritance-line {
+            width: 2px;
+            height: 30px;
+            background: #3498db;
+            margin: 0 10px;
+        }
+        
+        .multiple-parents {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .multiple-child {
+            margin-top: 20px;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            tab-size: 4;
+        }
+        
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+        
+        .code-block .function {
+            color: #50fa7b;
+        }
+        
+        .code-block .string {
+            color: #f1fa8c;
+        }
+        
+        .code-block .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .code-block .classname {
+            color: #8be9fd;
+        }
+        
+        .code-block .method {
+            color: #ffb86c;
+        }
+        
+        .output {
+            background: #1a202c;
+            color: #81e6d9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .mro-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin: 50px 0;
+            border-top: 5px solid #9b59b6;
+        }
+        
+        .mro-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .mro-header i {
+            font-size: 2rem;
+            color: #9b59b6;
+            margin-right: 15px;
+        }
+        
+        .mro-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .mro-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .algorithm-explanation {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #9b59b6;
+        }
+        
+        .algorithm-explanation h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .algorithm-explanation ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .algorithm-explanation li {
+            margin-bottom: 10px;
+        }
+        
+        .note {
+            background: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .note strong {
+            color: #ff9800;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            border-top: 1px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer-logo {
+            font-weight: bold;
+            color: #3498db;
+            margin-top: 10px;
+        }
+        
+        .footer-logo span {
+            color: #e74c3c;
+        }
+        
+        .changed-name {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .center-text {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .error-example {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .code-line {
+            display: block;
+            min-height: 1.5em;
+        }
+        
+        .indent-1 { padding-left: 20px; }
+        .indent-2 { padding-left: 40px; }
+        .indent-3 { padding-left: 60px; }
+        .indent-4 { padding-left: 80px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-project-diagram"></i> Types of Inheritance in Python</h1>
+            <p class="subtitle">Understanding Class Hierarchies and Relationships</p>
+        </header>
+        
+        <div class="inheritance-types">
+            <!-- Single Inheritance -->
+            <div class="type-card card-1">
+                <div class="card-header">
+                    <div class="type-number">1</div>
+                    <h2>Single Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>The concept of inheriting the properties from one class to another class is known as single inheritance.</p>
+                </div>
+                
+                <div class="inheritance-diagram">
+                    <div class="class-box parent">P (Parent)</div>
+                    <div class="inheritance-line"></div>
+                    <div class="class-box child">C (Child)</div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C</span>(P):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m2</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">c = C()</span>
+<span class="code-line">c.m1()</span>
+<span class="code-line">c.m2()</span>
+                </div>
+                
+                <div class="output">
+<strong>Output:</strong><br>
+Parent Method<br>
+Child Method
+                </div>
+            </div>
+            
+            <!-- Multi-Level Inheritance -->
+            <div class="type-card card-2">
+                <div class="card-header">
+                    <div class="type-number">2</div>
+                    <h2>Multi-Level Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>The concept of inheriting the properties from multiple classes to single class with the concept of one after another is known as multilevel inheritance.</p>
+                </div>
+                
+                <div class="inheritance-diagram">
+                    <div class="class-box parent">P (Parent)</div>
+                    <div class="inheritance-line"></div>
+                    <div class="class-box child">C (Child)</div>
+                    <div class="inheritance-line"></div>
+                    <div class="class-box grandchild">CC (Grandchild)</div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C</span>(P):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m2</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">CC</span>(C):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m3</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Sub Child Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">c = CC()</span>
+<span class="code-line">c.m1()</span>
+<span class="code-line">c.m2()</span>
+<span class="code-line">c.m3()</span>
+                </div>
+                
+                <div class="output">
+<strong>Output:</strong><br>
+Parent Method<br>
+Child Method<br>
+Sub Child Method
+                </div>
+            </div>
+            
+            <!-- Hierarchical Inheritance -->
+            <div class="type-card card-3">
+                <div class="card-header">
+                    <div class="type-number">3</div>
+                    <h2>Hierarchical Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>The concept of inheriting properties from one class into multiple classes which are present at same level is known as Hierarchical Inheritance.</p>
+                </div>
+                
+                <div class="inheritance-diagram">
+                    <div class="class-box parent">P (Parent)</div>
+                    <div style="display: flex; justify-content: center; width: 100%; margin-top: 10px;">
+                        <div class="inheritance-line" style="transform: rotate(45deg); margin-right: 40px;"></div>
+                        <div class="inheritance-line" style="transform: rotate(-45deg); margin-left: 40px;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-around; width: 100%;">
+                        <div class="class-box child">C1 (Child 1)</div>
+                        <div class="class-box child">C2 (Child 2)</div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C1</span>(P):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m2</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child1 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C2</span>(P):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m3</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child2 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">c1 = C1()</span>
+<span class="code-line">c1.m1()</span>
+<span class="code-line">c1.m2()</span>
+<span class="code-line"></span>
+<span class="code-line">c2 = C2()</span>
+<span class="code-line">c2.m1()</span>
+<span class="code-line">c2.m3()</span>
+                </div>
+                
+                <div class="output">
+<strong>Output:</strong><br>
+Parent Method<br>
+Child1 Method<br>
+Parent Method<br>
+Child2 Method
+                </div>
+            </div>
+            
+            <!-- Multiple Inheritance -->
+            <div class="type-card card-4">
+                <div class="card-header">
+                    <div class="type-number">4</div>
+                    <h2>Multiple Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>The concept of inheriting the properties from multiple classes into a single class at a time, is known as multiple inheritance.</p>
+                </div>
+                
+                <div class="inheritance-diagram">
+                    <div class="multiple-parents">
+                        <div class="class-box parent">P1 (Parent 1)</div>
+                        <div class="class-box parent">P2 (Parent 2)</div>
+                    </div>
+                    <div class="center-text">↓</div>
+                    <div class="multiple-child">
+                        <div class="class-box child">C (Child)</div>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P1</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent1 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P2</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m2</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent2 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C</span>(P1, P2):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m3</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">c = C()</span>
+<span class="code-line">c.m1()</span>
+<span class="code-line">c.m2()</span>
+<span class="code-line">c.m3()</span>
+                </div>
+                
+                <div class="output">
+<strong>Output:</strong><br>
+Parent1 Method<br>
+Parent2 Method<br>
+Child Method
+                </div>
+                
+                <div class="note">
+                    <p><strong>Important:</strong> If the same method is inherited from both parent classes, then Python will always consider the order of Parent classes in the declaration of the child class.</p>
+                    <p><code>class C(P1, P2):</code> → P1 method will be considered</p>
+                    <p><code>class C(P2, P1):</code> → P2 method will be considered</p>
+                </div>
+                
+                <div class="code-block">
+<span class="code-line"><span class="comment"># Example with same method name in both parents</span></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P1</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent1 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">P2</span>:</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m1</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Parent2 Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C</span>(P1, P2):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="method">m2</span>(<span class="keyword">self</span>):</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Child Method"</span>)</span>
+<span class="code-line"></span>
+<span class="code-line">c = C()</span>
+<span class="code-line">c.m1()  <span class="comment"># Will call P1.m1() because P1 comes first</span></span>
+<span class="code-line">c.m2()</span>
+                </div>
+                
+                <div class="output">
+<strong>Output:</strong><br>
+Parent1 Method<br>
+Child Method
+                </div>
+            </div>
+            
+            <!-- Hybrid Inheritance -->
+            <div class="type-card card-5">
+                <div class="card-header">
+                    <div class="type-number">5</div>
+                    <h2>Hybrid Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>Combination of Single, Multi level, Multiple and Hierarchical inheritance is known as Hybrid Inheritance.</p>
+                </div>
+                
+                <div class="inheritance-diagram" style="min-height: 220px;">
+                    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                        <div class="class-box parent" style="margin: 0 10px;">A</div>
+                        <div class="class-box parent" style="margin: 0 10px;">B</div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <div class="inheritance-line" style="transform: rotate(45deg); margin-right: 40px;"></div>
+                        <div class="inheritance-line" style="transform: rotate(-45deg); margin-left: 40px;"></div>
+                    </div>
+                    <div class="class-box child" style="margin: 15px auto;">C</div>
+                    <div class="inheritance-line"></div>
+                    <div class="class-box grandchild">D</div>
+                </div>
+                
+                <div class="note">
+                    <p><strong>Note:</strong> Hybrid inheritance is a combination of two or more types of inheritance. The method resolution order in hybrid inheritance is determined by Python's MRO algorithm.</p>
+                </div>
+            </div>
+            
+            <!-- Cyclic Inheritance -->
+            <div class="type-card card-6">
+                <div class="card-header">
+                    <div class="type-number">6</div>
+                    <h2>Cyclic Inheritance</h2>
+                </div>
+                
+                <div class="type-definition">
+                    <p>The concept of inheriting properties from one class to another class in cyclic way is called Cyclic Inheritance. Python doesn't support Cyclic Inheritance as it's not logically required.</p>
+                </div>
+                
+                <div class="inheritance-diagram" style="min-height: 180px;">
+                    <div class="class-box parent">A</div>
+                    <div style="position: relative; width: 100px; height: 100px; margin: 20px auto;">
+                        <div style="position: absolute; width: 100%; height: 100%; border: 2px dashed #e74c3c; border-radius: 50%;"></div>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #e74c3c; font-weight: bold;">Cyclic</div>
+                    </div>
+                </div>
+                
+                <div class="error-example">
+                    <p><strong>Example 1:</strong> Class inheriting from itself</p>
+                    <div class="code-block" style="margin: 10px 0; font-size: 0.9rem;">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">A</span>(A):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+                    </div>
+                    <p><strong>Error:</strong> NameError: name 'A' is not defined</p>
+                </div>
+                
+                <div class="error-example">
+                    <p><strong>Example 2:</strong> Two classes inheriting from each other</p>
+                    <div class="code-block" style="margin: 10px 0; font-size: 0.9rem;">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">A</span>(B):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">B</span>(A):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+                    </div>
+                    <p><strong>Error:</strong> NameError: name 'B' is not defined</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MRO Section -->
+        <!-- <div class="mro-section">
+            <div class="mro-header">
+                <i class="fas fa-sitemap"></i>
+                <h2>Method Resolution Order (MRO)</h2>
+            </div>
+            
+            <div class="mro-content">
+                <div class="algorithm-explanation">
+                    <h3>MRO Algorithm (C3 Algorithm)</h3>
+                    <ul>
+                        <li>In Hybrid Inheritance the method resolution order is decided based on MRO algorithm.</li>
+                        <li>This algorithm is also known as C3 algorithm proposed by Samuele Pedroni.</li>
+                        <li>It follows DLR (Depth First Left to Right):
+                            <ul>
+                                <li>Child will get more priority than Parent</li>
+                                <li>Left Parent will get more priority than Right Parent</li>
+                            </ul>
+                        </li>
+                        <li><strong>MRO(X) = X + Merge(MRO(P1), MRO(P2), ..., ParentList)</strong></li>
+                    </ul>
+                    
+                    <h3>Head Element vs Tail Terminology</h3>
+                    <ul>
+                        <li>Assume C1, C2, C3,... are classes</li>
+                        <li>In the list: C1 C2 C3 C4 C5....</li>
+                        <li>C1 is considered as Head Element and remaining is considered as Tail</li>
+                    </ul>
+                    
+                    <h3>How to find Merge</h3>
+                    <ul>
+                        <li>Take the head of first list</li>
+                        <li>If the head is not in the tail part of any other list, then add this head to the result and remove it from the lists in the merge</li>
+                        <li>If the head is present in the tail part of any other list, then consider the head element of the next list and continue the same process</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <div class="note">
+                        <p><strong>Note:</strong> We can find MRO of any class by using <code>mro()</code> function.</p>
+                        <div class="code-block" style="margin: 15px 0;">
+<span class="code-line"><span class="function">print</span>(ClassName.mro())</span>
+                        </div>
+                    </div>
+                    
+                    <div class="example">
+                        <h3>Example of MRO</h3>
+                        <div class="code-block">
+<span class="code-line"><span class="keyword">class</span> <span class="classname">A</span>:</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">B</span>(A):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">C</span>(A):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="classname">D</span>(B, C):</span>
+<span class="code-line indent-1"><span class="keyword">pass</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="function">print</span>(D.mro())</span>
+                        </div>
+                        
+                        <div class="output">
+<strong>Output (MRO for class D):</strong><br>
+[&lt;class '__main__.D'&gt;,<br>
+ &lt;class '__main__.B'&gt;,<br>
+ &lt;class '__main__.C'&gt;,<br>
+ &lt;class '__main__.A'&gt;,<br>
+ &lt;class 'object'&gt;]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        
+        <!-- <footer>
+            <p><i class="fas fa-code"></i> Types of Inheritance in Python - Complete Reference</p>
+            <p>All examples, diagrams and explanations included</p>
+            <div class="footer-logo">
+                <span>HEMA</span>SOFT
+            </div>
+            <p>Hyderabad | 040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.hemasoft.com</p>
+        </footer> -->
+    </div>
+
+    <script>
+        // Add animation to cards when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.type-card, .mro-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+            
+            // Add subtle animation to the inheritance lines
+            const lines = document.querySelectorAll('.inheritance-line');
+            lines.forEach(line => {
+                line.style.transition = 'all 0.5s ease';
+                line.addEventListener('mouseover', function() {
+                    this.style.transform = this.style.transform + ' scale(1.2)';
+                });
+                line.addEventListener('mouseout', function() {
+                    this.style.transform = this.style.transform.replace(' scale(1.2)', '');
+                });
+            });
+            
+            // Fix code indentation display
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                // Remove extra whitespace and ensure proper line breaks
+                const originalHTML = block.innerHTML;
+                const lines = originalHTML.split('\n');
+                const cleanedLines = lines.map(line => line.trim() === '' ? '&nbsp;' : line);
+                block.innerHTML = cleanedLines.join('\n');
+            });
+        });
+    </script>
+</body>
+</html>

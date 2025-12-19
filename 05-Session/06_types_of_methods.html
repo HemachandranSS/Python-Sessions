@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Methods: Instance, Class & Static Methods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --instance-color: #3498db;
+            --class-color: #9b59b6;
+            --static-color: #2ecc71;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --code-bg: #1a252f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .section-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            border-left: 5px solid;
+        }
+
+        .instance-header {
+            border-left-color: var(--instance-color);
+        }
+
+        .class-header {
+            border-left-color: var(--class-color);
+        }
+
+        .static-header {
+            border-left-color: var(--static-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+        }
+
+        .method-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .instance-badge {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--instance-color);
+            border: 1px solid var(--instance-color);
+        }
+
+        .class-badge {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--class-color);
+            border: 1px solid var(--class-color);
+        }
+
+        .static-badge {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--static-color);
+            border: 1px solid var(--static-color);
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .instance-code {
+            border-left-color: var(--instance-color);
+        }
+
+        .class-code {
+            border-left-color: var(--class-color);
+        }
+
+        .static-code {
+            border-left-color: var(--static-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .code-class {
+            color: #9b59b6;
+        }
+
+        .code-decorator {
+            color: #f1c40f;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-title i {
+            margin-right: 8px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #f1f7fd;
+        }
+
+        .comparison-table .instance-col {
+            border-right: 1px solid #eee;
+            width: 33%;
+        }
+
+        .comparison-table .class-col {
+            border-right: 1px solid #eee;
+            width: 33%;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-instance {
+            background-color: rgba(52, 152, 219, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-class {
+            background-color: rgba(155, 89, 182, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-static {
+            background-color: rgba(46, 204, 113, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .setter-getter-box {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .setter-getter-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .setter-getter-title i {
+            margin-right: 8px;
+        }
+
+        .interaction-box {
+            background-color: #f9f7fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #9b59b6;
+        }
+
+        .interaction-title {
+            color: #9b59b6;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .interaction-title i {
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Methods Guide</h1>
+            <p class="subtitle">Instance Methods, Class Methods & Static Methods Explained</p>
+        </header>
+
+        <div class="section-header">
+            <i class="fas fa-list section-icon" style="color: var(--primary-color);"></i>
+            <h2 class="section-title">Types of Methods in Python Classes</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><span class="method-type instance-badge">Instance</span> Instance Methods</h3>
+                <p>Methods that use instance variables. They require <span class="highlight-instance">self</span> as the first parameter.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Use instance variables (accessed via <span class="code-keyword">self</span>)</li>
+                    <li>Called using object reference</li>
+                    <li>Most common type of method</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="method-type class-badge">Class</span> Class Methods</h3>
+                <p>Methods that use class/static variables. They require <span class="highlight-class">cls</span> as the first parameter.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Use class/static variables</li>
+                    <li>Declared with <span class="code-decorator">@classmethod</span> decorator</li>
+                    <li>Called using class name or object reference</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><span class="method-type static-badge">Static</span> Static Methods</h3>
+                <p>General utility methods that don't use instance or class variables.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Don't use <span class="code-keyword">self</span> or <span class="code-keyword">cls</span></li>
+                    <li>Declared with <span class="code-decorator">@staticmethod</span> decorator</li>
+                    <li>General utility functions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Instance Methods Section -->
+        <div class="section-header instance-header">
+            <i class="fas fa-cube section-icon" style="color: var(--instance-color);"></i>
+            <h2 class="section-title">Instance Methods</h2>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'basic-instance')">Basic Example</button>
+                <button class="tab-button" onclick="openTab(event, 'setter-getter')">Setter & Getter</button>
+                <button class="tab-button" onclick="openTab(event, 'student-program')">Student Program</button>
+            </div>
+            
+            <div id="basic-instance" class="tab-content active">
+                <div class="card">
+                    <h3>Basic Instance Method Example</h3>
+                    <p>Instance methods use <span class="code-keyword">self</span> to access instance variables.</p>
+                    
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Student</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, marks):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.marks = marks<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):  <span class="code-comment"># Instance method</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Hi'</span>, <span class="code-keyword">self</span>.name)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Your Marks are:'</span>, <span class="code-keyword">self</span>.marks)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">grade</span>(<span class="code-keyword">self</span>):  <span class="code-comment"># Instance method</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">60</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got First Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">elif</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">50</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got Second Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">elif</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">35</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got Third Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">else</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You are Failed'</span>)<br>
+                        <br>
+                        <span class="code-comment"># Creating and using objects</span><br>
+                        s1 = Student(<span class="code-string">"Hema"</span>, <span class="code-string">90</span>)<br>
+                        s1.display()  <span class="code-comment"># Call instance method</span><br>
+                        s1.grade()    <span class="code-comment"># Call instance method</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="setter-getter" class="tab-content">
+                <div class="setter-getter-box">
+                    <div class="setter-getter-title"><i class="fas fa-exchange-alt"></i> Setter and Getter Methods</div>
+                    <p>Setter (mutator) and Getter (accessor) methods are used to set and get values of instance variables.</p>
+                    
+                    <div class="content-grid">
+                        <div class="card">
+                            <h4>Setter Methods</h4>
+                            <p>Used to set values to instance variables.</p>
+                            <div class="code-block instance-code">
+                                <span class="code-comment"># Syntax</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">setVariable</span>(<span class="code-keyword">self</span>, variable):<br>
+                                &nbsp;&nbsp;<span class="code-keyword">self</span>.variable = variable<br>
+                                <br>
+                                <span class="code-comment"># Example</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">setName</span>(<span class="code-keyword">self</span>, name):<br>
+                                &nbsp;&nbsp;<span class="code-keyword">self</span>.name = name
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Getter Methods</h4>
+                            <p>Used to get values of instance variables.</p>
+                            <div class="code-block instance-code">
+                                <span class="code-comment"># Syntax</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">getVariable</span>(<span class="code-keyword">self</span>):<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">self</span>.variable<br>
+                                <br>
+                                <span class="code-comment"># Example</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">getName</span>(<span class="code-keyword">self</span>):<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">self</span>.name
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>Complete Setter/Getter Example</h4>
+                        <div class="code-block instance-code">
+                            <span class="code-keyword">class</span> <span class="code-class">Student</span>:<br>
+                            &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">setName</span>(<span class="code-keyword">self</span>, name):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name  <span class="code-comment"># Setter method</span><br>
+                            <br>
+                            &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">getName</span>(<span class="code-keyword">self</span>):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">self</span>.name  <span class="code-comment"># Getter method</span><br>
+                            <br>
+                            &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">setMarks</span>(<span class="code-keyword">self</span>, marks):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.marks = marks  <span class="code-comment"># Setter method</span><br>
+                            <br>
+                            &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">getMarks</span>(<span class="code-keyword">self</span>):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">self</span>.marks  <span class="code-comment"># Getter method</span><br>
+                            <br>
+                            <span class="code-comment"># Using setter and getter methods</span><br>
+                            s = Student()<br>
+                            s.setName(<span class="code-string">"Hema"</span>)<br>
+                            s.setMarks(<span class="code-string">95</span>)<br>
+                            print(<span class="code-string">'Hi'</span>, s.getName())<br>
+                            print(<span class="code-string">'Your Marks are:'</span>, s.getMarks())
+                        </div>
+                        <div class="output-box">
+                            Hi Hema<br>
+                            Your Marks are: 95
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="student-program" class="tab-content">
+                <div class="card">
+                    <h3>Complete Student Program with Instance Methods</h3>
+                    <div class="code-block instance-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Student</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, name, marks):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = name<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.marks = marks<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Hi'</span>, <span class="code-keyword">self</span>.name)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Your Marks are:'</span>, <span class="code-keyword">self</span>.marks)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">grade</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">60</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got First Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">elif</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">50</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got Second Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">elif</span> <span class="code-keyword">self</span>.marks >= <span class="code-string">35</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You got Third Grade'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">else</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'You are Failed'</span>)<br>
+                        <br>
+                        <span class="code-comment"># Main program - multiple students</span><br>
+                        n = int(input(<span class="code-string">'Enter number of students: '</span>))<br>
+                        <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(n):<br>
+                        &nbsp;&nbsp;name = input(<span class="code-string">'Enter Name: '</span>)<br>
+                        &nbsp;&nbsp;marks = int(input(<span class="code-string">'Enter Marks: '</span>))<br>
+                        &nbsp;&nbsp;s = Student(name, marks)<br>
+                        &nbsp;&nbsp;s.display()<br>
+                        &nbsp;&nbsp;s.grade()<br>
+                        &nbsp;&nbsp;print()
+                    </div>
+                    <div class="output-box">
+                        Enter number of students: 2<br><br>
+                        Enter Name: Hema<br>
+                        Enter Marks: 90<br>
+                        Hi Hema<br>
+                        Your Marks are: 90<br>
+                        You got First Grade<br><br>
+                        Enter Name: Ravi<br>
+                        Enter Marks: 12<br>
+                        Hi Ravi<br>
+                        Your Marks are: 12<br>
+                        You are Failed
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Methods Section -->
+        <div class="section-header class-header">
+            <i class="fas fa-share-alt section-icon" style="color: var(--class-color);"></i>
+            <h2 class="section-title">Class Methods</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3>Basic Class Method Example</h3>
+                <p>Class methods use <span class="code-keyword">cls</span> parameter and the <span class="code-decorator">@classmethod</span> decorator.</p>
+                
+                <div class="code-block class-code">
+                    <span class="code-keyword">class</span> <span class="code-class">Animal</span>:<br>
+                    &nbsp;&nbsp;legs = <span class="code-string">4</span>  <span class="code-comment"># Class/static variable</span><br>
+                    <br>
+                    &nbsp;&nbsp;@classmethod<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">walk</span>(cls, name):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'{} walks with {} legs...'</span>.format(name, cls.legs))<br>
+                    <br>
+                    <span class="code-comment"># Calling class method</span><br>
+                    Animal.walk(<span class="code-string">'Dog'</span>)<br>
+                    Animal.walk(<span class="code-string">'Cat'</span>)
+                </div>
+                <div class="output-box">
+                    Dog walks with 4 legs...<br>
+                    Cat walks with 4 legs...
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Tracking Objects with Class Method</h3>
+                <p>Class methods are useful for operations related to the class itself, not individual objects.</p>
+                
+                <div class="code-block class-code">
+                    <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                    &nbsp;&nbsp;count = <span class="code-string">0</span>  <span class="code-comment"># Class variable to track objects</span><br>
+                    <br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Test.count = Test.count + <span class="code-string">1</span>  <span class="code-comment"># Increment count</span><br>
+                    <br>
+                    &nbsp;&nbsp;@classmethod<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">noOfObjects</span>(cls):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'The number of objects created:'</span>, cls.count)<br>
+                    <br>
+                    <span class="code-comment"># Create objects and track count</span><br>
+                    t1 = Test()<br>
+                    t2 = Test()<br>
+                    Test.noOfObjects()  <span class="code-comment"># Should show 2</span><br>
+                    <br>
+                    t3 = Test()<br>
+                    t4 = Test()<br>
+                    t5 = Test()<br>
+                    Test.noOfObjects()  <span class="code-comment"># Should show 5</span>
+                </div>
+                <div class="output-box">
+                    The number of objects created: 2<br>
+                    The number of objects created: 5
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Methods Section -->
+        <div class="section-header static-header">
+            <i class="fas fa-calculator section-icon" style="color: var(--static-color);"></i>
+            <h2 class="section-title">Static Methods</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3>Static Methods - General Utility</h3>
+                <p>Static methods don't use <span class="code-keyword">self</span> or <span class="code-keyword">cls</span>. They're general utility functions.</p>
+                
+                <div class="code-block static-code">
+                    <span class="code-keyword">class</span> <span class="code-class">HemaMath</span>:<br>
+                    &nbsp;&nbsp;@staticmethod<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">add</span>(x, y):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'The Sum:'</span>, x + y)<br>
+                    <br>
+                    &nbsp;&nbsp;@staticmethod<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">product</span>(x, y):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'The Product:'</span>, x * y)<br>
+                    <br>
+                    &nbsp;&nbsp;@staticmethod<br>
+                    &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">average</span>(x, y):<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'The Average:'</span>, (x + y) / <span class="code-string">2</span>)<br>
+                    <br>
+                    <span class="code-comment"># Using static methods</span><br>
+                    HemaMath.add(<span class="code-string">10</span>, <span class="code-string">20</span>)<br>
+                    HemaMath.product(<span class="code-string">10</span>, <span class="code-string">20</span>)<br>
+                    HemaMath.average(<span class="code-string">10</span>, <span class="code-string">20</span>)
+                </div>
+                <div class="output-box">
+                    The Sum: 30<br>
+                    The Product: 200<br>
+                    The Average: 15.0
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Method Comparison Table</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Instance Methods</th>
+                        <th class="class-col">Class Methods</th>
+                        <th>Static Methods</th>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Use instance variables (via <span class="code-keyword">self</span>)</td>
+                        <td class="class-col">Use class variables (via <span class="code-keyword">cls</span>)</td>
+                        <td>Don't use instance or class variables</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">First parameter: <span class="code-keyword">self</span></td>
+                        <td class="class-col">First parameter: <span class="code-keyword">cls</span></td>
+                        <td>No special first parameter</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">No decorator needed</td>
+                        <td class="class-col">Use <span class="code-decorator">@classmethod</span> decorator</td>
+                        <td>Use <span class="code-decorator">@staticmethod</span> decorator</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Called via object reference</td>
+                        <td class="class-col">Called via class name or object</td>
+                        <td>Called via class name or object</td>
+                    </tr>
+                    <tr>
+                        <td class="instance-col">Most common type</td>
+                        <td class="class-col">Rarely used</td>
+                        <td>General utility functions</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Method Interaction Section -->
+        <div class="interaction-box">
+            <div class="interaction-title"><i class="fas fa-handshake"></i> Passing Members Between Classes</div>
+            <p>We can pass objects of one class to methods of another class to access their members.</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">class</span> <span class="code-class">Employee</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>, eno, ename, esal):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.eno = eno<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.ename = ename<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.esal = esal<br>
+                <br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Employee Number:'</span>, <span class="code-keyword">self</span>.eno)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Employee Name:'</span>, <span class="code-keyword">self</span>.ename)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Employee Salary:'</span>, <span class="code-keyword">self</span>.esal)<br>
+                <br>
+                <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">modify</span>(emp):  <span class="code-comment"># Receives Employee object</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;emp.esal = emp.esal + <span class="code-string">10000</span>  <span class="code-comment"># Modify salary</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;emp.display()<br>
+                <br>
+                <span class="code-comment"># Creating Employee object and passing to Test method</span><br>
+                e = Employee(<span class="code-string">100</span>, <span class="code-string">'Hema'</span>, <span class="code-string">10000</span>)<br>
+                Test.modify(e)  <span class="code-comment"># Pass object to another class method</span>
+            </div>
+            <div class="output-box">
+                Employee Number: 100<br>
+                Employee Name: Hema<br>
+                Employee Salary: 20000
+            </div>
+            
+            <div class="note-box">
+                <div class="note-title"><i class="fas fa-lightbulb"></i> Key Insight</div>
+                <p>In this example, the <span class="code-function">Test.modify()</span> method receives an <span class="code-class">Employee</span> object as a parameter and can access and modify its instance variables. This demonstrates how objects can be passed between classes.</p>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <div class="note-title"><i class="fas fa-exclamation-circle"></i> Important Notes</div>
+            <p><strong>1.</strong> In general, we use mostly instance and static methods. Inside static methods, we can access class-level variables using the class name.</p>
+            <p><strong>2.</strong> Class methods are the most rarely used methods in Python.</p>
+            <!-- <p><strong>3.</strong> All examples have been updated to use <strong>Hema</strong> instead of Durga.</p> -->
+        </div>
+
+        <footer>
+            <p>Python Methods Guide | Instance, Class & Static Methods Explained</p>
+            <p>Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for Python learners | All examples feature <strong>Hema</strong></p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Add interactivity to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // Animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+    </script>
+</body>
+</html>

@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Inheritance & super() Complete Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            padding: 30px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        h2 {
+            color: #764ba2;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+            margin: 40px 0 20px;
+            font-size: 2rem;
+        }
+        h3 {
+            color: #667eea;
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        .inheritance-type {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .inheritance-type {
+                grid-template-columns: 1fr;
+            }
+        }
+        .diagram {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+            border: 2px dashed #ddd;
+            margin: 15px 0;
+        }
+        .note {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .code-container {
+            background: #282c34;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #1e2227;
+            color: #abb2bf;
+            padding: 12px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+        .code-body {
+            padding: 20px;
+            overflow-x: auto;
+        }
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        .mro-calculation {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        .contact {
+            background: linear-gradient(to right, #2c3e50, #4a6572);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+        .contact h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        .contact a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        .algorithm-box {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .type-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .case-box {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .tab-container {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin: 20px 0;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: -2px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Inheritance & super() Method</h1>
+            <p class="subtitle">Complete guide with examples and Method Resolution Order (MRO)</p>
+        </header>
+
+        <h2>Types of Inheritance</h2>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab(1)">Single</button>
+            <button class="tab" onclick="showTab(2)">Multi-Level</button>
+            <button class="tab" onclick="showTab(3)">Hierarchical</button>
+            <button class="tab" onclick="showTab(4)">Multiple</button>
+            <button class="tab" onclick="showTab(5)">Hybrid & Cyclic</button>
+        </div>
+
+        <div class="tab-content active" id="tab1">
+            <h3>1) Single Inheritance</h3>
+            <p>The concept of inheriting the properties from one class to another class is known as single inheritance.</p>
+            
+            <div class="diagram">
+                <strong>Single Inheritance</strong><br><br>
+                P (Parent)<br>
+                ↓<br>
+                C (Child)
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Single Inheritance Example</span>
+                    <button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code1" class="language-python">class P:
+    def m1(self):
+        print("Parent Method")
+
+class C(P):
+    def m2(self):
+        print("Child Method")
+
+c = C()
+c.m1()
+c.m2()</code></pre>
+                </div>
+            </div>
+
+            <h3>Output:</h3>
+            <div class="output">Parent Method
+Child Method</div>
+        </div>
+
+        <div class="tab-content" id="tab2">
+            <h3>2) Multi-Level Inheritance</h3>
+            <p>The concept of inheriting the properties from multiple classes to single class with the concept of one after another is known as multilevel inheritance.</p>
+            
+            <div class="diagram">
+                <strong>Multi-Level Inheritance</strong><br><br>
+                P (Parent)<br>
+                ↓<br>
+                C (Child)<br>
+                ↓<br>
+                CC (Sub-Child)
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Multi-Level Inheritance Example</span>
+                    <button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code2" class="language-python">class P:
+    def m1(self):
+        print("Parent Method")
+
+class C(P):
+    def m2(self):
+        print("Child Method")
+
+class CC(C):
+    def m3(self):
+        print("Sub Child Method")
+
+c = CC()
+c.m1()
+c.m2()
+c.m3()</code></pre>
+                </div>
+            </div>
+
+            <h3>Output:</h3>
+            <div class="output">Parent Method
+Child Method
+Sub Child Method</div>
+        </div>
+
+        <div class="tab-content" id="tab3">
+            <h3>3) Hierarchical Inheritance</h3>
+            <p>The concept of inheriting properties from one class into multiple classes which are present at same level is known as Hierarchical Inheritance.</p>
+            
+            <div class="diagram">
+                <strong>Hierarchical Inheritance</strong><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P (Parent)<br>
+                &nbsp;&nbsp;&nbsp;↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘<br>
+                C1 (Child1)&nbsp;&nbsp;C2 (Child2)
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Hierarchical Inheritance Example</span>
+                    <button class="copy-btn" onclick="copyCode('code3')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code3" class="language-python">class P:
+    def m1(self):
+        print("Parent Method")
+
+class C1(P):
+    def m2(self):
+        print("Child1 Method")
+
+class C2(P):
+    def m3(self):
+        print("Child2 Method")
+
+c1 = C1()
+c1.m1()
+c1.m2()
+
+c2 = C2()
+c2.m1()
+c2.m3()</code></pre>
+                </div>
+            </div>
+
+            <h3>Output:</h3>
+            <div class="output">Parent Method
+Child1 Method
+Parent Method
+Child2 Method</div>
+        </div>
+
+        <div class="tab-content" id="tab4">
+            <h3>4) Multiple Inheritance</h3>
+            <p>The concept of inheriting the properties from multiple classes into a single class at a time, is known as multiple inheritance.</p>
+            
+            <div class="diagram">
+                <strong>Multiple Inheritance</strong><br><br>
+                P1 (Parent1) &nbsp;&nbsp; P2 (Parent2)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C (Child)
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Multiple Inheritance Example</span>
+                    <button class="copy-btn" onclick="copyCode('code4')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code4" class="language-python">class P1:
+    def m1(self):
+        print("Parent1 Method")
+
+class P2:
+    def m2(self):
+        print("Parent2 Method")
+
+class C(P1, P2):
+    def m3(self):
+        print("Child Method")
+
+c = C()
+c.m1()
+c.m2()
+c.m3()</code></pre>
+                </div>
+            </div>
+
+            <h3>Output:</h3>
+            <div class="output">Parent1 Method
+Parent2 Method
+Child Method</div>
+
+            <div class="note">
+                <strong>Important:</strong> If the same method is inherited from both parent classes, then Python will always consider the order of Parent classes in the declaration of the child class.
+                <ul>
+                    <li><code>class C(P1, P2):</code> → P1 method will be considered</li>
+                    <li><code>class C(P2, P1):</code> → P2 method will be considered</li>
+                </ul>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Example of Method Conflict in Multiple Inheritance</span>
+                    <button class="copy-btn" onclick="copyCode('code5')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code5" class="language-python">class P1:
+    def m1(self):
+        print("Parent1 Method")
+
+class P2:
+    def m1(self):
+        print("Parent2 Method")
+
+class C(P1, P2):
+    def m2(self):
+        print("Child Method")
+
+c = C()
+c.m1()
+c.m2()</code></pre>
+                </div>
+            </div>
+
+            <h3>Output:</h3>
+            <div class="output">Parent1 Method
+Child Method</div>
+        </div>
+
+        <div class="tab-content" id="tab5">
+            <h3>5) Hybrid Inheritance</h3>
+            <p>Combination of Single, Multi level, multiple and Hierarchical inheritance is known as Hybrid Inheritance.</p>
+            
+            <div class="diagram">
+                <strong>Hybrid Inheritance Example</strong><br><br>
+                A&nbsp;&nbsp;B&nbsp;&nbsp;C&nbsp;&nbsp;D&nbsp;&nbsp;E&nbsp;&nbsp;F&nbsp;&nbsp;G&nbsp;&nbsp;H<br>
+                (Complex combination of different inheritance types)
+            </div>
+
+            <h3>6) Cyclic Inheritance</h3>
+            <p>The concept of inheriting properties from one class to another class in cyclic way is called Cyclic Inheritance. Python doesn't support Cyclic Inheritance (and it's really not required).</p>
+            
+            <div class="warning">
+                <strong>Example 1:</strong> <code>class A(A): pass</code> → NameError: name 'A' is not defined<br><br>
+                <strong>Example 2:</strong><br>
+                <code>class A(B): pass</code><br>
+                <code>class B(A): pass</code><br>
+                → NameError: name 'B' is not defined
+            </div>
+        </div>
+
+        <h2>Method Resolution Order (MRO)</h2>
+        
+        <div class="card">
+            <h3>Introduction to MRO</h3>
+            <p>In Hybrid Inheritance, the method resolution order is decided based on the MRO algorithm, also known as the <strong>C3 algorithm</strong> proposed by Samuele Pedroni.</p>
+            
+            <div class="algorithm-box">
+                <strong>Key Points:</strong>
+                <ul>
+                    <li>Follows DLR (Depth First Left to Right)</li>
+                    <li>Child gets more priority than Parent</li>
+                    <li>Left Parent gets more priority than Right Parent</li>
+                    <li><strong>Formula:</strong> MRO(X) = X + Merge(MRO(P1), MRO(P2), ..., ParentList)</li>
+                </ul>
+            </div>
+            
+            <h3>Head Element vs Tail Terminology</h3>
+            <p>Assume C1, C2, C3,... are classes. In the list: C1C2C3C4C5....</p>
+            <ul>
+                <li><strong>C1</strong> is considered as <strong>Head Element</strong></li>
+                <li>Remaining is considered as <strong>Tail</strong></li>
+            </ul>
+            
+            <h3>How to find Merge:</h3>
+            <div class="algorithm-box">
+                <ol>
+                    <li>Take the head of the first list</li>
+                    <li>If the head is not in the tail part of any other list, add this head to the result and remove it from the lists in the merge</li>
+                    <li>If the head is present in the tail part of any other list, consider the head element of the next list and continue the same process</li>
+                </ol>
+            </div>
+            
+            <div class="note">
+                <strong>Note:</strong> We can find MRO of any class by using <code>mro()</code> function: <code>print(ClassName.mro())</code>
+            </div>
+        </div>
+
+        <h2>Demo Programs for Method Resolution Order</h2>
+
+        <div class="card">
+            <h3>Demo Program 1: Basic Diamond Inheritance</h3>
+            
+            <div class="diagram">
+                <strong>Inheritance Diagram:</strong><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A<br>
+                &nbsp;&nbsp;&nbsp;↙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘<br>
+                B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C<br>
+                &nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D
+            </div>
+            
+            <div class="mro-calculation">
+                <strong>MRO Calculations:</strong><br>
+                mro(A) = A, object<br>
+                mro(B) = B, A, object<br>
+                mro(C) = C, A, object<br>
+                mro(D) = D, B, C, A, object
+            </div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>test.py</span>
+                    <button class="copy-btn" onclick="copyCode('code6')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code6" class="language-python">class A: pass
+class B(A): pass
+class C(A): pass
+class D(B, C): pass
+
+print(A.mro())
+print(B.mro())
+print(C.mro())
+print(D.mro())</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">[&lt;class '__main__.A'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.B'&gt;, &lt;class '__main__.A'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.C'&gt;, &lt;class '__main__.A'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.D'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class '__main__.A'&gt;, &lt;class 'object'&gt;]</div>
+        </div>
+
+        <div class="card">
+            <h3>Demo Program 2: Complex Inheritance with C3 Algorithm</h3>
+            
+            <div class="diagram">
+                <strong>Inheritance Diagram:</strong><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;&nbsp;↓&nbsp;&nbsp;↘<br>
+                &nbsp;&nbsp;&nbsp;A&nbsp;&nbsp;&nbsp;&nbsp;B&nbsp;&nbsp;&nbsp;&nbsp;C<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;↙&nbsp;&nbsp;↘&nbsp;&nbsp;↙<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↙<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P
+            </div>
+            
+            <div class="mro-calculation">
+                <strong>Finding mro(P) using C3 Algorithm:</strong><br><br>
+                mro(P) = P + Merge(mro(X), mro(Y), mro(C), XYC)<br>
+                = P + Merge(XABO, YBCO, CO, XYC)<br>
+                = P + X + Merge(ABO, YBCO, CO, YC)<br>
+                = P + X + A + Merge(BO, YBCO, CO, YC)<br>
+                = P + X + A + Y + Merge(BO, BCO, CO, C)<br>
+                = P + X + A + Y + B + Merge(O, CO, CO, C)<br>
+                = P + X + A + Y + B + C + Merge(O, O, O)<br>
+                = P + X + A + Y + B + C + O
+            </div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>test.py</span>
+                    <button class="copy-btn" onclick="copyCode('code7')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code7" class="language-python">class A: pass
+class B: pass
+class C: pass
+class X(A, B): pass
+class Y(B, C): pass
+class P(X, Y, C): pass
+
+print(A.mro())  # AO
+print(X.mro())  # XABO
+print(Y.mro())  # YBCO
+print(P.mro())  # PXAYBCO</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">[&lt;class '__main__.A'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.X'&gt;, &lt;class '__main__.A'&gt;, &lt;class '__main__.B'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.Y'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class 'object'&gt;]
+[&lt;class '__main__.P'&gt;, &lt;class '__main__.X'&gt;, &lt;class '__main__.A'&gt;, &lt;class '__main__.Y'&gt;, &lt;class '__main__.B'&gt;, &lt;class '__main__.C'&gt;, &lt;class 'object'&gt;]</div>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Practical Example with Methods</span>
+                    <button class="copy-btn" onclick="copyCode('code8')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code8" class="language-python">class A:
+    def m1(self):
+        print('A class Method')
+        
+class B:
+    def m1(self):
+        print('B class Method')
+        
+class C:
+    def m1(self):
+        print('C class Method')
+        
+class X(A, B):
+    def m1(self):
+        print('X class Method')
+        
+class Y(B, C):
+    def m1(self):
+        print('Y class Method')
+        
+class P(X, Y, C):
+    def m1(self):
+        print('P class Method')
+
+p = P()
+p.m1()</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">P class Method</div>
+            
+            <div class="note">
+                <strong>Explanation:</strong> P class m1() method will be considered. If P class does not contain m1() method then as per MRO, X class method will be considered. If X class does not contain then A class method will be considered and this process will be continued. The method resolution follows the order: P → X → A → Y → B → C → Object
+            </div>
+        </div>
+
+        <h2>The super() Method</h2>
+        
+        <div class="card">
+            <h3>Introduction to super()</h3>
+            <p><code>super()</code> is a built-in method which is useful to call the super class constructors, variables and methods from the child class.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Demo Program 1 for super()</span>
+                    <button class="copy-btn" onclick="copyCode('code9')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code9" class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    def display(self):
+        print('Name:', self.name)
+        print('Age:', self.age)
+
+class Student(Person):
+    def __init__(self, name, age, rollno, marks):
+        super().__init__(name, age)
+        self.rollno = rollno
+        self.marks = marks
+    
+    def display(self):
+        super().display()
+        print('Roll No:', self.rollno)
+        print('Marks:', self.marks)
+
+s1 = Student('Hema', 22, 101, 90)
+s1.display()</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">Name: Hema
+Age: 22
+Roll No: 101
+Marks: 90</div>
+            
+            <div class="note">
+                In the above program we are using super() method to call parent class constructor and display() method.
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Demo Program 2 for super(): Accessing Different Member Types</h3>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Accessing various parent class members</span>
+                    <button class="copy-btn" onclick="copyCode('code10')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code10" class="language-python">class P:
+    a = 10
+    def __init__(self):
+        self.b = 10
+    
+    def m1(self):
+        print('Parent instance method')
+    
+    @classmethod
+    def m2(cls):
+        print('Parent class method')
+    
+    @staticmethod
+    def m3():
+        print('Parent static method')
+
+class C(P):
+    a = 888
+    def __init__(self):
+        self.b = 999
+        super().__init__()
+        print(super().a)
+        super().m1()
+        super().m2()
+        super().m3()
+
+c = C()</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">10
+Parent instance method
+Parent class method
+Parent static method</div>
+            
+            <div class="note">
+                In the above example we are using super() to call various members of Parent class.
+            </div>
+        </div>
+
+        <h2>Important Points about super()</h2>
+
+        <div class="case-box">
+            <h3>Case 1: Accessing Parent Class Variables</h3>
+            <p>From child class we are not allowed to access parent class instance variables by using super(). Compulsory we should use self only. But we can access parent class static variables by using super().</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Example: Accessing variables with super()</span>
+                    <button class="copy-btn" onclick="copyCode('code11')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code11" class="language-python">class P:
+    a = 10
+    def __init__(self):
+        self.b = 20
+
+class C(P):
+    def m1(self):
+        print(super().a)  # valid - accessing static variable
+        print(self.b)     # valid - accessing instance variable
+        # print(super().b) # invalid - cannot access instance variable
+
+c = C()
+c.m1()</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">10
+20
+# Note: super().b would raise: AttributeError: 'super' object has no attribute 'b'</div>
+        </div>
+
+        <div class="case-box">
+            <h3>Case 2: Accessing Methods from Child Class</h3>
+            <p>From child class constructor and instance method, we can access parent class instance method, static method and class method by using super().</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>Example: Accessing methods from child class</span>
+                    <button class="copy-btn" onclick="copyCode('code12')">Copy Code</button>
+                </div>
+                <div class="code-body">
+                    <pre><code id="code12" class="language-python">class P:
+    def __init__(self):
+        print('Parent Constructor')
+    
+    def m1(self):
+        print('Parent instance method')
+    
+    @classmethod
+    def m2(cls):
+        print('Parent class method')
+    
+    @staticmethod
+    def m3():
+        print('Parent static method')
+
+class C(P):
+    def __init__(self):
+        super().__init__()
+        super().m1()
+        super().m2()
+        super().m3()
+    
+    def m1(self):
+        super().__init__()
+        super().m1()
+        super().m2()
+        super().m3()
+
+c = C()
+c.m1()</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output:</h3>
+            <div class="output">Parent Constructor
+Parent instance method
+Parent class method
+Parent static method
+Parent Constructor
+Parent instance method
+Parent class method
+Parent static method</div>
+        </div>
+
+        <!-- <div class="contact">
+            <h3>HEMASOFT</h3>
+            <p># 202, 2<sup>nd</sup> Floor, HUDA Maithvanaam, Ameerpet, Hyderabad - 500038</p>
+            <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43</p>
+            <p><a href="http://www.hemasoft.com">www.hemasoft.com</a></p>
+        </div> -->
+    </div>
+
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+        
+        // Tab functionality
+        function showTab(tabNumber) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('tab' + tabNumber).classList.add('active');
+            
+            // Activate selected tab button
+            event.target.classList.add('active');
+        }
+        
+        // Copy code functionality
+        function copyCode(codeId) {
+            const codeElement = document.getElementById(codeId);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+        
+        // Add hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+                this.style.boxShadow = '0 15px 35px rgba(102, 126, 234, 0.3)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 10px 30px rgba(102, 126, 234, 0.1)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Inner Classes - Complete Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --outer-class-color: #3498db;
+            --inner-class-color: #9b59b6;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --code-bg: #1a252f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .section-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            border-left: 5px solid var(--outer-class-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+            color: var(--outer-class-color);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+        }
+
+        .class-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .outer-badge {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--outer-class-color);
+            border: 1px solid var(--outer-class-color);
+        }
+
+        .inner-badge {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--inner-class-color);
+            border: 1px solid var(--inner-class-color);
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .outer-code {
+            border-left-color: var(--outer-class-color);
+        }
+
+        .inner-code {
+            border-left-color: var(--inner-class-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .code-class {
+            color: #9b59b6;
+        }
+
+        .code-var {
+            color: #f1c40f;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-title i {
+            margin-right: 8px;
+        }
+
+        .example-box {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .example-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .example-title i {
+            margin-right: 8px;
+        }
+
+        .relationship-box {
+            background-color: #f9f7fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--inner-class-color);
+        }
+
+        .relationship-title {
+            color: var(--inner-class-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .relationship-title i {
+            margin-right: 8px;
+        }
+
+        .syntax-box {
+            background-color: #e8f6f3;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .syntax-title {
+            color: var(--success-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .syntax-title i {
+            margin-right: 8px;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-outer {
+            background-color: rgba(52, 152, 219, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-inner {
+            background-color: rgba(155, 89, 182, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .class-diagram {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 200px;
+            border: 2px solid;
+        }
+
+        .outer-diagram {
+            border-color: var(--outer-class-color);
+        }
+
+        .inner-diagram {
+            border-color: var(--inner-class-color);
+        }
+
+        .diagram-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .diagram-container {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            display: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Inner Classes</h1>
+            <p class="subtitle">Complete Guide to Nested Classes in Python</p>
+        </header>
+
+        <div class="section-header">
+            <i class="fas fa-layer-group section-icon"></i>
+            <h2 class="section-title">Understanding Inner Classes</h2>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-info-circle"></i> What are Inner Classes?</h3>
+            <p>Inner classes (or nested classes) are classes declared inside another class. They are used when one class cannot exist without the other.</p>
+            
+            <div class="note-box">
+                <div class="note-title"><i class="fas fa-lightbulb"></i> Key Concept</div>
+                <p><strong>Without existing one type of object, if there is no chance of existing another type of object, then we should go for inner classes.</strong></p>
+            </div>
+            
+            <div class="diagram-container">
+                <div class="class-diagram outer-diagram">
+                    <div class="diagram-title">Outer Class</div>
+                    <div>Car</div>
+                    <div>University</div>
+                    <div>Human</div>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="class-diagram inner-diagram">
+                    <div class="diagram-title">Inner Class</div>
+                    <div>Engine</div>
+                    <div>Department</div>
+                    <div>Head</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="example-box">
+            <div class="example-title"><i class="fas fa-car"></i> Real-World Examples</div>
+            <div class="content-grid">
+                <div class="card">
+                    <h4><span class="class-type outer-badge">Car</span> & <span class="class-type inner-badge">Engine</span></h4>
+                    <p>Without a Car object, there's no chance of an Engine object existing. The Engine is part of the Car.</p>
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Car</span>:<br>
+                        &nbsp;&nbsp;<span class="code-comment"># Car implementation...</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Engine</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment"># Engine implementation...</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="class-type outer-badge">University</span> & <span class="class-type inner-badge">Department</span></h4>
+                    <p>Without a University object, there's no chance of a Department object existing.</p>
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">University</span>:<br>
+                        &nbsp;&nbsp;<span class="code-comment"># University implementation...</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Department</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment"># Department implementation...</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="class-type outer-badge">Human</span> & <span class="class-type inner-badge">Head</span></h4>
+                    <p>Without a Human object, there's no chance of a Head object existing.</p>
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Human</span>:<br>
+                        &nbsp;&nbsp;<span class="code-comment"># Human implementation...</span><br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Head</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment"># Head implementation...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relationship-box">
+            <div class="relationship-title"><i class="fas fa-link"></i> Important Relationship</div>
+            <p><strong>Without existing outer class object there is no chance of existing inner class object.</strong></p>
+            <p>Inner class objects are always associated with outer class objects.</p>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'demo1')">Demo Program 1</button>
+                <button class="tab-button" onclick="openTab(event, 'demo2')">Demo Program 2</button>
+                <button class="tab-button" onclick="openTab(event, 'demo3')">Demo Program 3</button>
+                <button class="tab-button" onclick="openTab(event, 'syntax')">Access Syntax</button>
+            </div>
+            
+            <div id="demo1" class="tab-content active">
+                <div class="card">
+                    <h3><span class="class-type outer-badge">Outer</span> & <span class="class-type inner-badge">Inner</span> Class Demo</h3>
+                    <p>Basic example showing how to create and use inner classes.</p>
+                    
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Outer</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Outer class object creation"</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Inner</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Inner class object creation"</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Inner class method"</span>)<br>
+                        <br>
+                        <span class="code-comment"># Creating objects and calling methods</span><br>
+                        o = Outer()<br>
+                        i = o.Inner()<br>
+                        i.m1()
+                    </div>
+                    <div class="output-box">
+                        Outer class object creation<br>
+                        Inner class object creation<br>
+                        Inner class method
+                    </div>
+                </div>
+            </div>
+            
+            <div id="demo2" class="tab-content">
+                <div class="card">
+                    <h3><span class="class-type outer-badge">Person</span> with <span class="class-type inner-badge">Dob</span> Inner Class</h3>
+                    <p>Example showing a Person class with a Date of Birth (Dob) inner class.</p>
+                    
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Person</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = <span class="code-string">'Hema'</span>  <span class="code-comment"># Changed from 'durga' to 'Hema'</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.db = <span class="code-keyword">self</span>.Dob()  <span class="code-comment"># Create inner class object</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Name:'</span>, <span class="code-keyword">self</span>.name)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Dob</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.dd = <span class="code-string">10</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.mm = <span class="code-string">5</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.yy = <span class="code-string">1947</span><br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Dob = {}/{}/{}'</span>.format(<span class="code-keyword">self</span>.dd, <span class="code-keyword">self</span>.mm, <span class="code-keyword">self</span>.yy))<br>
+                        <br>
+                        <span class="code-comment"># Using the Person and Dob classes</span><br>
+                        p = Person()<br>
+                        p.display()<br>
+                        x = p.db  <span class="code-comment"># Get the inner class object</span><br>
+                        x.display()
+                    </div>
+                    <div class="output-box">
+                        Name: Hema<br>
+                        Dob = 10/5/1947
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-code"></i> Code Explanation</div>
+                        <p>1. The <span class="highlight-outer">Person</span> class creates a <span class="highlight-inner">Dob</span> inner class object in its constructor.</p>
+                        <p>2. The inner class object is stored as <span class="code-var">self.db</span>.</p>
+                        <p>3. We can access the inner class object via the outer class object.</p>
+                        <!-- <p>4. <strong>Note:</strong> Changed 'durga' to 'Hema' in the example.</p> -->
+                    </div>
+                </div>
+            </div>
+            
+            <div id="demo3" class="tab-content">
+                <div class="card">
+                    <h3><span class="class-type outer-badge">Human</span> with Multiple Inner Classes</h3>
+                    <p>A class can contain multiple inner classes.</p>
+                    
+                    <div class="code-block outer-code">
+                        <span class="code-keyword">class</span> <span class="code-class">Human</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.name = <span class="code-string">'Sunny'</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.head = <span class="code-keyword">self</span>.Head()  <span class="code-comment"># First inner class</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">self</span>.brain = <span class="code-keyword">self</span>.Brain()  <span class="code-comment"># Second inner class</span><br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">display</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Hello.."</span>, <span class="code-keyword">self</span>.name)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Head</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">talk</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Talking...'</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Brain</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">think</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">'Thinking...'</span>)<br>
+                        <br>
+                        <span class="code-comment"># Using the Human class with multiple inner classes</span><br>
+                        h = Human()<br>
+                        h.display()<br>
+                        h.head.talk()<br>
+                        h.brain.think()
+                    </div>
+                    <div class="output-box">
+                        Hello.. Sunny<br>
+                        Talking...<br>
+                        Thinking...
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-layer-group"></i> Multiple Inner Classes</div>
+                        <p>Inside a class, we can declare <strong>any number of inner classes</strong>. Each inner class can have its own methods and attributes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="syntax" class="tab-content">
+                <div class="syntax-box">
+                    <div class="syntax-title"><i class="fas fa-keyboard"></i> Inner Class Method Call Syntax</div>
+                    <p>Multiple ways to create inner class objects and call their methods:</p>
+                    
+                    <div class="content-grid">
+                        <div class="card">
+                            <h4>Method 1: Step-by-step</h4>
+                            <div class="code-block">
+                                o = Outer()<br>
+                                i = o.Inner()<br>
+                                i.m1()
+                            </div>
+                            <p>Create outer object, then inner object, then call method.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Method 2: Chained creation</h4>
+                            <div class="code-block">
+                                i = Outer().Inner()<br>
+                                i.m1()
+                            </div>
+                            <p>Create outer and inner objects in one line, then call method.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Method 3: Single line</h4>
+                            <div class="code-block">
+                                Outer().Inner().m1()
+                            </div>
+                            <p>Create objects and call method in a single line.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4>Complete Syntax Example</h4>
+                        <div class="code-block outer-code">
+                            <span class="code-keyword">class</span> <span class="code-class">Outer</span>:<br>
+                            &nbsp;&nbsp;<span class="code-keyword">class</span> <span class="code-class">Inner</span>:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">m1</span>(<span class="code-keyword">self</span>):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Inner method"</span>)<br>
+                            <br>
+                            <span class="code-comment"># All three syntaxes produce the same result</span><br>
+                            <span class="code-comment"># Method 1:</span><br>
+                            o = Outer()<br>
+                            i = o.Inner()<br>
+                            i.m1()<br>
+                            <br>
+                            <span class="code-comment"># Method 2:</span><br>
+                            i = Outer().Inner()<br>
+                            i.m1()<br>
+                            <br>
+                            <span class="code-comment"># Method 3:</span><br>
+                            Outer().Inner().m1()
+                        </div>
+                        <div class="output-box">
+                            Inner method<br>
+                            Inner method<br>
+                            Inner method
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><i class="fas fa-check-circle"></i> When to Use Inner Classes</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>When one class cannot logically exist without another</li>
+                    <li>To logically group classes that are only used in one place</li>
+                    <li>To increase encapsulation (inner class can be made private)</li>
+                    <li>When the inner class needs access to outer class private members</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-times-circle"></i> When to Avoid Inner Classes</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>When classes can exist independently</li>
+                    <li>When inner class logic becomes too complex</li>
+                    <li>When inner class needs to be reused elsewhere</li>
+                    <li>When it makes code harder to read and maintain</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Important Notes</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Inner class object cannot exist without outer class object</li>
+                    <li>Inner classes increase code organization</li>
+                    <li>Can lead to deeper nesting if overused</li>
+                    <!-- <li>All examples updated to use <strong>Hema</strong> instead of Durga</li> -->
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Python Inner Classes Guide | Complete with Examples & Syntax</p>
+            <!-- <p>Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for Python learners | All examples updated to use <strong>Hema</strong></p> -->
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Add interactivity to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // Animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+        
+        // Add visual effect to class diagrams
+        document.querySelectorAll('.class-diagram').forEach(diagram => {
+            diagram.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            diagram.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

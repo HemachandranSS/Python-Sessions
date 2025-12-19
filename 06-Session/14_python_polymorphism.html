@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Polymorphism Complete Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .main-content {
+            padding: 40px;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 12px;
+            margin: 40px 0 25px;
+            font-size: 2.2rem;
+        }
+        h3 {
+            color: var(--dark);
+            margin: 30px 0 15px;
+            font-size: 1.6rem;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+        h4 {
+            color: var(--primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid #eaeaea;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.15);
+        }
+        .concept-box {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid var(--primary);
+        }
+        .example-box {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px dashed var(--secondary);
+        }
+        .note {
+            background: #e8f4fc;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .code-container {
+            background: #282c34;
+            border-radius: 12px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+        .code-header {
+            background: #1e2227;
+            color: #abb2bf;
+            padding: 15px 25px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+        .copy-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        .code-body {
+            padding: 25px;
+            overflow-x: auto;
+        }
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            border-left: 5px solid var(--primary);
+        }
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .topic-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            border-top: 5px solid var(--primary);
+        }
+        .topic-card:hover {
+            transform: translateY(-10px);
+        }
+        .topic-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .operator-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .operator-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .operator-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .operator-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .operator-table tr:hover {
+            background: #f0f7ff;
+        }
+        .contact {
+            background: linear-gradient(to right, var(--dark), #4a6572);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .contact h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-left: none;
+            padding-left: 0;
+        }
+        .contact a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        .pill {
+            display: inline-block;
+            padding: 5px 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0 5px 10px 0;
+        }
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Polymorphism</h1>
+            <p class="tagline">"Poly means many, Morphs means forms. Polymorphism means 'Many Forms'"</p>
+            <div style="margin-top: 20px;">
+                <span class="pill">Duck Typing</span>
+                <span class="pill">Operator Overloading</span>
+                <span class="pill">Method Overloading</span>
+                <span class="pill">Method Overriding</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="concept-box">
+                <h3>What is Polymorphism?</h3>
+                <p>Polymorphism allows objects of different types to be treated as objects of a common super type. It's a fundamental concept in object-oriented programming that enables flexibility and reusability.</p>
+                
+                <div class="example-box">
+                    <h4>Real-world Examples:</h4>
+                    <p><strong>Example 1:</strong> Yourself is the best example of polymorphism. In front of your parents you have one type of behaviour and with friends another type of behaviour. Same person but different behaviours at different places.</p>
+                    <p><strong>Example 2:</strong> <code>+</code> operator acts as concatenation for strings and arithmetic addition for numbers.</p>
+                    <p><strong>Example 3:</strong> <code>*</code> operator acts as multiplication for numbers and repetition operator for strings.</p>
+                    <p><strong>Example 4:</strong> The same method with different implementations in Parent class and child classes (method overriding).</p>
+                </div>
+            </div>
+
+            <h2>1. Duck Typing Philosophy of Python</h2>
+            <div class="card">
+                <p>Python follows the principle: <em>"If it walks like a duck and talks like a duck, it must be a duck."</em> In Python, we cannot specify types explicitly. Based on the provided value at runtime, the type is considered automatically.</p>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Duck Typing Example</span>
+                        <button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code1" class="language-python">class Duck:
+    def talk(self):
+        print('Quack.. Quack..')
+
+class Dog:
+    def talk(self):
+        print('Bow Bow..')
+
+class Cat:
+    def talk(self):
+        print('Meow Meow..')
+
+class Goat:
+    def talk(self):
+        print('Myaah Myaah..')
+
+def f1(obj):
+    obj.talk()
+
+animals = [Duck(), Cat(), Dog(), Goat()]
+for animal in animals:
+    f1(animal)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Quack.. Quack..
+Meow Meow..
+Bow Bow..
+Myaah Myaah..</div>
+                
+                <div class="warning">
+                    <strong>Problem:</strong> If an object doesn't contain the required method, we get an AttributeError. We can solve this using <code>hasattr()</code> function.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using hasattr() to Check Methods</span>
+                        <button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code2" class="language-python">class Duck:
+    def talk(self):
+        print('Quack.. Quack..')
+
+class Human:
+    def talk(self):
+        print('Hello Hi...')
+
+class Dog:
+    def bark(self):
+        print('Bow Bow..')
+
+def f1(obj):
+    if hasattr(obj, 'talk'):
+        obj.talk()
+    elif hasattr(obj, 'bark'):
+        obj.bark()
+
+d = Duck()
+f1(d)
+
+h = Human()
+f1(h)
+
+dog = Dog()
+f1(dog)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Quack.. Quack..
+Hello Hi...
+Bow Bow..</div>
+            </div>
+
+            <h2>2. Overloading</h2>
+            <p>Using the same operator or methods for different purposes.</p>
+            
+            <div class="topic-grid">
+                <div class="topic-card">
+                    <h4>Operator Overloading</h4>
+                    <p>Same operator for multiple purposes</p>
+                </div>
+                <div class="topic-card">
+                    <h4>Method Overloading</h4>
+                    <p>Same method name, different parameters</p>
+                </div>
+                <div class="topic-card">
+                    <h4>Constructor Overloading</h4>
+                    <p>Multiple constructors with different parameters</p>
+                </div>
+            </div>
+
+            <h3>2.1 Operator Overloading</h3>
+            <div class="card">
+                <p>Python supports operator overloading by using special "magic methods" (methods with double underscores).</p>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Basic Operator Overloading Examples</span>
+                        <button class="copy-btn" onclick="copyCode('code3')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code3" class="language-python"># + operator for different purposes
+print(10 + 20)           # 30 (arithmetic addition)
+print('Hema ' + 'Soft')  # Hema Soft (string concatenation)
+
+# * operator for different purposes
+print(10 * 20)           # 200 (multiplication)
+print('Hema ' * 3)       # Hema Hema Hema (string repetition)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Overloading + Operator for Custom Class</span>
+                        <button class="copy-btn" onclick="copyCode('code4')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code4" class="language-python">class Book:
+    def __init__(self, pages):
+        self.pages = pages
+    
+    def __add__(self, other):
+        return self.pages + other.pages
+
+b1 = Book(100)
+b2 = Book(200)
+print('The Total Number of Pages:', b1 + b2)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">The Total Number of Pages: 300</div>
+                
+                <h4>Operator to Magic Method Mapping:</h4>
+                <table class="operator-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Magic Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+</td><td>__add__(self, other)</td><td>Addition</td></tr>
+                        <tr><td>-</td><td>__sub__(self, other)</td><td>Subtraction</td></tr>
+                        <tr><td>*</td><td>__mul__(self, other)</td><td>Multiplication</td></tr>
+                        <tr><td>/</td><td>__truediv__(self, other)</td><td>Division</td></tr>
+                        <tr><td>//</td><td>__floordiv__(self, other)</td><td>Floor Division</td></tr>
+                        <tr><td>%</td><td>__mod__(self, other)</td><td>Modulus</td></tr>
+                        <tr><td>**</td><td>__pow__(self, other)</td><td>Exponentiation</td></tr>
+                        <tr><td><</td><td>__lt__(self, other)</td><td>Less than</td></tr>
+                        <tr><td><=</td><td>__le__(self, other)</td><td>Less than or equal</td></tr>
+                        <tr><td>></td><td>__gt__(self, other)</td><td>Greater than</td></tr>
+                        <tr><td>>=</td><td>__ge__(self, other)</td><td>Greater than or equal</td></tr>
+                        <tr><td>==</td><td>__eq__(self, other)</td><td>Equality</td></tr>
+                        <tr><td>!=</td><td>__ne__(self, other)</td><td>Not equal</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Overloading > and <= Operators</span>
+                        <button class="copy-btn" onclick="copyCode('code5')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code5" class="language-python">class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+    
+    def __gt__(self, other):
+        return self.marks > other.marks
+    
+    def __le__(self, other):
+        return self.marks <= other.marks
+
+print("10 > 20 =", 10 > 20)
+s1 = Student("Hema", 100)
+s2 = Student("Ravi", 200)
+print("s1 > s2 =", s1 > s2)
+print("s1 < s2 =", s1 < s2)  # Uses __gt__ in reverse
+print("s1 <= s2 =", s1 <= s2)
+print("s1 >= s2 =", s1 >= s2)  # Uses __le__ in reverse</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">10 > 20 = False
+s1 > s2 = False
+s1 < s2 = True
+s1 <= s2 = True
+s1 >= s2 = False</div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Overloading * Operator for Employee Class</span>
+                        <button class="copy-btn" onclick="copyCode('code6')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code6" class="language-python">class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+    
+    def __mul__(self, other):
+        return self.salary * other.days
+
+class TimeSheet:
+    def __init__(self, name, days):
+        self.name = name
+        self.days = days
+
+e = Employee('Hema', 500)
+t = TimeSheet('Hema', 25)
+print('This Month Salary:', e * t)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">This Month Salary: 12500</div>
+            </div>
+
+            <h3>2.2 Method Overloading</h3>
+            <div class="card">
+                <div class="warning">
+                    <strong>Important:</strong> Method overloading is <strong>not directly supported</strong> in Python. If we declare multiple methods with the same name, Python considers only the last method.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Method Overloading Attempt (Fails)</span>
+                        <button class="copy-btn" onclick="copyCode('code7')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code7" class="language-python">class Test:
+    def m1(self):
+        print('no-arg method')
+    
+    def m1(self, a):
+        print('one-arg method')
+    
+    def m1(self, a, b):
+        print('two-arg method')
+
+t = Test()
+# t.m1()        # Error
+# t.m1(10)      # Error
+t.m1(10, 20)   # Works</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">two-arg method</div>
+                
+                <h4>Solutions for Method Overloading Requirements:</h4>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Default Arguments</span>
+                        <button class="copy-btn" onclick="copyCode('code8')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code8" class="language-python">class Test:
+    def sum(self, a=None, b=None, c=None):
+        if a is not None and b is not None and c is not None:
+            print('The Sum of 3 Numbers:', a + b + c)
+        elif a is not None and b is not None:
+            print('The Sum of 2 Numbers:', a + b)
+        else:
+            print('Please provide 2 or 3 arguments')
+
+t = Test()
+t.sum(10, 20)
+t.sum(10, 20, 30)
+t.sum(10)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">The Sum of 2 Numbers: 30
+The Sum of 3 Numbers: 60
+Please provide 2 or 3 arguments</div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Variable Number of Arguments (*args)</span>
+                        <button class="copy-btn" onclick="copyCode('code9')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code9" class="language-python">class Test:
+    def sum(self, *args):
+        total = 0
+        for x in args:
+            total += x
+        print('The Sum:', total)
+
+t = Test()
+t.sum(10, 20)
+t.sum(10, 20, 30)
+t.sum(10)
+t.sum()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">The Sum: 30
+The Sum: 60
+The Sum: 10
+The Sum: 0</div>
+            </div>
+
+            <h3>2.3 Constructor Overloading</h3>
+            <div class="card">
+                <div class="warning">
+                    <strong>Important:</strong> Constructor overloading is <strong>not directly supported</strong> in Python. If we define multiple constructors, Python considers only the last one.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Constructor Overloading Attempt (Fails)</span>
+                        <button class="copy-btn" onclick="copyCode('code10')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code10" class="language-python">class Test:
+    def __init__(self):
+        print('No-Arg Constructor')
+    
+    def __init__(self, a):
+        print('One-Arg constructor')
+    
+    def __init__(self, a, b):
+        print('Two-Arg constructor')
+
+# t1 = Test()      # Error
+# t2 = Test(10)    # Error
+t3 = Test(10, 20)  # Works</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Two-Arg constructor</div>
+                
+                <h4>Solutions for Constructor Overloading:</h4>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Default Arguments</span>
+                        <button class="copy-btn" onclick="copyCode('code11')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code11" class="language-python">class Test:
+    def __init__(self, a=None, b=None, c=None):
+        print('Constructor with 0|1|2|3 number of arguments')
+
+t1 = Test()
+t2 = Test(10)
+t3 = Test(10, 20)
+t4 = Test(10, 20, 30)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Constructor with 0|1|2|3 number of arguments
+Constructor with 0|1|2|3 number of arguments
+Constructor with 0|1|2|3 number of arguments
+Constructor with 0|1|2|3 number of arguments</div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Using Variable Number of Arguments</span>
+                        <button class="copy-btn" onclick="copyCode('code12')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code12" class="language-python">class Test:
+    def __init__(self, *args):
+        print('Constructor with variable number of arguments')
+
+t1 = Test()
+t2 = Test(10)
+t3 = Test(10, 20)
+t4 = Test(10, 20, 30)
+t5 = Test(10, 20, 30, 40, 50, 60)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Constructor with variable number of arguments
+Constructor with variable number of arguments
+Constructor with variable number of arguments
+Constructor with variable number of arguments
+Constructor with variable number of arguments</div>
+            </div>
+
+            <h2>3. Overriding</h2>
+            <div class="card">
+                <p>Overriding allows a child class to provide a specific implementation of a method that is already provided by its parent class.</p>
+                
+                <h3>3.1 Method Overriding</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Basic Method Overriding Example</span>
+                        <button class="copy-btn" onclick="copyCode('code13')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code13" class="language-python">class Parent:
+    def property(self):
+        print('Gold+Land+Cash+Power')
+    
+    def marry(self):
+        print('Arranged Marriage')
+
+class Child(Parent):
+    def marry(self):
+        print('Love Marriage')
+
+c = Child()
+c.property()
+c.marry()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Gold+Land+Cash+Power
+Love Marriage</div>
+                
+                <div class="note">
+                    <strong>Note:</strong> From the overriding method of the child class, we can call the parent class method using <code>super()</code>.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Calling Parent Method with super()</span>
+                        <button class="copy-btn" onclick="copyCode('code14')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code14" class="language-python">class Parent:
+    def property(self):
+        print('Gold+Land+Cash+Power')
+    
+    def marry(self):
+        print('Arranged Marriage')
+
+class Child(Parent):
+    def marry(self):
+        super().marry()  # Call parent method
+        print('Love Marriage')
+
+c = Child()
+c.property()
+c.marry()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Gold+Land+Cash+Power
+Arranged Marriage
+Love Marriage</div>
+                
+                <h3>3.2 Constructor Overriding</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Constructor Overriding Example</span>
+                        <button class="copy-btn" onclick="copyCode('code15')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code15" class="language-python">class Parent:
+    def __init__(self):
+        print('Parent Constructor')
+
+class Child(Parent):
+    def __init__(self):
+        print('Child Constructor')
+
+c = Child()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Child Constructor</div>
+                
+                <div class="note">
+                    <strong>Note:</strong> If the child class doesn't contain a constructor, the parent class constructor will be executed. We can call the parent class constructor using <code>super()</code>.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Calling Parent Constructor with super()</span>
+                        <button class="copy-btn" onclick="copyCode('code16')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code16" class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+class Employee(Person):
+    def __init__(self, name, age, eno, esal):
+        super().__init__(name, age)  # Call parent constructor
+        self.eno = eno
+        self.esal = esal
+    
+    def display(self):
+        print('Employee Name:', self.name)
+        print('Employee Age:', self.age)
+        print('Employee Number:', self.eno)
+        print('Employee Salary:', self.esal)
+
+e1 = Employee('Hema', 48, 872425, 26000)
+e1.display()
+
+e2 = Employee('Sunny', 39, 872426, 36000)
+e2.display()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Employee Name: Hema
+Employee Age: 48
+Employee Number: 872425
+Employee Salary: 26000
+
+Employee Name: Sunny
+Employee Age: 39
+Employee Number: 872426
+Employee Salary: 36000</div>
+            </div>
+
+            <!-- <div class="contact">
+                <h3>HEMASOFT</h3>
+                <p># 202, 2<sup>nd</sup> Floor, HUDA Maithvanaam, Ameerpet, Hyderabad - 500038</p>
+                <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43</p>
+                <p><a href="http://www.hemasoft.com">www.hemasoft.com</a></p>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+        
+        // Copy code functionality
+        function copyCode(codeId) {
+            const codeElement = document.getElementById(codeId);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Copied!';
+            btn.style.background = 'linear-gradient(to right, #00b894, #20c997)';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'linear-gradient(to right, #6c5ce7, #a29bfe)';
+            }, 2000);
+        }
+        
+        // Add scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

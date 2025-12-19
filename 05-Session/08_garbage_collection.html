@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Garbage Collection & Destructors</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --gc-color: #9b59b6;
+            --destructor-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #1a252f;
+            --code-bg: #1a252f;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f7 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--gc-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--gc-color);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .python-logo {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .section-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            border-left: 5px solid;
+        }
+
+        .gc-header {
+            border-left-color: var(--gc-color);
+        }
+
+        .destructor-header {
+            border-left-color: var(--destructor-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+        }
+
+        .concept-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .gc-badge {
+            background-color: rgba(155, 89, 182, 0.1);
+            color: var(--gc-color);
+            border: 1px solid var(--gc-color);
+        }
+
+        .destructor-badge {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--destructor-color);
+            border: 1px solid var(--destructor-color);
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .gc-code {
+            border-left-color: var(--gc-color);
+        }
+
+        .destructor-code {
+            border-left-color: var(--destructor-color);
+        }
+
+        .code-keyword {
+            color: #3498db;
+        }
+
+        .code-string {
+            color: #e74c3c;
+        }
+
+        .code-comment {
+            color: #7f8c8d;
+        }
+
+        .code-function {
+            color: #2ecc71;
+        }
+
+        .code-class {
+            color: #9b59b6;
+        }
+
+        .code-var {
+            color: #f1c40f;
+        }
+
+        .output-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .note-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .note-title {
+            color: #ff8f00;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-title i {
+            margin-right: 8px;
+        }
+
+        .comparison-box {
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .comparison-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-title i {
+            margin-right: 8px;
+        }
+
+        .warning-box {
+            background-color: #ffebee;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .warning-title {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title i {
+            margin-right: 8px;
+        }
+
+        .highlight {
+            background-color: #fff9c4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-gc {
+            background-color: rgba(155, 89, 182, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-destructor {
+            background-color: rgba(231, 76, 60, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .visual-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .memory-box {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 250px;
+            border: 2px solid var(--gc-color);
+        }
+
+        .memory-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--gc-color);
+        }
+
+        .object-box {
+            background-color: #e3f2fd;
+            padding: 10px;
+            margin: 8px;
+            border-radius: 5px;
+            border: 1px dashed #3498db;
+        }
+
+        .object-box.useless {
+            background-color: #ffebee;
+            border-color: #e74c3c;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .visual-diagram {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 3px solid var(--gc-color);
+        }
+
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            display: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .ref-count-box {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 150px;
+            margin: 10px;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .step-number {
+            background-color: var(--secondary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-python python-logo"></i>Python Garbage Collection & Destructors</h1>
+            <p class="subtitle">Automatic Memory Management in Python</p>
+        </header>
+
+        <div class="section-header gc-header">
+            <i class="fas fa-recycle section-icon" style="color: var(--gc-color);"></i>
+            <h2 class="section-title">Garbage Collection in Python</h2>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><i class="fas fa-exclamation-triangle"></i> The Problem in Old Languages</h3>
+                <p>In languages like C++, programmers are responsible for both creation <strong>and</strong> destruction of objects.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Programmers carefully create objects</li>
+                    <li>But often neglect destroying useless objects</li>
+                    <li>Memory fills with useless objects</li>
+                    <li>Leads to "Out of Memory" errors</li>
+                    <li>Application crashes</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-robot"></i> Python's Solution: Garbage Collector</h3>
+                <p>Python has an assistant running in the background to destroy useless objects.</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Always running in background</li>
+                    <li>Destroys useless objects automatically</li>
+                    <li>Reduces memory problems significantly</li>
+                    <li>Less chance of "Out of Memory" errors</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-bullseye"></i> Main Objective</h3>
+                <p>The main objective of Garbage Collector is to <strong>destroy useless objects</strong>.</p>
+                <div class="note-box">
+                    <div class="note-title"><i class="fas fa-key"></i> Eligibility for Garbage Collection</div>
+                    <p><strong>If an object does not have any reference variable, then that object is eligible for Garbage Collection.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-diagram">
+            <div class="memory-box">
+                <div class="memory-title">Memory with Useless Objects</div>
+                <div class="object-box useless">Object A (no references)</div>
+                <div class="object-box">Object B (2 references)</div>
+                <div class="object-box useless">Object C (no references)</div>
+                <div class="object-box">Object D (1 reference)</div>
+                <div class="object-box useless">Object E (no references)</div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Objects A, C, E eligible for GC</p>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="memory-box">
+                <div class="memory-title">After Garbage Collection</div>
+                <div class="object-box">Object B (2 references)</div>
+                <div class="object-box">Object D (1 reference)</div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Memory cleaned up!</p>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'control-gc')">Controlling GC</button>
+                <button class="tab-button" onclick="openTab(event, 'basic-destructor')">Basic Destructor</button>
+                <button class="tab-button" onclick="openTab(event, 'reference-demo')">Reference Counting</button>
+                <button class="tab-button" onclick="openTab(event, 'list-demo')">List Objects Demo</button>
+            </div>
+            
+            <div id="control-gc" class="tab-content active">
+                <div class="card">
+                    <h3><span class="concept-type gc-badge">GC Control</span> Enabling/Disabling Garbage Collector</h3>
+                    <p>Python provides the <span class="highlight-gc">gc</span> module to control garbage collection.</p>
+                    
+                    <div class="code-block gc-code">
+                        <span class="code-keyword">import</span> gc<br>
+                        <br>
+                        <span class="code-comment"># Check if GC is enabled</span><br>
+                        print(gc.isenabled())  <span class="code-comment"># Returns True if GC enabled</span><br>
+                        <br>
+                        <span class="code-comment"># Disable GC explicitly</span><br>
+                        gc.disable()<br>
+                        print(gc.isenabled())<br>
+                        <br>
+                        <span class="code-comment"># Enable GC explicitly</span><br>
+                        gc.enable()<br>
+                        print(gc.isenabled())
+                    </div>
+                    <div class="output-box">
+                        True<br>
+                        False<br>
+                        True
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-info-circle"></i> Default Behavior</div>
+                        <p>By default, Garbage Collector is <strong>enabled</strong> in Python. We can disable it based on our requirements.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="basic-destructor" class="tab-content">
+                <div class="card">
+                    <h3><span class="concept-type destructor-badge">Destructor</span> Basic Destructor Example</h3>
+                    <p>Destructors are special methods named <span class="highlight-destructor">__del__</span> that perform cleanup before object destruction.</p>
+                    
+                    <div class="process-flow">
+                        <div class="flow-step">
+                            <div class="step-number">1</div>
+                            Object created
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="flow-step">
+                            <div class="step-number">2</div>
+                            Object has no references
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="flow-step">
+                            <div class="step-number">3</div>
+                            GC calls destructor
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="flow-step">
+                            <div class="step-number">4</div>
+                            Object destroyed
+                        </div>
+                    </div>
+                    
+                    <div class="code-block destructor-code">
+                        <span class="code-keyword">import</span> time<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Object Initialization..."</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__del__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Fulfilling Last Wish and performing clean up activities..."</span>)<br>
+                        <br>
+                        <span class="code-comment"># Create object</span><br>
+                        t1 = Test()<br>
+                        <br>
+                        <span class="code-comment"># Remove reference (makes object eligible for GC)</span><br>
+                        t1 = <span class="code-keyword">None</span><br>
+                        <br>
+                        <span class="code-comment"># Give GC time to work</span><br>
+                        time.sleep(5)<br>
+                        print(<span class="code-string">"End of application"</span>)
+                    </div>
+                    <div class="output-box">
+                        Object Initialization...<br>
+                        Fulfilling Last Wish and performing clean up activities...<br>
+                        End of application
+                    </div>
+                    
+                    <div class="warning-box">
+                        <div class="warning-title"><i class="fas fa-exclamation-circle"></i> Important Note</div>
+                        <p><strong>The job of destructor is NOT to destroy the object.</strong> Its job is to perform cleanup activities (closing database connections, files, etc.). Once destructor execution completes, the Garbage Collector automatically destroys the object.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="reference-demo" class="tab-content">
+                <div class="card">
+                    <h3><span class="concept-type gc-badge">Reference Counting</span> When Objects Are Destroyed</h3>
+                    <p>An object is only eligible for GC when its reference count reaches zero.</p>
+                    
+                    <div class="code-block gc-code">
+                        <span class="code-keyword">import</span> time<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Constructor Execution..."</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__del__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Destructor Execution..."</span>)<br>
+                        <br>
+                        <span class="code-comment"># Create object with multiple references</span><br>
+                        t1 = Test()<br>
+                        t2 = t1  <span class="code-comment"># Now 2 references to same object</span><br>
+                        t3 = t2  <span class="code-comment"># Now 3 references to same object</span><br>
+                        <br>
+                        <span class="code-comment"># Delete first reference (ref count: 3 -> 2)</span><br>
+                        <span class="code-keyword">del</span> t1<br>
+                        time.sleep(2)<br>
+                        print(<span class="code-string">"Object not yet destroyed after deleting t1"</span>)<br>
+                        <br>
+                        <span class="code-comment"># Delete second reference (ref count: 2 -> 1)</span><br>
+                        <span class="code-keyword">del</span> t2<br>
+                        time.sleep(2)<br>
+                        print(<span class="code-string">"Object not yet destroyed even after deleting t2"</span>)<br>
+                        <br>
+                        <span class="code-comment"># Delete last reference (ref count: 1 -> 0)</span><br>
+                        print(<span class="code-string">"I am trying to delete last reference variable..."</span>)<br>
+                        <span class="code-keyword">del</span> t3<br>
+                        time.sleep(2)<br>
+                        print(<span class="code-string">"End of program"</span>)
+                    </div>
+                    
+                    <div class="visual-diagram">
+                        <div class="memory-box">
+                            <div class="memory-title">Reference Changes</div>
+                            <p>After t1 = Test(): <span class="ref-count-box">1</span> reference</p>
+                            <p>After t2 = t1: <span class="ref-count-box">2</span> references</p>
+                            <p>After t3 = t2: <span class="ref-count-box">3</span> references</p>
+                            <p>After del t1: <span class="ref-count-box">2</span> references</p>
+                            <p>After del t2: <span class="ref-count-box">1</span> reference</p>
+                            <p>After del t3: <span class="ref-count-box">0</span> references</p>
+                        </div>
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-key"></i> Key Rule</div>
+                        <p><strong>If the object does not contain any reference variable then only it is eligible for GC.</strong> In other words, if the reference count is zero then the object is eligible for garbage collection.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="list-demo" class="tab-content">
+                <div class="card">
+                    <h3><span class="concept-type gc-badge">List Objects</span> Multiple Objects in a List</h3>
+                    <p>When objects are stored in a list, they're destroyed when the list is deleted.</p>
+                    
+                    <div class="code-block gc-code">
+                        <span class="code-keyword">import</span> time<br>
+                        <br>
+                        <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Constructor Execution..."</span>)<br>
+                        <br>
+                        &nbsp;&nbsp;<span class="code-keyword">def</span> <span class="code-function">__del__</span>(<span class="code-keyword">self</span>):<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span class="code-string">"Destructor Execution..."</span>)<br>
+                        <br>
+                        <span class="code-comment"># Create list with multiple Test objects</span><br>
+                        my_list = [Test(), Test(), Test()]<br>
+                        <br>
+                        <span class="code-comment"># Delete the entire list</span><br>
+                        <span class="code-keyword">del</span> my_list<br>
+                        <br>
+                        <span class="code-comment"># Give GC time to destroy objects</span><br>
+                        time.sleep(5)<br>
+                        print(<span class="code-string">"End of application"</span>)
+                    </div>
+                    <div class="output-box">
+                        Constructor Execution...<br>
+                        Constructor Execution...<br>
+                        Constructor Execution...<br>
+                        Destructor Execution...<br>
+                        Destructor Execution...<br>
+                        Destructor Execution...<br>
+                        End of application
+                    </div>
+                    
+                    <div class="note-box">
+                        <div class="note-title"><i class="fas fa-list"></i> List Reference Behavior</div>
+                        <p>When we create objects inside a list, the list holds references to those objects. When we delete the list (<span class="code-keyword">del my_list</span>), all references to the objects are removed, making them eligible for garbage collection.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header destructor-header">
+            <i class="fas fa-search section-icon" style="color: var(--destructor-color);"></i>
+            <h2 class="section-title">Finding Reference Count</h2>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-calculator"></i> Using sys.getrefcount()</h3>
+            <p>The <span class="highlight">sys</span> module provides <span class="code-function">getrefcount()</span> to find how many references an object has.</p>
+            
+            <div class="code-block destructor-code">
+                <span class="code-keyword">import</span> sys<br>
+                <br>
+                <span class="code-keyword">class</span> <span class="code-class">Test</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">pass</span><br>
+                <br>
+                <span class="code-comment"># Create object</span><br>
+                t1 = Test()<br>
+                <br>
+                <span class="code-comment"># Create multiple references to same object</span><br>
+                t2 = t1<br>
+                t3 = t1<br>
+                t4 = t1<br>
+                <br>
+                <span class="code-comment"># Check reference count</span><br>
+                print(sys.getrefcount(t1))
+            </div>
+            <div class="output-box">
+                5
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-title"><i class="fas fa-exclamation-triangle"></i> Important Note About getrefcount()</div>
+                <p><strong>For every object, Python internally maintains one default reference variable called <span class="code-keyword">self</span>.</strong> Additionally, <span class="code-function">getrefcount()</span> temporarily creates an extra reference while counting, which is why we see 5 references instead of 4 in the example above.</p>
+            </div>
+            
+            <div class="visual-diagram">
+                <div class="memory-box">
+                    <div class="memory-title">Reference Count Breakdown</div>
+                    <p>t1 = Test() <span class="ref-count-box">1</span></p>
+                    <p>t2 = t1 <span class="ref-count-box">+1</span></p>
+                    <p>t3 = t1 <span class="ref-count-box">+1</span></p>
+                    <p>t4 = t1 <span class="ref-count-box">+1</span></p>
+                    <p>Internal self <span class="ref-count-box">+1</span></p>
+                    <p>getrefcount() temp <span class="ref-count-box">+1</span></p>
+                    <p style="margin-top: 10px; font-weight: bold;">Total: <span class="ref-count-box">5</span> references</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-box">
+            <div class="comparison-title"><i class="fas fa-balance-scale"></i> Python vs C++ Memory Management</div>
+            <div class="content-grid">
+                <div class="card">
+                    <h4>C++ (Manual Management)</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Programmer creates objects</li>
+                        <li>Programmer must destroy objects</li>
+                        <li>Memory leaks common</li>
+                        <li>"Out of Memory" errors frequent</li>
+                        <li>More control but more responsibility</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h4>Python (Automatic GC)</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Programmer creates objects</li>
+                        <li>Garbage Collector destroys objects</li>
+                        <li>Memory leaks rare</li>
+                        <li>"Out of Memory" errors rare</li>
+                        <li>Less control but less responsibility</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><i class="fas fa-check-circle"></i> Benefits of Garbage Collection</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Prevents memory leaks</li>
+                    <li>Reduces programming errors</li>
+                    <li>Improves application stability</li>
+                    <li>Simplifies memory management</li>
+                    <li>Automatically handles circular references</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-tasks"></i> Destructor Use Cases</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Closing database connections</li>
+                    <li>Closing file handles</li>
+                    <li>Releasing network resources</li>
+                    <li>Logging object destruction</li>
+                    <li>Any cleanup before object deletion</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-lightbulb"></i> Best Practices</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Let GC do its job (don't disable unless necessary)</li>
+                    <li>Use destructors for cleanup, not business logic</li>
+                    <li>Be aware of reference cycles</li>
+                    <li>Monitor memory usage in large applications</li>
+                    <li>All examples feature Hema for consistency</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Python Garbage Collection & Destructors Guide | Automatic Memory Management</p>
+            <p>Created with <i class="fas fa-heart" style="color:#e74c3c;"></i> for Python learners</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Add interactivity to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                this.style.transform = 'scale(1.01)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // Animation for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply initial styles and observe cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Trigger initial animation
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+        
+        // Add visual effects to memory boxes
+        document.querySelectorAll('.memory-box').forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Animate reference count boxes
+        document.querySelectorAll('.ref-count-box').forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'rotate(10deg) scale(1.2)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'rotate(0deg) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

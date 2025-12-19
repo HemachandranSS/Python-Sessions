@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Abstract Classes, Interfaces & Access Modifiers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --warning: #f39c12;
+            --success: #27ae60;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(45deg, var(--dark), var(--primary));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .agenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .agenda-item {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .main-content {
+            padding: 40px;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 12px;
+            margin: 50px 0 25px;
+            font-size: 2.2rem;
+        }
+        h3 {
+            color: var(--dark);
+            margin: 30px 0 15px;
+            font-size: 1.6rem;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+        h4 {
+            color: var(--primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid #eaeaea;
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        }
+        .concept-box {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid var(--primary);
+        }
+        .definition {
+            background: #e8f4fc;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #3498db;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #f39c12;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .warning {
+            background: #fde8e8;
+            border-left: 5px solid #e74c3c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.05rem;
+        }
+        .code-container {
+            background: #282c34;
+            border-radius: 12px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+        .code-header {
+            background: #1e2227;
+            color: #abb2bf;
+            padding: 15px 25px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+        .copy-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        .code-body {
+            padding: 25px;
+            overflow-x: auto;
+        }
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            border-left: 5px solid var(--primary);
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .comparison-table tr:hover {
+            background: #f0f7ff;
+        }
+        .access-modifier {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .modifier-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            border-top: 5px solid var(--primary);
+        }
+        .modifier-card:hover {
+            transform: translateY(-10px);
+        }
+        .modifier-card.public {
+            border-top-color: var(--success);
+        }
+        .modifier-card.protected {
+            border-top-color: var(--warning);
+        }
+        .modifier-card.private {
+            border-top-color: var(--accent);
+        }
+        .modifier-card h4 {
+            color: var(--dark);
+        }
+        .type-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .type-concrete {
+            background: #d4edda;
+            color: #155724;
+        }
+        .type-abstract {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .type-interface {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .contact {
+            background: linear-gradient(to right, var(--dark), #4a6572);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .contact h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-left: none;
+            padding-left: 0;
+        }
+        .contact a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        .case-study {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #dee2e6;
+        }
+        .case-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+        .example-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .agenda {
+                flex-direction: column;
+            }
+            .access-modifier {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Python Abstract Classes & Interfaces</h1>
+            <p class="tagline">Complete Guide to Abstract Methods, Interfaces, Access Modifiers and More</p>
+            <div class="agenda">
+                <div class="agenda-item">Abstract Methods</div>
+                <div class="agenda-item">Abstract Classes</div>
+                <div class="agenda-item">Interfaces</div>
+                <div class="agenda-item">Access Modifiers</div>
+                <div class="agenda-item">__str__() Method</div>
+                <div class="agenda-item">str() vs repr()</div>
+                <div class="agenda-item">Banking Application</div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="definition">
+                <h3>What are Abstract Methods?</h3>
+                <p>Abstract methods are methods that are declared but contain no implementation. They serve as a blueprint for methods that must be implemented in child classes. In Python, we declare abstract methods using the <code>@abstractmethod</code> decorator from the <code>abc</code> module.</p>
+            </div>
+
+            <h2>1. Abstract Methods and Abstract Classes</h2>
+
+            <div class="card">
+                <h3>Declaring Abstract Methods</h3>
+                <div class="note">
+                    <strong>Note:</strong> The <code>@abstractmethod</code> decorator is present in the <code>abc</code> (Abstract Base Class) module. You must import it, otherwise you'll get an error.
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Import Error Example</span>
+                        <button class="copy-btn" onclick="copyCode('code1')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code1" class="language-python">class Test:
+    @abstractmethod
+    def m1(self):
+        pass
+
+# NameError: name 'abstractmethod' is not defined</code></pre>
+                    </div>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Correct Way to Declare Abstract Method</span>
+                        <button class="copy-btn" onclick="copyCode('code2')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code2" class="language-python">from abc import ABC, abstractmethod
+
+class Fruit:
+    @abstractmethod
+    def taste(self):
+        pass</code></pre>
+                    </div>
+                </div>
+                
+                <div class="note">
+                    <strong>Important:</strong> Child classes are responsible for providing implementation for parent class abstract methods.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Abstract Classes - Different Cases</h3>
+                
+                <div class="case-study">
+                    <div class="case-title">Case 1: Concrete Class (Can Create Object)</div>
+                    <div class="code-container">
+                        <div class="code-body">
+                            <pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Test:
+    pass
+
+t = Test()  # Valid: No abstract methods</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <div class="case-title">Case 2: ABC Class Without Abstract Methods (Can Create Object)</div>
+                    <div class="code-container">
+                        <div class="code-body">
+                            <pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Test(ABC):
+    pass
+
+t = Test()  # Valid: Even though it extends ABC, no abstract methods</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <div class="case-title">Case 3: ABC Class With Abstract Method (Cannot Create Object)</div>
+                    <div class="code-container">
+                        <div class="code-body">
+                            <pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Test(ABC):
+    @abstractmethod
+    def m1(self):
+        pass
+
+t = Test()  # TypeError: Can't instantiate abstract class Test with abstract methods m1</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <div class="case-title">Case 4: Class With Abstract Method But Not Extending ABC (Can Create Object)</div>
+                    <div class="code-container">
+                        <div class="code-body">
+                            <pre><code class="language-python">from abc import abstractmethod
+
+class Test:
+    @abstractmethod
+    def m1(self):
+        pass
+
+t = Test()  # Valid: Not extending ABC class</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <div class="case-title">Case 5: Abstract Method With Implementation (Rare Case)</div>
+                    <div class="code-container">
+                        <div class="code-body">
+                            <pre><code class="language-python">from abc import abstractmethod
+
+class Test:
+    @abstractmethod
+    def m1(self):
+        print('Hello')
+
+t = Test()
+t.m1()  # Output: Hello</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <strong>Conclusion:</strong> If a class contains at least one abstract method and extends the <code>ABC</code> class, instantiation is NOT possible. "Abstract class with abstract method instantiation is not possible."
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Implementing Abstract Methods in Child Classes</h3>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Vehicle Abstract Class Example</span>
+                        <button class="copy-btn" onclick="copyCode('code3')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code3" class="language-python">from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    @abstractmethod
+    def noofwheels(self):
+        pass
+
+class Bus(Vehicle):
+    def noofwheels(self):
+        return 7
+
+class Auto(Vehicle):
+    def noofwheels(self):
+        return 3
+
+b = Bus()
+print(b.noofwheels())  # Output: 7
+
+a = Auto()
+print(a.noofwheels())  # Output: 3</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">7
+3</div>
+                
+                <div class="note">
+                    <strong>Note:</strong> Abstract classes can contain both abstract and non-abstract (concrete) methods.
+                </div>
+            </div>
+
+            <h2>2. Interfaces in Python</h2>
+            <div class="card">
+                <p>In general, if an abstract class contains <strong>only abstract methods</strong>, such a type of abstract class is considered as an interface.</p>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Database Interface Example</span>
+                        <button class="copy-btn" onclick="copyCode('code4')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code4" class="language-python">from abc import ABC, abstractmethod
+
+class DBInterface(ABC):
+    @abstractmethod
+    def connect(self):
+        pass
+    
+    @abstractmethod
+    def disconnect(self):
+        pass
+
+class Oracle(DBInterface):
+    def connect(self):
+        print("Connecting to Oracle Database...")
+    
+    def disconnect(self):
+        print("Disconnecting from Oracle Database...")
+
+class Sybase(DBInterface):
+    def connect(self):
+        print("Connecting to Sybase Database...")
+    
+    def disconnect(self):
+        print("Disconnecting from Sybase Database...")
+
+# Dynamic class instantiation based on user input
+dbname = input('Enter Database Name: ')
+classname = globals()[dbname]
+x = classname()
+x.connect()
+x.disconnect()</code></pre>
+                    </div>
+                </div>
+                
+                <div class="example-output">
+                    <strong>Sample Output 1:</strong><br>
+                    Enter Database Name: Oracle<br>
+                    Connecting to Oracle Database...<br>
+                    Disconnecting from Oracle Database...<br><br>
+                    <strong>Sample Output 2:</strong><br>
+                    Enter Database Name: Sybase<br>
+                    Connecting to Sybase Database...<br>
+                    Disconnecting from Sybase Database...
+                </div>
+                
+                <div class="note">
+                    <strong>Note:</strong> The built-in function <code>globals()[str]</code> converts the string 'str' into a class name and returns the class.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Reading Class Name from File</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Printer Interface Example</span>
+                        <button class="copy-btn" onclick="copyCode('code5')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code5" class="language-python">from abc import ABC, abstractmethod
+
+class Printer(ABC):
+    @abstractmethod
+    def printit(self, text):
+        pass
+    
+    @abstractmethod
+    def disconnect(self):
+        pass
+
+class EPSON(Printer):
+    def printit(self, text):
+        print('Printing from EPSON Printer...')
+        print(text)
+    
+    def disconnect(self):
+        print('Printing completed on EPSON Printer...')
+
+class HP(Printer):
+    def printit(self, text):
+        print('Printing from HP Printer...')
+        print(text)
+    
+    def disconnect(self):
+        print('Printing completed on HP Printer...')
+
+# Read printer name from config file
+with open('config.txt', 'r') as f:
+    pname = f.readline().strip()
+
+classname = globals()[pname]
+x = classname()
+x.printit('This data has to print...')
+x.disconnect()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output (if config.txt contains "EPSON"):</h3>
+                <div class="output">Printing from EPSON Printer...
+This data has to print...
+Printing completed on EPSON Printer...</div>
+            </div>
+
+            <h2>3. Concrete Class vs Abstract Class vs Interface</h2>
+            <div class="card">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>When to Use</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="type-indicator type-interface">Interface</span></td>
+                            <td>When you don't know about implementation, just have requirement specifications</td>
+                            <td>Only abstract methods, no implementation</td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-indicator type-abstract">Abstract Class</span></td>
+                            <td>When you know about implementation but not completely (partially implemented)</td>
+                            <td>Mix of abstract and concrete methods</td>
+                        </tr>
+                        <tr>
+                            <td><span class="type-indicator type-concrete">Concrete Class</span></td>
+                            <td>When you know implementation completely and ready to provide service</td>
+                            <td>All methods have complete implementation</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Complete Example</span>
+                        <button class="copy-btn" onclick="copyCode('code6')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code6" class="language-python">from abc import ABC, abstractmethod
+
+class CollegeAutomation(ABC):
+    @abstractmethod
+    def m1(self):
+        pass
+    
+    @abstractmethod
+    def m2(self):
+        pass
+    
+    @abstractmethod
+    def m3(self):
+        pass
+
+class AbsCls(CollegeAutomation):
+    def m1(self):
+        print('m1 method implementation')
+    
+    def m2(self):
+        print('m2 method implementation')
+
+class ConcreteCls(AbsCls):
+    def m3(self):
+        print('m3 method implementation')
+
+c = ConcreteCls()
+c.m1()
+c.m2()
+c.m3()</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">m1 method implementation
+m2 method implementation
+m3 method implementation</div>
+            </div>
+
+            <h2>4. Public, Protected and Private Attributes</h2>
+            <div class="card">
+                <div class="access-modifier">
+                    <div class="modifier-card public">
+                        <h4>Public Attributes</h4>
+                        <p>Default in Python. Accessible from anywhere - within the class or from outside.</p>
+                        <div class="example-output">name = 'Hema'</div>
+                    </div>
+                    
+                    <div class="modifier-card protected">
+                        <h4>Protected Attributes</h4>
+                        <p>Accessible within the class and in child classes. Convention only, prefixed with <code>_</code>.</p>
+                        <div class="example-output">_name = 'Hema'</div>
+                    </div>
+                    
+                    <div class="modifier-card private">
+                        <h4>Private Attributes</h4>
+                        <p>Accessible only within the class. Prefixed with <code>__</code> (double underscore).</p>
+                        <div class="example-output">__name = 'Hema'</div>
+                    </div>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Access Modifiers Example</span>
+                        <button class="copy-btn" onclick="copyCode('code7')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code7" class="language-python">class Test:
+    x = 10           # Public
+    _y = 20          # Protected
+    __z = 30         # Private
+    
+    def m1(self):
+        print(Test.x)     # Accessible
+        print(Test._y)    # Accessible
+        print(Test.__z)   # Accessible (inside class)
+
+t = Test()
+t.m1()
+print(Test.x)       # Accessible
+print(Test._y)      # Accessible (but convention says don't)
+# print(Test.__z)   # AttributeError: type object 'Test' has no attribute '__z'</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">10
+20
+30
+10
+20</div>
+                
+                <div class="warning">
+                    <strong>Note:</strong> Protected attributes (<code>_name</code>) are just a convention in Python. They can still be accessed from outside, but it's considered bad practice.
+                </div>
+                
+                <h3>Accessing Private Variables Indirectly</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Access Private Variables</span>
+                        <button class="copy-btn" onclick="copyCode('code8')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code8" class="language-python">class Test:
+    def __init__(self):
+        self.__x = 10
+
+t = Test()
+# Direct access won't work
+# print(t.__x)  # AttributeError
+
+# Indirect access using name mangling
+print(t._Test__x)  # Output: 10</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h2>5. __str__() Method</h2>
+            <div class="card">
+                <p>The <code>__str__()</code> method is called when we print any object. By default, it returns a string in the format: <code>&lt;__main__.ClassName object at 0xmemoryaddress&gt;</code>. We can override this method to return meaningful string representation.</p>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Overriding __str__() Method</span>
+                        <button class="copy-btn" onclick="copyCode('code9')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code9" class="language-python">class Student:
+    def __init__(self, name, rollno):
+        self.name = name
+        self.rollno = rollno
+    
+    def __str__(self):
+        return f'Student Name: {self.name}, Roll No: {self.rollno}'
+
+s1 = Student('Hema', 101)
+s2 = Student('Ravi', 102)
+print(s1)
+print(s2)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Student Name: Hema, Roll No: 101
+Student Name: Ravi, Roll No: 102</div>
+                
+                <div class="note">
+                    <strong>Without overriding __str__():</strong> Output would be: <code>&lt;__main__.Student object at 0x022144B0&gt;</code>
+                </div>
+            </div>
+
+            <h2>6. Difference between str() and repr()</h2>
+            <div class="card">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Purpose</th>
+                            <th>Key Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>str()</code></td>
+                            <td>Returns a nicely printable string representation</td>
+                            <td>For readability. May not convert back to original object.</td>
+                        </tr>
+                        <tr>
+                            <td><code>repr()</code></td>
+                            <td>Returns an unambiguous string representation</td>
+                            <td>For debugging. Can convert back using <code>eval()</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>str() Example - Cannot Convert Back</span>
+                        <button class="copy-btn" onclick="copyCode('code10')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code10" class="language-python">import datetime
+
+today = datetime.datetime.now()
+s = str(today)  # Convert datetime to string
+print(s)
+
+# Try to convert back (will fail)
+# d = eval(s)  # SyntaxError: invalid token</code></pre>
+                    </div>
+                </div>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>repr() Example - Can Convert Back</span>
+                        <button class="copy-btn" onclick="copyCode('code11')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code11" class="language-python">import datetime
+
+today = datetime.datetime.now()
+s = repr(today)  # Convert datetime to repr string
+print(s)
+
+# Convert back using eval()
+d = eval(s)
+print(d)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">datetime.datetime(2023, 12, 19, 14, 30, 25, 123456)
+2023-12-19 14:30:25.123456</div>
+                
+                <div class="note">
+                    <strong>Recommendation:</strong> It's generally better to use <code>repr()</code> instead of <code>str()</code> for debugging purposes, as it provides unambiguous representation.
+                </div>
+            </div>
+
+            <h2>7. Mini Project: Banking Application</h2>
+            <div class="card">
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>Complete Banking Application</span>
+                        <button class="copy-btn" onclick="copyCode('code12')">Copy Code</button>
+                    </div>
+                    <div class="code-body">
+                        <pre><code id="code12" class="language-python">class Account:
+    def __init__(self, name, balance, min_balance):
+        self.name = name
+        self.balance = balance
+        self.min_balance = min_balance
+    
+    def deposit(self, amount):
+        self.balance += amount
+    
+    def withdraw(self, amount):
+        if self.balance - amount >= self.min_balance:
+            self.balance -= amount
+        else:
+            print("Sorry, Insufficient Funds")
+    
+    def printStatement(self):
+        print(f"Account Balance: {self.balance}")
+
+class Current(Account):
+    def __init__(self, name, balance):
+        super().__init__(name, balance, min_balance=-1000)
+    
+    def __str__(self):
+        return f"{self.name}'s Current Account with Balance: {self.balance}"
+
+class Savings(Account):
+    def __init__(self, name, balance):
+        super().__init__(name, balance, min_balance=0)
+    
+    def __str__(self):
+        return f"{self.name}'s Savings Account with Balance: {self.balance}"
+
+# Test the banking application
+c = Savings("Hema", 10000)
+print(c)
+c.deposit(5000)
+c.printStatement()
+c.withdraw(16000)  # Should show insufficient funds
+c.withdraw(15000)
+print(c)
+
+c2 = Current('Ravi', 20000)
+c2.deposit(6000)
+print(c2)
+c2.withdraw(27000)
+print(c2)</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Output:</h3>
+                <div class="output">Hema's Savings Account with Balance: 10000
+Account Balance: 15000
+Sorry, Insufficient Funds
+Hema's Savings Account with Balance: 0
+Ravi's Current Account with Balance: 26000
+Ravi's Current Account with Balance: -1000</div>
+                
+                <div class="success">
+                    <strong>Features Demonstrated:</strong>
+                    <ul>
+                        <li>Inheritance (Savings and Current extend Account)</li>
+                        <li>Method Overriding (__str__() method)</li>
+                        <li>super() method usage</li>
+                        <li>Encapsulation with private attributes</li>
+                        <li>Polymorphism with different account types</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- <div class="contact">
+                <h3>HEMASOFT</h3>
+                <p># 202, 2<sup>nd</sup> Floor, HUDA Maithvanaam, Ameerpet, Hyderabad - 500038</p>
+                <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43</p>
+                <p><a href="http://www.hemasoft.com">www.hemasoft.com</a></p>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+        
+        // Copy code functionality
+        function copyCode(codeId) {
+            const codeElement = document.getElementById(codeId);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Copied!';
+            btn.style.background = 'linear-gradient(to right, #27ae60, #2ecc71)';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'linear-gradient(to right, #3498db, #2ecc71)';
+            }, 2000);
+        }
+        
+        // Add scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
