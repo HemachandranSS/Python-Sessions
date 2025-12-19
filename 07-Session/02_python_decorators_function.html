@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Decorators – HemaSoft</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      color: #263238;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: #ffffff;
+      padding: 45px;
+      border-radius: 18px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.7rem;
+      color: #4a148c;
+      margin-bottom: 8px;
+    }
+    .brand {
+      text-align: center;
+      font-weight: 600;
+      color: #6a1b9a;
+      margin-bottom: 35px;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #311b92;
+      border-left: 6px solid #7e57c2;
+      padding-left: 12px;
+    }
+    p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 22px;
+      border-radius: 14px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .output {
+      background: #f1f8e9;
+      border-left: 6px solid #7cb342;
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-family: Consolas, monospace;
+      margin: 18px 0 32px 0;
+      white-space: pre-line;
+    }
+    .note {
+      background: #e3f2fd;
+      border-left: 6px solid #1e88e5;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    ul {
+      margin-left: 25px;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #546e7a;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Python Decorator Functions</h1>
+    <!-- <div class="brand">HemaSoft Training Notes</div> -->
+
+    <p>
+      A <strong>Decorator</strong> is a function that takes another function as an argument,
+      extends its functionality, and returns a modified function without changing the
+      original function definition.
+    </p>
+
+    <h2>Basic Example: wish() Function</h2>
+    <pre>
+def wish(name):
+    print("Hello", name, "Good Morning")
+
+wish("Hema")
+wish("Ravi")
+wish("Sunny")
+    </pre>
+
+    <div class="output">
+Hello Hema Good Morning
+Hello Ravi Good Morning
+Hello Sunny Good Morning
+    </div>
+
+    <p>
+      Suppose we want to change the behavior only when the name is <strong>Sunny</strong>,
+      without modifying the <code>wish()</code> function. This can be achieved using a decorator.
+    </p>
+
+    <h2>Using Decorator</h2>
+    <pre>
+def decor(func):
+    def inner(name):
+        if name == "Sunny":
+            print("Hello Sunny Bad Morning")
+        else:
+            func(name)
+    return inner
+
+@decor
+def wish(name):
+    print("Hello", name, "Good Morning")
+
+wish("Hema")
+wish("Ravi")
+wish("Sunny")
+    </pre>
+
+    <div class="output">
+Hello Hema Good Morning
+Hello Ravi Good Morning
+Hello Sunny Bad Morning
+    </div>
+
+    <h2>Calling Function With and Without Decorator</h2>
+    <pre>
+def decor(func):
+    def inner(name):
+        if name == "Sunny":
+            print("Hello Sunny Bad Morning")
+        else:
+            func(name)
+    return inner
+
+
+def wish(name):
+    print("Hello", name, "Good Morning")
+
+
+decorfunction = decor(wish)
+
+wish("Hema")      # decorator not executed
+wish("Sunny")    # decorator not executed
+
+decorfunction("Hema")   # decorator executed
+decorfunction("Sunny")  # decorator executed
+    </pre>
+
+    <div class="output">
+Hello Hema Good Morning
+Hello Sunny Good Morning
+Hello Hema Good Morning
+Hello Sunny Bad Morning
+    </div>
+
+    <h2>Smart Division Decorator</h2>
+    <pre>
+def smart_division(func):
+    def inner(a, b):
+        print("We are dividing", a, "with", b)
+        if b == 0:
+            print("OOPS... cannot divide")
+            return
+        return func(a, b)
+    return inner
+
+@smart_division
+def division(a, b):
+    return a / b
+
+print(division(20, 2))
+print(division(20, 0))
+    </pre>
+
+    <div class="output">
+We are dividing 20 with 2
+10.0
+We are dividing 20 with 0
+OOPS... cannot divide
+None
+    </div>
+
+    <h2>Marriage Decoration Example</h2>
+    <pre>
+def marriagedecor(func):
+    def inner():
+        print('Hair decoration...')
+        print('Face decoration with Platinum package')
+        print('Fair and Lovely etc..')
+        func()
+    return inner
+
+
+def getready():
+    print('Ready for the marriage')
+
+
+decorated_getready = marriagedecor(getready)
+decorated_getready()
+    </pre>
+
+    <div class="output">
+Hair decoration...
+Face decoration with Platinum package
+Fair and Lovely etc..
+Ready for the marriage
+    </div>
+
+    <h2>Decorator Chaining</h2>
+    <p>
+      Applying multiple decorators to the same function is called <strong>Decorator Chaining</strong>.
+      The decorator closest to the function executes first.
+    </p>
+
+    <pre>
+def decor1(func):
+    def inner():
+        x = func()
+        return x * x
+    return inner
+
+
+def decor(func):
+    def inner():
+        x = func()
+        return 2 * x
+    return inner
+
+@decor1
+@decor
+def num():
+    return 10
+
+print(num())
+    </pre>
+
+    <div class="output">400</div>
+
+    <!-- <footer>
+      © HemaSoft Python Training
+    </footer> -->
+  </div>
+</body>
+</html>

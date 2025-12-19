@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<!-- saved from url=(0093)https://hemachandranss.github.io/Python-Sessions/07-Session/02_python_exception_handling.html -->
+<html lang="en" data-qb-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Exception Handling</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #4a6fa5;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            color: #555;
+            border-left: 5px solid #3498db;
+        }
+
+        .note {
+            background-color: #fffde7;
+            border-left: 5px solid #ffd600;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-block {
+            background-color: #2d3a4b;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            border-left: 5px solid #3498db;
+        }
+
+        .output {
+            background-color: #1a237e;
+            color: #bbdefb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 5px solid #5c6bc0;
+        }
+
+        .example {
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #8bc34a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+
+        .exception-hierarchy {
+            background-color: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 2px solid #bbdefb;
+        }
+
+        .hierarchy-tree {
+            margin-left: 30px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .try-except-flow {
+            background-color: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 2px solid #ce93d8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .logo {
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .keyword {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #689f38;
+        }
+
+        .comment {
+            color: #9e9e9e;
+        }
+
+        .function {
+            color: #0288d1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .code-block, .output {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+        }
+    </style>
+<style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style></head>
+<body>
+    <div class="container">
+        <header>
+            <!-- <div class="logo">HEMASOFT</div> -->
+            <h1>Python Exception Handling</h1>
+            <p class="subtitle">Complete Guide to Handling Runtime Errors in Python</p>
+            <!-- <div class="contact-info">
+                HEMASOFT, # 202, 2nd Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038<br>
+                040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.hemasoft.com
+            </div> -->
+        </header>
+
+        <section>
+            <h2>Types of Errors in Programming</h2>
+            <p>In any programming language there are 2 types of errors possible:</p>
+            <ol>
+                <li><strong>Syntax Errors</strong></li>
+                <li><strong>Runtime Errors</strong></li>
+            </ol>
+
+            <h3>1) Syntax Errors</h3>
+            <p>The errors which occur because of invalid syntax are called syntax errors.</p>
+            
+            <div class="example">
+                <p><strong>Example 1:</strong></p>
+                <div class="code-block">
+<span class="keyword">x</span> = <span class="string">10</span><br>
+<span class="keyword">if</span> x == <span class="string">10</span><br>
+    <span class="function">print</span>(<span class="string">"Hello"</span>)
+                </div>
+                <div class="output">
+SyntaxError: invalid syntax
+                </div>
+            </div>
+
+            <div class="example">
+                <p><strong>Example 2:</strong></p>
+                <div class="code-block">
+<span class="function">print</span> <span class="string">"Hello"</span>
+                </div>
+                <div class="output">
+SyntaxError: Missing parentheses in call to 'print'
+                </div>
+            </div>
+
+            <div class="note">
+                <p><strong>Note:</strong> Programmer is responsible to correct these syntax errors. Once all syntax errors are corrected then only program execution will be started.</p>
+            </div>
+
+            <h3>2) Runtime Errors</h3>
+            <p>Also known as exceptions. While executing the program if something goes wrong because of end user input or programming logic or memory problems etc then we will get Runtime Errors.</p>
+            
+            <div class="example">
+                <p><strong>Examples:</strong></p>
+                <div class="code-block">
+1) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>) <span class="comment">→ ZeroDivisionError: division by zero</span><br>
+2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">"ten"</span>) <span class="comment">→ TypeError: unsupported operand type(s) for /: 'int' and 'str'</span><br>
+3) x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Number:"</span>))<br>
+   <span class="function">print</span>(x)
+                </div>
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter Number:ten<br>
+ValueError: invalid literal for int() with base 10: 'ten'
+                </div>
+            </div>
+
+            <div class="note">
+                <p><strong>Note:</strong> Exception Handling concept is applicable for Runtime Errors but not for syntax errors.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>What is an Exception?</h2>
+            <p>An unwanted and unexpected event that disturbs normal flow of program is called exception.</p>
+            
+            <div class="example">
+                <p><strong>Examples of Exceptions:</strong></p>
+                <ul>
+                    <li>ZeroDivisionError</li>
+                    <li>TypeError</li>
+                    <li>ValueError</li>
+                    <li>FileNotFoundError</li>
+                    <li>EOFError</li>
+                    <li>SleepingError</li>
+                    <li>TypePuncturedError</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <p>It is highly recommended to handle exceptions. The main objective of exception handling is Graceful Termination of the program (i.e., we should not block our resources and we should not miss anything).</p>
+                <p>Exception handling does not mean repairing exception. We have to define alternative way to continue rest of the program normally.</p>
+            </div>
+
+            <div class="example">
+                <p><strong>Example Scenario:</strong></p>
+                <p>For example our programming requirement is reading data from remote file locating at London. At runtime if London file is not available then the program should not be terminated abnormally. We have to provide local file to continue rest of the program normally. This way of defining alternative is nothing but exception handling.</p>
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="comment"># Read Data from Remote File locating at London</span><br>
+<span class="keyword">except</span> FileNotFoundError:<br>
+    <span class="comment"># use local file and continue rest of the program normally</span>
+                </div>
+            </div>
+
+            <h3>Default Exception Handling in Python</h3>
+            <ul>
+                <li>Every exception in Python is an object. For every exception type the corresponding classes are available.</li>
+                <li>Wherever an exception occurs PVM will create the corresponding exception object and will check for handling code. If handling code is not available then Python interpreter terminates the program abnormally and prints corresponding exception information to the console.</li>
+                <li>The rest of the program won't be executed.</li>
+            </ul>
+
+            <div class="example">
+                <div class="code-block">
+1) <span class="function">print</span>(<span class="string">"Hello"</span>)<br>
+2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+3) <span class="function">print</span>(<span class="string">"Hi"</span>)
+                </div>
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Hello<br>
+Traceback (most recent call last):<br>
+  File "test.py", line 2, in <module><br>
+    print(10/0)<br>
+ZeroDivisionError: division by zero
+                </module></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Python's Exception Hierarchy</h2>
+            <div class="exception-hierarchy">
+                <div class="hierarchy-tree">
+                    BaseException<br>
+                    ├── Exception<br>
+                    │   ├── AttributeError<br>
+                    │   ├── ArithmeticError<br>
+                    │   │   ├── ZeroDivisionError<br>
+                    │   │   ├── FloatingPointError<br>
+                    │   │   └── OverflowError<br>
+                    │   ├── EOFError<br>
+                    │   ├── NameError<br>
+                    │   ├── LookupError<br>
+                    │   │   ├── IndexError<br>
+                    │   │   └── KeyError<br>
+                    │   ├── OSError<br>
+                    │   │   ├── FileNotFoundError<br>
+                    │   │   ├── InterruptedError<br>
+                    │   │   ├── PermissionError<br>
+                    │   │   └── TimeoutError<br>
+                    │   ├── TypeError<br>
+                    │   └── ValueError<br>
+                    ├── SystemExit<br>
+                    ├── GeneratorExit<br>
+                    └── KeyboardInterrupt
+                </div>
+            </div>
+            
+            <div class="note">
+                <ul>
+                    <li>Every Exception in Python is a class.</li>
+                    <li>All exception classes are child classes of BaseException, i.e., every exception class extends BaseException either directly or indirectly. Hence BaseException acts as root for Python Exception Hierarchy.</li>
+                    <li>Most of the times being a programmer we have to concentrate on Exception and its child classes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Customized Exception Handling using try-except</h2>
+            <p>It is highly recommended to handle exceptions. The code which may raise exception is called risky code and we have to take risky code inside try block. The corresponding handling code we have to take inside except block.</p>
+            
+            <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="comment"># Risky Code</span><br>
+<span class="keyword">except</span> XXX:<br>
+    <span class="comment"># Handling code/Alternative Code</span>
+            </div>
+
+            <h3>Without try-except</h3>
+            <div class="example">
+                <div class="code-block">
+1) <span class="function">print</span>(<span class="string">"stmt-1"</span>)<br>
+2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+3) <span class="function">print</span>(<span class="string">"stmt-3"</span>)
+                </div>
+                <div class="output">
+stmt-1<br>
+ZeroDivisionError: division by zero<br>
+Abnormal termination/Non-Graceful Termination
+                </div>
+            </div>
+
+            <h3>With try-except</h3>
+            <div class="example">
+                <div class="code-block">
+1) <span class="function">print</span>(<span class="string">"stmt-1"</span>)<br>
+2) <span class="keyword">try:</span><br>
+3)     <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+4) <span class="keyword">except</span> ZeroDivisionError:<br>
+5)     <span class="function">print</span>(<span class="string">10</span>/<span class="string">2</span>)<br>
+6) <span class="function">print</span>(<span class="string">"stmt-3"</span>)
+                </div>
+                <div class="output">
+stmt-1<br>
+5.0<br>
+stmt-3<br>
+Normal termination/Graceful Termination
+                </div>
+            </div>
+
+            <h3>Control Flow in try-except</h3>
+            <div class="try-except-flow">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    stmt-1<br>
+    stmt-2<br>
+    stmt-3<br>
+<span class="keyword">except</span> XXX:<br>
+    stmt-4<br>
+stmt-5
+                </div>
+                
+                <p><strong>Case-1:</strong> If there is no exception → 1,2,3,5 and Normal Termination</p>
+                <p><strong>Case-2:</strong> If an exception raised at stmt-2 and corresponding except block matched → 1,4,5 Normal Termination</p>
+                <p><strong>Case-3:</strong> If an exception raised at stmt-2 and corresponding except block not matched → 1, Abnormal Termination</p>
+                <p><strong>Case-4:</strong> If an exception raised at stmt-4 or at stmt-5 then it is always abnormal termination.</p>
+            </div>
+
+            <div class="note">
+                <p><strong>Conclusions:</strong></p>
+                <ol>
+                    <li>Within the try block if anywhere exception raised then rest of the try block won't be executed even though we handled that exception. Hence we have to take only risky code inside try block and length of the try block should be as less as possible.</li>
+                    <li>In addition to try block, there may be a chance of raising exceptions inside except and finally blocks also.</li>
+                    <li>If any statement which is not part of try block raises an exception then it is always abnormal termination.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>How to Print Exception Information</h2>
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+<span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> msg:<br>
+    <span class="function">print</span>(<span class="string">"exception raised and its description is:"</span>, msg)
+                </div>
+                <div class="output">
+exception raised and its description is: division by zero
+                </div>
+            </div>
+
+            <h2>try with Multiple except Blocks</h2>
+            <p>The way of handling exception is varied from exception to exception. Hence for every exception type a separate except block we have to provide. i.e., try with multiple except blocks is possible and recommended to use.</p>
+            
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
+    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
+    <span class="function">print</span>(x/y)<br>
+<span class="keyword">except</span> ZeroDivisionError:<br>
+    <span class="function">print</span>(<span class="string">"Can't Divide with Zero"</span>)<br>
+<span class="keyword">except</span> ValueError:<br>
+    <span class="function">print</span>(<span class="string">"please provide int value only"</span>)
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: 2<br>
+5.0
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: 0<br>
+Can't Divide with Zero
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: ten<br>
+please provide int value only
+                </div>
+            </div>
+
+            <div class="note">
+                <p>If try with multiple except blocks available then the order of these except blocks is important. Python interpreter will always consider from top to bottom until matched except block identified.</p>
+            </div>
+
+            <h2>Single except Block that can handle Multiple Exceptions</h2>
+            <p>We can write a single except block that can handle multiple different types of exceptions.</p>
+            
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
+    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
+    <span class="function">print</span>(x/y)<br>
+<span class="keyword">except</span> (ZeroDivisionError, ValueError) <span class="keyword">as</span> msg:<br>
+    <span class="function">print</span>(<span class="string">"Piz Provide valid numbers only and problem is: "</span>, msg)
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: 0<br>
+Piz Provide valid numbers only and problem is: division by zero
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: ten<br>
+Piz Provide valid numbers only and problem is: invalid literal for int() with base 10: 'ten'
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Default except Block</h2>
+            <p>We can use default except block to handle any type of exceptions. In default except block generally we can print normal error messages.</p>
+            
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
+    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
+    <span class="function">print</span>(x/y)<br>
+<span class="keyword">except</span> ZeroDivisionError:<br>
+    <span class="function">print</span>(<span class="string">"ZeroDivisionError: Can't divide with zero"</span>)<br>
+<span class="keyword">except</span>:<br>
+    <span class="function">print</span>(<span class="string">"Default Except: Piz provide valid input only"</span>)
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: 0<br>
+ZeroDivisionError: Can't divide with zero
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter First Number: 10<br>
+Enter Second Number: ten<br>
+Default Except: Piz provide valid input only
+                </div>
+            </div>
+
+            <div class="warning">
+                <p><strong>Note:</strong> If try with multiple except blocks available then default except block should be last, otherwise we will get SyntaxError.</p>
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+<span class="keyword">except</span>:<br>
+    <span class="function">print</span>(<span class="string">"Default Except"</span>)<br>
+<span class="keyword">except</span> ZeroDivisionError:<br>
+    <span class="function">print</span>(<span class="string">"ZeroDivisionError"</span>)
+                </div>
+                <div class="output">
+SyntaxError: default 'except:' must be last
+                </div>
+            </div>
+
+            <div class="note">
+                <p>The following are various possible combinations of except blocks:</p>
+                <ol>
+                    <li>except ZeroDivisionError:</li>
+                    <li>except ZeroDivisionError as msg:</li>
+                    <li>except (ZeroDivisionError, ValueError):</li>
+                    <li>except (ZeroDivisionError, ValueError) as msg:</li>
+                    <li>except :</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>finally Block</h2>
+            <p>It is not recommended to maintain clean up code (Resource Deallocating Code or Resource Releasing code) inside try block because there is no guarantee for the execution of every statement inside try block always.</p>
+            <p>It is not recommended to maintain clean up code inside except block, because if there is no exception then except block won't be executed.</p>
+            <p>Hence we required some place to maintain clean up code which should be executed always irrespective of whether exception raised or not raised and whether exception handled or not handled. Such type of best place is nothing but finally block. Hence the main purpose of finally block is to maintain clean up code.</p>
+            
+            <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="comment"># Risky Code</span><br>
+<span class="keyword">except</span>:<br>
+    <span class="comment"># Handling Code</span><br>
+<span class="keyword">finally:</span><br>
+    <span class="comment"># Cleanup code</span>
+            </div>
+
+            <p>The speciality of finally block is it will be executed always whether exception raised or not raised and whether exception handled or not handled.</p>
+
+            <h3>Case-1: If there is no exception</h3>
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">"try"</span>)<br>
+<span class="keyword">except</span>:<br>
+    <span class="function">print</span>(<span class="string">"except"</span>)<br>
+<span class="keyword">finally:</span><br>
+    <span class="function">print</span>(<span class="string">"finally"</span>)
+                </div>
+                <div class="output">
+try<br>
+finally
+                </div>
+            </div>
+
+            <h3>Case-2: If there is an exception raised but handled</h3>
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">"try"</span>)<br>
+    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+<span class="keyword">except</span> ZeroDivisionError:<br>
+    <span class="function">print</span>(<span class="string">"except"</span>)<br>
+<span class="keyword">finally:</span><br>
+    <span class="function">print</span>(<span class="string">"finally"</span>)
+                </div>
+                <div class="output">
+try<br>
+except<br>
+finally
+                </div>
+            </div>
+
+            <h3>Case-3: If there is an exception raised but not handled</h3>
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">"try"</span>)<br>
+    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+<span class="keyword">except</span> NameError:<br>
+    <span class="function">print</span>(<span class="string">"except"</span>)<br>
+<span class="keyword">finally:</span><br>
+    <span class="function">print</span>(<span class="string">"finally"</span>)
+                </div>
+                <div class="output">
+try<br>
+finally<br>
+ZeroDivisionError: division by zero (Abnormal Termination)
+                </div>
+            </div>
+
+            <div class="warning">
+                <p><strong>Note:</strong> There is only one situation where finally block won't be executed i.e., whenever we are using os._exit(0) function. Whenever we are using os._exit(0) function then Python Virtual Machine itself will be shutdown. In this particular case finally won't be executed.</p>
+            </div>
+
+            <h2>Control Flow in try-except-finally</h2>
+            <div class="try-except-flow">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    stmt-1<br>
+    stmt-2<br>
+    stmt-3<br>
+<span class="keyword">except</span>:<br>
+    stmt-4<br>
+<span class="keyword">finally:</span><br>
+    stmt-5<br>
+    stmt-6
+                </div>
+                
+                <p><strong>Case-1:</strong> If there is no exception → 1,2,3,5,6 Normal Termination</p>
+                <p><strong>Case-2:</strong> If an exception raised at stmt-2 and the corresponding except block matched → 1,4,5,6 Normal Termination</p>
+                <p><strong>Case-3:</strong> If an exception raised at stmt-2 but the corresponding except block not matched → 1,5 Abnormal Termination</p>
+                <p><strong>Case-4:</strong> If an exception raised at stmt-4 then it is always abnormal termination but before that finally block will be executed.</p>
+                <p><strong>Case-5:</strong> If an exception raised at stmt-5 or at stmt-6 then it is always abnormal termination</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Nested try-except-finally Blocks</h2>
+            <p>We can take try-except-finally blocks inside try or except or finally blocks. i.e., nesting of try-except-finally is possible.</p>
+            
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">"outer try block"</span>)<br>
+    <span class="keyword">try:</span><br>
+        <span class="function">print</span>(<span class="string">"Inner try block"</span>)<br>
+        <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
+    <span class="keyword">except</span> ZeroDivisionError:<br>
+        <span class="function">print</span>(<span class="string">"Inner except block"</span>)<br>
+    <span class="keyword">finally:</span><br>
+        <span class="function">print</span>(<span class="string">"Inner finally block"</span>)<br>
+<span class="keyword">except</span>:<br>
+    <span class="function">print</span>(<span class="string">"outer except block"</span>)<br>
+<span class="keyword">finally:</span><br>
+    <span class="function">print</span>(<span class="string">"outer finally block"</span>)
+                </div>
+                <div class="output">
+outer try block<br>
+Inner try block<br>
+Inner except block<br>
+Inner finally block<br>
+outer finally block
+                </div>
+            </div>
+
+            <div class="note">
+                <p>General Risky code we have to take inside outer try block and too much risky code we have to take inside inner try block. Inside Inner try block if an exception raised then inner except block is responsible to handle. If it is unable to handle then outer except block is responsible to handle.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>else Block with try-except-finally</h2>
+            <p>We can use else block with try-except-finally blocks. else block will be executed if and only if there are no exceptions inside try block.</p>
+            
+            <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="comment"># Risky Code</span><br>
+<span class="keyword">except</span>:<br>
+    <span class="comment"># will be executed if exception inside try</span><br>
+<span class="keyword">else:</span><br>
+    <span class="comment"># will be executed if there is no exception inside try</span><br>
+<span class="keyword">finally:</span><br>
+    <span class="comment"># will be executed whether exception raised or not raised and handled or not handled</span>
+            </div>
+
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">try:</span><br>
+    <span class="function">print</span>(<span class="string">"try"</span>)<br>
+    <span class="comment"># print(10/0)  → If we comment this line then else block will be executed</span><br>
+<span class="keyword">except</span>:<br>
+    <span class="function">print</span>(<span class="string">"except"</span>)<br>
+<span class="keyword">else:</span><br>
+    <span class="function">print</span>(<span class="string">"else"</span>)<br>
+<span class="keyword">finally:</span><br>
+    <span class="function">print</span>(<span class="string">"finally"</span>)
+                </div>
+                
+                <p><strong>When line is commented (no exception):</strong></p>
+                <div class="output">
+try<br>
+else<br>
+finally
+                </div>
+                
+                <p><strong>When line is not commented (exception occurs):</strong></p>
+                <div class="output">
+try<br>
+except<br>
+finally
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Various possible Combinations of try-except-else-finally</h2>
+            <ol>
+                <li>Whenever we are writing try block, compulsory we should write except or finally block. i.e., without except or finally block we cannot write try block.</li>
+                <li>Whenever we are writing except block, compulsory we should write try block. i.e., except without try is always invalid.</li>
+                <li>Whenever we are writing finally block, compulsory we should write try block. i.e., finally without try is always invalid.</li>
+                <li>We can write multiple except blocks for the same try, but we cannot write multiple finally blocks for the same try.</li>
+                <li>Whenever we are writing else block compulsory except block should be there. i.e., without except we cannot write else block.</li>
+                <li>In try-except-else-finally order is important.</li>
+                <li>We can define try-except-else-finally inside try, except, else and finally blocks. i.e., nesting of try-except-else-finally is always possible.</li>
+            </ol>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Valid/Invalid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>try: print("try")</code></td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <td><code>except: print("Hello")</code></td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <td><code>else: print("Hello")</code></td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <td><code>finally: print("Hello")</code></td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>except: print("except")</code></td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>finally: print("finally")</code></td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>except: print("except")<br>else: print("else")</code></td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>else: print("else")</code></td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>except XXX: print("except-1")<br>except YYY: print("except-2")</code></td>
+                        <td>✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Types of Exceptions</h2>
+            <p>In Python there are 2 types of exceptions possible:</p>
+            <ol>
+                <li>Predefined Exceptions</li>
+                <li>User Defined Exceptions</li>
+            </ol>
+
+            <h3>1) Predefined Exceptions</h3>
+            <p>Also known as inbuilt exceptions. The exceptions which are raised automatically by Python virtual machine whenever a particular event occurs are called pre defined exceptions.</p>
+            
+            <div class="example">
+                <p><strong>Example 1:</strong> Whenever we are trying to perform Division by zero, automatically Python will raise ZeroDivisionError.</p>
+                <div class="code-block">
+<span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)
+                </div>
+                
+                <p><strong>Example 2:</strong> Whenever we are trying to convert input value to int type and if input value is not int value then Python will raise ValueError automatically.</p>
+                <div class="code-block">
+x = <span class="function">int</span>(<span class="string">"ten"</span>) <span class="comment">→ ValueError</span>
+                </div>
+            </div>
+
+            <h3>2) User Defined Exceptions</h3>
+            <p>Also known as Customized Exceptions or Programatic Exceptions. Sometimes we have to define and raise exceptions explicitly to indicate that something goes wrong, such type of exceptions are called User Defined Exceptions or Customized Exceptions.</p>
+            <p>Programmer is responsible to define these exceptions and Python not having any idea about these. Hence we have to raise explicitly based on our requirement by using "raise" keyword.</p>
+            
+            <div class="example">
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>InSufficientFundsException</li>
+                    <li>InvalidInputException</li>
+                    <li>TooYoungException</li>
+                    <li>TooOldException</li>
+                </ul>
+            </div>
+
+            <h3>How to Define and Raise Customized Exceptions</h3>
+            <p>Every exception in Python is a class that extends Exception class either directly or indirectly.</p>
+            
+            <div class="code-block">
+<span class="keyword">class</span> <span class="function">ClassName</span>(predefined exception class name):<br>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
+        <span class="keyword">self</span>.msg = arg
+            </div>
+
+            <div class="example">
+                <div class="code-block">
+<span class="keyword">class</span> <span class="function">TooYoungException</span>(Exception):<br>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
+        <span class="keyword">self</span>.msg = arg<br>
+<br>
+<span class="keyword">class</span> <span class="function">TooOldException</span>(Exception):<br>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
+        <span class="keyword">self</span>.msg = arg<br>
+<br>
+age = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Age:"</span>))<br>
+<span class="keyword">if</span> age &gt; <span class="string">60</span>:<br>
+    <span class="keyword">raise</span> TooYoungException(<span class="string">"Piz wait some more time you will get best match soon!!"</span>)<br>
+<span class="keyword">elif</span> age &lt; <span class="string">18</span>:<br>
+    <span class="keyword">raise</span> TooOldException(<span class="string">"Your age already crossed marriage age...no chance of getting marriage"</span>)<br>
+<span class="keyword">else</span>:<br>
+    <span class="function">print</span>(<span class="string">"You will get match details soon by email!!"</span>)
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter Age: 90<br>
+__main__.TooYoungException: Piz wait some more time you will get best match soon!!!
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter Age: 12<br>
+__main__.TooOldException: Your age already crossed marriage age...no chance of getting marriage
+                </div>
+                
+                <div class="output">
+D:\Python_classes&gt;py test.py<br>
+Enter Age: 27<br>
+You will get match details soon by email!!
+                </div>
+            </div>
+
+            <div class="note">
+                <p><strong>Note:</strong> raise keyword is best suitable for customized exceptions but not for pre defined exceptions.</p>
+            </div>
+        </section>
+
+        <!-- <footer class="footer">
+            <p>HEMASOFT, # 202, 2nd Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038</p>
+            <p>040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.hemasoft.com</p>
+            <p>Python Exception Handling Tutorial - Complete Reference</p>
+        </footer> -->
+    </div>
+
+</body></html>

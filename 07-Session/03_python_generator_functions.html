@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generator Functions – HemaSoft</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 40px;
+      color: #2c3e50;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      color: #1a237e;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #283593;
+      border-left: 6px solid #3f51b5;
+      padding-left: 12px;
+    }
+    p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .brand {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #37474f;
+    }
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .output {
+      background: #f1f8e9;
+      border-left: 6px solid #8bc34a;
+      padding: 16px 20px;
+      margin: 15px 0 30px 0;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .note {
+      background: #e3f2fd;
+      border-left: 6px solid #2196f3;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #546e7a;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generator Functions in Python</h1>
+    <!-- <div class="brand">HemaSoft Training Notes</div> -->
+
+    <p>
+      A <strong>Generator</strong> is a function that is responsible for generating a sequence of values.
+      We can write generator functions just like ordinary functions, but instead of using <code>return</code>,
+      we use the <code>yield</code> keyword to produce values one at a time.
+    </p>
+
+    <h2>Example 1: Simple Generator</h2>
+    <pre>
+# Generator definition
+def mygen():
+    yield 'A'
+    yield 'B'
+    yield 'C'
+
+# Creating generator object
+g = mygen()
+print(type(g))
+
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+    </pre>
+
+    <div class="output">
+&lt;class 'generator'&gt;
+A
+B
+C
+Traceback (most recent call last):
+  File "test.py", line 12, in &lt;module&gt;
+    print(next(g))
+StopIteration
+    </div>
+
+    <h2>Example 2: Countdown Generator</h2>
+    <pre>
+def countdown(num):
+    print("Start Countdown")
+    while num > 0:
+        yield num
+        num = num - 1
+
+values = countdown(5)
+for x in values:
+    print(x)
+    </pre>
+
+    <div class="output">
+Start Countdown
+5
+4
+3
+2
+1
+    </div>
+
+    <h2>Example 3: Generate First n Numbers</h2>
+    <pre>
+def firstn(num):
+    n = 1
+    while n <= num:
+        yield n
+        n = n + 1
+
+values = firstn(5)
+for x in values:
+    print(x)
+    </pre>
+
+    <div class="output">
+1
+2
+3
+4
+5
+    </div>
+
+    <p>We can convert a generator into a list:</p>
+    <pre>
+values = firstn(10)
+l1 = list(values)
+print(l1)
+    </pre>
+
+    <div class="output">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</div>
+
+    <h2>Example 4: Fibonacci Numbers</h2>
+    <p>The next Fibonacci number is the sum of the previous two numbers.</p>
+
+    <pre>
+def fib():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+for f in fib():
+    if f > 100:
+        break
+    print(f)
+    </pre>
+
+    <div class="output">
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+    </div>
+
+    <h2>Advantages of Generator Functions</h2>
+    <ul>
+      <li>Very easy to use compared to class-level iterators</li>
+      <li>Improves memory utilization and performance</li>
+      <li>Best suitable for reading data from very large files</li>
+      <li>Excellent for web scraping and crawling</li>
+    </ul>
+
+    <h2>Generators vs Normal Collections (Performance)</h2>
+    <pre>
+import random
+import time
+
+names = ['Sunny', 'Bunny', 'Chinny', 'Vinny']
+subjects = ['Python', 'Java', 'Blockchain']
+
+def people_list(num_people):
+    results = []
+    for i in range(num_people):
+        person = {
+            'id': i,
+            'name': random.choice(names),
+            'subject': random.choice(subjects)
+        }
+        results.append(person)
+    return results
+
+def people_generator(num_people):
+    for i in range(num_people):
+        person = {
+            'id': i,
+            'name': random.choice(names),
+            'major': random.choice(subjects)
+        }
+        yield person
+
+# Timing generator
+t1 = time.clock()
+people = people_generator(10000000)
+t2 = time.clock()
+print('Took {}'.format(t2 - t1))
+    </pre>
+
+    <div class="note">
+      Observe the difference in execution time when using lists versus generators.
+    </div>
+
+    <h2>Memory Utilization Comparison</h2>
+    <p><strong>Normal Collection:</strong></p>
+    <pre>
+l = [x * x for x in range(10000000000000000)]
+print(l[0])
+    </pre>
+    <p>This will result in a <strong>MemoryError</strong> because all values are stored in memory.</p>
+
+    <p><strong>Generator:</strong></p>
+    <pre>
+g = (x * x for x in range(10000000000000000))
+print(next(g))
+    </pre>
+
+    <div class="output">0</div>
+
+    <p>
+      No MemoryError occurs because values are generated one at a time and not stored in advance.
+    </p>
+
+    <!-- <footer>
+      © HemaSoft Python Training
+    </footer> -->
+  </div>
+</body>
+</html>
