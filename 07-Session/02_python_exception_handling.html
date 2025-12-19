@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
             line-height: 1.6;
             padding: 20px;
         }
@@ -22,9 +22,9 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: #2d2d30;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             padding: 30px;
         }
@@ -32,171 +32,234 @@
         header {
             text-align: center;
             padding-bottom: 30px;
-            border-bottom: 3px solid #4a6fa5;
+            border-bottom: 3px solid #007acc;
             margin-bottom: 30px;
         }
 
         h1 {
-            color: #2c3e50;
+            color: #4ec9b0;
             font-size: 2.8rem;
             margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         h2 {
-            color: #3498db;
+            color: #9cdcfe;
             margin-top: 25px;
             margin-bottom: 15px;
             padding-bottom: 8px;
-            border-bottom: 2px solid #ecf0f1;
+            border-bottom: 2px solid #3e3e42;
         }
 
         h3 {
-            color: #2c3e50;
+            color: #dcdcaa;
             margin-top: 20px;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            color: #7f8c8d;
+            color: #858585;
             font-size: 1.2rem;
             margin-bottom: 20px;
         }
 
         .contact-info {
-            background: #f8f9fa;
+            background: #252526;
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
             text-align: center;
-            color: #555;
-            border-left: 5px solid #3498db;
+            color: #ccc;
+            border-left: 5px solid #007acc;
+            font-family: 'Consolas', monospace;
         }
 
         .note {
-            background-color: #fffde7;
-            border-left: 5px solid #ffd600;
+            background-color: #3a3a3a;
+            border-left: 5px solid #dcdcaa;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            color: #d7ba7d;
         }
 
         .warning {
-            background-color: #ffebee;
-            border-left: 5px solid #f44336;
+            background-color: #402727;
+            border-left: 5px solid #f14c4c;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            color: #f48771;
         }
 
         .code-block {
-            background-color: #2d3a4b;
-            color: #e0e0e0;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            border-left: 5px solid #3498db;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            border-left: 5px solid #007acc;
+            border: 1px solid #3e3e42;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'Python Code';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #007acc;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 0 0 0 5px;
         }
 
         .output {
-            background-color: #1a237e;
-            color: #bbdefb;
+            background-color: #0c2d1c;
+            color: #6a9955;
             padding: 15px;
             border-radius: 10px;
             margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            border-left: 5px solid #5c6bc0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            border-left: 5px solid #6a9955;
+            border: 1px solid #264f34;
+            position: relative;
+        }
+
+        .output::before {
+            content: 'Output';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #6a9955;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 0 0 0 5px;
         }
 
         .example {
-            background-color: #f1f8e9;
+            background-color: #2a2a2a;
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
-            border-left: 5px solid #8bc34a;
+            border-left: 5px solid #b5cea8;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 25px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #3e3e42;
         }
 
         th {
-            background-color: #3498db;
+            background-color: #007acc;
             color: white;
             padding: 15px;
             text-align: left;
+            font-weight: 600;
         }
 
         td {
             padding: 15px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #3e3e42;
+            font-family: 'Consolas', monospace;
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #252526;
         }
 
         tr:hover {
-            background-color: #f1f8ff;
+            background-color: #2a2d2e;
         }
 
         .exception-hierarchy {
-            background-color: #e3f2fd;
+            background-color: #1e1e1e;
             padding: 25px;
             border-radius: 10px;
             margin: 25px 0;
-            border: 2px solid #bbdefb;
-        }
-
-        .hierarchy-tree {
-            margin-left: 30px;
-            font-family: 'Courier New', monospace;
+            border: 2px solid #007acc;
+            font-family: 'Consolas', monospace;
+            overflow-x: auto;
         }
 
         .try-except-flow {
-            background-color: #f3e5f5;
+            background-color: #2a2d2e;
             padding: 20px;
             border-radius: 10px;
             margin: 25px 0;
-            border: 2px solid #ce93d8;
+            border: 2px solid #569cd6;
         }
 
         .footer {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #7f8c8d;
+            border-top: 1px solid #3e3e42;
+            color: #858585;
             font-size: 0.9rem;
         }
 
         .logo {
-            color: #2c3e50;
+            color: #4ec9b0;
             font-weight: bold;
             font-size: 1.5rem;
             margin-bottom: 10px;
+            font-family: 'Consolas', monospace;
         }
 
+        /* Python Syntax Highlighting */
         .keyword {
-            color: #d32f2f;
+            color: #569cd6;
             font-weight: bold;
         }
 
         .string {
-            color: #689f38;
+            color: #ce9178;
+        }
+
+        .number {
+            color: #b5cea8;
         }
 
         .comment {
-            color: #9e9e9e;
+            color: #6a9955;
+            font-style: italic;
         }
 
         .function {
-            color: #0288d1;
+            color: #dcdcaa;
         }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .operator {
+            color: #d4d4d4;
+        }
+
+        .exception-name {
+            color: #f48771;
+            font-weight: bold;
+        }
+
+        .code-line {
+            display: block;
+            min-height: 1.2em;
+            white-space: pre;
+        }
+
+        .indent-1 { padding-left: 20px; }
+        .indent-2 { padding-left: 40px; }
+        .indent-3 { padding-left: 60px; }
+        .indent-4 { padding-left: 80px; }
 
         @media (max-width: 768px) {
             .container {
@@ -211,20 +274,25 @@
                 font-size: 0.9rem;
                 padding: 12px;
             }
+            
+            .indent-1 { padding-left: 15px; }
+            .indent-2 { padding-left: 30px; }
+            .indent-3 { padding-left: 45px; }
+            .indent-4 { padding-left: 60px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <!-- <div class="logo">HEMASOFT</div> -->
+        <!-- <header>
+            <div class="logo">HEMASOFT</div>
             <h1>Python Exception Handling</h1>
             <p class="subtitle">Complete Guide to Handling Runtime Errors in Python</p>
-            <!-- <div class="contact-info">
+            <div class="contact-info">
                 HEMASOFT, # 202, 2nd Floor, HUDA Maithvanam, Ameerpet, Hyderabad - 500038<br>
                 040 – 64 51 27 86, 80 96 96 96 96, 92 46 21 21 43 | www.hemasoft.com
-            </div> -->
-        </header>
+            </div>
+        </header> -->
 
         <section>
             <h2>Types of Errors in Programming</h2>
@@ -240,9 +308,9 @@
             <div class="example">
                 <p><strong>Example 1:</strong></p>
                 <div class="code-block">
-<span class="keyword">x</span> = <span class="string">10</span><br>
-<span class="keyword">if</span> x == <span class="string">10</span><br>
-    <span class="function">print</span>(<span class="string">"Hello"</span>)
+<span class="code-line"><span class="keyword">x</span> <span class="operator">=</span> <span class="number">10</span></span>
+<span class="code-line"><span class="keyword">if</span> <span class="keyword">x</span> <span class="operator">==</span> <span class="number">10</span></span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"Hello"</span>)</span>
                 </div>
                 <div class="output">
 SyntaxError: invalid syntax
@@ -252,7 +320,7 @@ SyntaxError: invalid syntax
             <div class="example">
                 <p><strong>Example 2:</strong></p>
                 <div class="code-block">
-<span class="function">print</span> <span class="string">"Hello"</span>
+<span class="code-line"><span class="function">print</span> <span class="string">"Hello"</span></span>
                 </div>
                 <div class="output">
 SyntaxError: Missing parentheses in call to 'print'
@@ -269,14 +337,19 @@ SyntaxError: Missing parentheses in call to 'print'
             <div class="example">
                 <p><strong>Examples:</strong></p>
                 <div class="code-block">
-1) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>) <span class="comment">→ ZeroDivisionError: division by zero</span><br>
-2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">"ten"</span>) <span class="comment">→ TypeError: unsupported operand type(s) for /: 'int' and 'str'</span><br>
-3) x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Number:"</span>))<br>
-   <span class="function">print</span>(x)
+<span class="code-line"><span class="comment"># Example 1</span></span>
+<span class="code-line"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>) <span class="comment"># ZeroDivisionError: division by zero</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="comment"># Example 2</span></span>
+<span class="code-line"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="string">"ten"</span>) <span class="comment"># TypeError: unsupported operand type(s) for /: 'int' and 'str'</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="comment"># Example 3</span></span>
+<span class="code-line"><span class="keyword">x</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Number:"</span>))</span>
+<span class="code-line"><span class="function">print</span>(<span class="keyword">x</span>)</span>
                 </div>
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter Number:ten<br>
+D:\Python_classes>py test.py
+Enter Number:ten
 ValueError: invalid literal for int() with base 10: 'ten'
                 </div>
             </div>
@@ -292,15 +365,15 @@ ValueError: invalid literal for int() with base 10: 'ten'
             
             <div class="example">
                 <p><strong>Examples of Exceptions:</strong></p>
-                <ul>
-                    <li>ZeroDivisionError</li>
-                    <li>TypeError</li>
-                    <li>ValueError</li>
-                    <li>FileNotFoundError</li>
-                    <li>EOFError</li>
-                    <li>SleepingError</li>
-                    <li>TypePuncturedError</li>
-                </ul>
+                <div class="code-block">
+<span class="code-line"><span class="exception-name">ZeroDivisionError</span></span>
+<span class="code-line"><span class="exception-name">TypeError</span></span>
+<span class="code-line"><span class="exception-name">ValueError</span></span>
+<span class="code-line"><span class="exception-name">FileNotFoundError</span></span>
+<span class="code-line"><span class="exception-name">EOFError</span></span>
+<span class="code-line"><span class="exception-name">SleepingError</span></span>
+<span class="code-line"><span class="exception-name">TypePuncturedError</span></span>
+                </div>
             </div>
 
             <div class="note">
@@ -312,10 +385,12 @@ ValueError: invalid literal for int() with base 10: 'ten'
                 <p><strong>Example Scenario:</strong></p>
                 <p>For example our programming requirement is reading data from remote file locating at London. At runtime if London file is not available then the program should not be terminated abnormally. We have to provide local file to continue rest of the program normally. This way of defining alternative is nothing but exception handling.</p>
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="comment"># Read Data from Remote File locating at London</span><br>
-<span class="keyword">except</span> FileNotFoundError:<br>
-    <span class="comment"># use local file and continue rest of the program normally</span>
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Read Data from Remote File locating at London</span></span>
+<span class="code-line indent-1"><span class="function">read_remote_file</span>(<span class="string">"london_data.txt"</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">FileNotFoundError</span>:</span>
+<span class="code-line indent-1"><span class="comment"># use local file and continue rest of the program normally</span></span>
+<span class="code-line indent-1"><span class="function">read_local_file</span>(<span class="string">"local_backup.txt"</span>)</span>
                 </div>
             </div>
 
@@ -328,16 +403,15 @@ ValueError: invalid literal for int() with base 10: 'ten'
 
             <div class="example">
                 <div class="code-block">
-1) <span class="function">print</span>(<span class="string">"Hello"</span>)<br>
-2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-3) <span class="function">print</span>(<span class="string">"Hi"</span>)
+<span class="code-line"><span class="function">print</span>(<span class="string">"Hello"</span>)</span>
+<span class="code-line"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)  <span class="comment"># This will cause an exception</span></span>
+<span class="code-line"><span class="function">print</span>(<span class="string">"Hi"</span>)   <span class="comment"># This line will not be executed</span></span>
                 </div>
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Hello<br>
-Traceback (most recent call last):<br>
-  File "test.py", line 2, in <module><br>
-    print(10/0)<br>
+Hello
+Traceback (most recent call last):
+  File "test.py", line 2, in <module>
+    print(10/0)
 ZeroDivisionError: division by zero
                 </div>
             </div>
@@ -346,30 +420,24 @@ ZeroDivisionError: division by zero
         <section>
             <h2>Python's Exception Hierarchy</h2>
             <div class="exception-hierarchy">
-                <div class="hierarchy-tree">
-                    BaseException<br>
-                    ├── Exception<br>
-                    │   ├── AttributeError<br>
-                    │   ├── ArithmeticError<br>
-                    │   │   ├── ZeroDivisionError<br>
-                    │   │   ├── FloatingPointError<br>
-                    │   │   └── OverflowError<br>
-                    │   ├── EOFError<br>
-                    │   ├── NameError<br>
-                    │   ├── LookupError<br>
-                    │   │   ├── IndexError<br>
-                    │   │   └── KeyError<br>
-                    │   ├── OSError<br>
-                    │   │   ├── FileNotFoundError<br>
-                    │   │   ├── InterruptedError<br>
-                    │   │   ├── PermissionError<br>
-                    │   │   └── TimeoutError<br>
-                    │   ├── TypeError<br>
-                    │   └── ValueError<br>
-                    ├── SystemExit<br>
-                    ├── GeneratorExit<br>
-                    └── KeyboardInterrupt
-                </div>
+                <span class="code-line"><span class="class-name">BaseException</span></span>
+                <span class="code-line indent-1"><span class="class-name">Exception</span></span>
+                <span class="code-line indent-2"><span class="class-name">ArithmeticError</span></span>
+                <span class="code-line indent-3"><span class="class-name">ZeroDivisionError</span></span>
+                <span class="code-line indent-3"><span class="class-name">FloatingPointError</span></span>
+                <span class="code-line indent-3"><span class="class-name">OverflowError</span></span>
+                <span class="code-line indent-2"><span class="class-name">LookupError</span></span>
+                <span class="code-line indent-3"><span class="class-name">IndexError</span></span>
+                <span class="code-line indent-3"><span class="class-name">KeyError</span></span>
+                <span class="code-line indent-2"><span class="class-name">OSError</span></span>
+                <span class="code-line indent-3"><span class="class-name">FileNotFoundError</span></span>
+                <span class="code-line indent-3"><span class="class-name">PermissionError</span></span>
+                <span class="code-line indent-3"><span class="class-name">TimeoutError</span></span>
+                <span class="code-line indent-2"><span class="class-name">TypeError</span></span>
+                <span class="code-line indent-2"><span class="class-name">ValueError</span></span>
+                <span class="code-line indent-1"><span class="class-name">SystemExit</span></span>
+                <span class="code-line indent-1"><span class="class-name">GeneratorExit</span></span>
+                <span class="code-line indent-1"><span class="class-name">KeyboardInterrupt</span></span>
             </div>
             
             <div class="note">
@@ -386,22 +454,24 @@ ZeroDivisionError: division by zero
             <p>It is highly recommended to handle exceptions. The code which may raise exception is called risky code and we have to take risky code inside try block. The corresponding handling code we have to take inside except block.</p>
             
             <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="comment"># Risky Code</span><br>
-<span class="keyword">except</span> XXX:<br>
-    <span class="comment"># Handling code/Alternative Code</span>
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Risky Code</span></span>
+<span class="code-line indent-1"><span class="function">risky_operation</span>()</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ExceptionType</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Handling code/Alternative Code</span></span>
+<span class="code-line indent-1"><span class="function">alternative_operation</span>()</span>
             </div>
 
             <h3>Without try-except</h3>
             <div class="example">
                 <div class="code-block">
-1) <span class="function">print</span>(<span class="string">"stmt-1"</span>)<br>
-2) <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-3) <span class="function">print</span>(<span class="string">"stmt-3"</span>)
+<span class="code-line"><span class="function">print</span>(<span class="string">"stmt-1"</span>)</span>
+<span class="code-line"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)   <span class="comment"># Exception occurs here</span></span>
+<span class="code-line"><span class="function">print</span>(<span class="string">"stmt-3"</span>) <span class="comment"># This will not be executed</span></span>
                 </div>
                 <div class="output">
-stmt-1<br>
-ZeroDivisionError: division by zero<br>
+stmt-1
+ZeroDivisionError: division by zero
 Abnormal termination/Non-Graceful Termination
                 </div>
             </div>
@@ -409,17 +479,17 @@ Abnormal termination/Non-Graceful Termination
             <h3>With try-except</h3>
             <div class="example">
                 <div class="code-block">
-1) <span class="function">print</span>(<span class="string">"stmt-1"</span>)<br>
-2) <span class="keyword">try:</span><br>
-3)     <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-4) <span class="keyword">except</span> ZeroDivisionError:<br>
-5)     <span class="function">print</span>(<span class="string">10</span>/<span class="string">2</span>)<br>
-6) <span class="function">print</span>(<span class="string">"stmt-3"</span>)
+<span class="code-line"><span class="function">print</span>(<span class="string">"stmt-1"</span>)</span>
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">2</span>)  <span class="comment"># Alternative operation</span></span>
+<span class="code-line"><span class="function">print</span>(<span class="string">"stmt-3"</span>)</span>
                 </div>
                 <div class="output">
-stmt-1<br>
-5.0<br>
-stmt-3<br>
+stmt-1
+5.0
+stmt-3
 Normal termination/Graceful Termination
                 </div>
             </div>
@@ -427,13 +497,13 @@ Normal termination/Graceful Termination
             <h3>Control Flow in try-except</h3>
             <div class="try-except-flow">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    stmt-1<br>
-    stmt-2<br>
-    stmt-3<br>
-<span class="keyword">except</span> XXX:<br>
-    stmt-4<br>
-stmt-5
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1">stmt-1</span>
+<span class="code-line indent-1">stmt-2  <span class="comment"># Exception may occur here</span></span>
+<span class="code-line indent-1">stmt-3  <span class="comment"># Will not execute if exception at stmt-2</span></span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">XXX</span>:</span>
+<span class="code-line indent-1">stmt-4  <span class="comment"># Executes if exception occurs and matches</span></span>
+<span class="code-line">stmt-5  <span class="comment"># Always executes if no exception or exception handled</span></span>
                 </div>
                 
                 <p><strong>Case-1:</strong> If there is no exception → 1,2,3,5 and Normal Termination</p>
@@ -456,10 +526,10 @@ stmt-5
             <h2>How to Print Exception Information</h2>
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-<span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> msg:<br>
-    <span class="function">print</span>(<span class="string">"exception raised and its description is:"</span>, msg)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span> <span class="keyword">as</span> msg:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"exception raised and its description is:"</span>, msg)</span>
                 </div>
                 <div class="output">
 exception raised and its description is: division by zero
@@ -471,34 +541,34 @@ exception raised and its description is: division by zero
             
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
-    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
-    <span class="function">print</span>(x/y)<br>
-<span class="keyword">except</span> ZeroDivisionError:<br>
-    <span class="function">print</span>(<span class="string">"Can't Divide with Zero"</span>)<br>
-<span class="keyword">except</span> ValueError:<br>
-    <span class="function">print</span>(<span class="string">"please provide int value only"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="keyword">x</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))</span>
+<span class="code-line indent-1"><span class="keyword">y</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="keyword">x</span><span class="operator">/</span><span class="keyword">y</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"Can't Divide with Zero"</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ValueError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"please provide int value only"</span>)</span>
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: 2<br>
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: 2
 5.0
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: 0<br>
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: 0
 Can't Divide with Zero
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: ten<br>
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: ten
 please provide int value only
                 </div>
             </div>
@@ -512,26 +582,26 @@ please provide int value only
             
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
-    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
-    <span class="function">print</span>(x/y)<br>
-<span class="keyword">except</span> (ZeroDivisionError, ValueError) <span class="keyword">as</span> msg:<br>
-    <span class="function">print</span>(<span class="string">"Piz Provide valid numbers only and problem is: "</span>, msg)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="keyword">x</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))</span>
+<span class="code-line indent-1"><span class="keyword">y</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="keyword">x</span><span class="operator">/</span><span class="keyword">y</span>)</span>
+<span class="code-line"><span class="keyword">except</span> (<span class="exception-name">ZeroDivisionError</span>, <span class="exception-name">ValueError</span>) <span class="keyword">as</span> msg:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"Please provide valid numbers only and problem is: "</span>, msg)</span>
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: 0<br>
-Piz Provide valid numbers only and problem is: division by zero
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: 0
+Please provide valid numbers only and problem is: division by zero
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: ten<br>
-Piz Provide valid numbers only and problem is: invalid literal for int() with base 10: 'ten'
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: ten
+Please provide valid numbers only and problem is: invalid literal for int() with base 10: 'ten'
                 </div>
             </div>
         </section>
@@ -542,40 +612,40 @@ Piz Provide valid numbers only and problem is: invalid literal for int() with ba
             
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    x = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))<br>
-    y = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))<br>
-    <span class="function">print</span>(x/y)<br>
-<span class="keyword">except</span> ZeroDivisionError:<br>
-    <span class="function">print</span>(<span class="string">"ZeroDivisionError: Can't divide with zero"</span>)<br>
-<span class="keyword">except</span>:<br>
-    <span class="function">print</span>(<span class="string">"Default Except: Piz provide valid input only"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="keyword">x</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter First Number: "</span>))</span>
+<span class="code-line indent-1"><span class="keyword">y</span> <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Second Number: "</span>))</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="keyword">x</span><span class="operator">/</span><span class="keyword">y</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"ZeroDivisionError: Can't divide with zero"</span>)</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"Default Except: Please provide valid input only"</span>)</span>
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: 0<br>
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: 0
 ZeroDivisionError: Can't divide with zero
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter First Number: 10<br>
-Enter Second Number: ten<br>
-Default Except: Piz provide valid input only
+D:\Python_classes>py test.py
+Enter First Number: 10
+Enter Second Number: ten
+Default Except: Please provide valid input only
                 </div>
             </div>
 
             <div class="warning">
                 <p><strong>Note:</strong> If try with multiple except blocks available then default except block should be last, otherwise we will get SyntaxError.</p>
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-<span class="keyword">except</span>:<br>
-    <span class="function">print</span>(<span class="string">"Default Except"</span>)<br>
-<span class="keyword">except</span> ZeroDivisionError:<br>
-    <span class="function">print</span>(<span class="string">"ZeroDivisionError"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"Default Except"</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"ZeroDivisionError"</span>)</span>
                 </div>
                 <div class="output">
 SyntaxError: default 'except:' must be last
@@ -584,13 +654,13 @@ SyntaxError: default 'except:' must be last
 
             <div class="note">
                 <p>The following are various possible combinations of except blocks:</p>
-                <ol>
-                    <li>except ZeroDivisionError:</li>
-                    <li>except ZeroDivisionError as msg:</li>
-                    <li>except (ZeroDivisionError, ValueError):</li>
-                    <li>except (ZeroDivisionError, ValueError) as msg:</li>
-                    <li>except :</li>
-                </ol>
+                <div class="code-block">
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span> <span class="keyword">as</span> msg:</span>
+<span class="code-line"><span class="keyword">except</span> (<span class="exception-name">ZeroDivisionError</span>, <span class="exception-name">ValueError</span>):</span>
+<span class="code-line"><span class="keyword">except</span> (<span class="exception-name">ZeroDivisionError</span>, <span class="exception-name">ValueError</span>) <span class="keyword">as</span> msg:</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+                </div>
             </div>
         </section>
 
@@ -601,12 +671,15 @@ SyntaxError: default 'except:' must be last
             <p>Hence we required some place to maintain clean up code which should be executed always irrespective of whether exception raised or not raised and whether exception handled or not handled. Such type of best place is nothing but finally block. Hence the main purpose of finally block is to maintain clean up code.</p>
             
             <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="comment"># Risky Code</span><br>
-<span class="keyword">except</span>:<br>
-    <span class="comment"># Handling Code</span><br>
-<span class="keyword">finally:</span><br>
-    <span class="comment"># Cleanup code</span>
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Risky Code</span></span>
+<span class="code-line indent-1"><span class="function">risky_operation</span>()</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Handling Code</span></span>
+<span class="code-line indent-1"><span class="function">handle_exception</span>()</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Cleanup code - Always executes</span></span>
+<span class="code-line indent-1"><span class="function">cleanup_resources</span>()</span>
             </div>
 
             <p>The speciality of finally block is it will be executed always whether exception raised or not raised and whether exception handled or not handled.</p>
@@ -614,15 +687,15 @@ SyntaxError: default 'except:' must be last
             <h3>Case-1: If there is no exception</h3>
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">"try"</span>)<br>
-<span class="keyword">except</span>:<br>
-    <span class="function">print</span>(<span class="string">"except"</span>)<br>
-<span class="keyword">finally:</span><br>
-    <span class="function">print</span>(<span class="string">"finally"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"try"</span>)</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"except"</span>)</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"finally"</span>)</span>
                 </div>
                 <div class="output">
-try<br>
+try
 finally
                 </div>
             </div>
@@ -630,17 +703,17 @@ finally
             <h3>Case-2: If there is an exception raised but handled</h3>
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">"try"</span>)<br>
-    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-<span class="keyword">except</span> ZeroDivisionError:<br>
-    <span class="function">print</span>(<span class="string">"except"</span>)<br>
-<span class="keyword">finally:</span><br>
-    <span class="function">print</span>(<span class="string">"finally"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"try"</span>)</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"except"</span>)</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"finally"</span>)</span>
                 </div>
                 <div class="output">
-try<br>
-except<br>
+try
+except
 finally
                 </div>
             </div>
@@ -648,17 +721,17 @@ finally
             <h3>Case-3: If there is an exception raised but not handled</h3>
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">"try"</span>)<br>
-    <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-<span class="keyword">except</span> NameError:<br>
-    <span class="function">print</span>(<span class="string">"except"</span>)<br>
-<span class="keyword">finally:</span><br>
-    <span class="function">print</span>(<span class="string">"finally"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"try"</span>)</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line"><span class="keyword">except</span> <span class="exception-name">NameError</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"except"</span>)</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"finally"</span>)</span>
                 </div>
                 <div class="output">
-try<br>
-finally<br>
+try
+finally
 ZeroDivisionError: division by zero (Abnormal Termination)
                 </div>
             </div>
@@ -670,15 +743,15 @@ ZeroDivisionError: division by zero (Abnormal Termination)
             <h2>Control Flow in try-except-finally</h2>
             <div class="try-except-flow">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    stmt-1<br>
-    stmt-2<br>
-    stmt-3<br>
-<span class="keyword">except</span>:<br>
-    stmt-4<br>
-<span class="keyword">finally:</span><br>
-    stmt-5<br>
-    stmt-6
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1">stmt-1</span>
+<span class="code-line indent-1">stmt-2  <span class="comment"># Exception may occur here</span></span>
+<span class="code-line indent-1">stmt-3</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1">stmt-4  <span class="comment"># Exception handling</span></span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1">stmt-5  <span class="comment"># Always executes</span></span>
+<span class="code-line indent-1">stmt-6  <span class="comment"># Always executes</span></span>
                 </div>
                 
                 <p><strong>Case-1:</strong> If there is no exception → 1,2,3,5,6 Normal Termination</p>
@@ -695,25 +768,25 @@ ZeroDivisionError: division by zero (Abnormal Termination)
             
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">"outer try block"</span>)<br>
-    <span class="keyword">try:</span><br>
-        <span class="function">print</span>(<span class="string">"Inner try block"</span>)<br>
-        <span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)<br>
-    <span class="keyword">except</span> ZeroDivisionError:<br>
-        <span class="function">print</span>(<span class="string">"Inner except block"</span>)<br>
-    <span class="keyword">finally:</span><br>
-        <span class="function">print</span>(<span class="string">"Inner finally block"</span>)<br>
-<span class="keyword">except</span>:<br>
-    <span class="function">print</span>(<span class="string">"outer except block"</span>)<br>
-<span class="keyword">finally:</span><br>
-    <span class="function">print</span>(<span class="string">"outer finally block"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"outer try block"</span>)</span>
+<span class="code-line indent-1"><span class="keyword">try</span>:</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Inner try block"</span>)</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)</span>
+<span class="code-line indent-1"><span class="keyword">except</span> <span class="exception-name">ZeroDivisionError</span>:</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Inner except block"</span>)</span>
+<span class="code-line indent-1"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-2"><span class="function">print</span>(<span class="string">"Inner finally block"</span>)</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"outer except block"</span>)</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"outer finally block"</span>)</span>
                 </div>
                 <div class="output">
-outer try block<br>
-Inner try block<br>
-Inner except block<br>
-Inner finally block<br>
+outer try block
+Inner try block
+Inner except block
+Inner finally block
 outer finally block
                 </div>
             </div>
@@ -728,40 +801,44 @@ outer finally block
             <p>We can use else block with try-except-finally blocks. else block will be executed if and only if there are no exceptions inside try block.</p>
             
             <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="comment"># Risky Code</span><br>
-<span class="keyword">except</span>:<br>
-    <span class="comment"># will be executed if exception inside try</span><br>
-<span class="keyword">else:</span><br>
-    <span class="comment"># will be executed if there is no exception inside try</span><br>
-<span class="keyword">finally:</span><br>
-    <span class="comment"># will be executed whether exception raised or not raised and handled or not handled</span>
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="comment"># Risky Code</span></span>
+<span class="code-line indent-1"><span class="function">risky_operation</span>()</span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="comment"># will be executed if exception inside try</span></span>
+<span class="code-line indent-1"><span class="function">handle_exception</span>()</span>
+<span class="code-line"><span class="keyword">else</span>:</span>
+<span class="code-line indent-1"><span class="comment"># will be executed if there is no exception inside try</span></span>
+<span class="code-line indent-1"><span class="function">continue_normal_flow</span>()</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="comment"># will be executed whether exception raised or not raised and handled or not handled</span></span>
+<span class="code-line indent-1"><span class="function">cleanup_resources</span>()</span>
             </div>
 
             <div class="example">
                 <div class="code-block">
-<span class="keyword">try:</span><br>
-    <span class="function">print</span>(<span class="string">"try"</span>)<br>
-    <span class="comment"># print(10/0)  → If we comment this line then else block will be executed</span><br>
-<span class="keyword">except</span>:<br>
-    <span class="function">print</span>(<span class="string">"except"</span>)<br>
-<span class="keyword">else:</span><br>
-    <span class="function">print</span>(<span class="string">"else"</span>)<br>
-<span class="keyword">finally:</span><br>
-    <span class="function">print</span>(<span class="string">"finally"</span>)
+<span class="code-line"><span class="keyword">try</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"try"</span>)</span>
+<span class="code-line indent-1"><span class="comment"># print(10/0)  # If we comment this line then else block will be executed</span></span>
+<span class="code-line"><span class="keyword">except</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"except"</span>)</span>
+<span class="code-line"><span class="keyword">else</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"else"</span>)</span>
+<span class="code-line"><span class="keyword">finally</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"finally"</span>)</span>
                 </div>
                 
                 <p><strong>When line is commented (no exception):</strong></p>
                 <div class="output">
-try<br>
-else<br>
+try
+else
 finally
                 </div>
                 
                 <p><strong>When line is not commented (exception occurs):</strong></p>
                 <div class="output">
-try<br>
-except<br>
+try
+except
 finally
                 </div>
             </div>
@@ -789,39 +866,35 @@ finally
                 <tbody>
                     <tr>
                         <td><code>try: print("try")</code></td>
-                        <td>X</td>
-                    </tr>
-                    <tr>
-                        <td><code>except: print("Hello")</code></td>
-                        <td>X</td>
-                    </tr>
-                    <tr>
-                        <td><code>else: print("Hello")</code></td>
-                        <td>X</td>
-                    </tr>
-                    <tr>
-                        <td><code>finally: print("Hello")</code></td>
-                        <td>X</td>
+                        <td>❌</td>
                     </tr>
                     <tr>
                         <td><code>try: print("try")<br>except: print("except")</code></td>
-                        <td>✓</td>
+                        <td>✅</td>
                     </tr>
                     <tr>
                         <td><code>try: print("try")<br>finally: print("finally")</code></td>
-                        <td>✓</td>
+                        <td>✅</td>
                     </tr>
                     <tr>
                         <td><code>try: print("try")<br>except: print("except")<br>else: print("else")</code></td>
-                        <td>✓</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td><code>try: print("try")<br>except ZeroDivisionError: print("except-1")<br>except ValueError: print("except-2")</code></td>
+                        <td>✅</td>
                     </tr>
                     <tr>
                         <td><code>try: print("try")<br>else: print("else")</code></td>
-                        <td>X</td>
+                        <td>❌</td>
                     </tr>
                     <tr>
-                        <td><code>try: print("try")<br>except XXX: print("except-1")<br>except YYY: print("except-2")</code></td>
-                        <td>✓</td>
+                        <td><code>except: print("except")</code></td>
+                        <td>❌</td>
+                    </tr>
+                    <tr>
+                        <td><code>finally: print("finally")</code></td>
+                        <td>❌</td>
                     </tr>
                 </tbody>
             </table>
@@ -841,12 +914,12 @@ finally
             <div class="example">
                 <p><strong>Example 1:</strong> Whenever we are trying to perform Division by zero, automatically Python will raise ZeroDivisionError.</p>
                 <div class="code-block">
-<span class="function">print</span>(<span class="string">10</span>/<span class="string">0</span>)
+<span class="code-line"><span class="function">print</span>(<span class="number">10</span><span class="operator">/</span><span class="number">0</span>)  <span class="comment"># Raises ZeroDivisionError</span></span>
                 </div>
                 
                 <p><strong>Example 2:</strong> Whenever we are trying to convert input value to int type and if input value is not int value then Python will raise ValueError automatically.</p>
                 <div class="code-block">
-x = <span class="function">int</span>(<span class="string">"ten"</span>) <span class="comment">→ ValueError</span>
+<span class="code-line"><span class="keyword">x</span> <span class="operator">=</span> <span class="function">int</span>(<span class="string">"ten"</span>)  <span class="comment"># Raises ValueError</span></span>
                 </div>
             </div>
 
@@ -856,57 +929,57 @@ x = <span class="function">int</span>(<span class="string">"ten"</span>) <span c
             
             <div class="example">
                 <p><strong>Examples:</strong></p>
-                <ul>
-                    <li>InSufficientFundsException</li>
-                    <li>InvalidInputException</li>
-                    <li>TooYoungException</li>
-                    <li>TooOldException</li>
-                </ul>
+                <div class="code-block">
+<span class="code-line"><span class="class-name">InSufficientFundsException</span></span>
+<span class="code-line"><span class="class-name">InvalidInputException</span></span>
+<span class="code-line"><span class="class-name">TooYoungException</span></span>
+<span class="code-line"><span class="class-name">TooOldException</span></span>
+                </div>
             </div>
 
             <h3>How to Define and Raise Customized Exceptions</h3>
             <p>Every exception in Python is a class that extends Exception class either directly or indirectly.</p>
             
             <div class="code-block">
-<span class="keyword">class</span> <span class="function">ClassName</span>(predefined exception class name):<br>
-    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
-        <span class="keyword">self</span>.msg = arg
+<span class="code-line"><span class="keyword">class</span> <span class="class-name">ClassName</span>(<span class="exception-name">Exception</span>):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):</span>
+<span class="code-line indent-2"><span class="keyword">self</span>.msg <span class="operator">=</span> arg</span>
             </div>
 
             <div class="example">
                 <div class="code-block">
-<span class="keyword">class</span> <span class="function">TooYoungException</span>(Exception):<br>
-    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
-        <span class="keyword">self</span>.msg = arg<br>
-<br>
-<span class="keyword">class</span> <span class="function">TooOldException</span>(Exception):<br>
-    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):<br>
-        <span class="keyword">self</span>.msg = arg<br>
-<br>
-age = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Age:"</span>))<br>
-<span class="keyword">if</span> age > <span class="string">60</span>:<br>
-    <span class="keyword">raise</span> TooYoungException(<span class="string">"Piz wait some more time you will get best match soon!!"</span>)<br>
-<span class="keyword">elif</span> age < <span class="string">18</span>:<br>
-    <span class="keyword">raise</span> TooOldException(<span class="string">"Your age already crossed marriage age...no chance of getting marriage"</span>)<br>
-<span class="keyword">else</span>:<br>
-    <span class="function">print</span>(<span class="string">"You will get match details soon by email!!"</span>)
+<span class="code-line"><span class="keyword">class</span> <span class="class-name">TooYoungException</span>(<span class="exception-name">Exception</span>):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):</span>
+<span class="code-line indent-2"><span class="keyword">self</span>.msg <span class="operator">=</span> arg</span>
+<span class="code-line"></span>
+<span class="code-line"><span class="keyword">class</span> <span class="class-name">TooOldException</span>(<span class="exception-name">Exception</span>):</span>
+<span class="code-line indent-1"><span class="keyword">def</span> <span class="function">__init__</span>(<span class="keyword">self</span>, arg):</span>
+<span class="code-line indent-2"><span class="keyword">self</span>.msg <span class="operator">=</span> arg</span>
+<span class="code-line"></span>
+<span class="code-line">age <span class="operator">=</span> <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter Age:"</span>))</span>
+<span class="code-line"><span class="keyword">if</span> age <span class="operator">></span> <span class="number">60</span>:</span>
+<span class="code-line indent-1"><span class="keyword">raise</span> <span class="exception-name">TooYoungException</span>(<span class="string">"Please wait some more time you will get best match soon!!"</span>)</span>
+<span class="code-line"><span class="keyword">elif</span> age <span class="operator"><</span> <span class="number">18</span>:</span>
+<span class="code-line indent-1"><span class="keyword">raise</span> <span class="exception-name">TooOldException</span>(<span class="string">"Your age already crossed marriage age...no chance of getting marriage"</span>)</span>
+<span class="code-line"><span class="keyword">else</span>:</span>
+<span class="code-line indent-1"><span class="function">print</span>(<span class="string">"You will get match details soon by email!!"</span>)</span>
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter Age: 90<br>
-__main__.TooYoungException: Piz wait some more time you will get best match soon!!!
+D:\Python_classes>py test.py
+Enter Age: 90
+__main__.TooYoungException: Please wait some more time you will get best match soon!!!
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter Age: 12<br>
+D:\Python_classes>py test.py
+Enter Age: 12
 __main__.TooOldException: Your age already crossed marriage age...no chance of getting marriage
                 </div>
                 
                 <div class="output">
-D:\Python_classes>py test.py<br>
-Enter Age: 27<br>
+D:\Python_classes>py test.py
+Enter Age: 27
 You will get match details soon by email!!
                 </div>
             </div>
