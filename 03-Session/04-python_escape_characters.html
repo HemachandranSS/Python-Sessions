@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
@@ -53,9 +54,17 @@
             animation: slideUp 0.8s ease-out forwards;
         }
 
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.4s; }
-        .section:nth-child(4) { animation-delay: 0.6s; }
+        .section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .section:nth-child(4) {
+            animation-delay: 0.6s;
+        }
 
         .section-title {
             font-size: 2.5em;
@@ -102,7 +111,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
         }
 
@@ -112,7 +121,7 @@
 
         .escape-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .escape-symbol {
@@ -122,7 +131,7 @@
             margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .escape-name {
@@ -242,6 +251,7 @@
         }
 
         .example-code {
+            white-space: pre-wrap;
             background: #1a1a1a;
             color: #fff;
             padding: 15px;
@@ -321,6 +331,7 @@
                 opacity: 0;
                 transform: translateY(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -335,18 +346,24 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(10deg);
             }
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.7;
             }
+
             50% {
                 opacity: 1;
             }
@@ -360,17 +377,18 @@
             .header h1 {
                 font-size: 2em;
             }
-            
+
             .section-title {
                 font-size: 1.8em;
             }
-            
+
             .escape-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="floating-shapes">
         <div class="shape" style="font-size: 60px;">🐍</div>
@@ -387,7 +405,8 @@
         <div class="section">
             <h2 class="section-title">🎯 Escape Characters</h2>
             <p style="text-align: center; font-size: 1.1em; margin-bottom: 30px; opacity: 0.9;">
-                Escape characters allow you to include special characters in strings that would otherwise be impossible or cause syntax errors.
+                Escape characters allow you to include special characters in strings that would otherwise be impossible
+                or cause syntax errors.
             </p>
 
             <div class="escape-grid">
@@ -433,7 +452,7 @@
                     <div class="escape-description">Includes single quote in string</div>
                 </div>
 
-                <div class="escape-card" onclick="demonstrateEscape('\"', 'Double Quote')">
+                <div class="escape-card" onclick="demonstrateEscape('\"', ' Double Quote')">
                     <div class="escape-symbol">\"</div>
                     <div class="escape-name">Double Quote</div>
                     <div class="escape-description">Includes double quote in string</div>
@@ -449,7 +468,8 @@
             <div class="demo-section">
                 <div class="demo-title">🚀 Interactive Python Demo</div>
                 <div class="code-editor">
-                    <textarea class="code-input" id="codeInput" placeholder='Try: s = "Hello\nWorld\t!"&#10;print(s)&#10;print(repr(s))'>s = "Hello\nWorld\t!"
+                    <textarea class="code-input" id="codeInput"
+                        placeholder='Try: s = "Hello\nWorld\t!"&#10;print(s)&#10;print(repr(s))'>s = "Hello\nWorld\t!"
 print(s)
 print(repr(s))</textarea>
                     <button class="run-btn" onclick="runCode()">▶ Run Code</button>
@@ -461,30 +481,30 @@ print(repr(s))</textarea>
                 <div class="example-card">
                     <h4 style="color: #feca57; margin-bottom: 15px;">📝 Basic Example</h4>
                     <div class="example-code">s = "durga\nsoftware"
-print(s)</div>
+                        print(s)</div>
                     <div class="example-result">durga
-software</div>
+                        software</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #feca57; margin-bottom: 15px;">🔖 Tab Example</h4>
                     <div class="example-code">s = "Name:\tJohn\nAge:\t25"
-print(s)</div>
-                    <div class="example-result">Name:	John
-Age:	25</div>
+                        print(s)</div>
+                    <div class="example-result">Name: John
+                        Age: 25</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #feca57; margin-bottom: 15px;">💬 Quote Example</h4>
                     <div class="example-code">s = "She said \"Hello!\""
-print(s)</div>
+                        print(s)</div>
                     <div class="example-result">She said "Hello!"</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #feca57; margin-bottom: 15px;">🛤️ Path Example</h4>
                     <div class="example-code">path = "C:\\Users\\John"
-print(path)</div>
+                        print(path)</div>
                     <div class="example-result">C:\Users\John</div>
                 </div>
             </div>
@@ -492,61 +512,63 @@ print(path)</div>
 
         <div class="section constants-section">
             <h2 class="section-title">📊 Constants in Python</h2>
-            
+
             <div style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
                 <p>Python doesn't have true constants, but follows naming conventions!</p>
             </div>
 
             <div class="warning-box">
                 <h4>⚠️ Important Note</h4>
-                <p>Python doesn't enforce constants like other languages. It's purely a <strong>naming convention</strong> to use UPPERCASE letters for values that shouldn't change. You can still modify them, but it's considered bad practice.</p>
+                <p>Python doesn't enforce constants like other languages. It's purely a <strong>naming
+                        convention</strong> to use UPPERCASE letters for values that shouldn't change. You can still
+                    modify them, but it's considered bad practice.</p>
             </div>
 
             <div class="examples-grid">
                 <div class="example-card">
                     <h4 style="color: #ff6b6b; margin-bottom: 15px;">✅ Good Practice</h4>
                     <div class="example-code">PI = 3.14159
-MAX_SIZE = 100
-DATABASE_URL = "localhost:5432"
-API_KEY = "abc123xyz"
+                        MAX_SIZE = 100
+                        DATABASE_URL = "localhost:5432"
+                        API_KEY = "abc123xyz"
 
-# Use them (don't change)
-radius = 5
-area = PI * radius ** 2</div>
+                        # Use them (don't change)
+                        radius = 5
+                        area = PI * radius ** 2</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #ff6b6b; margin-bottom: 15px;">❌ Bad Practice</h4>
                     <div class="example-code">PI = 3.14159
-print(PI)  # 3.14159
+                        print(PI) # 3.14159
 
-# This works but is wrong!
-PI = 2.5
-print(PI)  # 2.5
+                        # This works but is wrong!
+                        PI = 2.5
+                        print(PI) # 2.5
 
-# Breaks the convention</div>
+                        # Breaks the convention</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #ff6b6b; margin-bottom: 15px;">🏢 Real World Example</h4>
                     <div class="example-code">CONFIG_FILE = "settings.ini"
-MAX_RETRIES = 3
-TIMEOUT_SECONDS = 30
-ERROR_CODES = {
-    404: "Not Found",
-    500: "Server Error"
-}</div>
+                        MAX_RETRIES = 3
+                        TIMEOUT_SECONDS = 30
+                        ERROR_CODES = {
+                        404: "Not Found",
+                        500: "Server Error"
+                        }</div>
                 </div>
 
                 <div class="example-card">
                     <h4 style="color: #ff6b6b; margin-bottom: 15px;">🔐 Advanced Constants</h4>
                     <div class="example-code"># Using Enum for true constants
-from enum import Enum
+                        from enum import Enum
 
-class Status(Enum):
-    PENDING = 1
-    APPROVED = 2
-    REJECTED = 3</div>
+                        class Status(Enum):
+                        PENDING = 1
+                        APPROVED = 2
+                        REJECTED = 3</div>
                 </div>
             </div>
 
@@ -586,7 +608,7 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
                         <li>Makes strings more readable and functional</li>
                     </ul>
                 </div>
-                
+
                 <div class="example-card">
                     <h4 style="color: #00ff88; margin-bottom: 15px;">📏 Constants</h4>
                     <ul style="text-align: left; line-height: 1.8;">
@@ -603,60 +625,60 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
     <script>
         function demonstrateEscape(escapeChar, name) {
             const examples = {
-                '\n': { 
-                    code: 's = "Line 1\nLine 2\nLine 3"\nprint(s)', 
-                    output: 'Line 1\nLine 2\nLine 3' 
+                '\n': {
+                    code: 's = "Line 1\nLine 2\nLine 3"\nprint(s)',
+                    output: 'Line 1\nLine 2\nLine 3'
                 },
-                '\t': { 
-                    code: 's = "Name:\tJohn\nAge:\t25"\nprint(s)', 
-                    output: 'Name:\tJohn\nAge:\t25' 
+                '\t': {
+                    code: 's = "Name:\tJohn\nAge:\t25"\nprint(s)',
+                    output: 'Name:\tJohn\nAge:\t25'
                 },
-                '\r': { 
-                    code: 's = "Hello\rWorld"\nprint(s)', 
-                    output: 'World' 
+                '\r': {
+                    code: 's = "Hello\rWorld"\nprint(s)',
+                    output: 'World'
                 },
-                '\b': { 
-                    code: 's = "Hello\bWorld"\nprint(s)', 
-                    output: 'HellWorld' 
+                '\b': {
+                    code: 's = "Hello\bWorld"\nprint(s)',
+                    output: 'HellWorld'
                 },
-                '\f': { 
-                    code: 's = "Page 1\fPage 2"\nprint(s)', 
-                    output: 'Page 1\fPage 2' 
+                '\f': {
+                    code: 's = "Page 1\fPage 2"\nprint(s)',
+                    output: 'Page 1\fPage 2'
                 },
-                '\v': { 
-                    code: 's = "Line 1\vLine 2"\nprint(s)', 
-                    output: 'Line 1\vLine 2' 
+                '\v': {
+                    code: 's = "Line 1\vLine 2"\nprint(s)',
+                    output: 'Line 1\vLine 2'
                 },
-                "\'": { 
-                    code: 's = "It\'s a beautiful day"\nprint(s)', 
-                    output: "It's a beautiful day" 
+                "\'": {
+                    code: 's = "It\'s a beautiful day"\nprint(s)',
+                    output: "It's a beautiful day"
                 },
-                '\"': { 
-                    code: 's = "She said \"Hello!\""\nprint(s)', 
-                    output: 'She said "Hello!"' 
+                '\"': {
+                    code: 's = "She said \"Hello!\""\nprint(s)',
+                    output: 'She said "Hello!"'
                 },
-                '\\': { 
-                    code: 's = "C:\\Users\\John"\nprint(s)', 
-                    output: 'C:\Users\John' 
+                '\\': {
+                    code: 's = "C:\\Users\\John"\nprint(s)',
+                    output: 'C:\Users\John'
                 }
             };
 
             const example = examples[escapeChar];
             if (example) {
                 document.getElementById('codeInput').value = example.code;
-                
+
                 // Run the code automatically to show output
                 setTimeout(() => {
                     runCode();
                 }, 100);
-                
+
                 // Add a visual effect to highlight the card
                 const cards = document.querySelectorAll('.escape-card');
                 cards.forEach(card => {
                     if (card.querySelector('.escape-symbol').textContent === escapeChar) {
                         card.style.transform = 'translateY(-10px) scale(1.05)';
                         card.style.boxShadow = '0 25px 50px rgba(255, 107, 107, 0.4)';
-                        
+
                         setTimeout(() => {
                             card.style.transform = 'translateY(0) scale(1)';
                             card.style.boxShadow = 'none';
@@ -669,12 +691,12 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
         function runCode() {
             const code = document.getElementById('codeInput').value;
             const output = document.getElementById('output');
-            
+
             try {
                 // Simulate Python execution for common escape sequences
                 let result = '';
                 const lines = code.split('\n');
-                
+
                 for (let line of lines) {
                     line = line.trim();
                     if (line.startsWith('s =') || line.startsWith('text =') || line.startsWith('string =')) {
@@ -714,11 +736,11 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
                         }
                     }
                 }
-                
+
                 output.textContent = result || 'No output generated';
                 output.classList.add('pulse');
                 setTimeout(() => output.classList.remove('pulse'), 2000);
-                
+
             } catch (error) {
                 output.textContent = 'Error: ' + error.message;
                 output.style.color = '#ff6b6b';
@@ -728,21 +750,21 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
         function runConstantsCode() {
             const code = document.getElementById('constantsInput').value;
             const output = document.getElementById('constantsOutput');
-            
+
             // Simulate the constants demo
             let result = '';
             result += 'Original MAX_VALUE: 10\n';
             result += 'Modified MAX_VALUE: 20\n';
             result += 'Enum MAX_VALUE: 10\n';
             result += '\n💡 Notice: Regular variables can be changed,\nbut Enum provides better constant behavior!';
-            
+
             output.textContent = result;
             output.classList.add('pulse');
             setTimeout(() => output.classList.remove('pulse'), 2000);
         }
 
         // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const cards = document.querySelectorAll('.escape-card');
             cards.forEach((card, index) => {
                 card.style.animationDelay = `${index * 0.1}s`;
@@ -761,11 +783,12 @@ print("Enum MAX_VALUE:", Config.MAX_VALUE.value)</textarea>
         });
 
         // Add keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.ctrlKey && e.key === 'Enter') {
                 runCode();
             }
         });
     </script>
 </body>
+
 </html>

@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python File Handling - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #242f60 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: expandWidth 1s ease-out;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.4em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin: 15px 0;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slideInLeft 0.6s ease-out;
+         whitespace: pre-wrap;}
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .code-block::before {
+            content: 'Python';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #333;
+            animation: highlightPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(253, 160, 133, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(253, 160, 133, 0.8);
+            }
+        }
+
+        .note {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-left: 5px solid #ff6b6b;
+            border-radius: 8px;
+            margin: 20px 0;
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .note strong {
+            color: #c0392b;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 40px;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 1.05em;
+            color: #444;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        li::marker {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+            transition: background 0.3s ease;
+        }
+
+        .output-box {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #00acc1;
+            font-family: 'Courier New', monospace;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .output-box::before {
+            content: 'Output:';
+            display: block;
+            font-weight: bold;
+            color: #00838f;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+
+        .diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .flow-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .arrow {
+            display: inline-block;
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+            animation: arrowMove 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowMove {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            margin: 40px 0 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        footer p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-indicator:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        .keyword {
+            color: #f92672;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #a6e22e;
+        }
+
+        .comment {
+            color: #75715e;
+            font-style: italic;
+        }
+
+        .function {
+            color: #66d9ef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📁 Python File Handling</h1>
+            <p class="subtitle">A Comprehensive Guide to File Operations in Python</p>
+            <div>
+                <span class="badge">Python</span>
+                <span class="badge">File I/O</span>
+                <span class="badge">Complete Tutorial</span>
+            </div>
+        </header>
+
+        <div class="section">
+            <h2>Introduction to Files</h2>
+            <p>As part of programming requirements, we need to store our data permanently for future purposes. For this requirement, we should use <span class="highlight">files</span>.</p>
+            <p>Files are very common permanent storage areas to store our data.</p>
+            
+            <h3>Types of Files</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>File Type</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Text Files</strong></td>
+                        <td>Used to store character data</td>
+                        <td>abc.txt</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binary Files</strong></td>
+                        <td>Used to store binary data like images, video files, audio files</td>
+                        <td>image.jpg, video.mp4, audio.mp3</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Opening a File</h2>
+            <p>Before performing any operation (like read or write) on a file, we must first open that file. Python provides an inbuilt function <span class="highlight">open()</span> for this purpose.</p>
+            
+            <div class="code-block">
+<pre>f = open(filename, mode)</pre>
+            </div>
+
+            <h3>File Opening Modes</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Mode</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>r</strong></td>
+                        <td>Open for reading (default). File pointer at beginning. FileNotFoundError if file doesn't exist.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>w</strong></td>
+                        <td>Open for writing. Overrides existing data. Creates file if it doesn't exist.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>a</strong></td>
+                        <td>Open for appending. Doesn't override existing data. Creates file if it doesn't exist.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>r+</strong></td>
+                        <td>Read and write. Doesn't delete previous data. Pointer at beginning.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>w+</strong></td>
+                        <td>Write and read. Overrides existing data.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>a+</strong></td>
+                        <td>Append and read. Doesn't override existing data.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>x</strong></td>
+                        <td>Exclusive creation mode for write. FileExistsError if file exists.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> All the above modes are for text files. If these modes are suffixed with 'b', they represent binary files.<br>
+                Examples: rb, wb, ab, r+b, w+b, a+b, xb
+            </div>
+
+            <div class="example-box">
+                <h4>Example:</h4>
+                <div class="code-block">
+<pre>f = open("abc.txt", "w")
+<span class="comment"># We are opening abc.txt file for writing data</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Closing a File</h2>
+            <p>After completing operations on a file, it is highly recommended to close the file using the <span class="highlight">close()</span> function.</p>
+            
+            <div class="code-block">
+<pre>f.close()</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>File Object Properties</h2>
+            <p>Once we open a file and get a file object, we can retrieve various details about that file using its properties:</p>
+            
+            <ul>
+                <li><strong>name</strong> - Name of the opened file</li>
+                <li><strong>mode</strong> - Mode in which the file is opened</li>
+                <li><strong>closed</strong> - Returns boolean indicating if file is closed</li>
+                <li><strong>readable()</strong> - Returns boolean indicating if file is readable</li>
+                <li><strong>writable()</strong> - Returns boolean indicating if file is writable</li>
+            </ul>
+
+            <div class="example-box">
+                <h4>Example:</h4>
+                <div class="code-block">
+<pre>f = open("abc.txt", 'w')
+print("File Name: ", f.name)
+print("File Mode: ", f.mode)
+print("Is File Readable: ", f.readable())
+print("Is File Writable: ", f.writable())
+print("Is File Closed: ", f.closed)
+f.close()
+print("Is File Closed: ", f.closed)</pre>
+                </div>
+
+                <div class="output-box">
+File Name: abc.txt<br>
+File Mode: w<br>
+Is File Readable: False<br>
+Is File Writable: True<br>
+Is File Closed: False<br>
+Is File Closed: True
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Writing Data to Text Files</h2>
+            <p>We can write character data to text files using the following methods:</p>
+            
+            <ul>
+                <li><strong>write(str)</strong> - Write a string to the file</li>
+                <li><strong>writelines(list)</strong> - Write a list of strings to the file</li>
+            </ul>
+
+            <h3>Example 1: Using write()</h3>
+            <div class="code-block">
+<pre>f = open("abcd.txt", 'w')
+f.write("Hema\n")
+f.write("Software\n")
+f.write("Solutions\n")
+print("Data written to the file successfully")
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+<strong>abcd.txt contents:</strong><br>
+Hema<br>
+Software<br>
+Solutions
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> In the above program, data in the file will be overridden every time we run the program. For append operation, open the file with mode "a":
+                <div class="code-block">
+<pre>f = open("abcd.txt", "a")</pre>
+                </div>
+            </div>
+
+            <h3>Example 2: Using writelines()</h3>
+            <div class="code-block">
+<pre>f = open("abcd.txt", 'w')
+list = ["sunny\n", "bunny\n", "vinny\n", "chinny"]
+f.writelines(list)
+print("List of lines written to the file successfully")
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+<strong>abcd.txt contents:</strong><br>
+sunny<br>
+bunny<br>
+vinny<br>
+chinny
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> When writing data using write() methods, you must provide line separator (\n), otherwise all data will be written to a single line.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Reading Data from Text Files</h2>
+            <p>We can read character data from text files using these methods:</p>
+            
+            <ul>
+                <li><strong>read()</strong> - Read total data from the file</li>
+                <li><strong>read(n)</strong> - Read 'n' characters from the file</li>
+                <li><strong>readline()</strong> - Read only one line</li>
+                <li><strong>readlines()</strong> - Read all lines into a list</li>
+            </ul>
+
+            <h3>Example 1: Read Total Data</h3>
+            <div class="code-block">
+<pre>f = open("abc.txt", 'r')
+data = f.read()
+print(data)
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+sunny<br>
+bunny<br>
+chinny<br>
+vinny
+            </div>
+
+            <h3>Example 2: Read First 10 Characters</h3>
+            <div class="code-block">
+<pre>f = open("abc.txt", 'r')
+data = f.read(10)
+print(data)
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+sunny<br>
+bunn
+            </div>
+
+            <h3>Example 3: Read Data Line by Line</h3>
+            <div class="code-block">
+<pre>f = open("abc.txt", 'r')
+line1 = f.readline()
+print(line1, end='')
+line2 = f.readline()
+print(line2, end='')
+line3 = f.readline()
+print(line3, end='')
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+sunny<br>
+bunny<br>
+chinny
+            </div>
+
+            <h3>Example 4: Read All Lines into List</h3>
+            <div class="code-block">
+<pre>f = open("abc.txt", 'r')
+lines = f.readlines()
+for line in lines:
+    print(line, end='')
+f.close()</pre>
+            </div>
+
+            <div class="output-box">
+sunny<br>
+bunny<br>
+chinny<br>
+vinny
+            </div>
+
+            <h3>Example 5: Mixed Reading Operations</h3>
+            <div class="code-block">
+<pre>f = open("abc.txt", "r")
+print(f.read(3))
+print(f.readline())
+print(f.read(4))
+print("Remaining data")
+print(f.read())</pre>
+            </div>
+
+            <div class="output-box">
+sun<br>
+ny<br>
+<br>
+bunn<br>
+Remaining data<br>
+y<br>
+chinny<br>
+vinny
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>The with Statement</h2>
+            <p>The <span class="highlight">with</span> statement can be used when opening files. It groups file operation statements within a block.</p>
+            
+            <div class="note">
+                <strong>Advantage:</strong> The with statement automatically takes care of closing the file after completing all operations, even in case of exceptions. We don't need to close explicitly.
+            </div>
+
+            <div class="example-box">
+                <div class="code-block">
+<pre>with open("abc.txt", "w") as f:
+    f.write("Hema\n")
+    f.write("Software\n")
+    f.write("Solutions\n")
+    print("Is File Closed: ", f.closed)
+print("Is File Closed: ", f.closed)</pre>
+                </div>
+
+                <div class="output-box">
+Is File Closed: False<br>
+Is File Closed: True
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>The seek() and tell() Methods</h2>
+            
+            <h3>tell() Method</h3>
+            <p>The <span class="highlight">tell()</span> method returns the current position of the cursor (file pointer) from the beginning of the file. The position (index) of the first character is zero, just like string indexing.</p>
+
+            <div class="code-block">
+<pre>f = open("abc.txt", "r")
+print(f.tell())
+print(f.read(2))
+print(f.tell())
+print(f.read(3))
+print(f.tell())</pre>
+            </div>
+
+            <div class="output-box">
+0<br>
+su<br>
+2<br>
+nny<br>
+5
+            </div>
+
+            <h3>seek() Method</h3>
+            <p>The <span class="highlight">seek()</span> method moves the cursor (file pointer) to a specified location.</p>
+
+            <div class="code-block">
+<pre>f.seek(offset, fromwhere)</pre>
+            </div>
+
+            <p><strong>Allowed values for 'fromwhere':</strong></p>
+            <ul>
+                <li><strong>0</strong> - From beginning of file (default)</li>
+                <li><strong>1</strong> - From current position</li>
+                <li><strong>2</strong> - From end of file</li>
+            </ul>
+
+            <div class="note">
+                <strong>Note:</strong> Python 2 supports all 3 values, but Python 3 supports only zero.
+            </div>
+
+            <div class="example-box">
+                <div class="code-block">
+<pre>data = "All Students are STUPIDS"
+f = open("abc.txt", "w")
+f.write(data)
+with open("abc.txt", "r+") as f:
+    text = f.read()
+    print(text)
+    print("The Current Cursor Position: ", f.tell())
+    f.seek(17)
+    print("The Current Cursor Position: ", f.tell())
+    f.write("GEMS!!!")
+    f.seek(0)
+    text = f.read()
+    print("Data After Modification:")
+    print(text)</pre>
+                </div>
+
+                <div class="output-box">
+All Students are STUPIDS<br>
+The Current Cursor Position: 24<br>
+The Current Cursor Position: 17<br>
+Data After Modification:<br>
+All Students are GEMS!!!
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Checking File Existence</h2>
+            <p>We can use the <span class="highlight">os</span> library to get information about files. The os module has a path sub-module containing the <strong>isfile()</strong> function to check whether a file exists.</p>
+
+            <div class="code-block">
+<pre>os.path.isfile(fname)</pre>
+            </div>
+
+            <h3>Example: Check File Existence and Print Content</h3>
+            <div class="code-block">
+<pre>import os, sys
+fname = input("Enter File Name: ")
+if os.path.isfile(fname):
+    print("File exists:", fname)
+    f = open(fname, "r")
+else:
+    print("File does not exist:", fname)
+    sys.exit(0)
+print("The content of file is:")
+data = f.read()
+print(data)</pre>
+            </div>
+
+            <div class="output-box">
+Enter File Name: hema.txt<br>
+File does not exist: hema.txt<br>
+<br>
+Enter File Name: abc.txt<br>
+File exists: abc.txt<br>
+The content of file is:<br>
+All Students are GEMS!!!
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> sys.exit(0) exits the system without executing the rest of the program. The argument represents status code (0 means normal termination).
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Counting Lines, Words, and Characters</h2>
+            <p>Program to print the number of lines, words, and characters in a file:</p>
+
+            <div class="code-block">
+<pre>import os, sys
+fname = input("Enter File Name: ")
+if os.path.isfile(fname):
+    print("File exists:", fname)
+    f = open(fname, "r")
+else:
+    print("File does not exist:", fname)
+    sys.exit(0)
+
+lcount = wcount = ccount = 0
+for line in f:
+    lcount = lcount + 1
+    ccount = ccount + len(line)
+    words = line.split()
+    wcount = wcount + len(words)
+
+print("The number of Lines:", lcount)
+print("The number of Words:", wcount)
+print("The number of Characters:", ccount)</pre>
+            </div>
+
+            <div class="output-box">
+Enter File Name: abc.txt<br>
+File exists: abc.txt<br>
+The number of Lines: 6<br>
+The number of Words: 24<br>
+The number of Characters: 149
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Handling Binary Data</h2>
+            <p>It's very common to read or write binary data like images, video files, and audio files.</p>
+
+            <h3>Example: Copy Image File</h3>
+            <div class="code-block">
+<pre>f1 = open("rossum.jpg", "rb")
+f2 = open("newpic.jpg", "wb")
+bytes = f1.read()
+f2.write(bytes)
+print("New Image is available with the name: newpic.jpg")</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Handling CSV Files</h2>
+            <p><span class="highlight">CSV</span> stands for Comma Separated Values. Python provides the csv module to handle CSV files.</p>
+
+            <h3>Writing Data to CSV File</h3>
+            <div class="code-block">
+<pre>import csv
+with open("emp.csv", "w", newline='') as f:
+    w = csv.writer(f)  <span class="comment"># returns csv writer object</span>
+    w.writerow(["ENO", "ENAME", "ESAL", "EADDR"])
+    n = int(input("Enter Number of Employees:"))
+    for i in range(n):
+        eno = input("Enter Employee No:")
+        ename = input("Enter Employee Name:")
+        esal = input("Enter Employee Salary:")
+        eaddr = input("Enter Employee Address:")
+        w.writerow([eno, ename, esal, eaddr])
+print("Total Employees data written to csv file successfully")</pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> The newline attribute prevents blank lines between data rows in Python 3. In Python 2, use mode 'wb' instead.
+            </div>
+
+            <h3>Reading Data from CSV File</h3>
+            <div class="code-block">
+<pre>import csv
+f = open("emp.csv", 'r')
+r = csv.reader(f)  <span class="comment"># returns csv reader object</span>
+data = list(r)
+for line in data:
+    for word in line:
+        print(word, "\t", end='')
+    print()</pre>
+            </div>
+
+            <div class="output-box">
+ENO    ENAME    ESAL    EADDR<br>
+100    Hema     1000    Hyd<br>
+200    Sachin   2000    Mumbai<br>
+300    Dhoni    3000    Ranchi
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Zipping and Unzipping Files</h2>
+            <p>Python's zipfile module provides functionality to zip and unzip files.</p>
+
+            <h3>Main Advantages:</h3>
+            <ul>
+                <li>Improve memory utilization</li>
+                <li>Reduce transport time</li>
+                <li>Improve performance</li>
+            </ul>
+
+            <h3>Creating a Zip File</h3>
+            <div class="code-block">
+<pre>from zipfile import *
+f = ZipFile("files.zip", 'w', ZIP_DEFLATED)
+f.write("file1.txt")
+f.write("file2.txt")
+f.write("file3.txt")
+f.close()
+print("files.zip file created successfully")</pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> ZIP_DEFLATED constant represents creating a zip file.
+            </div>
+
+            <h3>Unzipping Files</h3>
+            <div class="code-block">
+<pre>from zipfile import *
+f = ZipFile("files.zip", 'r', ZIP_STORED)
+names = f.namelist()
+for name in names:
+    print("File Name: ", name)
+    print("The Content of this file is:")
+    f1 = open(name, 'r')
+    print(f1.read())
+    print()</pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> ZIP_STORED represents unzip operation (default value).
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Working with Directories</h2>
+            <p>Python provides the <span class="highlight">os</span> module to perform directory-related operations:</p>
+
+            <h3>Common Directory Operations</h3>
+
+            <h4>1. Get Current Working Directory</h4>
+            <div class="code-block">
+<pre>import os
+cwd = os.getcwd()
+print("Current Working Directory:", cwd)</pre>
+            </div>
+
+            <h4>2. Create a Sub Directory</h4>
+            <div class="code-block">
+<pre>import os
+os.mkdir("mysub")
+print("mysub directory created in cwd")</pre>
+            </div>
+
+            <h4>3. Create Nested Directories</h4>
+            <div class="code-block">
+<pre>import os
+os.mkdir("mysub/mysub2")
+print("mysub2 created inside mysub")</pre>
+            </div>
+
+            <h4>4. Create Multiple Directory Levels</h4>
+            <div class="code-block">
+<pre>import os
+os.makedirs("sub1/sub2/sub3")
+print("sub1, sub2, and sub3 directories created")</pre>
+            </div>
+
+            <h4>5. Remove a Directory</h4>
+            <div class="code-block">
+<pre>import os
+os.rmdir("mysub/mysub2")
+print("mysub2 directory deleted")</pre>
+            </div>
+
+            <h4>6. Remove Multiple Directories</h4>
+            <div class="code-block">
+<pre>import os
+os.removedirs("sub1/sub2/sub3")
+print("All 3 directories removed")</pre>
+            </div>
+
+            <h4>7. Rename a Directory</h4>
+            <div class="code-block">
+<pre>import os
+os.rename("mysub", "newdir")
+print("mysub directory renamed to newdir")</pre>
+            </div>
+
+            <h4>8. List Directory Contents</h4>
+            <div class="code-block">
+<pre>import os
+print(os.listdir("."))</pre>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> listdir() shows contents of the specified directory but not subdirectories.
+            </div>
+
+            <h4>9. List Contents Including Subdirectories (walk())</h4>
+            <div class="code-block">
+<pre>import os
+for dirpath, dirnames, filenames in os.walk('.'):
+    print("Current Directory Path:", dirpath)
+    print("Directories:", dirnames)
+    print("Files:", filenames)
+    print()</pre>
+            </div>
+
+            <div class="note">
+                <strong>walk() parameters:</strong>
+                <ul>
+                    <li><strong>path</strong> - Directory path (. for current)</li>
+                    <li><strong>topdown</strong> - True: traverse top to bottom</li>
+                    <li><strong>onerror</strong> - Function to execute on error</li>
+                    <li><strong>followlinks</strong> - True: visit symbolic link directories</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Running External Programs</h2>
+            <p>The os module contains the <span class="highlight">system()</span> function to run programs and commands, similar to C's system() function.</p>
+
+            <div class="code-block">
+<pre>import os
+os.system("dir *.py")
+os.system("py abc.py")</pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Getting File Information</h2>
+            <p>We can get file statistics like size, access time, and modification time using the <span class="highlight">stat()</span> function.</p>
+
+            <div class="code-block">
+<pre>stats = os.stat("abc.txt")</pre>
+            </div>
+
+            <h3>File Statistics Parameters</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>st_mode</td>
+                        <td>Protection bits</td>
+                    </tr>
+                    <tr>
+                        <td>st_ino</td>
+                        <td>Inode number</td>
+                    </tr>
+                    <tr>
+                        <td>st_dev</td>
+                        <td>Device</td>
+                    </tr>
+                    <tr>
+                        <td>st_nlink</td>
+                        <td>Number of hard links</td>
+                    </tr>
+                    <tr>
+                        <td>st_uid</td>
+                        <td>User ID of owner</td>
+                    </tr>
+                    <tr>
+                        <td>st_gid</td>
+                        <td>Group ID of owner</td>
+                    </tr>
+                    <tr>
+                        <td>st_size</td>
+                        <td>Size of file in bytes</td>
+                    </tr>
+                    <tr>
+                        <td>st_atime</td>
+                        <td>Time of most recent access</td>
+                    </tr>
+                    <tr>
+                        <td>st_mtime</td>
+                        <td>Time of most recent modification</td>
+                    </tr>
+                    <tr>
+                        <td>st_ctime</td>
+                        <td>Time of most recent metadata change</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>Example: Print File Statistics</h3>
+            <div class="code-block">
+<pre>import os
+stats = os.stat("abc.txt")
+print(stats)</pre>
+            </div>
+
+            <h3>Example: Print Specific Properties</h3>
+            <div class="code-block">
+<pre>import os
+from datetime import *
+stats = os.stat("abc.txt")
+print("File Size in Bytes:", stats.st_size)
+print("File Last Accessed Time:", datetime.fromtimestamp(stats.st_atime))
+print("File Last Modified Time:", datetime.fromtimestamp(stats.st_mtime))</pre>
+            </div>
+
+            <div class="output-box">
+File Size in Bytes: 22410<br>
+File Last Accessed Time: 2017-09-15 10:27:26.599490<br>
+File Last Modified Time: 2017-09-16 10:46:39.245394
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Pickling and Unpickling Objects</h2>
+            
+            <div class="diagram">
+                <div class="flow-item">Object (e1)</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">pickle.dump()</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">File (abc.txt)</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">pickle.load()</div>
+                <span class="arrow">→</span>
+                <div class="flow-item">Object (e2)</div>
+            </div>
+
+            <p>Sometimes we need to write the complete state of an object to a file and read it back.</p>
+            
+            <ul>
+                <li><strong>Pickling</strong> - Writing object state to file</li>
+                <li><strong>Unpickling</strong> - Reading object state from file</li>
+            </ul>
+
+            <p>Python's <span class="highlight">pickle</span> module provides these functions:</p>
+            <ul>
+                <li><strong>pickle.dump(object, file)</strong> - For pickling</li>
+                <li><strong>pickle.load(file)</strong> - For unpickling</li>
+            </ul>
+
+            <h3>Example: Pickle and Unpickle an Employee Object</h3>
+            <div class="code-block">
+<pre>import pickle
+
+class Employee:
+    def __init__(self, eno, ename, esal, eaddr):
+        self.eno = eno
+        self.ename = ename
+        self.esal = esal
+        self.eaddr = eaddr
+    
+    def display(self):
+        print(self.eno, "\t", self.ename, "\t", self.esal, "\t", self.eaddr)
+
+with open("emp.dat", "wb") as f:
+    e = Employee(100, "Hema", 1000, "Hyd")
+    pickle.dump(e, f)
+    print("Pickling of Employee Object completed...")
+
+with open("emp.dat", "rb") as f:
+    obj = pickle.load(f)
+    print("Printing Employee Information after unpickling")
+    obj.display()</pre>
+            </div>
+
+            <h3>Writing Multiple Employee Objects</h3>
+            
+            <h4>emp.py:</h4>
+            <div class="code-block">
+<pre>class Employee:
+    def __init__(self, eno, ename, esal, eaddr):
+        self.eno = eno
+        self.ename = ename
+        self.esal = esal
+        self.eaddr = eaddr
+    
+    def display(self):
+        print(self.eno, "\t", self.ename, "\t", self.esal, "\t", self.eaddr)</pre>
+            </div>
+
+            <h4>pick.py:</h4>
+            <div class="code-block">
+<pre>import emp, pickle
+f = open("emp.dat", "wb")
+n = int(input("Enter The number of Employees:"))
+for i in range(n):
+    eno = int(input("Enter Employee Number:"))
+    ename = input("Enter Employee Name:")
+    esal = float(input("Enter Employee Salary:"))
+    eaddr = input("Enter Employee Address:")
+    e = emp.Employee(eno, ename, esal, eaddr)
+    pickle.dump(e, f)
+print("Employee Objects pickled successfully")</pre>
+            </div>
+
+            <h4>unpick.py:</h4>
+            <div class="code-block">
+<pre>import emp, pickle
+f = open("emp.dat", "rb")
+print("Employee Details:")
+while True:
+    try:
+        obj = pickle.load(f)
+        obj.display()
+    except EOFError:
+        print("All employees Completed")
+        break
+f.close()</pre>
+            </div>
+        </div>
+
+        <footer>
+            <h2>🎉 Summary</h2>
+            <p>You've learned comprehensive Python file handling including:</p>
+            <p>✅ File opening modes • ✅ Reading and writing operations • ✅ CSV handling • ✅ Binary files • ✅ Zipping/Unzipping • ✅ Directory operations • ✅ Pickling objects</p>
+            <p style="margin-top: 20px; color: #667eea; font-weight: bold;">Happy Coding! 🐍</p>
+        </footer>
+    </div>
+
+    <div class="scroll-indicator" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        ↑
+    </div>
+
+    <script>
+        // Add animation delay to sections as they appear
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Show/hide scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 300) {
+                scrollIndicator.style.display = 'flex';
+            } else {
+                scrollIndicator.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
